@@ -1,0 +1,79 @@
+{
+  "name": "EMPRENOR Construcciones - Servicios Profesionales",
+  "short_name": "EMPRENOR",
+  "description": "Empresa líder en construcción, remodelación y servicios en el NOA. Más de 15 años de experiencia en Salta, Jujuy, Tucumán y Formosa.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f2a43",
+  "theme_color": "#0f2a43",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es-AR",
+  "dir": "ltr",
+  "categories": ["business", "construction", "services"],
+  "screenshots": [
+    {
+      "src": "/construction-site-workers-blueprint.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Contacto",
+      "short_name": "Contacto",
+      "description": "Solicitar cotización gratuita",
+      "url": "/contacto",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Proyectos",
+      "short_name": "Proyectos",
+      "description": "Ver nuestros proyectos completados",
+      "url": "/proyectos",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Servicios",
+      "short_name": "Servicios",
+      "description": "Explorar nuestros servicios",
+      "url": "/#servicios",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

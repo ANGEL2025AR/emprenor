@@ -3,8 +3,26 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Images, ArrowRight, Building2, Home, Store, Factory, ChevronLeft, ChevronRight } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogHeader,
+  DialogDescription,
+} from "@/components/ui/dialog"
+import {
+  Images,
+  ArrowRight,
+  Building2,
+  Home,
+  Store,
+  Factory,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Clock,
+} from "lucide-react"
 import Link from "next/link"
 
 const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental"]
@@ -177,14 +195,117 @@ export default function ProyectosPage() {
                         </div>
                       </DialogContent>
                     )}
+
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl">{project.title}</DialogTitle>
+                        <DialogDescription className="sr-only">
+                          Detalles completos del proyecto {project.title}
+                        </DialogDescription>
+                      </DialogHeader>
+
+                      <div className="space-y-6">
+                        {/* Galería de imágenes */}
+                        <div className="relative">
+                          <img
+                            src={
+                              selectedGalleryIndex === 0
+                                ? project.image
+                                : project.gallery?.[selectedGalleryIndex - 1] || "/placeholder.svg"
+                            }
+                            alt={`${project.title} - Imagen ${selectedGalleryIndex + 1}`}
+                            className="w-full h-auto max-h-[400px] object-cover rounded-lg"
+                          />
+                          {project.gallery && project.gallery.length > 0 && (
+                            <>
+                              <div className="absolute inset-y-0 left-0 flex items-center">
+                                <Button
+                                  variant="secondary"
+                                  size="icon"
+                                  className="ml-2"
+                                  onClick={() =>
+                                    setSelectedGalleryIndex((prev) => (prev === 0 ? project.gallery!.length : prev - 1))
+                                  }
+                                >
+                                  <ChevronLeft className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              <div className="absolute inset-y-0 right-0 flex items-center">
+                                <Button
+                                  variant="secondary"
+                                  size="icon"
+                                  className="mr-2"
+                                  onClick={() =>
+                                    setSelectedGalleryIndex((prev) => (prev === project.gallery!.length ? 0 : prev + 1))
+                                  }
+                                >
+                                  <ChevronRight className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm">
+                                {selectedGalleryIndex + 1} / {project.gallery.length + 1}
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Información del proyecto */}
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent-foreground">
+                              {getCategoryIcon(project.category)}
+                              {project.category}
+                            </span>
+                          </div>
+
+                          <div className="space-y-2">
+                            <h4 className="text-sm font-semibold text-foreground">Descripción del Proyecto</h4>
+                            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                              {project.description}
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                Duración
+                              </p>
+                              <p className="text-sm font-medium">{project.duration}</p>
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <MapPin className="h-3 w-3" />
+                                Ubicación
+                              </p>
+                              <p className="text-sm font-medium">{project.location}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </DialogContent>
                   </Dialog>
 
                   <CardContent className="p-6 space-y-3">
                     <h3 className="text-xl font-semibold text-foreground line-clamp-1">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{project.description}</p>
-                    <p className="text-xs text-muted-foreground pt-2 border-t border-border">
-                      {project.duration} | {project.location}
-                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{project.description}</p>
+
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {project.duration}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {project.location}
+                      </span>
+                    </div>
+
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm" className="w-full mt-3 bg-transparent">
+                        Ver Detalles Completos
+                      </Button>
+                    </DialogTrigger>
                   </CardContent>
                 </Card>
               ))}

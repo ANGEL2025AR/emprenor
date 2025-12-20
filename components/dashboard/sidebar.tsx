@@ -33,6 +33,7 @@ import {
   Award,
   AlertOctagon,
   Zap,
+  Globe,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -180,6 +181,12 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       href: "/dashboard/chat",
       icon: MessageSquare,
       permission: "chat.view" as const,
+    },
+    {
+      name: "Sitio Web",
+      href: "/dashboard/sitio-web/proyectos",
+      icon: Globe,
+      permission: "admin.access" as const,
     },
     {
       name: "Usuarios",

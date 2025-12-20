@@ -200,4 +200,4 @@ Una vez completado el PASO 2 (Redeploy sin caché), el sistema estará **100% OP
 **Estado:** ✅ CÓDIGO COMPLETO - ⚠️ PENDIENTE REDEPLOY
 \`\`\`
 
-```env file="" isHidden
+\`\`\`env file="" isHidden

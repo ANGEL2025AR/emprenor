@@ -616,3 +616,43 @@ export interface Invoice extends BaseDocument {
   }[]
   createdBy: ObjectId
 }
+
+// ============================================
+// PROYECTOS PÚBLICOS DEL SITIO WEB
+// ============================================
+
+export type PublicProjectCategory =
+  | "Residencial"
+  | "Comercial"
+  | "Industrial"
+  | "Remodelación"
+  | "Oficina Gubernamental"
+  | "Otro"
+
+export interface PublicProject extends BaseDocument {
+  title: string
+  category: PublicProjectCategory
+  description: string
+  detailedDescription?: string
+  duration: string // ej: "8 meses"
+  location: string
+  image: string
+  gallery?: string[] // URLs de imágenes adicionales
+  featured: boolean // destacar en inicio
+  order: number // orden de visualización
+  published: boolean
+  publishDate?: Date
+  metadata?: {
+    client?: string
+    area?: string
+    budget?: number
+    year?: number
+    [key: string]: unknown
+  }
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+    keywords?: string[]
+  }
+  createdBy: ObjectId
+}

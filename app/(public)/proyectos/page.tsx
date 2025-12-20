@@ -1,94 +1,43 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Images, ArrowRight, Building2, Home, Store, Factory } from "lucide-react"
 import Link from "next/link"
 
-const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación"]
+const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental"]
 
-const projects = [
-  {
-    id: 1,
-    title: "NUEVO EDIFICIO MUNICIPAL DE GRAL. E. MOSCONI ",
-    category: "Oficina Gubernamental",
-    description:
-      "Inicio de la segunda etapa de construcción del Edificio Municipal.",
-    image: "/modern-residential-house-construction.jpg",
-    details: "Duración: 8 meses | Ubicación:Departamento San Martin",
-  },
-  {
-    id: 2,
-    title: "Edificio Corporativo de Oficinas",
-    category: "Comercial",
-    description:
-      "Construcción de edificio de 5 pisos para uso corporativo con fachada de cristal y espacios de trabajo modernos.",
-    image: "/modern-office-building-construction.jpg",
-    details: "Duración: 18 meses | Ubicación: Centro Financiero",
-  },
-  {
-    id: 3,
-    title: "Remodelación Integral de Cocina",
-    category: "Remodelación",
-    description:
-      "Renovación completa de cocina con gabinetes italianos, encimera de cuarzo y electrodomésticos de última generación.",
-    image: "/luxury-kitchen-remodel.jpg",
-    details: "Duración: 2 meses | Ubicación: Residencial Privado",
-  },
-  {
-    id: 4,
-    title: "Nave Industrial con Oficinas",
-    category: "Industrial",
-    description:
-      "Construcción de nave industrial de 2,000m² con área de oficinas administrativas y sistemas de seguridad avanzados.",
-    image: "/industrial-warehouse-construction.png",
-    details: "Duración: 12 meses | Ubicación: Parque Industrial",
-  },
-  {
-    id: 5,
-    title: "Centro Comercial Local",
-    category: "Comercial",
-    description: "Desarrollo de plaza comercial con 15 locales, estacionamiento y áreas comunes de convivencia.",
-    image: "/shopping-center-construction.jpg",
-    details: "Duración: 14 meses | Ubicación: Zona Comercial",
-  },
-  {
-    id: 6,
-    title: "Condominio Residencial",
-    category: "Residencial",
-    description: "Construcción de complejo habitacional con 20 unidades, áreas verdes y amenidades recreativas.",
-    image: "/residential-condominium-complex.jpg",
-    details: "Duración: 16 meses | Ubicación: Zona Suburbana",
-  },
-  {
-    id: 7,
-    title: "Renovación de Baños Completos",
-    category: "Remodelación",
-    description: "Transformación de 3 baños con acabados de mármol, duchas modernas y sistemas de ahorro de agua.",
-    image: "/luxury-bathroom-renovation.png",
-    details: "Duración: 6 semanas | Ubicación: Casa Particular",
-  },
-  {
-    id: 8,
-    title: "Ampliación de Casa Habitación",
-    category: "Residencial",
-    description: "Construcción de segundo piso con 3 recámaras, baño completo y terraza con vista panorámica.",
-    image: "/house-extension-second-floor.jpg",
-    details: "Duración: 5 meses | Ubicación: Zona Residencial",
-  },
-  {
-    id: 9,
-    title: "Restaurante y Bar",
-    category: "Comercial",
-    description: "Construcción y diseño interior de restaurante de 300m² con cocina industrial y área de bar premium.",
-    image: "/restaurant-interior-construction.jpg",
-    details: "Duración: 4 meses | Ubicación: Centro Histórico",
-  },
-]
+interface Project {
+  _id: string
+  title: string
+  category: string
+  description: string
+  duration: string
+  location: string
+  image: string
+}
 
 export default function ProyectosPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos")
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadProjects()
+  }, [])
+
+  const loadProjects = async () => {
+    try {
+      const res = await fetch("/api/public-projects?published=true")
+      const data = await res.json()
+      setProjects(data.projects || [])
+    } catch (error) {
+      console.error("Error al cargar proyectos:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const filteredProjects =
     selectedCategory === "Todos" ? projects : projects.filter((project) => project.category === selectedCategory)
@@ -143,34 +92,45 @@ export default function ProyectosPage() {
             ))}
           </div>
 
-          {/* Projects Grid */}
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((project) => (
-              <Card
-                key={project.id}
-                className="border-border overflow-hidden group hover:border-accent transition-colors"
-              >
-                <div className="relative aspect-[3/2] overflow-hidden bg-muted">
-                  <img
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-3 right-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
-                      {getCategoryIcon(project.category)}
-                      {project.category}
-                    </span>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Cargando proyectos...</p>
+            </div>
+          ) : filteredProjects.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No hay proyectos disponibles en esta categoría</p>
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {filteredProjects.map((project) => (
+                <Card
+                  key={project._id}
+                  className="border-border overflow-hidden group hover:border-accent transition-colors"
+                >
+                  <div className="relative aspect-[3/2] overflow-hidden bg-muted">
+                    <img
+                      src={project.image || "/placeholder.svg"}
+                      alt={project.title}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-3 right-3">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
+                        {getCategoryIcon(project.category)}
+                        {project.category}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <CardContent className="p-6 space-y-3">
-                  <h3 className="text-xl font-semibold text-foreground line-clamp-1">{project.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{project.description}</p>
-                  <p className="text-xs text-muted-foreground pt-2 border-t border-border">{project.details}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <CardContent className="p-6 space-y-3">
+                    <h3 className="text-xl font-semibold text-foreground line-clamp-1">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{project.description}</p>
+                    <p className="text-xs text-muted-foreground pt-2 border-t border-border">
+                      {project.duration} | {project.location}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
 
           {/* CTA Section */}
           <div className="mt-16">

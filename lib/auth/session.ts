@@ -123,3 +123,27 @@ export async function updateLastLogin(userId: string): Promise<void> {
   const db = await getDb()
   await db.collection("users").updateOne({ _id: new ObjectId(userId) }, { $set: { lastLogin: new Date() } })
 }
+
+export async function verifyAuth(request: Request): Promise<SessionPayload | null> {
+  const cookieHeader = request.headers.get("cookie")
+  if (!cookieHeader) return null
+
+  const cookies = cookieHeader.split(";").reduce(
+    (acc, cookie) => {
+      const [key, value] = cookie.trim().split("=")
+      acc[key] = value
+      return acc
+    },
+    {} as Record<string, string>,
+  )
+
+  const token = cookies[COOKIE_NAME]
+  if (!token) return null
+
+  try {
+    const { payload } = await jwtVerify(token, SECRET_KEY)
+    return payload as SessionPayload
+  } catch {
+    return null
+  }
+}

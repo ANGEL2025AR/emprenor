@@ -10,11 +10,46 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { ArrowLeft, Upload, Loader2 } from "lucide-react"
+import { ArrowLeft, Upload, Loader2, X, ImagePlus } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-const categories = ["Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental", "Otro"]
+const categories = [
+  "Institución Educativa",
+  "Universidad",
+  "Centro Cultural",
+  "Edificio Municipal",
+  "Centro de Salud",
+  "Hospital",
+  "Obras Públicas",
+  "Infraestructura Vial",
+  "Infraestructura Hidráulica",
+  "Infraestructura Deportiva",
+  "Estadio",
+  "Polideportivo",
+  "Vivienda Social",
+  "Edificio Residencial",
+  "Condominio",
+  "Edificio Comercial",
+  "Centro Comercial",
+  "Oficinas Corporativas",
+  "Edificio Industrial",
+  "Planta Industrial",
+  "Depósito y Logística",
+  "Restauración Patrimonial",
+  "Remodelación",
+  "Ampliación",
+  "Centro Comunitario",
+  "Biblioteca Pública",
+  "Museo",
+  "Teatro",
+  "Terminal de Transporte",
+  "Aeropuerto",
+  "Estación Ferroviaria",
+  "Hotel",
+  "Complejo Turístico",
+  "Otro",
+]
 
 export default function NuevoProyectoPage() {
   const router = useRouter()
@@ -28,6 +63,7 @@ export default function NuevoProyectoPage() {
     duration: "",
     location: "",
     image: "",
+    gallery: [] as string[],
     published: false,
     featured: false,
     order: 999,
@@ -57,6 +93,48 @@ export default function NuevoProyectoPage() {
     } finally {
       setUploading(false)
     }
+  }
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+
+    setUploading(true)
+    try {
+      const uploadedUrls: string[] = []
+
+      for (const file of files) {
+        const formData = new FormData()
+        formData.append("file", file)
+
+        const res = await fetch("/api/public-projects/upload-image", {
+          method: "POST",
+          body: formData,
+        })
+
+        const data = await res.json()
+        if (data.success) {
+          uploadedUrls.push(data.url)
+        }
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        gallery: [...prev.gallery, ...uploadedUrls],
+      }))
+    } catch (error) {
+      console.error("Error al subir imágenes:", error)
+      alert("Error al subir imágenes")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const removeGalleryImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      gallery: prev.gallery.filter((_, i) => i !== index),
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -206,6 +284,56 @@ export default function NuevoProyectoPage() {
                   {uploading && <p className="text-sm text-muted-foreground mt-2">Subiendo...</p>}
                 </div>
               )}
+            </div>
+
+            <div className="space-y-2">
+              <Label>Galería de Imágenes (Opcional)</Label>
+              <p className="text-sm text-muted-foreground">
+                Agrega más imágenes para mostrar avances o diferentes vistas del proyecto
+              </p>
+
+              {formData.gallery.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                  {formData.gallery.map((url, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={url || "/placeholder.svg"}
+                        alt={`Imagen ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => removeGalleryImage(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="border-2 border-dashed rounded-lg p-6 text-center">
+                <ImagePlus className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+                <Label htmlFor="gallery-upload" className="cursor-pointer">
+                  <span className="text-primary hover:underline">
+                    {formData.gallery.length > 0 ? "Agregar más imágenes" : "Subir imágenes a la galería"}
+                  </span>
+                  <Input
+                    id="gallery-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleGalleryUpload}
+                    disabled={uploading}
+                  />
+                </Label>
+                <p className="text-xs text-muted-foreground mt-2">Puedes seleccionar múltiples imágenes a la vez</p>
+                {uploading && <p className="text-sm text-muted-foreground mt-2">Subiendo...</p>}
+              </div>
             </div>
 
             <div className="space-y-4">

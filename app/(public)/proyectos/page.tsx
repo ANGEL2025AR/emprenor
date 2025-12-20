@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Images, ArrowRight, Building2, Home, Store, Factory } from "lucide-react"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Images, ArrowRight, Building2, Home, Store, Factory, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 
 const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental"]
@@ -16,12 +17,14 @@ interface Project {
   duration: string
   location: string
   image: string
+  gallery?: string[]
 }
 
 export default function ProyectosPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos")
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedGalleryIndex, setSelectedGalleryIndex] = useState(0)
 
   useEffect(() => {
     loadProjects()
@@ -107,19 +110,75 @@ export default function ProyectosPage() {
                   key={project._id}
                   className="border-border overflow-hidden group hover:border-accent transition-colors"
                 >
-                  <div className="relative aspect-[3/2] overflow-hidden bg-muted">
-                    <img
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
-                        {getCategoryIcon(project.category)}
-                        {project.category}
-                      </span>
-                    </div>
-                  </div>
+                  <Dialog onOpenChange={() => setSelectedGalleryIndex(0)}>
+                    <DialogTrigger asChild>
+                      <div className="relative aspect-[3/2] overflow-hidden bg-muted cursor-pointer">
+                        <img
+                          src={project.image || "/placeholder.svg"}
+                          alt={project.title}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-3 right-3">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
+                            {getCategoryIcon(project.category)}
+                            {project.category}
+                          </span>
+                        </div>
+                        {project.gallery && project.gallery.length > 0 && (
+                          <div className="absolute bottom-3 right-3">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
+                              <Images className="h-3 w-3" />
+                              {project.gallery.length + 1}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </DialogTrigger>
+                    {project.gallery && project.gallery.length > 0 && (
+                      <DialogContent className="max-w-4xl">
+                        <DialogTitle className="sr-only">Galería de {project.title}</DialogTitle>
+                        <div className="relative">
+                          <img
+                            src={
+                              selectedGalleryIndex === 0
+                                ? project.image
+                                : project.gallery[selectedGalleryIndex - 1] || "/placeholder.svg"
+                            }
+                            alt={`${project.title} - Imagen ${selectedGalleryIndex + 1}`}
+                            className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                          />
+                          <div className="absolute inset-y-0 left-0 flex items-center">
+                            <Button
+                              variant="secondary"
+                              size="icon"
+                              className="ml-2"
+                              onClick={() =>
+                                setSelectedGalleryIndex((prev) => (prev === 0 ? project.gallery!.length : prev - 1))
+                              }
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="absolute inset-y-0 right-0 flex items-center">
+                            <Button
+                              variant="secondary"
+                              size="icon"
+                              className="mr-2"
+                              onClick={() =>
+                                setSelectedGalleryIndex((prev) => (prev === project.gallery!.length ? 0 : prev + 1))
+                              }
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm">
+                            {selectedGalleryIndex + 1} / {project.gallery.length + 1}
+                          </div>
+                        </div>
+                      </DialogContent>
+                    )}
+                  </Dialog>
+
                   <CardContent className="p-6 space-y-3">
                     <h3 className="text-xl font-semibold text-foreground line-clamp-1">{project.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{project.description}</p>

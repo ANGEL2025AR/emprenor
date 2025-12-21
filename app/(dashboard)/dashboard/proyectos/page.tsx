@@ -9,8 +9,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Search, Filter, MapPin, Calendar, Users, MoreVertical, Loader2 } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Plus, Search, Filter, MapPin, Calendar, Users, MoreVertical, Loader2, Trash2, Eye, Edit } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 import type { Project } from "@/lib/db/models"
 
 const STATUS_COLORS: Record<string, string> = {
@@ -45,6 +63,11 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const { toast } = useToast()
+  const router = useRouter()
 
   useEffect(() => {
     fetchProjects()
@@ -69,6 +92,45 @@ export default function ProjectsPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     fetchProjects()
+  }
+
+  const openDeleteDialog = (projectId: string) => {
+    setProjectToDelete(projectId)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDelete = async () => {
+    if (!projectToDelete) return
+
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/projects/${projectToDelete}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el proyecto")
+      }
+
+      toast({
+        title: "Proyecto eliminado",
+        description: "El proyecto se ha eliminado correctamente",
+      })
+
+      // Recargar proyectos
+      await fetchProjects()
+      router.refresh()
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el proyecto",
+        variant: "destructive",
+      })
+    } finally {
+      setDeleting(false)
+      setDeleteDialogOpen(false)
+      setProjectToDelete(null)
+    }
   }
 
   return (
@@ -158,10 +220,24 @@ export default function ProjectsPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/proyectos/${project._id}`}>Ver detalles</Link>
+                        <Link href={`/dashboard/proyectos/${project._id}`} className="cursor-pointer">
+                          <Eye className="w-4 h-4 mr-2" />
+                          Ver detalles
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/proyectos/${project._id}/editar`}>Editar</Link>
+                        <Link href={`/dashboard/proyectos/${project._id}/editar`} className="cursor-pointer">
+                          <Edit className="w-4 h-4 mr-2" />
+                          Editar
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => openDeleteDialog(project._id?.toString() || "")}
+                        className="text-red-600 focus:text-red-600 cursor-pointer"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Eliminar
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -210,6 +286,25 @@ export default function ProjectsPage() {
           ))}
         </div>
       )}
+
+      {/* Dialogo de confirmación para eliminar */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar proyecto?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. El proyecto será eliminado permanentemente de la base de datos junto con
+              todos sus documentos y registros asociados.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-red-500 hover:bg-red-600" disabled={deleting}>
+              {deleting ? "Eliminando..." : "Eliminar Proyecto"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

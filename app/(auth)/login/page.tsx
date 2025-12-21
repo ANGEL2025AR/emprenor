@@ -61,11 +61,12 @@ export default function LoginPage() {
         <div className="hidden lg:block space-y-8 px-8">
           <div className="space-y-4">
             <Image
-              src="/images/logo-emprenor.svg"
+              src="/images/logo-emprenor.png"
               alt="EMPRENOR Logo"
               width={200}
               height={60}
               className="h-12 w-auto"
+              priority
             />
             <h1 className="text-4xl font-bold text-slate-900 leading-tight">Sistema de Gestión de Construcción</h1>
             <p className="text-lg text-slate-600 leading-relaxed">
@@ -100,11 +101,12 @@ export default function LoginPage() {
             {/* Logo móvil */}
             <div className="lg:hidden flex justify-center">
               <Image
-                src="/images/logo-emprenor.svg"
+                src="/images/logo-emprenor.png"
                 alt="EMPRENOR Logo"
                 width={180}
                 height={54}
                 className="h-10 w-auto"
+                priority
               />
             </div>
 

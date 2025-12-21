@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import type { SerializableUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
+import Image from "next/image"
 import {
   LayoutDashboard,
   FolderKanban,
@@ -17,7 +18,6 @@ import {
   MessageSquare,
   Users,
   Settings,
-  Building2,
   X,
   ChevronLeft,
   Menu,
@@ -258,8 +258,8 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
             href="/dashboard"
             className={cn("flex items-center gap-3 transition-all", isCollapsed && "lg:justify-center")}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-5 h-5 text-white" />
+            <div className="relative w-10 h-10 flex-shrink-0">
+              <Image src="/images/logo-emprenor.png" alt="EMPRENOR" fill className="object-contain" priority />
             </div>
             {!isCollapsed && <span className="text-xl font-bold text-white lg:block">EMPRENOR</span>}
           </Link>

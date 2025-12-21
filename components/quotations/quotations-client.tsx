@@ -1,12 +1,23 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Search, FileText, CheckCircle, XCircle, Clock, Send } from "lucide-react"
+import { Plus, Search, FileText, CheckCircle, XCircle, Clock, Send, Edit, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast"
 import type { Quotation } from "@/lib/db/models"
 
 const statusConfig = {
@@ -45,6 +56,9 @@ export function QuotationsClient() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     fetchQuotations()
@@ -88,6 +102,36 @@ export function QuotationsClient() {
       month: "short",
       day: "numeric",
     })
+  }
+
+  const handleDelete = async () => {
+    if (!deleteId) return
+
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/quotations/${deleteId}`, {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        toast({
+          title: "Cotización eliminada",
+          description: "La cotización ha sido eliminada exitosamente",
+        })
+        fetchQuotations()
+      } else {
+        throw new Error("Error al eliminar")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la cotización",
+        variant: "destructive",
+      })
+    } finally {
+      setDeleting(false)
+      setDeleteId(null)
+    }
   }
 
   if (loading) {
@@ -149,10 +193,10 @@ export function QuotationsClient() {
           {filteredQuotations.map((quotation) => {
             const StatusIcon = statusConfig[quotation.status].icon
             return (
-              <Link key={quotation._id} href={`/dashboard/cotizaciones/${quotation._id}`}>
-                <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-3 flex-1">
+              <Card key={quotation._id} className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-start justify-between">
+                  <Link href={`/dashboard/cotizaciones/${quotation._id}`} className="flex-1">
+                    <div className="space-y-3">
                       <div className="flex items-center gap-3">
                         <h3 className="text-lg font-semibold">{quotation.projectName}</h3>
                         <Badge className={statusConfig[quotation.status].color}>
@@ -167,17 +211,51 @@ export function QuotationsClient() {
                       </div>
                       <p className="text-sm text-muted-foreground line-clamp-2">{quotation.projectDescription}</p>
                     </div>
+                  </Link>
+                  <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-2xl font-bold text-green-600">{formatCurrency(quotation.total)}</p>
                       <p className="text-sm text-muted-foreground mt-1">{quotation.items.length} ítems</p>
                     </div>
+                    <div className="flex gap-2">
+                      <Link href={`/dashboard/cotizaciones/${quotation._id}/editar`}>
+                        <Button variant="outline" size="sm">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setDeleteId(quotation._id)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                </Card>
-              </Link>
+                </div>
+              </Card>
             )
           })}
         </div>
       )}
+
+      <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar cotización?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. La cotización será eliminada permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} disabled={deleting} className="bg-red-600 hover:bg-red-700">
+              {deleting ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

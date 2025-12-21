@@ -36,4 +36,6 @@ export async function getDb(): Promise<Db> {
   return client.db("emprenor")
 }
 
+export { clientPromise }
+
 export default clientPromise

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { getDb } from "@/lib/db/connection"
-import { contactFormSchema, sanitizeHtml, type ContactFormData } from "@/lib/validators"
+import { contactFormSchema, sanitizeHtml, type ContactFormData } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
 
 const limiter = rateLimit({ windowMs: 60000, maxRequests: 5 })

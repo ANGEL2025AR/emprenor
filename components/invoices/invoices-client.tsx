@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import type { Invoice } from "@/lib/db/models"
+import { useToast } from "@/components/ui/use-toast"
 
 const statusConfig = {
   borrador: { label: "Borrador", color: "bg-gray-100 text-gray-800", icon: FileText },
@@ -57,6 +58,9 @@ export function InvoicesClient() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [typeFilter, setTypeFilter] = useState<string>("all")
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     fetchInvoices()
@@ -105,6 +109,36 @@ export function InvoicesClient() {
   const totalFacturado = filteredInvoices.filter((i) => i.status !== "anulada").reduce((sum, i) => sum + i.total, 0)
 
   const totalCobrado = filteredInvoices.filter((i) => i.status === "pagada").reduce((sum, i) => sum + i.paidAmount, 0)
+
+  const handleDelete = async () => {
+    if (!deleteId) return
+
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/invoices/${deleteId}`, {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        toast({
+          title: "Factura eliminada",
+          description: "La factura ha sido eliminada exitosamente",
+        })
+        fetchInvoices()
+      } else {
+        throw new Error("Error al eliminar")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la factura",
+        variant: "destructive",
+      })
+    } finally {
+      setDeleting(false)
+      setDeleteId(null)
+    }
+  }
 
   if (loading) {
     return (
@@ -227,6 +261,16 @@ export function InvoicesClient() {
                         <p className="text-sm text-muted-foreground mt-1">
                           Cobrado: {formatCurrency(invoice.paidAmount)}
                         </p>
+                      )}
+                      {invoice.status !== "anulada" && (
+                        <Button
+                          onClick={() => setDeleteId(invoice._id)}
+                          className="bg-red-600 hover:bg-red-700 mt-2"
+                          disabled={deleting}
+                        >
+                          <XCircle className="w-4 h-4 mr-2" />
+                          Eliminar
+                        </Button>
                       )}
                     </div>
                   </div>

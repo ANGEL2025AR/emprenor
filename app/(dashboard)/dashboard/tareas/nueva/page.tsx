@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -12,18 +11,51 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save, ListTodo } from "lucide-react"
+import type { Project } from "@/lib/db/models"
+import { useToast } from "@/hooks/use-toast"
 
 export default function NuevaTareaPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [employees, setEmployees] = useState<{ _id: string; name: string; lastName: string }[]>([])
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     projectId: "",
     priority: "media",
-    dueDate: "",
-    assignedTo: "",
+    type: "construccion",
+    startDate: "",
+    endDate: "",
+    estimatedHours: "",
+    assignedTo: [] as string[],
   })
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [projectsRes, employeesRes] = await Promise.all([
+          fetch("/api/projects?limit=100"),
+          fetch("/api/employees?limit=100"),
+        ])
+
+        if (projectsRes.ok) {
+          const projectsData = await projectsRes.json()
+          setProjects(projectsData.projects || [])
+        }
+
+        if (employeesRes.ok) {
+          const employeesData = await employeesRes.json()
+          setEmployees(employeesData.employees || [])
+        }
+      } catch (error) {
+        console.error("Error cargando datos:", error)
+      }
+    }
+
+    loadData()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,14 +65,32 @@ export default function NuevaTareaPage() {
       const response = await fetch("/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          estimatedHours: Number.parseFloat(formData.estimatedHours) || 0,
+        }),
       })
 
       if (response.ok) {
+        toast({
+          title: "Tarea creada",
+          description: "La tarea se ha creado correctamente",
+        })
         router.push("/dashboard/tareas")
+      } else {
+        const error = await response.json()
+        toast({
+          title: "Error al crear tarea",
+          description: error.error || "Ocurrió un error inesperado",
+          variant: "destructive",
+        })
       }
     } catch {
-      // Error silencioso
+      toast({
+        title: "Error de conexión",
+        description: "No se pudo conectar con el servidor",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }
@@ -115,14 +165,94 @@ export default function NuevaTareaPage() {
                 </Select>
               </div>
 
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="projectId">Proyecto *</Label>
+                <Select
+                  value={formData.projectId}
+                  onValueChange={(value) => setFormData({ ...formData, projectId: value })}
+                  required
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar proyecto" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projects.map((project) => (
+                      <SelectItem key={project._id?.toString()} value={project._id?.toString() || ""}>
+                        {project.code} - {project.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
-                <Label htmlFor="dueDate">Fecha Límite</Label>
+                <Label htmlFor="type">Tipo de Tarea *</Label>
+                <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="construccion">Construcción</SelectItem>
+                    <SelectItem value="inspeccion">Inspección</SelectItem>
+                    <SelectItem value="mantenimiento">Mantenimiento</SelectItem>
+                    <SelectItem value="documentacion">Documentación</SelectItem>
+                    <SelectItem value="otro">Otro</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="startDate">Fecha de Inicio *</Label>
                 <Input
-                  id="dueDate"
+                  id="startDate"
                   type="date"
-                  value={formData.dueDate}
-                  onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                  value={formData.startDate}
+                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="endDate">Fecha de Fin *</Label>
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="estimatedHours">Horas Estimadas</Label>
+                <Input
+                  id="estimatedHours"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  value={formData.estimatedHours}
+                  onChange={(e) => setFormData({ ...formData, estimatedHours: e.target.value })}
+                  placeholder="8"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="assignedTo">Asignar a</Label>
+                <Select
+                  value={formData.assignedTo[0] || ""}
+                  onValueChange={(value) => setFormData({ ...formData, assignedTo: [value] })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar empleado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employees.map((employee) => (
+                      <SelectItem key={employee._id} value={employee._id}>
+                        {employee.name} {employee.lastName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

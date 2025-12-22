@@ -656,3 +656,200 @@ export interface PublicProject extends BaseDocument {
   }
   createdBy: ObjectId
 }
+
+// ============================================
+// RECURSOS HUMANOS POR PROYECTO
+// ============================================
+
+export type EmployeeRole =
+  | "gerente_proyecto"
+  | "supervisor"
+  | "ingeniero"
+  | "maestro_mayor_obras"
+  | "oficial"
+  | "ayudante"
+  | "operador_maquinaria"
+  | "administrativo"
+
+export interface Employee extends BaseDocument {
+  personalInfo: {
+    firstName: string
+    lastName: string
+    dni: string
+    cuil: string
+    birthDate: Date
+    address: string
+    phone: string
+    email: string
+    emergencyContact: {
+      name: string
+      relationship: string
+      phone: string
+    }
+  }
+  employment: {
+    role: EmployeeRole
+    startDate: Date
+    endDate?: Date
+    status: "activo" | "licencia" | "suspendido" | "finalizado"
+    contractType: "efectivo" | "temporal" | "contratista"
+    salary: number
+    currency: string
+  }
+  skills: string[]
+  certifications: {
+    name: string
+    issuedBy: string
+    issueDate: Date
+    expiryDate?: Date
+    documentUrl?: string
+  }[]
+  projectAssignments: {
+    projectId: ObjectId
+    role: EmployeeRole
+    startDate: Date
+    endDate?: Date
+    hoursWorked: number
+  }[]
+  attendanceRecords: {
+    date: Date
+    projectId?: ObjectId
+    checkIn: Date
+    checkOut?: Date
+    hoursWorked: number
+    notes?: string
+  }[]
+  documents: {
+    type: "cv" | "contrato" | "certificado" | "examen_medico" | "otro"
+    name: string
+    url: string
+    uploadDate: Date
+  }[]
+  companyId?: ObjectId
+  createdBy: ObjectId
+}
+
+// ============================================
+// MATERIALES Y PRODUCTOS POR PROYECTO
+// ============================================
+
+export type MaterialCategory =
+  | "cemento_hormigon"
+  | "acero_hierro"
+  | "madera"
+  | "ceramicos_revestimientos"
+  | "pintura"
+  | "electricos"
+  | "plomeria"
+  | "aislantes"
+  | "herramientas"
+  | "equipos"
+  | "otros"
+
+export interface Material extends BaseDocument {
+  code: string // MAT-2025-001
+  name: string
+  description: string
+  category: MaterialCategory
+  unit: string // m2, kg, unidad, litro, etc
+  specifications: {
+    brand?: string
+    model?: string
+    quality?: string
+    dimensions?: string
+    weight?: string
+    color?: string
+    [key: string]: string | undefined
+  }
+  pricing: {
+    costPrice: number
+    currency: string
+    supplier?: string
+    lastUpdate: Date
+  }
+  stock: {
+    warehouse: string
+    quantity: number
+    minStock: number
+    maxStock: number
+  }
+  images: string[]
+  datasheetUrl?: string
+  companyId?: ObjectId
+}
+
+export interface ProjectMaterial extends BaseDocument {
+  projectId: ObjectId
+  materialId: ObjectId
+  taskId?: ObjectId
+  quantity: {
+    estimated: number
+    actual: number
+    unit: string
+  }
+  cost: {
+    estimated: number
+    actual: number
+    currency: string
+  }
+  supplier?: {
+    name: string
+    contact: string
+    deliveryDate?: Date
+  }
+  status: "por_pedir" | "pedido" | "en_transito" | "entregado" | "instalado"
+  location?: string
+  notes?: string
+  purchaseOrderNumber?: string
+  invoiceNumber?: string
+  deliveryReceipt?: string
+  usedBy: ObjectId[]
+  usageLog: {
+    date: Date
+    quantity: number
+    taskId?: ObjectId
+    usedBy: ObjectId
+    notes?: string
+  }[]
+  createdBy: ObjectId
+}
+
+// ============================================
+// REPORTES LEGALES
+// ============================================
+
+export interface LegalReport extends BaseDocument {
+  projectId: ObjectId
+  reportType: "proyecto_completo" | "financiero" | "tecnico" | "auditoria"
+  reportNumber: string
+  generatedBy: ObjectId
+  content: Record<string, unknown>
+  legalValidity: {
+    certified: boolean
+    certificationNumber?: string
+    certificationDate?: Date
+    validUntil?: Date
+    digitalSignature?: string
+  }
+  signatures: {
+    projectManager?: {
+      userId: ObjectId
+      name: string
+      signature?: string
+      date: Date
+    }
+    technicalDirector?: {
+      userId: ObjectId
+      name: string
+      signature?: string
+      date: Date
+    }
+    client?: {
+      name: string
+      signature?: string
+      date: Date
+    }
+  }
+  pdfUrl?: string
+  status: "borrador" | "emitido" | "firmado" | "archivado"
+}

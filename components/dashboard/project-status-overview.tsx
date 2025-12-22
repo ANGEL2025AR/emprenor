@@ -1,22 +1,36 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { FolderKanban } from "lucide-react"
+import { getDb } from "@/lib/db/connection"
+import Link from "next/link"
 
-export function ProjectStatusOverview() {
-  // Datos de ejemplo - en producción vendrían de la API
-  const projects = [
-    { name: "Torre Empresarial Norte", status: "en_progreso", progress: 75, budget: 85 },
-    { name: "Centro Comercial Sur", status: "en_progreso", progress: 45, budget: 42 },
-    { name: "Residencial Las Palmas", status: "completado", progress: 100, budget: 98 },
-    { name: "Planta Industrial Este", status: "en_progreso", progress: 60, budget: 72 },
-    { name: "Remodelación Hospital", status: "pausado", progress: 30, budget: 28 },
-  ]
+async function getProjectsData() {
+  try {
+    const db = await getDb()
+
+    const projects = await db.collection("projects").find().sort({ updatedAt: -1 }).limit(5).toArray()
+
+    return projects.map((p) => ({
+      id: p._id.toString(),
+      name: p.name || "Sin nombre",
+      status: p.status || "pendiente",
+      progress: p.progress || 0,
+      budget: p.budget?.spent && p.budget?.approved ? (p.budget.spent / p.budget.approved) * 100 : 0,
+    }))
+  } catch {
+    return []
+  }
+}
+
+export async function ProjectStatusOverview() {
+  const projects = await getProjectsData()
 
   const getStatusBadge = (status: string) => {
     const badges = {
       en_progreso: { label: "En Progreso", variant: "default" as const },
       completado: { label: "Completado", variant: "secondary" as const },
       pausado: { label: "Pausado", variant: "destructive" as const },
+      pendiente: { label: "Pendiente", variant: "outline" as const },
     }
     return badges[status as keyof typeof badges] || { label: status, variant: "default" as const }
   }
@@ -30,42 +44,60 @@ export function ProjectStatusOverview() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {projects.map((project) => {
-            const badge = getStatusBadge(project.status)
-            return (
-              <div key={project.name} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <p className="font-semibold text-slate-900">{project.name}</p>
-                    <Badge variant={badge.variant} className="mt-1">
-                      {badge.label}
-                    </Badge>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-slate-600">Progreso: {project.progress}%</p>
-                    <p className="text-sm text-slate-600">Presupuesto: {project.budget}%</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 transition-all" style={{ width: `${project.progress}%` }} />
+        {projects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <FolderKanban className="w-16 h-16 text-slate-300 mb-4" />
+            <p className="text-slate-500 font-medium">No hay proyectos registrados</p>
+            <p className="text-sm text-slate-400 mt-1">Crea tu primer proyecto para comenzar</p>
+            <Link
+              href="/dashboard/proyectos/nuevo"
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              Crear Proyecto
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {projects.map((project) => {
+              const badge = getStatusBadge(project.status)
+              return (
+                <Link
+                  key={project.id}
+                  href={`/dashboard/proyectos/${project.id}`}
+                  className="block border-b border-slate-100 pb-4 last:border-0 last:pb-0 hover:bg-slate-50 transition-colors rounded-lg p-2 -m-2"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <p className="font-semibold text-slate-900">{project.name}</p>
+                      <Badge variant={badge.variant} className="mt-1">
+                        {badge.label}
+                      </Badge>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-slate-600">Progreso: {project.progress}%</p>
+                      <p className="text-sm text-slate-600">Presupuesto: {project.budget.toFixed(0)}%</p>
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full transition-all ${project.budget > 100 ? "bg-red-500" : project.budget > 90 ? "bg-amber-500" : "bg-green-500"}`}
-                        style={{ width: `${Math.min(project.budget, 100)}%` }}
-                      />
+                  <div className="flex gap-2">
+                    <div className="flex-1">
+                      <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 transition-all" style={{ width: `${project.progress}%` }} />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full transition-all ${project.budget > 100 ? "bg-red-500" : project.budget > 90 ? "bg-amber-500" : "bg-green-500"}`}
+                          style={{ width: `${Math.min(project.budget, 100)}%` }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </CardContent>
     </Card>
   )

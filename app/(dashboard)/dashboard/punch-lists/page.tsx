@@ -12,15 +12,20 @@ async function getPunchLists() {
     const db = await getDb()
     const lists = await db.collection("punch_lists").find().sort({ createdAt: -1 }).limit(50).toArray()
 
-    return lists.map((list) => {
-      const serialized = JSON.parse(JSON.stringify(list))
-      return {
-        ...serialized,
-        _id: list._id.toString(),
-        projectId: list.projectId?.toString() || "",
-        createdBy: list.createdBy?.toString() || "",
-      }
-    })
+    return lists.map((list) => ({
+      _id: list._id.toString(),
+      projectId: list.projectId?.toString() || "",
+      listNumber: list.listNumber || "",
+      title: list.title || "",
+      location: list.location || "",
+      inspector: list.inspector || "",
+      items: list.items || [],
+      summary: list.summary || { totalItems: 0, openItems: 0, criticalItems: 0 },
+      status: list.status || "abierto",
+      createdBy: list.createdBy?.toString() || "",
+      createdAt: list.createdAt instanceof Date ? list.createdAt.toISOString() : "",
+      updatedAt: list.updatedAt instanceof Date ? list.updatedAt.toISOString() : "",
+    }))
   } catch {
     return []
   }

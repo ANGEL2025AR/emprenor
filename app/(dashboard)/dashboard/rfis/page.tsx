@@ -11,16 +11,25 @@ async function getRFIs() {
     const db = await getDb()
     const rfis = await db.collection("rfis").find().sort({ requestedDate: -1 }).limit(50).toArray()
 
-    return rfis.map((rfi) => {
-      const serialized = JSON.parse(JSON.stringify(rfi))
-      return {
-        ...serialized,
-        _id: rfi._id.toString(),
-        projectId: rfi.projectId?.toString() || "",
-        requestedBy: rfi.requestedBy?.toString() || "",
-        respondedBy: rfi.respondedBy?.toString() || undefined,
-      }
-    })
+    return rfis.map((rfi) => ({
+      _id: rfi._id.toString(),
+      projectId: rfi.projectId?.toString() || "",
+      rfiNumber: rfi.rfiNumber || "",
+      subject: rfi.subject || "",
+      question: rfi.question || "",
+      requestedBy: rfi.requestedBy?.toString() || "",
+      requestedDate: rfi.requestedDate instanceof Date ? rfi.requestedDate.toISOString() : "",
+      requiredBy: rfi.requiredBy instanceof Date ? rfi.requiredBy.toISOString() : null,
+      respondedBy: rfi.respondedBy?.toString() || null,
+      respondedDate: rfi.respondedDate instanceof Date ? rfi.respondedDate.toISOString() : null,
+      response: rfi.response || null,
+      attachments: rfi.attachments || [],
+      status: rfi.status || "abierto",
+      priority: rfi.priority || "normal",
+      impact: rfi.impact || { cost: 0, schedule: 0 },
+      createdAt: rfi.createdAt instanceof Date ? rfi.createdAt.toISOString() : "",
+      updatedAt: rfi.updatedAt instanceof Date ? rfi.updatedAt.toISOString() : "",
+    }))
   } catch {
     return []
   }

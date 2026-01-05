@@ -12,23 +12,31 @@ async function getDailyLogs() {
     const db = await getDb()
     const logs = await db.collection("daily_logs").find().sort({ date: -1, createdAt: -1 }).limit(50).toArray()
 
-    return logs.map((log) => {
-      const serialized: any = { ...log }
-
-      // Serializar ObjectIds
-      if (log._id) serialized._id = log._id.toString()
-      if (log.projectId) serialized.projectId = log.projectId.toString()
-      if (log.preparedBy) serialized.preparedBy = log.preparedBy.toString()
-      if (log.reviewedBy) serialized.reviewedBy = log.reviewedBy.toString()
-      if (log.approvedBy) serialized.approvedBy = log.approvedBy.toString()
-
-      // Serializar Dates
-      if (log.date instanceof Date) serialized.date = log.date.toISOString()
-      if (log.createdAt instanceof Date) serialized.createdAt = log.createdAt.toISOString()
-      if (log.updatedAt instanceof Date) serialized.updatedAt = log.updatedAt.toISOString()
-
-      return serialized
-    })
+    return logs.map((log) => ({
+      _id: log._id.toString(),
+      projectId: log.projectId?.toString() || "",
+      logNumber: log.logNumber || "",
+      date: log.date instanceof Date ? log.date.toISOString() : "",
+      shift: log.shift || "",
+      weather: log.weather || { temperature: 0, conditions: "", precipitation: 0 },
+      workforce: log.workforce || { contractors: [], subcontractors: [], total: 0 },
+      activities: log.activities || [],
+      materials: log.materials || [],
+      equipment: log.equipment || [],
+      safetyObservations: log.safetyObservations || [],
+      delays: log.delays || [],
+      visitors: log.visitors || [],
+      notes: log.notes || "",
+      preparedBy: log.preparedBy?.toString() || "",
+      preparedAt: log.preparedAt instanceof Date ? log.preparedAt.toISOString() : "",
+      reviewedBy: log.reviewedBy?.toString() || null,
+      reviewedAt: log.reviewedAt instanceof Date ? log.reviewedAt.toISOString() : null,
+      approvedBy: log.approvedBy?.toString() || null,
+      approvedAt: log.approvedAt instanceof Date ? log.approvedAt.toISOString() : null,
+      signatures: log.signatures || {},
+      createdAt: log.createdAt instanceof Date ? log.createdAt.toISOString() : "",
+      updatedAt: log.updatedAt instanceof Date ? log.updatedAt.toISOString() : "",
+    }))
   } catch {
     return []
   }

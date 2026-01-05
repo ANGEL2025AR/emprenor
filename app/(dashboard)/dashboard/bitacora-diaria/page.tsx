@@ -15,10 +15,13 @@ async function getDailyLogs() {
     return logs.map((log) => ({
       ...log,
       _id: log._id.toString(),
-      projectId: log.projectId.toString(),
-      preparedBy: log.preparedBy.toString(),
+      projectId: log.projectId?.toString() || "",
+      preparedBy: log.preparedBy?.toString() || "",
       reviewedBy: log.reviewedBy?.toString(),
       approvedBy: log.approvedBy?.toString(),
+      date: log.date instanceof Date ? log.date.toISOString() : log.date,
+      createdAt: log.createdAt instanceof Date ? log.createdAt.toISOString() : log.createdAt,
+      updatedAt: log.updatedAt instanceof Date ? log.updatedAt.toISOString() : log.updatedAt,
     }))
   } catch {
     return []
@@ -74,7 +77,10 @@ export default async function DailyLogsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-slate-900">
-                  {logs.reduce((sum, log) => sum + (log.workforce?.total || 0), 0)}
+                  {logs.reduce((sum, log) => {
+                    const workforce = log.workforce as { total?: number } | undefined
+                    return sum + (workforce?.total || 0)
+                  }, 0)}
                 </p>
                 <p className="text-xs text-slate-600">Personal total hoy</p>
               </div>
@@ -90,7 +96,10 @@ export default async function DailyLogsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-slate-900">
-                  {logs.reduce((sum, log) => sum + (log.safetyObservations?.length || 0), 0)}
+                  {logs.reduce((sum, log) => {
+                    const observations = log.safetyObservations as unknown[] | undefined
+                    return sum + (Array.isArray(observations) ? observations.length : 0)
+                  }, 0)}
                 </p>
                 <p className="text-xs text-slate-600">Observaciones de seguridad</p>
               </div>
@@ -106,7 +115,10 @@ export default async function DailyLogsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-slate-900">
-                  {logs.reduce((sum, log) => sum + (log.activities?.length || 0), 0)}
+                  {logs.reduce((sum, log) => {
+                    const activities = log.activities as unknown[] | undefined
+                    return sum + (Array.isArray(activities) ? activities.length : 0)
+                  }, 0)}
                 </p>
                 <p className="text-xs text-slate-600">Actividades registradas</p>
               </div>

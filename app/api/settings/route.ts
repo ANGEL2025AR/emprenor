@@ -20,6 +20,7 @@ export async function GET() {
         email: "info@emprenor.com",
         phone: "+54 9 11 2758-6521",
         address: "Salta Capital, Argentina",
+        theme: "light",
         notifications: {
           email: true,
           push: false,
@@ -43,13 +44,30 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
-    // Solo admin puede modificar configuración
+    const data = await request.json()
+    const db = await getDb()
+
+    // Si solo está cambiando el tema, permitirlo para cualquier usuario
+    if (data.theme && Object.keys(data).length === 1) {
+      await db.collection("settings").updateOne(
+        { type: "company" },
+        {
+          $set: {
+            theme: data.theme,
+            updatedAt: new Date(),
+            updatedBy: user._id,
+          },
+        },
+        { upsert: true },
+      )
+
+      return NextResponse.json({ success: true, message: "Tema actualizado" })
+    }
+
+    // Para otros cambios, requiere permisos de admin
     if (user.role !== "admin" && user.role !== "super_admin") {
       return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
-
-    const data = await request.json()
-    const db = await getDb()
 
     await db.collection("settings").updateOne(
       { type: "company" },

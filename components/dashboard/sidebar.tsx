@@ -286,7 +286,6 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
             <div className="relative w-10 h-10 flex-shrink-0">
               <Image src="/images/logo-emprenor.png" alt="EMPRENOR" fill className="object-contain" priority />
             </div>
-            {!isCollapsed && <span className="text-xl font-bold text-white lg:block">EMPRENOR</span>}
           </Link>
 
           {/* Mobile close button */}

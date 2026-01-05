@@ -14,7 +14,6 @@ export default function ConfigurationPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-
   const [companyData, setCompanyData] = useState({
     companyName: "",
     cuit: "",
@@ -22,7 +21,6 @@ export default function ConfigurationPage() {
     phone: "",
     address: "",
   })
-
   const [notifications, setNotifications] = useState({
     email: true,
     push: false,
@@ -31,12 +29,12 @@ export default function ConfigurationPage() {
     projectUpdates: true,
     paymentAlerts: true,
   })
-
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   })
+  const [theme, setTheme] = useState<"light" | "dark" | "system">("light")
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -53,6 +51,9 @@ export default function ConfigurationPage() {
           })
           if (data.settings.notifications) {
             setNotifications(data.settings.notifications)
+          }
+          if (data.settings.theme) {
+            setTheme(data.settings.theme)
           }
         }
       } catch (error) {
@@ -168,6 +169,46 @@ export default function ConfigurationPage() {
       })
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleChangeTheme = async (newTheme: "light" | "dark" | "system") => {
+    setTheme(newTheme)
+
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ theme: newTheme }),
+      })
+
+      if (res.ok) {
+        // Aplicar tema al documento
+        const root = document.documentElement
+        if (newTheme === "dark") {
+          root.classList.add("dark")
+        } else if (newTheme === "light") {
+          root.classList.remove("dark")
+        } else {
+          // Sistema: detectar preferencia del navegador
+          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            root.classList.add("dark")
+          } else {
+            root.classList.remove("dark")
+          }
+        }
+
+        toast({
+          title: "Tema actualizado",
+          description: `Se ha cambiado al tema ${newTheme === "light" ? "claro" : newTheme === "dark" ? "oscuro" : "del sistema"}`,
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo cambiar el tema",
+        variant: "destructive",
+      })
     }
   }
 
@@ -426,15 +467,30 @@ export default function ConfigurationPage() {
               <div className="space-y-4">
                 <h4 className="font-medium text-slate-900">Tema</h4>
                 <div className="grid grid-cols-3 gap-4 max-w-md">
-                  <button className="p-4 border-2 border-green-500 rounded-lg bg-white text-center">
+                  <button
+                    onClick={() => handleChangeTheme("light")}
+                    className={`p-4 border-2 rounded-lg bg-white text-center transition-all hover:border-green-400 ${
+                      theme === "light" ? "border-green-500 shadow-md" : "border-slate-200"
+                    }`}
+                  >
                     <div className="w-8 h-8 mx-auto bg-slate-100 rounded-full mb-2" />
                     <span className="text-sm font-medium">Claro</span>
                   </button>
-                  <button className="p-4 border rounded-lg bg-slate-900 text-white text-center">
+                  <button
+                    onClick={() => handleChangeTheme("dark")}
+                    className={`p-4 border-2 rounded-lg bg-slate-900 text-white text-center transition-all hover:border-green-400 ${
+                      theme === "dark" ? "border-green-500 shadow-md" : "border-slate-700"
+                    }`}
+                  >
                     <div className="w-8 h-8 mx-auto bg-slate-700 rounded-full mb-2" />
                     <span className="text-sm font-medium">Oscuro</span>
                   </button>
-                  <button className="p-4 border rounded-lg text-center">
+                  <button
+                    onClick={() => handleChangeTheme("system")}
+                    className={`p-4 border-2 rounded-lg text-center transition-all hover:border-green-400 ${
+                      theme === "system" ? "border-green-500 shadow-md" : "border-slate-200"
+                    }`}
+                  >
                     <div className="w-8 h-8 mx-auto bg-gradient-to-r from-white to-slate-900 rounded-full mb-2" />
                     <span className="text-sm font-medium">Sistema</span>
                   </button>

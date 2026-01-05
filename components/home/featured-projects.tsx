@@ -76,8 +76,7 @@ export default async function FeaturedProjects() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => {
-            // Obtener la primera imagen del proyecto o usar placeholder
-            const mainImage = project.images && project.images.length > 0 ? project.images[0] : null
+            const mainImage = project.image || null
 
             return (
               <Link

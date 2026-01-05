@@ -12,17 +12,23 @@ async function getDailyLogs() {
     const db = await getDb()
     const logs = await db.collection("daily_logs").find().sort({ date: -1, createdAt: -1 }).limit(50).toArray()
 
-    return logs.map((log) => ({
-      ...log,
-      _id: log._id.toString(),
-      projectId: log.projectId?.toString() || "",
-      preparedBy: log.preparedBy?.toString() || "",
-      reviewedBy: log.reviewedBy?.toString(),
-      approvedBy: log.approvedBy?.toString(),
-      date: log.date instanceof Date ? log.date.toISOString() : log.date,
-      createdAt: log.createdAt instanceof Date ? log.createdAt.toISOString() : log.createdAt,
-      updatedAt: log.updatedAt instanceof Date ? log.updatedAt.toISOString() : log.updatedAt,
-    }))
+    return logs.map((log) => {
+      const serialized: any = { ...log }
+
+      // Serializar ObjectIds
+      if (log._id) serialized._id = log._id.toString()
+      if (log.projectId) serialized.projectId = log.projectId.toString()
+      if (log.preparedBy) serialized.preparedBy = log.preparedBy.toString()
+      if (log.reviewedBy) serialized.reviewedBy = log.reviewedBy.toString()
+      if (log.approvedBy) serialized.approvedBy = log.approvedBy.toString()
+
+      // Serializar Dates
+      if (log.date instanceof Date) serialized.date = log.date.toISOString()
+      if (log.createdAt instanceof Date) serialized.createdAt = log.createdAt.toISOString()
+      if (log.updatedAt instanceof Date) serialized.updatedAt = log.updatedAt.toISOString()
+
+      return serialized
+    })
   } catch {
     return []
   }

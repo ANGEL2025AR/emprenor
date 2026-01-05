@@ -23,6 +23,7 @@ import {
   Star,
   Wrench,
 } from "lucide-react"
+import FeaturedProjects from "@/components/home/featured-projects"
 
 const services = [
   {
@@ -144,30 +145,10 @@ const testimonials = [
   },
 ]
 
-const projects = [
-  {
-    title: "Residencia Familiar",
-    location: "Salta Capital",
-    category: "Construcción",
-    image: "/modern-residential-house-construction.jpg",
-  },
-  {
-    title: "Centro Comercial",
-    location: "San Salvador de Jujuy",
-    category: "Obra Civil",
-    image: "/modern-office-building-construction.jpg",
-  },
-  {
-    title: "Planta Industrial",
-    location: "Tartagal",
-    category: "Industrial",
-    image: "/industrial-warehouse-construction.png",
-  },
-]
-
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <Image
           src="/construction-site-workers-blueprint.jpg"
@@ -279,6 +260,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Why Choose Us Section */}
       <section className="py-20 bg-white">
         <div className="container px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -329,56 +311,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-slate-900">
-        <div className="container px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Proyectos Destacados</h2>
-            <p className="text-lg text-slate-400">
-              Conoce algunos de nuestros proyectos más representativos en la región del NOA.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-2xl">
-                <div className="relative w-full h-72">
-                  <Image
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="inline-block px-3 py-1 bg-green-500/20 text-green-400 text-sm rounded-full mb-3">
-                    {project.category}
-                  </span>
-                  <h3 className="text-xl font-semibold text-white mb-1">{project.title}</h3>
-                  <p className="text-slate-400 flex items-center gap-1">
-                    <MapPin className="w-4 h-4" />
-                    {project.location}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white/20 text-white hover:bg-white/10 bg-transparent"
-              asChild
-            >
-              <Link href="/proyectos">
-                Ver todos los proyectos
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <FeaturedProjects />
 
       {/* Testimonials Section */}
       <section className="py-20 bg-slate-50">

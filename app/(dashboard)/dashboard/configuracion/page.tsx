@@ -1,16 +1,28 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Settings, Bell, Shield, Palette, Building2, Save, Loader2 } from "lucide-react"
+import { Settings, Bell, Shield, Palette, Building2, Save, Loader2, CheckCircle2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function ConfigurationPage() {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+
+  const [companyData, setCompanyData] = useState({
+    companyName: "",
+    cuit: "",
+    email: "",
+    phone: "",
+    address: "",
+  })
+
   const [notifications, setNotifications] = useState({
     email: true,
     push: false,
@@ -20,16 +32,155 @@ export default function ConfigurationPage() {
     paymentAlerts: true,
   })
 
-  const handleSave = async () => {
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  })
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const res = await fetch("/api/settings")
+        const data = await res.json()
+        if (data.settings) {
+          setCompanyData({
+            companyName: data.settings.companyName || "",
+            cuit: data.settings.cuit || "",
+            email: data.settings.email || "",
+            phone: data.settings.phone || "",
+            address: data.settings.address || "",
+          })
+          if (data.settings.notifications) {
+            setNotifications(data.settings.notifications)
+          }
+        }
+      } catch (error) {
+        console.error("Error al cargar configuración:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadSettings()
+  }, [])
+
+  const handleSaveCompany = async () => {
     setSaving(true)
-    // Simular guardado
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setSaving(false)
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(companyData),
+      })
+
+      if (res.ok) {
+        toast({
+          title: "Configuración guardada",
+          description: "Los datos de la empresa se han actualizado correctamente",
+        })
+      } else {
+        throw new Error("Error al guardar")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la configuración",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleSaveNotifications = async () => {
+    setSaving(true)
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notifications }),
+      })
+
+      if (res.ok) {
+        toast({
+          title: "Preferencias guardadas",
+          description: "Las notificaciones se han configurado correctamente",
+        })
+      } else {
+        throw new Error("Error al guardar")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la configuración",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleChangePassword = async () => {
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Las contraseñas no coinciden",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      toast({
+        title: "Error",
+        description: "La contraseña debe tener al menos 6 caracteres",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setSaving(true)
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        }),
+      })
+
+      if (res.ok) {
+        toast({
+          title: "Contraseña actualizada",
+          description: "Tu contraseña se ha cambiado correctamente",
+        })
+        setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
+      } else {
+        const data = await res.json()
+        throw new Error(data.error || "Error al cambiar contraseña")
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo cambiar la contraseña",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
+      </div>
+    )
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Configuración</h1>
         <p className="text-slate-600">Personaliza tu experiencia en la plataforma</p>
@@ -68,26 +219,47 @@ export default function ConfigurationPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="companyName">Nombre de la Empresa</Label>
-                  <Input id="companyName" defaultValue="EMPRENOR Construcciones" />
+                  <Input
+                    id="companyName"
+                    value={companyData.companyName}
+                    onChange={(e) => setCompanyData({ ...companyData, companyName: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="cuit">CUIT</Label>
-                  <Input id="cuit" defaultValue="30-12345678-9" />
+                  <Input
+                    id="cuit"
+                    value={companyData.cuit}
+                    onChange={(e) => setCompanyData({ ...companyData, cuit: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email de Contacto</Label>
-                  <Input id="email" type="email" defaultValue="info@emprenor.com" />
+                  <Input
+                    id="email"
+                    type="email"
+                    value={companyData.email}
+                    onChange={(e) => setCompanyData({ ...companyData, email: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Teléfono</Label>
-                  <Input id="phone" defaultValue="+54 9 11 2758-6521" />
+                  <Input
+                    id="phone"
+                    value={companyData.phone}
+                    onChange={(e) => setCompanyData({ ...companyData, phone: e.target.value })}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="address">Dirección</Label>
-                <Input id="address" defaultValue="Salta Capital, Argentina" />
+                <Input
+                  id="address"
+                  value={companyData.address}
+                  onChange={(e) => setCompanyData({ ...companyData, address: e.target.value })}
+                />
               </div>
-              <Button onClick={handleSave} disabled={saving}>
+              <Button onClick={handleSaveCompany} disabled={saving}>
                 {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                 Guardar Cambios
               </Button>
@@ -172,7 +344,7 @@ export default function ConfigurationPage() {
                 </div>
               </div>
 
-              <Button onClick={handleSave} disabled={saving}>
+              <Button onClick={handleSaveNotifications} disabled={saving}>
                 {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                 Guardar Preferencias
               </Button>
@@ -195,26 +367,47 @@ export default function ConfigurationPage() {
                 <div className="space-y-4 max-w-md">
                   <div className="space-y-2">
                     <Label htmlFor="current-password">Contraseña Actual</Label>
-                    <Input id="current-password" type="password" />
+                    <Input
+                      id="current-password"
+                      type="password"
+                      value={passwordData.currentPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="new-password">Nueva Contraseña</Label>
-                    <Input id="new-password" type="password" />
+                    <Input
+                      id="new-password"
+                      type="password"
+                      value={passwordData.newPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirm-password">Confirmar Nueva Contraseña</Label>
-                    <Input id="confirm-password" type="password" />
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      value={passwordData.confirmPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                    />
                   </div>
-                  <Button>Actualizar Contraseña</Button>
+                  <Button onClick={handleChangePassword} disabled={saving}>
+                    {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                    Actualizar Contraseña
+                  </Button>
                 </div>
               </div>
 
               <div className="space-y-4 pt-4 border-t">
-                <h4 className="font-medium text-slate-900">Sesiones Activas</h4>
-                <p className="text-sm text-slate-500">
-                  Gestiona las sesiones activas de tu cuenta en diferentes dispositivos.
-                </p>
-                <Button variant="outline">Ver Sesiones Activas</Button>
+                <h4 className="font-medium text-slate-900">Estado de Seguridad</h4>
+                <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg border border-green-200">
+                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  <div>
+                    <p className="font-medium text-green-800">Cuenta Segura</p>
+                    <p className="text-sm text-green-600">Tu cuenta está protegida con autenticación JWT</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

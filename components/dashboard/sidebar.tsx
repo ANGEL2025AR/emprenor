@@ -34,6 +34,7 @@ import {
   AlertOctagon,
   Zap,
   Globe,
+  Shield,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -186,6 +187,12 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       name: "Sitio Web",
       href: "/dashboard/sitio-web/proyectos",
       icon: Globe,
+      permission: "admin.access" as const,
+    },
+    {
+      name: "Auditoría",
+      href: "/dashboard/auditoria",
+      icon: Shield,
       permission: "admin.access" as const,
     },
     {

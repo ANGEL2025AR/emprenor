@@ -11,12 +11,16 @@ async function getRFIs() {
     const db = await getDb()
     const rfis = await db.collection("rfis").find().sort({ requestedDate: -1 }).limit(50).toArray()
 
-    return rfis.map((rfi) => ({
-      ...rfi,
-      _id: rfi._id.toString(),
-      projectId: rfi.projectId.toString(),
-      requestedBy: rfi.requestedBy.toString(),
-    }))
+    return rfis.map((rfi) => {
+      const serialized = JSON.parse(JSON.stringify(rfi))
+      return {
+        ...serialized,
+        _id: rfi._id.toString(),
+        projectId: rfi.projectId?.toString() || "",
+        requestedBy: rfi.requestedBy?.toString() || "",
+        respondedBy: rfi.respondedBy?.toString() || undefined,
+      }
+    })
   } catch {
     return []
   }

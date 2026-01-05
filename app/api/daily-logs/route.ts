@@ -17,7 +17,10 @@ export async function GET(request: Request) {
     const endDate = searchParams.get("endDate")
 
     const db = await getDb()
-    const query: Record<string, unknown> = {}
+    const query: {
+      projectId?: ObjectId
+      date?: { $gte?: Date; $lte?: Date }
+    } = {}
 
     if (projectId) {
       query.projectId = new ObjectId(projectId)

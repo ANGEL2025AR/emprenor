@@ -194,3 +194,36 @@ export async function getAuditLogs(filters: {
 
   return { logs, total }
 }
+
+export async function logActivity(
+  userId: string | ObjectId,
+  action: string,
+  entityType: string,
+  entityId: string | ObjectId,
+  previousData: Record<string, unknown> | null,
+  newData: Record<string, unknown>,
+  ip: string,
+  userAgent: string,
+): Promise<void> {
+  try {
+    const db = await getDb()
+
+    const userIdObj = typeof userId === "string" ? new ObjectId(userId) : userId
+    const entityIdObj = typeof entityId === "string" ? new ObjectId(entityId) : entityId
+
+    await db.collection("activity_logs").insertOne({
+      userId: userIdObj,
+      action,
+      entityType,
+      entityId: entityIdObj,
+      previousData,
+      newData,
+      ip,
+      userAgent,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  } catch (error) {
+    console.error("Error logging activity:", error)
+  }
+}

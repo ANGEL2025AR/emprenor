@@ -70,6 +70,24 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       permission: "projects.view" as const,
     },
     {
+      name: "Bitácora Diaria",
+      href: "/dashboard/bitacora-diaria",
+      icon: FileText,
+      permission: "projects.view" as const,
+    },
+    {
+      name: "Punch Lists",
+      href: "/dashboard/punch-lists",
+      icon: ClipboardCheck,
+      permission: "quality.view" as const,
+    },
+    {
+      name: "RFIs",
+      href: "/dashboard/rfis",
+      icon: MessageSquare,
+      permission: "projects.view" as const,
+    },
+    {
       name: "Clientes",
       href: "/dashboard/clientes",
       icon: Users,

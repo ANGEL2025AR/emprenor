@@ -853,3 +853,345 @@ export interface LegalReport extends BaseDocument {
   pdfUrl?: string
   status: "borrador" | "emitido" | "firmado" | "archivado"
 }
+
+// ============================================
+// DAILY LOGS (BITÁCORA DIARIA DE OBRA)
+// ============================================
+
+export type WeatherCondition = "soleado" | "nublado" | "lluvioso" | "ventoso" | "nevado" | "tormenta"
+export type SafetyIncidentSeverity = "leve" | "moderado" | "grave" | "critico"
+
+export interface DailyLog extends BaseDocument {
+  projectId: ObjectId
+  date: Date
+  logNumber: string // DL-2025-001
+  shift: "mañana" | "tarde" | "noche"
+
+  // Condiciones del sitio
+  weather: {
+    condition: WeatherCondition
+    temperature: number
+    humidity?: number
+    notes?: string
+  }
+
+  // Personal en sitio
+  workforce: {
+    contractorWorkers: number
+    subcontractorWorkers: number
+    visitors: number
+    inspectors: number
+    total: number
+  }
+
+  // Equipo y maquinaria
+  equipment: {
+    name: string
+    operator?: string
+    hoursUsed: number
+    status: "operativo" | "mantenimiento" | "averiado"
+    notes?: string
+  }[]
+
+  // Actividades realizadas
+  activities: {
+    description: string
+    location: string
+    workersAssigned: number
+    percentComplete: number
+    materials: {
+      name: string
+      quantity: number
+      unit: string
+    }[]
+    notes?: string
+  }[]
+
+  // Materiales recibidos
+  materialsReceived: {
+    supplierName: string
+    deliveryTime: Date
+    items: {
+      description: string
+      quantity: number
+      unit: string
+      condition: "buena" | "dañada" | "rechazada"
+    }[]
+    receiptNumber?: string
+  }[]
+
+  // Seguridad e incidentes
+  safetyObservations: {
+    type: "near_miss" | "violation" | "incident" | "improvement"
+    severity?: SafetyIncidentSeverity
+    description: string
+    location: string
+    actionTaken?: string
+    responsibleParty?: string
+    photos?: string[]
+  }[]
+
+  // Visitas e inspecciones
+  visitors: {
+    name: string
+    company: string
+    purpose: string
+    arrivalTime: Date
+    departureTime?: Date
+    escort?: string
+  }[]
+
+  // Delays y problemas
+  delays: {
+    description: string
+    cause: string
+    impact: "menor" | "moderado" | "significativo" | "critico"
+    duration: number // horas
+    mitigationActions?: string
+  }[]
+
+  // Observaciones generales
+  notes: string
+  photos: string[]
+
+  // Firmas y aprobaciones
+  preparedBy: ObjectId
+  preparedAt: Date
+  reviewedBy?: ObjectId
+  reviewedAt?: Date
+  approvedBy?: ObjectId
+  approvedAt?: Date
+
+  signatures: {
+    siteSupervisor?: {
+      userId: ObjectId
+      signature: string
+      date: Date
+    }
+    projectManager?: {
+      userId: ObjectId
+      signature: string
+      date: Date
+    }
+  }
+}
+
+// ============================================
+// PUNCH LISTS (LISTA DE PENDIENTES/DEFECTOS)
+// ============================================
+
+export type PunchItemStatus = "abierto" | "en_progreso" | "resuelto" | "cerrado" | "rechazado"
+export type PunchItemPriority = "baja" | "media" | "alta" | "critica"
+export type PunchItemCategory =
+  | "defecto_construccion"
+  | "acabado_incompleto"
+  | "limpieza"
+  | "pintura"
+  | "instalacion_incorrecta"
+  | "faltante"
+  | "daño"
+  | "otro"
+
+export interface PunchList extends BaseDocument {
+  projectId: ObjectId
+  listNumber: string // PL-2025-001
+  listName: string
+  description: string
+  inspectionId?: ObjectId
+  phase: string // fase del proyecto
+  location: string
+  createdBy: ObjectId
+  status: "abierta" | "en_progreso" | "completada" | "cerrada"
+
+  items: {
+    itemNumber: string // PL-001-001
+    category: PunchItemCategory
+    description: string
+    location: string
+    detailedLocation?: string
+    priority: PunchItemPriority
+    status: PunchItemStatus
+
+    identifiedBy: ObjectId
+    identifiedDate: Date
+
+    assignedTo?: ObjectId
+    assignedDate?: Date
+
+    dueDate?: Date
+    completedDate?: Date
+    verifiedDate?: Date
+
+    photos: {
+      before: string[]
+      after: string[]
+    }
+
+    cost?: number
+    notes?: string
+
+    resolution?: {
+      description: string
+      resolvedBy: ObjectId
+      resolvedDate: Date
+    }
+
+    verification?: {
+      verifiedBy: ObjectId
+      verifiedDate: Date
+      approved: boolean
+      comments?: string
+    }
+  }[]
+
+  summary: {
+    totalItems: number
+    openItems: number
+    inProgressItems: number
+    resolvedItems: number
+    closedItems: number
+    criticalItems: number
+  }
+}
+
+// ============================================
+// RFIs (REQUEST FOR INFORMATION)
+// ============================================
+
+export type RFIStatus = "abierto" | "en_revision" | "respondido" | "cerrado" | "cancelado"
+export type RFIPriority = "baja" | "normal" | "alta" | "urgente"
+export type RFIImpact = "ninguno" | "menor" | "moderado" | "mayor" | "critico"
+
+export interface RFI extends BaseDocument {
+  projectId: ObjectId
+  rfiNumber: string // RFI-2025-001
+  subject: string
+  description: string
+  discipline: "arquitectura" | "estructura" | "mecanica" | "electrica" | "plomeria" | "otro"
+
+  // Solicitud
+  requestedBy: ObjectId
+  requestedDate: Date
+  requiredResponseDate: Date
+  priority: RFIPriority
+
+  // Contexto
+  drawingReferences: {
+    drawingNumber: string
+    drawingTitle: string
+    revision: string
+    sheet?: string
+  }[]
+
+  specificationReferences: {
+    section: string
+    title: string
+    page?: string
+  }[]
+
+  location: string
+  cost: {
+    hasImpact: boolean
+    estimatedCost?: number
+    justification?: string
+  }
+
+  schedule: {
+    hasImpact: boolean
+    impact?: RFIImpact
+    daysImpacted?: number
+    justification?: string
+  }
+
+  // Estado
+  status: RFIStatus
+
+  // Asignación
+  assignedTo?: ObjectId
+  assignedDepartment?: string
+  assignedDate?: Date
+
+  // Respuesta
+  response?: {
+    respondedBy: ObjectId
+    respondedDate: Date
+    responseText: string
+    recommendation: string
+    drawingsRequired: boolean
+    newDrawings?: {
+      drawingNumber: string
+      drawingTitle: string
+      revision: string
+    }[]
+  }
+
+  // Seguimiento
+  reviewers: {
+    userId: ObjectId
+    role: string
+    reviewDate?: Date
+    comments?: string
+  }[]
+
+  // Distribución
+  distribution: {
+    userId: ObjectId
+    sentDate: Date
+    acknowledged: boolean
+    acknowledgedDate?: Date
+  }[]
+
+  // Adjuntos
+  attachments: {
+    type: "documento" | "plano" | "foto" | "video" | "otro"
+    name: string
+    url: string
+    uploadedBy: ObjectId
+    uploadedDate: Date
+  }[]
+
+  // Conversación
+  comments: {
+    userId: ObjectId
+    comment: string
+    date: Date
+    attachments?: string[]
+  }[]
+
+  closedBy?: ObjectId
+  closedDate?: Date
+  closureReason?: string
+}
+
+// ============================================
+// 2FA/MFA (TWO-FACTOR AUTHENTICATION)
+// ============================================
+
+export interface TwoFactorAuth extends BaseDocument {
+  userId: ObjectId
+  enabled: boolean
+  secret: string // base32 encoded secret para TOTP
+  backupCodes: {
+    code: string
+    used: boolean
+    usedAt?: Date
+  }[]
+  verifiedAt?: Date
+  lastUsedAt?: Date
+  method: "totp" | "sms" | "email"
+}
+
+export interface LoginAttempt extends BaseDocument {
+  userId?: ObjectId
+  email: string
+  ipAddress: string
+  userAgent: string
+  success: boolean
+  failureReason?: string
+  twoFactorUsed: boolean
+  geolocation?: {
+    country?: string
+    city?: string
+    region?: string
+  }
+}

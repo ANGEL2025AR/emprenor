@@ -3,7 +3,6 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { hashPassword } from "@/lib/auth/password"
-import { userSchema } from "@/lib/validations/schemas"
 import type { User } from "@/lib/db/models"
 
 // GET - Listar usuarios
@@ -70,29 +69,30 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const result = userSchema.safeParse(body)
 
-    if (!result.success) {
-      return NextResponse.json({ error: "Datos inválidos", details: result.error.flatten() }, { status: 400 })
+    if (!body.password || body.password.length < 8) {
+      return NextResponse.json({ error: "La contraseña debe tener al menos 8 caracteres" }, { status: 400 })
     }
 
     const db = await getDb()
 
     // Verificar email único
-    const existing = await db.collection("users").findOne({ email: result.data.email.toLowerCase() })
+    const existing = await db.collection("users").findOne({ email: body.email.toLowerCase() })
     if (existing) {
       return NextResponse.json({ error: "El email ya existe" }, { status: 409 })
     }
 
-    // Crear con contraseña temporal
-    const tempPassword = Math.random().toString(36).slice(-8) + "A1"
-    const hashedPassword = hashPassword(tempPassword)
+    const hashedPassword = hashPassword(body.password)
 
     const newUser: Omit<User, "_id"> = {
-      ...result.data,
-      email: result.data.email.toLowerCase(),
+      email: body.email.toLowerCase(),
       password: hashedPassword,
+      name: body.name,
+      lastName: body.lastName,
+      phone: body.phone || "",
+      role: body.role,
       permissions: [],
+      isActive: body.isActive !== false,
       emailVerified: false,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -104,7 +104,6 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         user: { ...newUser, _id: insertResult.insertedId, password: undefined },
-        tempPassword, // En producción, enviar por email
       },
       { status: 201 },
     )

@@ -283,7 +283,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
             href="/dashboard"
             className={cn("flex items-center gap-3 transition-all", isCollapsed && "lg:justify-center")}
           >
-            <div className="relative w-16 h-16 flex-shrink-0">
+            <div className="relative w-20 h-20 flex-shrink-0">
               <Image src="/images/logo-emprenor.png" alt="EMPRENOR" fill className="object-contain" priority />
             </div>
           </Link>

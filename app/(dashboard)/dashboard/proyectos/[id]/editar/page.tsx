@@ -46,17 +46,34 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
     setSaving(true)
 
     try {
+      const updateData = {
+        name: project.name,
+        description: project.description,
+        status: project.status,
+        progress: project.progress || 0,
+        budget: {
+          estimated: project.budget?.estimated || 0,
+          approved: project.budget?.approved || 0,
+          spent: project.budget?.spent || 0,
+          currency: project.budget?.currency || "ARS",
+        },
+      }
+
       const response = await fetch(`/api/projects/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(project),
+        body: JSON.stringify(updateData),
       })
 
       if (response.ok) {
         router.push(`/dashboard/proyectos/${id}`)
+        router.refresh()
+      } else {
+        alert("Error al guardar el proyecto")
       }
-    } catch {
-      // Error silencioso
+    } catch (error) {
+      console.error("[v0] Error guardando proyecto:", error)
+      alert("Error al guardar el proyecto")
     } finally {
       setSaving(false)
     }
@@ -139,29 +156,34 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                   type="number"
                   min="0"
                   max="100"
-                  value={project.progress || 0}
-                  onChange={(e) => setProject({ ...project, progress: Number.parseInt(e.target.value) })}
+                  value={project.progress || ""}
+                  onChange={(e) => setProject({ ...project, progress: Number.parseInt(e.target.value) || 0 })}
+                  placeholder="0"
                 />
+                <p className="text-xs text-slate-500">Ingrese el porcentaje de avance del proyecto</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="budget">Presupuesto Estimado</Label>
+                <Label htmlFor="budget">Presupuesto Estimado (ARS)</Label>
                 <Input
                   id="budget"
                   type="number"
-                  value={project.budget?.estimated || 0}
+                  min="0"
+                  value={project.budget?.estimated || ""}
                   onChange={(e) =>
                     setProject({
                       ...project,
                       budget: {
                         ...project.budget!,
-                        estimated: Number.parseInt(e.target.value),
+                        estimated: Number.parseInt(e.target.value) || 0,
                         approved: project.budget?.approved || 0,
                         spent: project.budget?.spent || 0,
                         currency: project.budget?.currency || "ARS",
                       },
                     })
                   }
+                  placeholder="0"
                 />
+                <p className="text-xs text-slate-500">Ingrese el presupuesto total estimado</p>
               </div>
             </div>
 

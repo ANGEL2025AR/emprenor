@@ -85,6 +85,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
 
   const budgetTotal = project.budget?.estimated || project.budget?.approved || 0
   const budgetSpent = project.budget?.spent || 0
+  const budgetDisplay = budgetTotal > 0 ? `$${(budgetTotal / 1000000).toFixed(1)}M` : "Sin definir"
 
   const teamSize = project.team?.workers?.length || 0
 
@@ -123,7 +124,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <ListTodo className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{project.progress}%</p>
+                <p className="text-2xl font-bold">{project.progress || 0}%</p>
                 <p className="text-sm text-slate-600">Progreso</p>
               </div>
             </div>
@@ -136,7 +137,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <DollarSign className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold">${(budgetTotal / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold">{budgetDisplay}</p>
                 <p className="text-sm text-slate-600">Presupuesto</p>
               </div>
             </div>
@@ -149,7 +150,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <Users className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{teamSize}</p>
+                <p className="text-2xl font-bold">{teamSize > 0 ? teamSize : "N/A"}</p>
                 <p className="text-sm text-slate-600">Equipo</p>
               </div>
             </div>
@@ -162,7 +163,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <Calendar className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{daysRemaining > 0 ? daysRemaining : 0}</p>
+                <p className="text-2xl font-bold">{daysRemaining > 0 ? daysRemaining : "N/A"}</p>
                 <p className="text-sm text-slate-600">Días restantes</p>
               </div>
             </div>
@@ -175,9 +176,9 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Progreso General</span>
-            <span className="text-sm font-bold text-green-600">{project.progress}%</span>
+            <span className="text-sm font-bold text-green-600">{project.progress || 0}%</span>
           </div>
-          <Progress value={project.progress} className="h-3" />
+          <Progress value={project.progress || 0} className="h-3" />
         </CardContent>
       </Card>
 

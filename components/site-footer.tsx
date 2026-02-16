@@ -15,6 +15,7 @@ export function SiteFooter() {
                 alt="EMPRENOR Logo"
                 width={160}
                 height={42}
+                style={{ width: "auto", height: "auto" }}
                 className="h-10 w-auto"
               />
             </Link>

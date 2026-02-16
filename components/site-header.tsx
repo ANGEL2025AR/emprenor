@@ -46,6 +46,7 @@ export function SiteHeader() {
             alt="EMPRENOR Logo"
             width={180}
             height={48}
+            style={{ width: "auto", height: "auto" }}
             className="h-10 w-auto md:h-12"
             priority
           />

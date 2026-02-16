@@ -65,6 +65,7 @@ export default function LoginPage() {
               alt="EMPRENOR Logo"
               width={200}
               height={60}
+              style={{ width: "auto", height: "auto" }}
               className="h-12 w-auto"
               priority
             />
@@ -105,6 +106,7 @@ export default function LoginPage() {
                 alt="EMPRENOR Logo"
                 width={180}
                 height={54}
+                style={{ width: "auto", height: "auto" }}
                 className="h-10 w-auto"
                 priority
               />

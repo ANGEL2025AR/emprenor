@@ -154,7 +154,7 @@ export function ProjectFinancesClient({ projectId }: { projectId: string }) {
                   </div>
                   <div className="text-right">
                     <p className={`font-bold ${payment.type === "ingreso" ? "text-green-600" : "text-red-600"}`}>
-                      {payment.type === "ingreso" ? "+" : "-"}${payment.amount.toLocaleString("es-AR")}
+                      {payment.type === "ingreso" ? "+" : "-"}${(payment.amount || 0).toLocaleString("es-AR")}
                     </p>
                     <Badge className="mt-1" variant="outline">
                       {payment.status}
@@ -194,7 +194,7 @@ export function ProjectFinancesClient({ projectId }: { projectId: string }) {
                     <p className="text-sm text-slate-600">{invoice.client?.name}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-slate-900">${invoice.total.toLocaleString("es-AR")}</p>
+                    <p className="font-bold text-slate-900">${(invoice.total || 0).toLocaleString("es-AR")}</p>
                     <Badge className="mt-1" variant="outline">
                       {invoice.status}
                     </Badge>

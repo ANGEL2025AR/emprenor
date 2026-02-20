@@ -101,7 +101,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </Button>
           <div>
             <div className="flex items-center gap-2">
-              <Badge className={STATUS_COLORS[project.status]}>{STATUS_LABELS[project.status]}</Badge>
+              <Badge className={STATUS_COLORS[project.status] || "bg-slate-100 text-slate-700"}>{STATUS_LABELS[project.status] || project.status}</Badge>
               <span className="text-sm text-slate-500">{project.code}</span>
             </div>
             <h1 className="text-2xl font-bold text-slate-900 mt-1">{project.name}</h1>

@@ -208,7 +208,7 @@ export default function ProjectsPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <Badge className={STATUS_COLORS[project.status]}>{STATUS_LABELS[project.status]}</Badge>
+                    <Badge className={STATUS_COLORS[project.status] || "bg-slate-100 text-slate-700"}>{STATUS_LABELS[project.status] || project.status}</Badge>
                     <CardTitle className="mt-2 text-lg">{project.name}</CardTitle>
                     <p className="text-sm text-slate-500">{project.code}</p>
                   </div>

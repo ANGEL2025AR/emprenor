@@ -219,7 +219,7 @@ export default function InventoryClient() {
                         <td className="py-3 px-4">
                           <Badge className={`${status.color} text-white`}>{status.label}</Badge>
                         </td>
-                        <td className="py-3 px-4 text-right">${item.cost.toLocaleString("es-AR")}</td>
+                        <td className="py-3 px-4 text-right">${(item.cost || 0).toLocaleString("es-AR")}</td>
                         <td className="py-3 px-4 text-slate-600">{item.location || "No especificada"}</td>
                         <td className="py-3 px-4 text-center">
                           <Button

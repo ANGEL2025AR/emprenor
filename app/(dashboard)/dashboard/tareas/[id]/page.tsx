@@ -113,8 +113,8 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
         <div className="flex-1">
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl font-bold text-slate-900">{task.title}</h1>
-            <Badge className={STATUS_COLORS[task.status]}>{STATUS_LABELS[task.status]}</Badge>
-            <Badge variant="outline" className={PRIORITY_COLORS[task.priority]}>
+            <Badge className={STATUS_COLORS[task.status] || "bg-slate-100 text-slate-700"}>{STATUS_LABELS[task.status] || task.status}</Badge>
+            <Badge variant="outline" className={PRIORITY_COLORS[task.priority] || "text-slate-700"}>
               Prioridad {task.priority}
             </Badge>
           </div>

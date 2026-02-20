@@ -178,7 +178,7 @@ export default function ClientsClient() {
                   <div className="text-xs text-muted-foreground">Proyectos</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">${client.totalInvoiced.toLocaleString()}</div>
+                  <div className="text-2xl font-bold">${(client.totalInvoiced || 0).toLocaleString()}</div>
                   <div className="text-xs text-muted-foreground">Facturado</div>
                 </div>
               </div>

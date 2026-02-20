@@ -101,7 +101,7 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
         <div className="flex-1">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-slate-900">{transaction.description}</h1>
-            <Badge className={STATUS_COLORS[transaction.status]}>{transaction.status}</Badge>
+            <Badge className={STATUS_COLORS[transaction.status] || "bg-slate-100 text-slate-700"}>{transaction.status}</Badge>
           </div>
           <p className="text-slate-600">Referencia: {transaction.reference}</p>
         </div>

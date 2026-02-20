@@ -59,7 +59,7 @@ export default function InventoryClient() {
         setItems(data.items || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading inventory:", error)
+      console.error("[API] Error loading inventory:", error)
     } finally {
       setLoading(false)
     }

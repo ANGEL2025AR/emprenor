@@ -44,17 +44,23 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    const data = await request.json()
+    const body = await request.json()
     const db = await getDb()
+
+    const allowedFields = [
+      "name", "email", "phone", "company", "cuit", "type",
+      "fiscalCondition", "address", "city", "province", "country",
+      "industry", "website", "notes", "status"
+    ]
+    const data: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+    data.updatedAt = new Date()
 
     const result = await db.collection("clients").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...data,
-          updatedAt: new Date(),
-        },
-      },
+      { $set: data },
     )
 
     if (result.matchedCount === 0) {

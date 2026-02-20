@@ -26,14 +26,19 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const data = await request.json()
     const db = await getDb()
 
+    const allowedFields = [
+      "name", "description", "trigger", "action", "conditions",
+      "schedule", "status", "enabled"
+    ]
+    const sanitized: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (data[key] !== undefined) sanitized[key] = data[key]
+    }
+    sanitized.updatedAt = new Date()
+
     const result = await db.collection("automations").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...data,
-          updatedAt: new Date(),
-        },
-      },
+      { $set: sanitized },
     )
 
     if (result.matchedCount === 0) {

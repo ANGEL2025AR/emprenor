@@ -153,7 +153,7 @@ export function DashboardCharts() {
           budgetUsage: budgetUsage.length > 0 ? budgetUsage : [],
         })
       } catch (error) {
-        console.error("[v0] Error loading dashboard charts:", error)
+        console.error("[API] Error loading dashboard charts:", error)
         setData({
           monthlyRevenue: [],
           projectDistribution: [],

@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ suppliers })
   } catch (error) {
-    console.error("[v0] Suppliers error:", error)
+    console.error("[API] Suppliers error:", error)
     return NextResponse.json({ error: "Error al cargar proveedores", suppliers: [] }, { status: 500 })
   }
 }
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       supplierId: result.insertedId,
     })
   } catch (error) {
-    console.error("[v0] Supplier create error:", error)
+    console.error("[API] Supplier create error:", error)
     return NextResponse.json({ error: "Error al crear proveedor" }, { status: 500 })
   }
 }

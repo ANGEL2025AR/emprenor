@@ -69,16 +69,21 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
+    const allowedSettings = [
+      "companyName", "companyEmail", "companyPhone", "companyAddress",
+      "companyLogo", "currency", "language", "timezone", "theme",
+      "notifications", "fiscalId", "website"
+    ]
+    const sanitized: Record<string, unknown> = { type: "company" }
+    for (const key of allowedSettings) {
+      if (data[key] !== undefined) sanitized[key] = data[key]
+    }
+    sanitized.updatedAt = new Date()
+    sanitized.updatedBy = user._id
+
     await db.collection("settings").updateOne(
       { type: "company" },
-      {
-        $set: {
-          ...data,
-          type: "company",
-          updatedAt: new Date(),
-          updatedBy: user._id,
-        },
-      },
+      { $set: sanitized },
       { upsert: true },
     )
 

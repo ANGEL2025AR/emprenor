@@ -34,7 +34,7 @@ export default function IncidentsClient() {
         setIncidents(data.incidents || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading incidents:", error)
+      console.error("[API] Error loading incidents:", error)
     } finally {
       setLoading(false)
     }

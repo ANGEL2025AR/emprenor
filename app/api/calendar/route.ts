@@ -72,14 +72,14 @@ export async function GET(request: Request) {
       ...tasks.map((t) => ({
         _id: String(t._id),
         title: t.title,
-        date: t.endDate?.toISOString() || new Date().toISOString(),
+        date: t.endDate ? new Date(t.endDate).toISOString() : new Date().toISOString(),
         type: "tarea",
         status: t.status,
       })),
       ...inspections.map((i) => ({
         _id: String(i._id),
-        title: `Inspección: ${i.title}`,
-        date: i.date?.toISOString() || new Date().toISOString(),
+        title: `Inspeccion: ${i.title}`,
+        date: i.date ? new Date(i.date).toISOString() : new Date().toISOString(),
         type: "inspeccion",
         status: i.result,
       })),
@@ -87,7 +87,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ events })
   } catch (error) {
-    console.error("[v0] Calendar error:", error)
+    console.error("[API] Calendar error:", error)
     return NextResponse.json({ error: "Error al cargar calendario", events: [] }, { status: 500 })
   }
 }

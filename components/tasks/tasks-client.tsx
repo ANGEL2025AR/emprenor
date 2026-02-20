@@ -65,7 +65,7 @@ export function TasksClient() {
         setTasks(data.tasks || [])
       }
     } catch (error) {
-      console.error("[v0] Error fetching tasks:", error)
+      console.error("[API] Error fetching tasks:", error)
     } finally {
       setLoading(false)
     }

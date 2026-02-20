@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ employees })
   } catch (error) {
-    console.error("[v0] Employees error:", error)
+    console.error("[API] Employees error:", error)
     return NextResponse.json({ error: "Error al cargar empleados", employees: [] }, { status: 500 })
   }
 }
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       employeeId: result.insertedId,
     })
   } catch (error) {
-    console.error("[v0] Employee create error:", error)
+    console.error("[API] Employee create error:", error)
     return NextResponse.json({ error: "Error al crear empleado" }, { status: 500 })
   }
 }

@@ -52,7 +52,7 @@ export default function EmployeesClient() {
         setEmployees(data.employees || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading employees:", error)
+      console.error("[API] Error loading employees:", error)
     } finally {
       setLoading(false)
     }

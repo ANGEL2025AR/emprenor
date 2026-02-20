@@ -34,7 +34,7 @@ export default function CertificatesClient() {
         setCertificates(data.certificates || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading certificates:", error)
+      console.error("[API] Error loading certificates:", error)
     } finally {
       setLoading(false)
     }

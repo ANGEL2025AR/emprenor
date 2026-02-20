@@ -40,7 +40,7 @@ export default function ReportsClient() {
         document.body.removeChild(a)
       }
     } catch (error) {
-      console.error("[v0] Error generating report:", error)
+      console.error("[API] Error generating report:", error)
     } finally {
       setGenerating(false)
     }

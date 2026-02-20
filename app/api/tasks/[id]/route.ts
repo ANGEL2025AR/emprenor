@@ -56,15 +56,20 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     if (body.status === "completada") progress = 100
     if (body.status === "pendiente") progress = 0
 
+    const allowedFields = [
+      "title", "description", "status", "priority", "dueDate",
+      "startDate", "endDate", "projectId", "assignedTo", "tags"
+    ]
+    const data: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+    data.progress = progress
+    data.updatedAt = new Date()
+
     const updateResult = await db.collection("tasks").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...body,
-          progress,
-          updatedAt: new Date(),
-        },
-      },
+      { $set: data },
     )
 
     if (updateResult.matchedCount === 0) {

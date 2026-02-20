@@ -35,17 +35,23 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: "No autenticado" }, { status: 401 })
     }
 
-    const data = await request.json()
+    const body = await request.json()
     const db = await getDb()
+
+    const allowedFields = [
+      "projectName", "clientName", "clientId", "items", "subtotal",
+      "discount", "taxBase", "tax", "total", "currency", "validUntil",
+      "terms", "notes", "status"
+    ]
+    const data: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+    data.updatedAt = new Date()
 
     const result = await db.collection("quotations").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...data,
-          updatedAt: new Date(),
-        },
-      },
+      { $set: data },
     )
 
     if (result.matchedCount === 0) {

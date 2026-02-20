@@ -74,9 +74,10 @@ export async function POST(request: Request) {
       dueDate: new Date(data.dueDate),
       client: {
         name: clientData.name || "",
-        cuitCuil: clientData.cuitCuil || clientData.cuit || "",
+        cuit: clientData.cuitCuil || clientData.cuit || "",
+        taxCondition: clientData.fiscalCondition || clientData.taxCondition || "consumidor_final",
+        email: clientData.email || "",
         address: clientData.address || "",
-        fiscalCondition: clientData.fiscalCondition || "consumidor_final",
       },
       projectName: data.projectName || "",
       items: data.items || [],

@@ -3,10 +3,21 @@ import { getDb } from "@/lib/db/connection"
 import { verifyPassword } from "@/lib/auth/password"
 import { createSession, updateLastLogin } from "@/lib/auth/session"
 import { loginSchema } from "@/lib/validations/schemas"
+import { rateLimit } from "@/lib/rate-limiter"
 import type { User } from "@/lib/db/models"
+
+const loginRateLimit = rateLimit({ windowMs: 60000 * 15, maxRequests: 5 })
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimitResult = await loginRateLimit(request)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: "Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos." },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
 
     const result = loginSchema.safeParse(body)

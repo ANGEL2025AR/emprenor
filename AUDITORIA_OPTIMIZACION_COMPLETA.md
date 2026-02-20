@@ -126,7 +126,7 @@ Se realizó una auditoría exhaustiva de extremo a extremo del sistema EMPRENOR,
 
 ### ESTRUCTURA DE CARPETAS OPTIMIZADA:
 
-```
+\`\`\`
 lib/
 ├── mongodb.ts (✅ Única conexión MongoDB)
 ├── db/
@@ -141,7 +141,7 @@ lib/
     ├── session.ts (✅ Gestión de sesiones)
     ├── password.ts (✅ Seguridad de contraseñas)
     └── permissions.ts (✅ Control de acceso)
-```
+\`\`\`
 
 ## FUNCIONALIDADES COMPLETADAS
 

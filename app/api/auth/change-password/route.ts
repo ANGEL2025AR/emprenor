@@ -17,8 +17,16 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Datos incompletos" }, { status: 400 })
     }
 
-    if (newPassword.length < 6) {
-      return NextResponse.json({ error: "La nueva contraseña debe tener al menos 6 caracteres" }, { status: 400 })
+    if (newPassword.length < 8) {
+      return NextResponse.json({ error: "La nueva contraseña debe tener al menos 8 caracteres" }, { status: 400 })
+    }
+
+    if (!/[A-Z]/.test(newPassword)) {
+      return NextResponse.json({ error: "La contraseña debe contener al menos una mayúscula" }, { status: 400 })
+    }
+
+    if (!/[0-9]/.test(newPassword)) {
+      return NextResponse.json({ error: "La contraseña debe contener al menos un número" }, { status: 400 })
     }
 
     const db = await getDb()
@@ -49,8 +57,7 @@ export async function PUT(request: NextRequest) {
     )
 
     return NextResponse.json({ success: true, message: "Contraseña actualizada correctamente" })
-  } catch (error) {
-    console.error("Error al cambiar contraseña:", error)
+  } catch {
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }

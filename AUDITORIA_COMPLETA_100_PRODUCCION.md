@@ -857,11 +857,11 @@ El sistema **EMPRENOR** está **100% LISTO PARA PRODUCCIÓN** y compete exitosam
 
 El sistema puede desplegarse inmediatamente a producción en Vercel con las siguientes variables de entorno configuradas:
 
-```env
+\`\`\`env
 MONGODB_URI=mongodb+srv://...
 JWT_SECRET=...
 BLOB_READ_WRITE_TOKEN=...
-```
+\`\`\`
 
 **CERTIFICADO DE CALIDAD:** ✅ APROBADO PARA PRODUCCIÓN
 

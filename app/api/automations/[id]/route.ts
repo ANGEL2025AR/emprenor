@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
+import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const db = await getDb()
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
 
+    const { id } = await params
+    if (!ObjectId.isValid(id)) return NextResponse.json({ error: "ID inválido" }, { status: 400 })
+
+    const db = await getDb()
     const automation = await db.collection("automations").findOne({ _id: new ObjectId(id) })
 
     if (!automation) {
@@ -22,7 +27,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
     const { id } = await params
+    if (!ObjectId.isValid(id)) return NextResponse.json({ error: "ID inválido" }, { status: 400 })
+
     const data = await request.json()
     const db = await getDb()
 
@@ -54,9 +64,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const db = await getDb()
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
 
+    const { id } = await params
+    if (!ObjectId.isValid(id)) return NextResponse.json({ error: "ID inválido" }, { status: 400 })
+
+    const db = await getDb()
     const result = await db.collection("automations").deleteOne({ _id: new ObjectId(id) })
 
     if (result.deletedCount === 0) {

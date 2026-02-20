@@ -166,7 +166,7 @@ El sistema EMPRENOR ha sido auditado exhaustivamente en todas sus 79 páginas, 5
 **Problema:** Los Server Components que consultan MongoDB directamente no serializaban correctamente ObjectIds y Dates anidados, causando errores de TypeScript en build.
 
 **Solución Implementada:**
-```typescript
+\`\`\`typescript
 // Mapeo explícito de TODAS las propiedades
 return logs.map((log) => ({
   _id: log._id.toString(),
@@ -177,7 +177,7 @@ return logs.map((log) => ({
   activities: log.activities || [],
   // ... todas las propiedades explícitamente mapeadas
 }))
-```
+\`\`\`
 
 **Archivos Corregidos:**
 - ✅ `app/(dashboard)/dashboard/bitacora-diaria/page.tsx`
@@ -188,7 +188,7 @@ return logs.map((log) => ({
 **Problema:** La API de daily-logs tenía `query.date` tipado como `unknown` causando error de TypeScript.
 
 **Solución Implementada:**
-```typescript
+\`\`\`typescript
 const query: {
   projectId?: ObjectId
   date?: { $gte?: Date; $lte?: Date }
@@ -199,7 +199,7 @@ if (startDate || endDate) {
   if (startDate) query.date.$gte = new Date(startDate)
   if (endDate) query.date.$lte = new Date(endDate)
 }
-```
+\`\`\`
 
 **Archivos Corregidos:**
 - ✅ `app/api/daily-logs/route.ts`

@@ -57,8 +57,8 @@ type SerializablePayment = Omit<
   _id: string
   createdAt: string
   updatedAt: string
-  dueDate: string
-  paidDate?: string
+  dueDate: string | null
+  paidDate?: string | null
   createdBy: string
   approvedBy?: string
   approvedAt?: string
@@ -261,7 +261,7 @@ export function PaymentsClient() {
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
                         <TypeIcon className={`w-5 h-5 ${typeColor}`} />
-                        <h3 className="text-lg font-semibold">{payment.description}</h3>
+                        <h3 className="text-lg font-semibold">{payment.description || payment.notes || payment.paymentNumber}</h3>
                         <Badge className={statusInfo.color}>
                           <StatusIcon className="w-3 h-3 mr-1" />
                           {statusInfo.label}
@@ -271,7 +271,7 @@ export function PaymentsClient() {
                         <span className="font-mono">{payment.paymentNumber}</span>
                         {payment.payer && <span>De: {payment.payer.name}</span>}
                         {payment.recipient && <span>Para: {payment.recipient.name}</span>}
-                        <span>Vence: {formatDate(payment.dueDate)}</span>
+                        {payment.dueDate && <span>Vence: {formatDate(payment.dueDate)}</span>}
                       </div>
                     </div>
                   </Link>

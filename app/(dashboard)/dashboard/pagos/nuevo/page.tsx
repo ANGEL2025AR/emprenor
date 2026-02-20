@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,7 +15,17 @@ import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 
 export default function NuevoPagoPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600" /></div>}>
+      <NuevoPagoForm />
+    </Suspense>
+  )
+}
+
+function NuevoPagoForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const projectId = searchParams.get("projectId")
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
@@ -26,7 +36,7 @@ export default function NuevoPagoPage() {
     const formData = new FormData(e.currentTarget)
     const data = {
       invoiceId: formData.get("invoiceId") || undefined,
-      projectId: formData.get("projectId") || undefined,
+      projectId: formData.get("projectId") || projectId || undefined,
       amount: Number.parseFloat(formData.get("amount") as string) || 0,
       paymentMethod: formData.get("paymentMethod") || "efectivo",
       paymentDate: formData.get("paymentDate"),

@@ -22,20 +22,26 @@ export async function GET(request: Request) {
     const db = await getDb()
     const payments = await db.collection<Payment>("payments").find(filter).sort({ dueDate: -1 }).toArray()
 
-    const serializedPayments = payments.map((payment) => ({
-      ...payment,
-      _id: payment._id?.toString(),
-      createdAt: payment.createdAt ? new Date(payment.createdAt).toISOString() : new Date().toISOString(),
-      updatedAt: payment.updatedAt ? new Date(payment.updatedAt).toISOString() : new Date().toISOString(),
-      dueDate: payment.dueDate ? new Date(payment.dueDate).toISOString() : null,
-      paidDate: payment.paidDate ? new Date(payment.paidDate).toISOString() : null,
-      createdBy: payment.createdBy?.toString(),
-      approvedBy: payment.approvedBy?.toString(),
-      approvedAt: payment.approvedAt ? new Date(payment.approvedAt).toISOString() : null,
-      contractId: payment.contractId?.toString(),
-      projectId: payment.projectId?.toString(),
-      invoiceId: payment.invoiceId?.toString(),
-    }))
+    const serializedPayments = payments.map((payment) => {
+      const safeDate = (d: unknown) => {
+        if (!d) return null
+        try { const date = new Date(d as string); return isNaN(date.getTime()) ? null : date.toISOString() } catch { return null }
+      }
+      return {
+        ...payment,
+        _id: payment._id?.toString(),
+        createdAt: safeDate(payment.createdAt) || new Date().toISOString(),
+        updatedAt: safeDate(payment.updatedAt) || new Date().toISOString(),
+        dueDate: safeDate(payment.dueDate),
+        paidDate: safeDate(payment.paidDate),
+        createdBy: payment.createdBy?.toString(),
+        approvedBy: payment.approvedBy?.toString(),
+        approvedAt: safeDate(payment.approvedAt),
+        contractId: payment.contractId?.toString(),
+        projectId: payment.projectId?.toString(),
+        invoiceId: payment.invoiceId?.toString(),
+      }
+    })
 
     return NextResponse.json({ payments: serializedPayments })
   } catch (error) {

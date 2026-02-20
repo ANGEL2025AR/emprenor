@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       amount: Number(data.amount) || 0,
       currency: data.currency || "ARS",
       dueDate,
-      status: data.status || "completed",
+      status: data.status === "completed" ? "pagado" : (data.status || "pagado"),
       description: data.notes || data.description || "",
       payer: data.payer || {},
       recipient: data.recipient || {},

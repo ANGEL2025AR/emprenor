@@ -55,13 +55,23 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     const db = await getDb()
 
+    // Sanitizar: solo permitir campos seguros
+    const allowedFields = [
+      "name", "description", "type", "priority", "status", "progress",
+      "client", "location", "dates", "budget", "team", "notes",
+    ]
+    const sanitizedUpdate: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) {
+        sanitizedUpdate[key] = body[key]
+      }
+    }
+    sanitizedUpdate.updatedAt = new Date()
+
     const updateResult = await db.collection("projects").updateOne(
       { _id: new ObjectId(id) },
       {
-        $set: {
-          ...body,
-          updatedAt: new Date(),
-        },
+        $set: sanitizedUpdate,
       },
     )
 

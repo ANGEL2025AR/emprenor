@@ -39,9 +39,19 @@ export function DashboardCharts() {
           fetch("/api/tasks"),
         ])
 
-        const transactions = await transactionsRes.json()
-        const projects = await projectsRes.json()
-        const tasks = await tasksRes.json()
+        const transactionsData = await transactionsRes.json()
+        const projectsData = await projectsRes.json()
+        const tasksData = await tasksRes.json()
+
+        // Extraer arrays desde la respuesta envuelta
+        const transactions = transactionsData.transactions || transactionsData || []
+        const projects = projectsData.projects || projectsData || []
+        const tasks = tasksData.tasks || tasksData || []
+
+        // Asegurar que son arrays
+        const transactionsArr = Array.isArray(transactions) ? transactions : []
+        const projectsArr = Array.isArray(projects) ? projects : []
+        const tasksArr = Array.isArray(tasks) ? tasks : []
 
         // Procesar datos de ingresos/egresos mensuales
         const sixMonthsAgo = new Date()
@@ -50,7 +60,7 @@ export function DashboardCharts() {
         const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
         const monthlyMap = new Map<string, { ingresos: number; egresos: number }>()
 
-        transactions
+        transactionsArr
           .filter((t: any) => t.status === "pagado" && new Date(t.date) >= sixMonthsAgo)
           .forEach((t: any) => {
             const date = new Date(t.date)
@@ -83,7 +93,7 @@ export function DashboardCharts() {
           cancelado: 0,
         }
 
-        projects.forEach((p: any) => {
+        projectsArr.forEach((p: any) => {
           const status = p.status || "en_progreso"
           if (status in statusCount) {
             statusCount[status as keyof typeof statusCount]++
@@ -102,7 +112,7 @@ export function DashboardCharts() {
         fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28)
 
         const weeklyTasks = new Map<number, { completadas: number; pendientes: number }>()
-        tasks
+        tasksArr
           .filter((t: any) => new Date(t.createdAt) >= fourWeeksAgo)
           .forEach((t: any) => {
             const weekNum = Math.floor((Date.now() - new Date(t.createdAt).getTime()) / (7 * 24 * 60 * 60 * 1000))
@@ -127,7 +137,7 @@ export function DashboardCharts() {
           .reverse()
 
         // Uso de presupuesto por proyecto (top 4)
-        const budgetUsage = projects
+        const budgetUsage = projectsArr
           .filter((p: any) => p.budget?.approved && p.budget?.spent)
           .slice(0, 4)
           .map((p: any) => ({

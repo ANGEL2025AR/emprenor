@@ -33,7 +33,7 @@ export default function NuevoPagoPage() {
       transactionId: formData.get("transactionId") || undefined,
       notes: formData.get("notes") || "",
       type: formData.get("paymentType") || "ingreso",
-      status: "completed",
+      status: "pagado",
     }
 
     try {

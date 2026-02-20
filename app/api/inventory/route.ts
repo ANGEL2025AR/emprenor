@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ items })
   } catch (error) {
-    console.error("[v0] Inventory error:", error)
+    console.error("[API] Inventory error:", error)
     return NextResponse.json({ error: "Error al cargar inventario", items: [] }, { status: 500 })
   }
 }
@@ -28,23 +28,25 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, category, quantity, unit, minStock, cost, supplier, location } = body
 
-    if (!name || !category || quantity === undefined) {
+    if (!body.name || !body.category || body.quantity === undefined) {
       return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 })
     }
 
     const db = await getDb()
     const result = await db.collection("inventory").insertOne({
-      name,
-      category,
-      quantity: Number(quantity),
-      unit: unit || "unidad",
-      minStock: Number(minStock) || 10,
-      cost: Number(cost) || 0,
-      supplier,
-      location,
+      name: body.name,
+      category: body.category,
+      quantity: Number(body.quantity),
+      unit: body.unit || "unidad",
+      minStock: Number(body.minStock) || 10,
+      cost: Number(body.cost || body.unitPrice) || 0,
+      supplier: body.supplier || "",
+      location: body.location || "",
+      notes: body.notes || "",
+      status: "activo",
       createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: new ObjectId(user._id),
     })
 
@@ -53,7 +55,7 @@ export async function POST(request: Request) {
       itemId: result.insertedId,
     })
   } catch (error) {
-    console.error("[v0] Inventory create error:", error)
+    console.error("[API] Inventory create error:", error)
     return NextResponse.json({ error: "Error al crear item" }, { status: 500 })
   }
 }

@@ -24,11 +24,11 @@ async function getEmployee(id: string) {
       position: employee.position,
       department: employee.department,
       salary: employee.salary,
-      hireDate: employee.hireDate?.toISOString().split("T")[0],
+      hireDate: employee.hireDate ? new Date(employee.hireDate).toISOString().split("T")[0] : null,
       address: employee.address,
       emergencyContact: employee.emergencyContact,
       status: employee.status || "activo",
-      createdAt: employee.createdAt?.toISOString(),
+      createdAt: employee.createdAt ? new Date(employee.createdAt).toISOString() : null,
     }
   } catch {
     return null

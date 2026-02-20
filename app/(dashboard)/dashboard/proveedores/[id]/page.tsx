@@ -31,7 +31,7 @@ async function getSupplier(id: string) {
       totalSpent: supplier.totalSpent || 0,
       status: supplier.status || "activo",
       notes: supplier.notes,
-      createdAt: supplier.createdAt?.toISOString(),
+      createdAt: supplier.createdAt ? new Date(supplier.createdAt).toISOString() : null,
     }
   } catch {
     return null

@@ -10,18 +10,19 @@ export const metadata = {
 export default async function ReporteFinancieroPage() {
   const db = await getDb()
 
-  const transactions = await db.collection("transactions").find().toArray()
+  // Use payments collection (transactions may not exist)
+  const payments = await db.collection("payments").find().toArray()
   const projects = await db.collection("projects").find().toArray()
 
-  const ingresos = transactions
-    .filter((t) => t.type === "ingreso" && t.status === "pagado")
+  const ingresos = payments
+    .filter((t) => t.type === "ingreso" && (t.status === "pagado" || t.status === "completed"))
     .reduce((sum, t) => sum + (t.amount || 0), 0)
 
-  const egresos = transactions
-    .filter((t) => t.type === "egreso" && t.status === "pagado")
+  const egresos = payments
+    .filter((t) => t.type === "egreso" && (t.status === "pagado" || t.status === "completed"))
     .reduce((sum, t) => sum + (t.amount || 0), 0)
 
-  const pendiente = transactions.filter((t) => t.status === "pendiente").reduce((sum, t) => sum + (t.amount || 0), 0)
+  const pendiente = payments.filter((t) => t.status === "pendiente").reduce((sum, t) => sum + (t.amount || 0), 0)
 
   return (
     <div className="space-y-6">

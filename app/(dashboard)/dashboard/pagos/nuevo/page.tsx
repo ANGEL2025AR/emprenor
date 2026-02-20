@@ -25,13 +25,14 @@ export default function NuevoPagoPage() {
 
     const formData = new FormData(e.currentTarget)
     const data = {
-      invoiceId: formData.get("invoiceId"),
-      projectId: formData.get("projectId"),
-      amount: Number.parseFloat(formData.get("amount") as string),
-      paymentMethod: formData.get("paymentMethod"),
+      invoiceId: formData.get("invoiceId") || undefined,
+      projectId: formData.get("projectId") || undefined,
+      amount: Number.parseFloat(formData.get("amount") as string) || 0,
+      paymentMethod: formData.get("paymentMethod") || "efectivo",
       paymentDate: formData.get("paymentDate"),
-      transactionId: formData.get("transactionId"),
-      notes: formData.get("notes"),
+      transactionId: formData.get("transactionId") || undefined,
+      notes: formData.get("notes") || "",
+      type: formData.get("paymentType") || "ingreso",
       status: "completed",
     }
 
@@ -87,13 +88,21 @@ export default function NuevoPagoPage() {
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="invoiceId">ID de Factura (Opcional)</Label>
-                <Input id="invoiceId" name="invoiceId" placeholder="Ej: 001-00000123" />
+                <Label htmlFor="paymentType">Tipo de Pago *</Label>
+                <Select name="paymentType" required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccione tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ingreso">Ingreso (cobro a cliente)</SelectItem>
+                    <SelectItem value="egreso">Egreso (pago a proveedor)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="projectId">ID de Proyecto (Opcional)</Label>
-                <Input id="projectId" name="projectId" placeholder="Ingrese ObjectId del proyecto" />
+                <Label htmlFor="invoiceId">ID de Factura (Opcional)</Label>
+                <Input id="invoiceId" name="invoiceId" placeholder="Ej: 001-00000123" />
               </div>
 
               <div className="space-y-2">

@@ -17,22 +17,22 @@ export async function GET() {
     const serializedContracts = contracts.map((contract) => ({
       ...contract,
       _id: contract._id?.toString(),
-      createdAt: contract.createdAt.toISOString(),
-      updatedAt: contract.updatedAt.toISOString(),
-      startDate: contract.startDate.toISOString(),
-      estimatedEndDate: contract.estimatedEndDate.toISOString(),
-      actualEndDate: contract.actualEndDate?.toISOString(),
-      createdBy: contract.createdBy.toString(),
+      createdAt: contract.createdAt ? new Date(contract.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: contract.updatedAt ? new Date(contract.updatedAt).toISOString() : new Date().toISOString(),
+      startDate: contract.startDate ? new Date(contract.startDate).toISOString() : null,
+      estimatedEndDate: contract.estimatedEndDate ? new Date(contract.estimatedEndDate).toISOString() : null,
+      actualEndDate: contract.actualEndDate ? new Date(contract.actualEndDate).toISOString() : null,
+      createdBy: contract.createdBy?.toString(),
       quotationId: contract.quotationId?.toString(),
       clientId: contract.clientId?.toString(),
-      deliverables: contract.deliverables.map((d) => ({
+      deliverables: (contract.deliverables || []).map((d) => ({
         ...d,
-        deadline: d.deadline.toISOString(),
-        deliveredAt: d.deliveredAt?.toISOString(),
+        deadline: d.deadline ? new Date(d.deadline).toISOString() : null,
+        deliveredAt: d.deliveredAt ? new Date(d.deliveredAt).toISOString() : null,
       })),
-      paymentTerms: contract.paymentTerms.map((pt) => ({
+      paymentTerms: (contract.paymentTerms || []).map((pt) => ({
         ...pt,
-        dueDate: pt.dueDate?.toISOString(),
+        dueDate: pt.dueDate ? new Date(pt.dueDate).toISOString() : null,
       })),
     }))
 
@@ -56,28 +56,46 @@ export async function POST(request: Request) {
     const count = await db.collection("contracts").countDocuments()
     const code = `CONT-${new Date().getFullYear()}-${String(count + 1).padStart(3, "0")}`
 
+    // Map form fields - endDate from form to estimatedEndDate in DB
+    const estimatedEndDate = data.estimatedEndDate || data.endDate
+    
+    // Handle deliverables - can come as array of strings from form or array of objects
+    const deliverables = Array.isArray(data.deliverables) 
+      ? data.deliverables.map((d: string | { description: string }) => {
+          if (typeof d === "string") {
+            return { description: d, status: "pendiente", deadline: new Date(estimatedEndDate) }
+          }
+          return d
+        })
+      : []
+
+    // Handle warranties - can come as a string from form or array
+    const warranties = typeof data.warranties === "string" 
+      ? data.warranties.split("\n").filter((w: string) => w.trim()).map((w: string) => w.trim())
+      : (data.warranties || [])
+
     const contract: Contract = {
       code,
       quotationId: data.quotationId ? new ObjectId(data.quotationId) : undefined,
       clientId: data.clientId ? new ObjectId(data.clientId) : undefined,
-      clientInfo: data.clientInfo,
-      projectName: data.projectName,
-      type: data.type,
-      description: data.description,
-      scope: data.scope,
+      clientInfo: data.clientInfo || {},
+      projectName: data.projectName || "",
+      type: data.type || "construccion",
+      description: data.description || data.scope || "",
+      scope: data.scope || "",
       startDate: new Date(data.startDate),
-      estimatedEndDate: new Date(data.estimatedEndDate),
+      estimatedEndDate: new Date(estimatedEndDate),
       duration: data.duration,
-      amount: data.amount,
+      amount: Number(data.amount) || 0,
       currency: data.currency || "ARS",
       paymentTerms: data.paymentTerms || [],
-      penaltyClause: data.penaltyClause,
-      warranties: data.warranties || [],
-      deliverables: data.deliverables || [],
+      penaltyClause: data.penaltyClause || "",
+      warranties,
+      deliverables,
       status: "borrador",
-      signatures: {}, // Inicializado vacío, se llenará cuando se firme el contrato
+      signatures: {},
       attachments: data.attachments || [],
-      notes: data.notes,
+      notes: data.notes || "",
       createdBy: new ObjectId(user._id),
       createdAt: new Date(),
       updatedAt: new Date(),

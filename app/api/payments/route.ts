@@ -25,13 +25,13 @@ export async function GET(request: Request) {
     const serializedPayments = payments.map((payment) => ({
       ...payment,
       _id: payment._id?.toString(),
-      createdAt: payment.createdAt.toISOString(),
-      updatedAt: payment.updatedAt.toISOString(),
-      dueDate: payment.dueDate.toISOString(),
-      paidDate: payment.paidDate?.toISOString(),
-      createdBy: payment.createdBy.toString(),
+      createdAt: payment.createdAt ? new Date(payment.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: payment.updatedAt ? new Date(payment.updatedAt).toISOString() : new Date().toISOString(),
+      dueDate: payment.dueDate ? new Date(payment.dueDate).toISOString() : null,
+      paidDate: payment.paidDate ? new Date(payment.paidDate).toISOString() : null,
+      createdBy: payment.createdBy?.toString(),
       approvedBy: payment.approvedBy?.toString(),
-      approvedAt: payment.approvedAt?.toISOString(),
+      approvedAt: payment.approvedAt ? new Date(payment.approvedAt).toISOString() : null,
       contractId: payment.contractId?.toString(),
       projectId: payment.projectId?.toString(),
       invoiceId: payment.invoiceId?.toString(),
@@ -57,20 +57,27 @@ export async function POST(request: Request) {
     const count = await db.collection("payments").countDocuments()
     const paymentNumber = `PAG-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`
 
+    // Map form fields to DB model
+    const paymentDate = data.paymentDate ? new Date(data.paymentDate) : new Date()
+    const dueDate = data.dueDate ? new Date(data.dueDate) : paymentDate
+
     const payment: Payment = {
-      type: data.type,
+      type: data.type || "ingreso",
       paymentNumber,
-      amount: data.amount,
+      amount: Number(data.amount) || 0,
       currency: data.currency || "ARS",
-      dueDate: new Date(data.dueDate),
-      status: "pendiente",
-      description: data.description,
-      payer: data.payer,
-      recipient: data.recipient,
-      paymentMethod: data.paymentMethod,
-      reference: data.reference,
+      dueDate,
+      status: data.status || "completed",
+      description: data.notes || data.description || "",
+      payer: data.payer || {},
+      recipient: data.recipient || {},
+      paymentMethod: data.paymentMethod || "efectivo",
+      reference: data.transactionId || data.reference || "",
       bankDetails: data.bankDetails,
-      notes: data.notes,
+      notes: data.notes || "",
+      paidDate: paymentDate,
+      projectId: data.projectId ? new ObjectId(data.projectId) : undefined,
+      invoiceId: data.invoiceId && ObjectId.isValid(data.invoiceId) ? new ObjectId(data.invoiceId) : undefined,
       createdBy: new ObjectId(user._id),
       createdAt: new Date(),
       updatedAt: new Date(),

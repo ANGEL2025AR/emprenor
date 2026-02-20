@@ -25,20 +25,20 @@ export async function GET(request: Request) {
     const serializedInvoices = invoices.map((invoice) => ({
       ...invoice,
       _id: invoice._id?.toString(),
-      createdAt: invoice.createdAt.toISOString(),
-      updatedAt: invoice.updatedAt.toISOString(),
-      issueDate: invoice.issueDate.toISOString(),
-      dueDate: invoice.dueDate.toISOString(),
-      paidDate: invoice.paidDate?.toISOString(),
-      caeExpiration: invoice.caeExpiration?.toISOString(),
-      createdBy: invoice.createdBy.toString(),
+      createdAt: invoice.createdAt ? new Date(invoice.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: invoice.updatedAt ? new Date(invoice.updatedAt).toISOString() : new Date().toISOString(),
+      issueDate: invoice.issueDate ? new Date(invoice.issueDate).toISOString() : new Date().toISOString(),
+      dueDate: invoice.dueDate ? new Date(invoice.dueDate).toISOString() : null,
+      paidDate: invoice.paidDate ? new Date(invoice.paidDate).toISOString() : null,
+      caeExpiration: invoice.caeExpiration ? new Date(invoice.caeExpiration).toISOString() : null,
+      createdBy: invoice.createdBy?.toString(),
       contractId: invoice.contractId?.toString(),
       projectId: invoice.projectId?.toString(),
       certificateId: invoice.certificateId?.toString(),
-      payments: invoice.payments.map((p) => ({
-        paymentId: p.paymentId.toString(),
+      payments: (invoice.payments || []).map((p) => ({
+        paymentId: p.paymentId?.toString(),
         amount: p.amount,
-        date: p.date.toISOString(),
+        date: p.date ? new Date(p.date).toISOString() : null,
       })),
     }))
 
@@ -59,24 +59,35 @@ export async function POST(request: Request) {
     const data = await request.json()
     const db = await getDb()
 
-    const count = await db.collection("invoices").countDocuments({ type: data.type })
-    const invoiceNumber = `FC-${data.type}-${String(count + 1).padStart(8, "0")}`
+    // Support both form field names and direct API field names
+    const invoiceType = data.invoiceType || data.type || "B"
+    const count = await db.collection("invoices").countDocuments({ type: invoiceType })
+    const invoiceNumber = data.invoiceNumber || `FC-${invoiceType}-${String(count + 1).padStart(8, "0")}`
+
+    // Map clientInfo from form to client field in DB
+    const clientData = data.clientInfo || data.client || {}
 
     const invoice: Invoice = {
       invoiceNumber,
-      type: data.type,
-      issueDate: new Date(data.issueDate),
+      type: invoiceType,
+      issueDate: new Date(data.issueDate || new Date()),
       dueDate: new Date(data.dueDate),
-      client: data.client,
-      items: data.items,
-      subtotal: data.subtotal,
-      discount: data.discount || 0,
-      taxBase: data.taxBase,
-      tax: data.tax,
-      total: data.total,
+      client: {
+        name: clientData.name || "",
+        cuitCuil: clientData.cuitCuil || clientData.cuit || "",
+        address: clientData.address || "",
+        fiscalCondition: clientData.fiscalCondition || "consumidor_final",
+      },
+      projectName: data.projectName || "",
+      items: data.items || [],
+      subtotal: Number(data.subtotal) || 0,
+      discount: Number(data.discount) || 0,
+      taxBase: Number(data.taxBase) || Number(data.subtotal) || 0,
+      tax: Number(data.taxes) || Number(data.tax) || 0,
+      total: Number(data.total) || 0,
       currency: data.currency || "ARS",
-      paymentTerms: data.paymentTerms,
-      observations: data.observations,
+      paymentTerms: data.paymentTerms || "",
+      observations: data.notes || data.observations || "",
       status: "borrador",
       paidAmount: 0,
       payments: [],

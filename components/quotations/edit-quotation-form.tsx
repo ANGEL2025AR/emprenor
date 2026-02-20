@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface QuotationItem {
   description: string
@@ -21,6 +22,7 @@ interface QuotationItem {
 
 export default function EditQuotationForm({ quotation }: { quotation: any }) {
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<QuotationItem[]>(quotation.items || [])
 
@@ -53,10 +55,15 @@ export default function EditQuotationForm({ quotation }: { quotation: any }) {
       })
 
       if (response.ok) {
+        toast({ title: "Cotizacion actualizada", description: "Los cambios se guardaron correctamente" })
         router.push(`/dashboard/cotizaciones/${quotation._id}`)
+        router.refresh()
+      } else {
+        const errData = await response.json().catch(() => ({}))
+        toast({ title: "Error", description: errData.error || "No se pudo actualizar la cotizacion", variant: "destructive" })
       }
-    } catch (error) {
-      console.error("Error updating quotation:", error)
+    } catch {
+      toast({ title: "Error de conexion", description: "No se pudo conectar con el servidor", variant: "destructive" })
     } finally {
       setLoading(false)
     }

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { ArrowLeft, Mail, Phone, Building, Globe, MapPin, Edit, Trash2, DollarSign } from "lucide-react"
 import { getCurrentUser } from "@/lib/auth/session"
+import { safeDate } from "@/lib/utils"
 
 async function getSupplier(id: string) {
   try {
@@ -31,7 +32,7 @@ async function getSupplier(id: string) {
       totalSpent: supplier.totalSpent || 0,
       status: supplier.status || "activo",
       notes: supplier.notes,
-      createdAt: supplier.createdAt ? new Date(supplier.createdAt).toISOString() : null,
+      createdAt: safeDate(supplier.createdAt, null),
     }
   } catch {
     return null

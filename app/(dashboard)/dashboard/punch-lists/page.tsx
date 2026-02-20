@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/lib/auth/session"
 import { redirect } from "next/navigation"
 import { getDb } from "@/lib/db/connection"
+import { safeDate } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Plus, CheckCircle2, Clock, AlertTriangle, XCircle } from "lucide-react"
@@ -32,8 +33,8 @@ async function getPunchLists() {
         closedItems: 0,
         criticalItems: 0,
       },
-      createdAt: list.createdAt instanceof Date ? list.createdAt.toISOString() : "",
-      updatedAt: list.updatedAt instanceof Date ? list.updatedAt.toISOString() : "",
+      createdAt: safeDate(list.createdAt) || "",
+      updatedAt: safeDate(list.updatedAt) || "",
     }))
   } catch {
     return []

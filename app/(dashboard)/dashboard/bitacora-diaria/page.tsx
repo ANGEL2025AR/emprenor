@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/lib/auth/session"
 import { redirect } from "next/navigation"
 import { getDb } from "@/lib/db/connection"
+import { safeDate } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Plus, Calendar, Users, AlertTriangle, FileText } from "lucide-react"
@@ -16,7 +17,7 @@ async function getDailyLogs() {
       _id: log._id.toString(),
       projectId: log.projectId?.toString() || "",
       logNumber: log.logNumber || "",
-      date: log.date instanceof Date ? log.date.toISOString() : "",
+      date: safeDate(log.date) || "",
       shift: log.shift || "",
       weather: log.weather || { temperature: 0, conditions: "", precipitation: 0 },
       workforce: log.workforce || { contractors: [], subcontractors: [], total: 0 },
@@ -28,14 +29,14 @@ async function getDailyLogs() {
       visitors: log.visitors || [],
       notes: log.notes || "",
       preparedBy: log.preparedBy?.toString() || "",
-      preparedAt: log.preparedAt instanceof Date ? log.preparedAt.toISOString() : "",
+      preparedAt: safeDate(log.preparedAt) || "",
       reviewedBy: log.reviewedBy?.toString() || null,
-      reviewedAt: log.reviewedAt instanceof Date ? log.reviewedAt.toISOString() : null,
+      reviewedAt: safeDate(log.reviewedAt, null),
       approvedBy: log.approvedBy?.toString() || null,
-      approvedAt: log.approvedAt instanceof Date ? log.approvedAt.toISOString() : null,
+      approvedAt: safeDate(log.approvedAt, null),
       signatures: log.signatures || {},
-      createdAt: log.createdAt instanceof Date ? log.createdAt.toISOString() : "",
-      updatedAt: log.updatedAt instanceof Date ? log.updatedAt.toISOString() : "",
+      createdAt: safeDate(log.createdAt) || "",
+      updatedAt: safeDate(log.updatedAt) || "",
     }))
   } catch {
     return []

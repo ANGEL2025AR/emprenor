@@ -26,6 +26,7 @@ const ROUTE_PERMISSION_MAP: Record<string, { permission: string; allowedRoles: s
   "/dashboard/proveedores": { permission: "suppliers.view", allowedRoles: ["super_admin", "admin", "gerente"] },
   "/dashboard/inventario": { permission: "inventory.view", allowedRoles: ["super_admin", "admin", "gerente", "supervisor"] },
   "/dashboard/certificados": { permission: "certificates.view", allowedRoles: ["super_admin", "admin", "gerente", "supervisor", "cliente"] },
+  "/dashboard/portal": { permission: "portal.dashboard", allowedRoles: ["super_admin", "admin", "gerente", "supervisor", "trabajador"] },
 }
 
 export async function middleware(request: NextRequest) {

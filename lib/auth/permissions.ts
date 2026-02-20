@@ -112,6 +112,19 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "daily_logs.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
   "daily_logs.create": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
 
+  // Portal del Empleado
+  "portal.dashboard": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.wallet": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.payslips": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.personnel_file": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.leave_requests": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.art": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.accidents": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.help_desk": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.announcements": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.advances": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  "portal.admin": ["super_admin", "admin", "gerente"],
+
   // Sitio Web público
   "website.view": ["super_admin", "admin"],
   "website.edit": ["super_admin", "admin"],
@@ -233,6 +246,15 @@ export const PERMISSION_CATEGORIES: Record<string, { label: string; permissions:
   website: {
     label: "Sitio Web",
     permissions: ["website.view", "website.edit"],
+  },
+  portal: {
+    label: "Portal del Empleado",
+    permissions: [
+      "portal.dashboard", "portal.wallet", "portal.payslips",
+      "portal.personnel_file", "portal.leave_requests", "portal.art",
+      "portal.accidents", "portal.help_desk", "portal.announcements",
+      "portal.advances", "portal.admin",
+    ],
   },
   admin: {
     label: "Administración",
@@ -364,4 +386,12 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/notificaciones": "notifications.view",
   "/dashboard/contactos": "contacts.view",
   "/dashboard/roles": "admin.roles",
+  "/dashboard/portal": "portal.dashboard",
+  "/dashboard/portal/billetera": "portal.wallet",
+  "/dashboard/portal/recibos": "portal.payslips",
+  "/dashboard/portal/legajo": "portal.personnel_file",
+  "/dashboard/portal/solicitudes": "portal.leave_requests",
+  "/dashboard/portal/art": "portal.art",
+  "/dashboard/portal/mesa-ayuda": "portal.help_desk",
+  "/dashboard/portal/comunicaciones": "portal.announcements",
 }

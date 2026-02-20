@@ -132,8 +132,8 @@ export const inspectionSchema = z.object({
 
 export const transactionSchema = z.object({
   type: z.enum(["ingreso", "egreso"]),
-  category: z.enum(["pago_cliente", "pago_proveedor", "pago_empleado", "material", "equipo", "servicio", "otro"]),
-  projectId: z.string(),
+  category: z.enum(["pago_cliente", "pago_proveedor", "pago_empleado", "material", "equipo", "servicio", "materiales", "mano_obra", "equipos", "transporte", "servicios", "impuestos", "anticipo", "financiamiento", "otros_ingresos", "otros_gastos", "otro"]),
+  projectId: z.string().optional(),
   amount: z.number().positive("El monto debe ser positivo"),
   currency: z.string().default("ARS"),
   date: z.coerce.date(),

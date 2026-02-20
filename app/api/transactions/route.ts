@@ -92,9 +92,11 @@ export async function POST(request: NextRequest) {
 
     const userObjectId = new ObjectId(user._id)
 
+    const hasProject = validationResult.data.projectId && ObjectId.isValid(validationResult.data.projectId)
+
     const newTransaction: Omit<Transaction, "_id"> = {
       ...validationResult.data,
-      projectId: new ObjectId(validationResult.data.projectId),
+      projectId: hasProject ? new ObjectId(validationResult.data.projectId) : undefined,
       reference: validationResult.data.reference || code,
       status: "pendiente",
       notes: validationResult.data.notes || "",
@@ -105,12 +107,12 @@ export async function POST(request: NextRequest) {
 
     const insertResult = await db.collection("transactions").insertOne(newTransaction)
 
-    // Actualizar gastos del proyecto si es egreso
-    if (validationResult.data.type === "egreso") {
+    // Actualizar gastos del proyecto si es egreso y tiene proyecto
+    if (validationResult.data.type === "egreso" && hasProject) {
       await db
         .collection("projects")
         .updateOne(
-          { _id: new ObjectId(validationResult.data.projectId) },
+          { _id: new ObjectId(validationResult.data.projectId!) },
           { $inc: { "budget.spent": validationResult.data.amount } },
         )
     }

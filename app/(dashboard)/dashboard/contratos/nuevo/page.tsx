@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface PaymentTerm {
   percentage: number
@@ -19,6 +20,7 @@ interface PaymentTerm {
 
 export default function NuevoContratoPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [paymentTerms, setPaymentTerms] = useState<PaymentTerm[]>([
     { percentage: 30, description: "Anticipo", dueDate: "" },
@@ -46,7 +48,7 @@ export default function NuevoContratoPage() {
     e.preventDefault()
 
     if (totalPercentage !== 100) {
-      alert("Los porcentajes de pago deben sumar 100%")
+      toast({ title: "Error", description: "Los porcentajes de pago deben sumar 100%", variant: "destructive" })
       return
     }
 
@@ -79,12 +81,15 @@ export default function NuevoContratoPage() {
       })
 
       if (response.ok) {
+        toast({ title: "Contrato creado", description: "El contrato se registro correctamente" })
         router.push("/dashboard/contratos")
+        router.refresh()
       } else {
-        alert("Error al crear contrato")
+        const errData = await response.json().catch(() => ({}))
+        toast({ title: "Error", description: errData.error || "No se pudo crear el contrato", variant: "destructive" })
       }
-    } catch (error) {
-      alert("Error al crear contrato")
+    } catch {
+      toast({ title: "Error de conexion", description: "No se pudo conectar con el servidor", variant: "destructive" })
     } finally {
       setLoading(false)
     }

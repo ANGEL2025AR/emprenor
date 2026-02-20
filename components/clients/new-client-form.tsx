@@ -51,8 +51,9 @@ export default function NewClientForm() {
       }
 
       router.push(`/dashboard/clientes/${data.client._id}`)
+      router.refresh()
     } catch {
-      setError("Error de conexión")
+      setError("Error de conexion")
     } finally {
       setIsLoading(false)
     }

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth/session"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
+import { Toaster } from "@/components/ui/toaster"
 
 export default async function DashboardLayout({
   children,
@@ -22,6 +23,7 @@ export default async function DashboardLayout({
         <DashboardHeader user={user} />
         <main className="flex-1 p-4 md:p-6 pt-20 lg:pt-6">{children}</main>
       </div>
+      <Toaster />
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface QuotationItem {
   description: string
@@ -20,6 +21,7 @@ interface QuotationItem {
 
 export default function NuevaCotizacionPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [items, setItems] = useState<QuotationItem[]>([{ description: "", quantity: 1, unitPrice: 0, total: 0 }])
 
@@ -74,12 +76,15 @@ export default function NuevaCotizacionPage() {
       })
 
       if (response.ok) {
+        toast({ title: "Cotizacion creada", description: "La cotizacion se registro correctamente" })
         router.push("/dashboard/cotizaciones")
+        router.refresh()
       } else {
-        alert("Error al crear cotización")
+        const errData = await response.json().catch(() => ({}))
+        toast({ title: "Error", description: errData.error || "No se pudo crear la cotizacion", variant: "destructive" })
       }
-    } catch (error) {
-      alert("Error al crear cotización")
+    } catch {
+      toast({ title: "Error de conexion", description: "No se pudo conectar con el servidor", variant: "destructive" })
     } finally {
       setLoading(false)
     }

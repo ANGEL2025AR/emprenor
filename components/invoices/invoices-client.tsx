@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import Link from "next/link"
 import type { Invoice } from "@/lib/db/models"
 import { useToast } from "@/hooks/use-toast"
@@ -265,8 +275,10 @@ export function InvoicesClient() {
                       )}
                       {invoice.status !== "anulada" && (
                         <Button
-                          onClick={() => setDeleteId(invoice._id)}
-                          className="bg-red-600 hover:bg-red-700 mt-2"
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setDeleteId(invoice._id) }}
+                          variant="destructive"
+                          size="sm"
+                          className="mt-2"
                           disabled={deleting}
                         >
                           <XCircle className="w-4 h-4 mr-2" />
@@ -281,6 +293,25 @@ export function InvoicesClient() {
           })}
         </div>
       )}
+      <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminar factura</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta accion no se puede deshacer. Se eliminara la factura permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

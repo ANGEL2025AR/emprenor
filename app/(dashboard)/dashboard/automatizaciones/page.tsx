@@ -1,10 +1,8 @@
-import { redirect } from "next/navigation"
-import { getCurrentUser } from "@/lib/auth/session"
+import { requirePermission } from "@/lib/auth/require-permission"
 import AutomationsClient from "@/components/automations/automations-client"
 
 export default async function AutomacionesPage() {
-  const user = await getCurrentUser()
-  if (!user) redirect("/login")
+  await requirePermission("automations.view")
 
   return (
     <div className="space-y-6">

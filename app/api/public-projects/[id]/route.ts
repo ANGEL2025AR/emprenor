@@ -41,12 +41,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "ID inválido" }, { status: 400 })
     }
 
-    const updateData = {
-      ...body,
-      updatedAt: new Date(),
+    const allowedFields = [
+      "title", "description", "category", "location", "client",
+      "year", "area", "duration", "images", "features", "published",
+      "featured", "order", "slug", "tags"
+    ]
+    const updateData: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) updateData[key] = body[key]
     }
-
-    delete updateData._id
+    updateData.updatedAt = new Date()
 
     const result = await db
       .collection<PublicProject>("public_projects")

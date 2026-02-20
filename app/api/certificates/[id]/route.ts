@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
+import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
     const { id } = await params
     const db = await getDb()
 
@@ -22,6 +26,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
     const { id } = await params
     const data = await request.json()
     const db = await getDb()
@@ -54,6 +61,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
     const { id } = await params
     const db = await getDb()
 

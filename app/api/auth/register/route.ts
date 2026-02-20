@@ -3,10 +3,21 @@ import { getDb } from "@/lib/db/connection"
 import { hashPassword } from "@/lib/auth/password"
 import { createSession } from "@/lib/auth/session"
 import { registerSchema } from "@/lib/validations/schemas"
+import { rateLimit } from "@/lib/rate-limiter"
 import type { User } from "@/lib/db/models"
+
+const registerRateLimit = rateLimit({ windowMs: 60000 * 60, maxRequests: 3 })
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimitResult = await registerRateLimit(request)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: "Demasiados intentos de registro. Intenta de nuevo más tarde." },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
 
     const result = registerSchema.safeParse(body)

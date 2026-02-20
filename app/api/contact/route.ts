@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { getDb } from "@/lib/db/connection"
+import { getCurrentUser } from "@/lib/auth/session"
 import { contactFormSchema, sanitizeHtml, type ContactFormData } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
 
@@ -95,6 +96,14 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    const user = await getCurrentUser()
+    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
+    const adminRoles = ["super_admin", "admin"]
+    if (!adminRoles.includes(user.role)) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const db = await getDb()
     const collection = db.collection("contactos")
 

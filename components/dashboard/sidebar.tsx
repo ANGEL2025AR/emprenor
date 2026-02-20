@@ -35,6 +35,16 @@ import {
   Zap,
   Globe,
   Shield,
+  ShieldCheck,
+  Inbox,
+  Wallet,
+  Palmtree,
+  HelpCircle,
+  Megaphone,
+  ShieldAlert,
+  Banknote,
+  FolderOpen,
+  BadgeDollarSign,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -206,6 +216,66 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       href: "/dashboard/sitio-web/proyectos",
       icon: Globe,
       permission: "admin.access" as const,
+    },
+    {
+      name: "Portal Empleado",
+      href: "/dashboard/portal",
+      icon: Wallet,
+      permission: "portal.dashboard" as const,
+    },
+    {
+      name: "Billetera Virtual",
+      href: "/dashboard/portal/billetera",
+      icon: BadgeDollarSign,
+      permission: "portal.wallet" as const,
+    },
+    {
+      name: "Recibos de Sueldo",
+      href: "/dashboard/portal/recibos",
+      icon: Banknote,
+      permission: "portal.payslips" as const,
+    },
+    {
+      name: "Mi Legajo",
+      href: "/dashboard/portal/legajo",
+      icon: FolderOpen,
+      permission: "portal.personnel_file" as const,
+    },
+    {
+      name: "Solicitudes",
+      href: "/dashboard/portal/solicitudes",
+      icon: Palmtree,
+      permission: "portal.leave_requests" as const,
+    },
+    {
+      name: "ART / Seguridad",
+      href: "/dashboard/portal/art",
+      icon: ShieldAlert,
+      permission: "portal.art" as const,
+    },
+    {
+      name: "Mesa de Ayuda",
+      href: "/dashboard/portal/mesa-ayuda",
+      icon: HelpCircle,
+      permission: "portal.help_desk" as const,
+    },
+    {
+      name: "Comunicaciones",
+      href: "/dashboard/portal/comunicaciones",
+      icon: Megaphone,
+      permission: "portal.announcements" as const,
+    },
+    {
+      name: "Contactos Web",
+      href: "/dashboard/contactos",
+      icon: Inbox,
+      permission: "contacts.view" as const,
+    },
+    {
+      name: "Roles y Permisos",
+      href: "/dashboard/roles",
+      icon: ShieldCheck,
+      permission: "admin.roles" as const,
     },
     {
       name: "Auditoría",

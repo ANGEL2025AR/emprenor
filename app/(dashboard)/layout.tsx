@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
 import { Toaster } from "@/components/ui/toaster"
+import { AccessProvider } from "@/lib/auth/access-control"
 
 export default async function DashboardLayout({
   children,
@@ -17,13 +18,15 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex">
-      <DashboardSidebar user={user} />
-      <div className="flex-1 flex flex-col min-h-screen lg:ml-0">
-        <DashboardHeader user={user} />
-        <main className="flex-1 p-4 md:p-6 pt-20 lg:pt-6">{children}</main>
+    <AccessProvider user={user}>
+      <div className="min-h-screen bg-slate-100 flex">
+        <DashboardSidebar user={user} />
+        <div className="flex-1 flex flex-col min-h-screen lg:ml-0">
+          <DashboardHeader user={user} />
+          <main className="flex-1 p-4 md:p-6 pt-20 lg:pt-6">{children}</main>
+        </div>
+        <Toaster />
       </div>
-      <Toaster />
-    </div>
+    </AccessProvider>
   )
 }

@@ -1,13 +1,8 @@
-import { getCurrentUser } from "@/lib/auth/session"
-import { redirect } from "next/navigation"
+import { requirePermission } from "@/lib/auth/require-permission"
 import ReportsClient from "@/components/reports/reports-client"
 
 export default async function ReportesPage() {
-  const user = await getCurrentUser()
-
-  if (!user) {
-    redirect("/login")
-  }
+  await requirePermission("reports.view")
 
   return (
     <div className="space-y-6">

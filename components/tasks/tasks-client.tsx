@@ -65,7 +65,7 @@ export function TasksClient() {
         setTasks(data.tasks || [])
       }
     } catch (error) {
-      console.error("[v0] Error fetching tasks:", error)
+      console.error("[API] Error fetching tasks:", error)
     } finally {
       setLoading(false)
     }
@@ -168,19 +168,21 @@ export function TasksClient() {
       ) : (
         <div className="grid gap-4">
           {filteredTasks.map((task) => {
-            const StatusIcon = statusConfig[task.status].icon
+            const tStatus = statusConfig[task.status] || { label: task.status, color: "bg-gray-100 text-gray-800", icon: CheckCircle2 }
+            const tPriority = priorityConfig[task.priority] || { label: task.priority, color: "bg-gray-100 text-gray-800" }
+            const StatusIcon = tStatus.icon
             return (
               <Card key={task._id} className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start justify-between">
                   <div className="space-y-3 flex-1">
                     <div className="flex items-center gap-3 flex-wrap">
                       <h3 className="text-lg font-semibold">{task.title}</h3>
-                      <Badge className={statusConfig[task.status].color}>
+                      <Badge className={tStatus.color}>
                         <StatusIcon className="w-3 h-3 mr-1" />
-                        {statusConfig[task.status].label}
+                        {tStatus.label}
                       </Badge>
-                      <Badge className={priorityConfig[task.priority].color}>
-                        {priorityConfig[task.priority].label}
+                      <Badge className={tPriority.color}>
+                        {tPriority.label}
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-2">{task.description}</p>

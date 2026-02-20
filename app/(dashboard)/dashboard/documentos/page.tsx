@@ -160,7 +160,7 @@ export default function DocumentsPage() {
               <Card key={doc._id?.toString()} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${TYPE_COLORS[doc.type]}`}>
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${TYPE_COLORS[doc.type] || "bg-slate-100"}`}>
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">

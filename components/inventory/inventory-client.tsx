@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Package, Search, Plus, AlertTriangle, Trash2 } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   AlertDialog,
@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
+import Link from "next/link"
 
 interface InventoryItem {
   _id: string
@@ -58,7 +59,7 @@ export default function InventoryClient() {
         setItems(data.items || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading inventory:", error)
+      console.error("[API] Error loading inventory:", error)
     } finally {
       setLoading(false)
     }
@@ -170,20 +171,12 @@ export default function InventoryClient() {
                 ))}
               </SelectContent>
             </Select>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Agregar Item
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Nuevo Item de Inventario</DialogTitle>
-                </DialogHeader>
-                <p className="text-sm text-slate-600">Funcionalidad de agregar items próximamente</p>
-              </DialogContent>
-            </Dialog>
+            <Button asChild>
+              <Link href="/dashboard/inventario/nuevo">
+                <Plus className="w-4 h-4 mr-2" />
+                Agregar Item
+              </Link>
+            </Button>
           </div>
 
           {loading ? (
@@ -226,7 +219,7 @@ export default function InventoryClient() {
                         <td className="py-3 px-4">
                           <Badge className={`${status.color} text-white`}>{status.label}</Badge>
                         </td>
-                        <td className="py-3 px-4 text-right">${item.cost.toLocaleString("es-AR")}</td>
+                        <td className="py-3 px-4 text-right">${(item.cost || 0).toLocaleString("es-AR")}</td>
                         <td className="py-3 px-4 text-slate-600">{item.location || "No especificada"}</td>
                         <td className="py-3 px-4 text-center">
                           <Button

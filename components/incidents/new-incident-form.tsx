@@ -35,7 +35,7 @@ export default function NewIncidentForm() {
           setProjects(data.projects || [])
         }
       } catch (error) {
-        console.error("[v0] Error fetching projects:", error)
+        console.error("[API] Error fetching projects:", error)
       } finally {
         setLoadingProjects(false)
       }

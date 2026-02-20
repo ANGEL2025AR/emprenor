@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { ArrowLeft, Mail, Phone, Briefcase, Calendar, MapPin, Edit, Trash2 } from "lucide-react"
 import { getCurrentUser } from "@/lib/auth/session"
+import { safeDate } from "@/lib/utils"
 
 async function getEmployee(id: string) {
   try {
@@ -24,11 +25,11 @@ async function getEmployee(id: string) {
       position: employee.position,
       department: employee.department,
       salary: employee.salary,
-      hireDate: employee.hireDate?.toISOString().split("T")[0],
+      hireDate: safeDate(employee.hireDate, null)?.split("T")[0] ?? null,
       address: employee.address,
       emergencyContact: employee.emergencyContact,
       status: employee.status || "activo",
-      createdAt: employee.createdAt?.toISOString(),
+      createdAt: safeDate(employee.createdAt, null),
     }
   } catch {
     return null

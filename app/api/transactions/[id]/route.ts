@@ -48,13 +48,20 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const body = await request.json()
     const db = await getDb()
 
+    const allowedFields = [
+      "type", "category", "amount", "description", "reference",
+      "date", "status", "notes", "paymentMethod"
+    ]
+    const data: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+    data.updatedAt = new Date()
+
     const result = await db.collection("transactions").updateOne(
       { _id: new ObjectId(id) },
       {
-        $set: {
-          ...body,
-          updatedAt: new Date(),
-        },
+        $set: data,
       },
     )
 

@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ incidents })
   } catch (error) {
-    console.error("[v0] Incidents error:", error)
+    console.error("[API] Incidents error:", error)
     return NextResponse.json({ error: "Error al cargar incidencias", incidents: [] }, { status: 500 })
   }
 }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       incidentId: result.insertedId,
     })
   } catch (error) {
-    console.error("[v0] Incident create error:", error)
+    console.error("[API] Incident create error:", error)
     return NextResponse.json({ error: "Error al crear incidencia" }, { status: 500 })
   }
 }

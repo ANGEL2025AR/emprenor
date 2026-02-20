@@ -6,11 +6,21 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import Link from "next/link"
 import type { Invoice } from "@/lib/db/models"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 
-const statusConfig = {
+const statusConfig: Record<string, { label: string; color: string; icon: typeof FileText }> = {
   borrador: { label: "Borrador", color: "bg-gray-100 text-gray-800", icon: FileText },
   emitida: { label: "Emitida", color: "bg-blue-100 text-blue-800", icon: Receipt },
   enviada: { label: "Enviada", color: "bg-purple-100 text-purple-800", icon: Receipt },
@@ -232,7 +242,8 @@ export function InvoicesClient() {
       ) : (
         <div className="grid gap-4">
           {filteredInvoices.map((invoice) => {
-            const StatusIcon = statusConfig[invoice.status].icon
+            const invoiceStatus = statusConfig[invoice.status] || { label: invoice.status, color: "bg-gray-100 text-gray-800", icon: FileText }
+            const StatusIcon = invoiceStatus.icon
             return (
               <Link key={invoice._id} href={`/dashboard/facturas/${invoice._id}`}>
                 <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
@@ -243,9 +254,9 @@ export function InvoicesClient() {
                           {invoice.type}
                         </Badge>
                         <h3 className="text-lg font-semibold">{invoice.client?.name}</h3>
-                        <Badge className={statusConfig[invoice.status].color}>
+                        <Badge className={invoiceStatus.color}>
                           <StatusIcon className="w-3 h-3 mr-1" />
-                          {statusConfig[invoice.status].label}
+                          {invoiceStatus.label}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-6 text-sm text-muted-foreground">
@@ -264,8 +275,10 @@ export function InvoicesClient() {
                       )}
                       {invoice.status !== "anulada" && (
                         <Button
-                          onClick={() => setDeleteId(invoice._id)}
-                          className="bg-red-600 hover:bg-red-700 mt-2"
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setDeleteId(invoice._id) }}
+                          variant="destructive"
+                          size="sm"
+                          className="mt-2"
                           disabled={deleting}
                         >
                           <XCircle className="w-4 h-4 mr-2" />
@@ -280,6 +293,25 @@ export function InvoicesClient() {
           })}
         </div>
       )}
+      <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminar factura</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta accion no se puede deshacer. Se eliminara la factura permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

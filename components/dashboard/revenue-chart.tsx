@@ -90,7 +90,7 @@ export async function RevenueChart() {
                   style={{ width: `${(revenue[i] / maxRevenue) * 100}%` }}
                 >
                   <span className="text-xs font-medium text-white">
-                    {i > 0 ? ((revenue[i] / revenue[i - 1] - 1) * 100).toFixed(1) : "0.0"}%
+                    {i > 0 && revenue[i - 1] > 0 ? ((revenue[i] / revenue[i - 1] - 1) * 100).toFixed(1) : "0.0"}%
                   </span>
                 </div>
               </div>
@@ -100,7 +100,7 @@ export async function RevenueChart() {
         <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
           <p className="text-sm text-green-800">
             <span className="font-semibold">Crecimiento promedio:</span> +
-            {revenue.length > 1 ? ((revenue[revenue.length - 1] / revenue[0] - 1) * 100).toFixed(1) : "0.0"}% en{" "}
+            {revenue.length > 1 && revenue[0] > 0 ? ((revenue[revenue.length - 1] / revenue[0] - 1) * 100).toFixed(1) : "0.0"}% en{" "}
             {months.length} meses
           </p>
         </div>

@@ -12,9 +12,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
 import { ArrowLeft, Save } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function NuevaAutomatizacionPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -44,13 +46,15 @@ export default function NuevaAutomatizacionPage() {
       })
 
       if (response.ok) {
+        toast({ title: "Automatizacion creada", description: "La automatizacion se configuro correctamente" })
         router.push("/dashboard/automatizaciones")
+        router.refresh()
       } else {
-        alert("Error al crear automatización")
+        const errData = await response.json().catch(() => ({}))
+        toast({ title: "Error", description: errData.error || "No se pudo crear la automatizacion", variant: "destructive" })
       }
-    } catch (error) {
-      console.error("Error creating automation:", error)
-      alert("Error al crear automatización")
+    } catch {
+      toast({ title: "Error de conexion", description: "No se pudo conectar con el servidor", variant: "destructive" })
     } finally {
       setLoading(false)
     }

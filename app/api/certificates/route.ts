@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ certificates })
   } catch (error) {
-    console.error("[v0] Certificates error:", error)
+    console.error("[API] Certificates error:", error)
     return NextResponse.json({ error: "Error al cargar certificados", certificates: [] }, { status: 500 })
   }
 }
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       certificateId: result.insertedId,
     })
   } catch (error) {
-    console.error("[v0] Certificate create error:", error)
+    console.error("[API] Certificate create error:", error)
     return NextResponse.json({ error: "Error al crear certificado" }, { status: 500 })
   }
 }

@@ -126,8 +126,8 @@ export function ProjectTasksClient({ projectId }: { projectId: string }) {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-medium text-slate-900">{task.title}</h4>
-                        <Badge className={STATUS_COLORS[task.status]}>{task.status}</Badge>
-                        <Badge className={PRIORITY_COLORS[task.priority]} variant="outline">
+                        <Badge className={STATUS_COLORS[task.status] || "bg-slate-100 text-slate-700"}>{task.status}</Badge>
+                        <Badge className={PRIORITY_COLORS[task.priority] || "text-slate-700"} variant="outline">
                           {task.priority}
                         </Badge>
                       </div>

@@ -49,7 +49,7 @@ export default function CalendarClient() {
         setEvents(data.events || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading events:", error)
+      console.error("[API] Error loading events:", error)
     } finally {
       setLoading(false)
     }

@@ -12,9 +12,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save, DollarSign, TrendingUp, TrendingDown } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function NuevaTransaccionPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const searchParams = useSearchParams()
   const initialType = searchParams.get("type") || "ingreso"
 
@@ -43,10 +45,26 @@ export default function NuevaTransaccionPage() {
       })
 
       if (response.ok) {
+        toast({
+          title: "Transaccion registrada",
+          description: `Se registro correctamente el ${formData.type === "ingreso" ? "ingreso" : "egreso"}`,
+        })
         router.push("/dashboard/finanzas")
+        router.refresh()
+      } else {
+        const errorData = await response.json()
+        toast({
+          title: "Error",
+          description: errorData.error || "No se pudo registrar la transaccion",
+          variant: "destructive",
+        })
       }
     } catch {
-      // Error silencioso
+      toast({
+        title: "Error de conexion",
+        description: "No se pudo conectar con el servidor",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }

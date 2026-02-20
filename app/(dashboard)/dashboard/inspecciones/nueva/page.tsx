@@ -12,9 +12,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save, ClipboardCheck } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function NuevaInspeccionPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
@@ -36,10 +38,15 @@ export default function NuevaInspeccionPage() {
       })
 
       if (response.ok) {
+        toast({ title: "Inspeccion creada", description: "La inspeccion se programo correctamente" })
         router.push("/dashboard/inspecciones")
+        router.refresh()
+      } else {
+        const errData = await response.json().catch(() => ({}))
+        toast({ title: "Error", description: errData.error || "No se pudo crear la inspeccion", variant: "destructive" })
       }
     } catch {
-      // Error silencioso
+      toast({ title: "Error de conexion", description: "No se pudo conectar con el servidor", variant: "destructive" })
     } finally {
       setIsLoading(false)
     }

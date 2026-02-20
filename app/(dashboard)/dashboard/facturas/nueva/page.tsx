@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Plus, Trash2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface InvoiceItem {
   description: string
@@ -21,6 +22,7 @@ interface InvoiceItem {
 
 export default function NuevaFacturaPage() {
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [invoiceType, setInvoiceType] = useState<"A" | "B" | "C">("B")
   const [items, setItems] = useState<InvoiceItem[]>([{ description: "", quantity: 1, unitPrice: 0, total: 0 }])
@@ -78,12 +80,15 @@ export default function NuevaFacturaPage() {
       })
 
       if (response.ok) {
+        toast({ title: "Factura emitida", description: "La factura se registro correctamente" })
         router.push("/dashboard/facturas")
+        router.refresh()
       } else {
-        alert("Error al crear factura")
+        const errData = await response.json().catch(() => ({}))
+        toast({ title: "Error", description: errData.error || "No se pudo emitir la factura", variant: "destructive" })
       }
-    } catch (error) {
-      alert("Error al crear factura")
+    } catch {
+      toast({ title: "Error de conexion", description: "No se pudo conectar con el servidor", variant: "destructive" })
     } finally {
       setLoading(false)
     }

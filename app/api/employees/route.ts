@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({ employees })
   } catch (error) {
-    console.error("[v0] Employees error:", error)
+    console.error("[API] Employees error:", error)
     return NextResponse.json({ error: "Error al cargar empleados", employees: [] }, { status: 500 })
   }
 }
@@ -28,22 +28,39 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, lastName, role, specialty, contact, hireDate } = body
 
-    if (!name || !lastName || !role) {
-      return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 })
+    // Support both form format (name as full name) and API format (name + lastName)
+    const fullName = body.name || ""
+    const nameParts = fullName.split(" ")
+    const firstName = body.firstName || nameParts[0] || fullName
+    const lastName = body.lastName || nameParts.slice(1).join(" ") || ""
+    const role = body.role || body.position || ""
+
+    if (!fullName || !role) {
+      return NextResponse.json({ error: "Nombre y cargo son requeridos" }, { status: 400 })
     }
 
     const db = await getDb()
     const result = await db.collection("employees").insertOne({
-      name,
+      name: fullName,
+      firstName,
       lastName,
       role,
-      specialty,
-      contact: contact || {},
-      hireDate: hireDate ? new Date(hireDate) : new Date(),
+      position: body.position || role,
+      specialty: body.specialty || "",
+      email: body.email || "",
+      phone: body.phone || "",
+      dni: body.dni || "",
+      address: body.address || "",
+      salary: Number(body.salary) || 0,
+      contact: body.contact || { email: body.email, phone: body.phone },
+      hireDate: body.hireDate ? new Date(body.hireDate) : new Date(),
+      emergencyContact: body.emergencyContact || "",
+      emergencyPhone: body.emergencyPhone || "",
+      notes: body.notes || "",
       status: "activo",
       createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: new ObjectId(user._id),
     })
 
@@ -52,7 +69,7 @@ export async function POST(request: Request) {
       employeeId: result.insertedId,
     })
   } catch (error) {
-    console.error("[v0] Employee create error:", error)
+    console.error("[API] Employee create error:", error)
     return NextResponse.json({ error: "Error al crear empleado" }, { status: 500 })
   }
 }

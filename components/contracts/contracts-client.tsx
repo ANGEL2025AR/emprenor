@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import type { Contract } from "@/lib/db/models"
 
-const statusConfig = {
+const statusConfig: Record<string, { label: string; color: string; icon: typeof FileText }> = {
   borrador: { label: "Borrador", color: "bg-gray-100 text-gray-800", icon: FileText },
   pendiente_firma: { label: "Pendiente Firma", color: "bg-yellow-100 text-yellow-800", icon: Clock },
   activo: { label: "Activo", color: "bg-green-100 text-green-800", icon: CheckCircle },
@@ -147,7 +147,8 @@ export function ContractsClient() {
       ) : (
         <div className="grid gap-4">
           {filteredContracts.map((contract) => {
-            const StatusIcon = statusConfig[contract.status].icon
+            const contractStatus = statusConfig[contract.status] || { label: contract.status, color: "bg-gray-100 text-gray-800", icon: FileText }
+            const StatusIcon = contractStatus.icon
             return (
               <Link key={contract._id} href={`/dashboard/contratos/${contract._id}`}>
                 <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
@@ -155,9 +156,9 @@ export function ContractsClient() {
                     <div className="space-y-3 flex-1">
                       <div className="flex items-center gap-3">
                         <h3 className="text-lg font-semibold">{contract.projectName}</h3>
-                        <Badge className={statusConfig[contract.status].color}>
+                        <Badge className={contractStatus.color}>
                           <StatusIcon className="w-3 h-3 mr-1" />
-                          {statusConfig[contract.status].label}
+                          {contractStatus.label}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-6 text-sm text-muted-foreground">

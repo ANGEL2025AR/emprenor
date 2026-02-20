@@ -33,6 +33,7 @@ export default function EditTaskForm({ task }: EditTaskFormProps) {
       description: formData.get("description"),
       priority: formData.get("priority"),
       status: formData.get("status"),
+      progress: Number(formData.get("progress")) || 0,
       dueDate: formData.get("dueDate"),
     }
 
@@ -86,6 +87,19 @@ export default function EditTaskForm({ task }: EditTaskFormProps) {
           <div>
             <Label htmlFor="description">Descripción</Label>
             <Textarea id="description" name="description" defaultValue={task.description} rows={4} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="progress">Progreso (%)</Label>
+            <Input
+              id="progress"
+              name="progress"
+              type="number"
+              min="0"
+              max="100"
+              defaultValue={task.progress || 0}
+              placeholder="0-100"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

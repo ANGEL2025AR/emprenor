@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/lib/auth/session"
 import { redirect } from "next/navigation"
 import { getDb } from "@/lib/db/connection"
+import { safeDate } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Plus, MessageSquare, Clock, CheckCircle2, XCircle } from "lucide-react"
@@ -18,17 +19,17 @@ async function getRFIs() {
       subject: rfi.subject || "",
       question: rfi.question || "",
       requestedBy: rfi.requestedBy?.toString() || "",
-      requestedDate: rfi.requestedDate instanceof Date ? rfi.requestedDate.toISOString() : "",
-      requiredBy: rfi.requiredBy instanceof Date ? rfi.requiredBy.toISOString() : null,
+      requestedDate: safeDate(rfi.requestedDate) || "",
+      requiredBy: safeDate(rfi.requiredBy, null),
       respondedBy: rfi.respondedBy?.toString() || null,
-      respondedDate: rfi.respondedDate instanceof Date ? rfi.respondedDate.toISOString() : null,
+      respondedDate: safeDate(rfi.respondedDate, null),
       response: rfi.response || null,
       attachments: rfi.attachments || [],
       status: rfi.status || "abierto",
       priority: rfi.priority || "normal",
       impact: rfi.impact || { cost: 0, schedule: 0 },
-      createdAt: rfi.createdAt instanceof Date ? rfi.createdAt.toISOString() : "",
-      updatedAt: rfi.updatedAt instanceof Date ? rfi.updatedAt.toISOString() : "",
+      createdAt: safeDate(rfi.createdAt) || "",
+      updatedAt: safeDate(rfi.updatedAt) || "",
     }))
   } catch {
     return []

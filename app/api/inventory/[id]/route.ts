@@ -35,15 +35,20 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       status = "low"
     }
 
+    const allowedFields = [
+      "name", "category", "quantity", "unit", "minStock",
+      "cost", "supplier", "location", "notes"
+    ]
+    const sanitized: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (data[key] !== undefined) sanitized[key] = data[key]
+    }
+    sanitized.status = status
+    sanitized.updatedAt = new Date()
+
     const result = await db.collection("inventory").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...data,
-          status,
-          updatedAt: new Date(),
-        },
-      },
+      { $set: sanitized },
     )
 
     if (result.matchedCount === 0) {

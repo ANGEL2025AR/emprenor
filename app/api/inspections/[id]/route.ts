@@ -51,9 +51,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     const db = await getDb()
 
+    const allowedFields = [
+      "title", "type", "status", "result", "date", "inspector",
+      "projectId", "projectName", "observations", "notes", "checklist", "photos"
+    ]
+    const data: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+    data.updatedAt = new Date()
+
     const updateResult = await db
       .collection("inspections")
-      .updateOne({ _id: new ObjectId(id) }, { $set: { ...body, updatedAt: new Date() } })
+      .updateOne({ _id: new ObjectId(id) }, { $set: data })
 
     if (updateResult.matchedCount === 0) {
       return NextResponse.json({ error: "Inspección no encontrada" }, { status: 404 })

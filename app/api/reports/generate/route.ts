@@ -192,7 +192,7 @@ export async function POST(request: Request) {
       generatedAt: new Date(),
     })
   } catch (error) {
-    console.error("[v0] Report generation error:", error)
+    console.error("[API] Report generation error:", error)
     return NextResponse.json({ error: "Error al generar reporte" }, { status: 500 })
   }
 }

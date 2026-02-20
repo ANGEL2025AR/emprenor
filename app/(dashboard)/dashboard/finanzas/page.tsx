@@ -186,7 +186,7 @@ export default function FinancePage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <Badge className={STATUS_COLORS[transaction.status]}>{transaction.status}</Badge>
+                    <Badge className={STATUS_COLORS[transaction.status] || "bg-slate-100 text-slate-700"}>{transaction.status}</Badge>
                     <p
                       className={`font-semibold ${transaction.type === "ingreso" ? "text-green-600" : "text-red-600"}`}
                     >

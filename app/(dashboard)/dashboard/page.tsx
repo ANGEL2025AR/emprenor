@@ -117,7 +117,7 @@ export default async function DashboardPage() {
     {
       title: "Balance Financiero",
       value: `$${(stats.balance / 1000000).toFixed(2)}M`,
-      subtitle: `${stats.ingresos > stats.egresos ? "+" : ""}${((stats.balance / stats.ingresos) * 100).toFixed(1)}% este mes`,
+      subtitle: stats.ingresos > 0 ? `${stats.balance >= 0 ? "+" : ""}${((stats.balance / stats.ingresos) * 100).toFixed(1)}% margen` : "Sin movimientos registrados",
       icon: DollarSign,
       color: stats.balance >= 0 ? "bg-green-500" : "bg-red-500",
       trend: stats.balance >= 0 ? "up" : "down",
@@ -202,10 +202,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {executiveKPIs.map((kpi) => (
           <Link key={kpi.title} href={kpi.href}>
-            <Card
-              className="hover:shadow-lg transition-all cursor-pointer border-l-4"
-              style={{ borderLeftColor: kpi.color.replace("bg-", "") }}
-            >
+            <Card className="hover:shadow-lg transition-all cursor-pointer border-l-4 border-l-slate-300">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">

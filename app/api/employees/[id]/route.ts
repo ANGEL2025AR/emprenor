@@ -23,17 +23,24 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    const data = await request.json()
+    const body = await request.json()
     const db = await getDb()
+
+    // Sanitize: only allow known fields
+    const allowedFields = [
+      "name", "firstName", "lastName", "email", "phone", "position", "role",
+      "department", "specialty", "salary", "hireDate", "address", "dni",
+      "emergencyContact", "emergencyPhone", "notes", "status", "contact"
+    ]
+    const data: Record<string, unknown> = {}
+    for (const key of allowedFields) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+    data.updatedAt = new Date()
 
     const result = await db.collection("employees").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...data,
-          updatedAt: new Date(),
-        },
-      },
+      { $set: data },
     )
 
     if (result.matchedCount === 0) {

@@ -31,10 +31,11 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import type { Payment } from "@/lib/db/models"
 
-const statusConfig = {
+const statusConfig: Record<string, { label: string; color: string; icon: typeof Clock }> = {
   pendiente: { label: "Pendiente", color: "bg-yellow-100 text-yellow-800", icon: Clock },
   parcial: { label: "Parcial", color: "bg-blue-100 text-blue-800", icon: AlertCircle },
   pagado: { label: "Pagado", color: "bg-green-100 text-green-800", icon: CheckCircle },
+  completed: { label: "Pagado", color: "bg-green-100 text-green-800", icon: CheckCircle },
   atrasado: { label: "Atrasado", color: "bg-red-100 text-red-800", icon: AlertCircle },
   cancelado: { label: "Cancelado", color: "bg-gray-100 text-gray-800", icon: XCircle },
 }
@@ -248,7 +249,8 @@ export function PaymentsClient() {
       ) : (
         <div className="grid gap-4">
           {filteredPayments.map((payment) => {
-            const StatusIcon = statusConfig[payment.status].icon
+            const statusInfo = statusConfig[payment.status] || { label: payment.status, color: "bg-gray-100 text-gray-800", icon: Clock }
+            const StatusIcon = statusInfo.icon
             const TypeIcon = payment.type === "ingreso" ? ArrowUpCircle : ArrowDownCircle
             const typeColor = payment.type === "ingreso" ? "text-green-600" : "text-red-600"
 
@@ -260,9 +262,9 @@ export function PaymentsClient() {
                       <div className="flex items-center gap-3">
                         <TypeIcon className={`w-5 h-5 ${typeColor}`} />
                         <h3 className="text-lg font-semibold">{payment.description}</h3>
-                        <Badge className={statusConfig[payment.status].color}>
+                        <Badge className={statusInfo.color}>
                           <StatusIcon className="w-3 h-3 mr-1" />
-                          {statusConfig[payment.status].label}
+                          {statusInfo.label}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-6 text-sm text-muted-foreground">

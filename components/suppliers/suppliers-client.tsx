@@ -52,7 +52,7 @@ export default function SuppliersClient() {
         setSuppliers(data.suppliers || [])
       }
     } catch (error) {
-      console.error("[v0] Error loading suppliers:", error)
+      console.error("[API] Error loading suppliers:", error)
     } finally {
       setLoading(false)
     }

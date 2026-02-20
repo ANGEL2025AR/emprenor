@@ -191,7 +191,8 @@ export function QuotationsClient() {
       ) : (
         <div className="grid gap-4">
           {filteredQuotations.map((quotation) => {
-            const StatusIcon = statusConfig[quotation.status].icon
+            const qStatus = statusConfig[quotation.status] || { label: quotation.status, color: "bg-gray-100 text-gray-800", icon: FileText }
+            const StatusIcon = qStatus.icon
             return (
               <Card key={quotation._id} className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start justify-between">
@@ -199,9 +200,9 @@ export function QuotationsClient() {
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
                         <h3 className="text-lg font-semibold">{quotation.projectName}</h3>
-                        <Badge className={statusConfig[quotation.status].color}>
+                        <Badge className={qStatus.color}>
                           <StatusIcon className="w-3 h-3 mr-1" />
-                          {statusConfig[quotation.status].label}
+                          {qStatus.label}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-6 text-sm text-muted-foreground">

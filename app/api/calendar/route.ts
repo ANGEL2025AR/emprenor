@@ -53,7 +53,7 @@ export async function GET(request: Request) {
           evts.push({
             _id: `${p._id}-start`,
             title: `Inicio: ${p.name}`,
-            date: p.dates.start.toISOString(),
+            date: new Date(p.dates.start).toISOString(),
             type: "proyecto",
             projectName: p.name,
           })
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
           evts.push({
             _id: `${p._id}-end`,
             title: `Fin: ${p.name}`,
-            date: p.dates.estimatedEnd.toISOString(),
+            date: new Date(p.dates.estimatedEnd).toISOString(),
             type: "proyecto",
             projectName: p.name,
           })

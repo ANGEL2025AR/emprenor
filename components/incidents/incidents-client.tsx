@@ -93,14 +93,16 @@ export default function IncidentsClient() {
         ) : (
           <div className="space-y-3">
             {filteredIncidents.map((inc) => {
-              const StatusIcon = statusConfig[inc.status].icon
+              const incStatus = statusConfig[inc.status] || { label: inc.status, color: "bg-gray-500", icon: AlertTriangle }
+              const incSeverity = severityConfig[inc.severity] || { label: inc.severity, color: "bg-gray-100 text-gray-800" }
+              const StatusIcon = incStatus.icon
               return (
                 <Card key={inc._id} className="hover:shadow-md transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-4 flex-1">
                         <div
-                          className={`w-12 h-12 ${statusConfig[inc.status].color} rounded-xl flex items-center justify-center flex-shrink-0`}
+                          className={`w-12 h-12 ${incStatus.color} rounded-xl flex items-center justify-center flex-shrink-0`}
                         >
                           <StatusIcon className="w-6 h-6 text-white" />
                         </div>
@@ -109,10 +111,10 @@ export default function IncidentsClient() {
                           <p className="text-sm text-slate-600 mt-1">{inc.projectName}</p>
                           {inc.description && <p className="text-sm text-slate-500 mt-2">{inc.description}</p>}
                           <div className="flex gap-2 mt-3">
-                            <Badge className={severityConfig[inc.severity].color}>
-                              {severityConfig[inc.severity].label}
+                            <Badge className={incSeverity.color}>
+                              {incSeverity.label}
                             </Badge>
-                            <Badge variant="outline">{statusConfig[inc.status].label}</Badge>
+                            <Badge variant="outline">{incStatus.label}</Badge>
                           </div>
                         </div>
                       </div>

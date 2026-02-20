@@ -28,21 +28,32 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, category, contact, address, rating } = body
 
-    if (!name || !category) {
-      return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 })
+    if (!body.name) {
+      return NextResponse.json({ error: "Nombre del proveedor es requerido" }, { status: 400 })
     }
 
     const db = await getDb()
     const result = await db.collection("suppliers").insertOne({
-      name,
-      category,
-      contact: contact || {},
-      address,
-      rating: rating || 0,
+      name: body.name,
+      category: body.category || body.type || "general",
+      contact: body.contact || {
+        name: body.contactName || "",
+        email: body.email || "",
+        phone: body.phone || "",
+      },
+      cuit: body.cuit || "",
+      email: body.email || "",
+      phone: body.phone || "",
+      address: body.address || "",
+      city: body.city || "",
+      province: body.province || "",
+      specialties: body.specialties || [],
+      rating: Number(body.rating) || 0,
+      notes: body.notes || "",
       status: "activo",
       createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: new ObjectId(user._id),
     })
 

@@ -86,14 +86,15 @@ export default function CertificatesClient() {
         ) : (
           <div className="space-y-3">
             {filteredCertificates.map((cert) => {
-              const StatusIcon = statusConfig[cert.status].icon
+              const certStatus = statusConfig[cert.status] || { label: cert.status, color: "bg-gray-500", icon: FileText }
+              const StatusIcon = certStatus.icon
               return (
                 <Card key={cert._id} className="hover:shadow-md transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-12 h-12 ${statusConfig[cert.status].color} rounded-xl flex items-center justify-center`}
+                          className={`w-12 h-12 ${certStatus.color} rounded-xl flex items-center justify-center`}
                         >
                           <StatusIcon className="w-6 h-6 text-white" />
                         </div>
@@ -102,7 +103,7 @@ export default function CertificatesClient() {
                           <p className="text-sm text-slate-600">Certificado N° {cert.certificateNumber}</p>
                           <div className="flex gap-2 mt-1">
                             <Badge variant="outline">{cert.type}</Badge>
-                            <Badge className={statusConfig[cert.status].color}>{statusConfig[cert.status].label}</Badge>
+                            <Badge className={certStatus.color}>{certStatus.label}</Badge>
                           </div>
                         </div>
                       </div>

@@ -78,19 +78,21 @@ export default async function ReporteFinancieroPage() {
         <CardContent>
           <div className="space-y-4">
             {projects.map((project) => {
-              const projectIngresos = transactions
+              const projectIngresos = payments
                 .filter(
                   (t) =>
                     t.projectId?.toString() === project._id?.toString() &&
                     t.type === "ingreso" &&
-                    t.status === "pagado",
+                    (t.status === "pagado" || t.status === "completed"),
                 )
                 .reduce((sum, t) => sum + (t.amount || 0), 0)
 
-              const projectEgresos = transactions
+              const projectEgresos = payments
                 .filter(
                   (t) =>
-                    t.projectId?.toString() === project._id?.toString() && t.type === "egreso" && t.status === "pagado",
+                    t.projectId?.toString() === project._id?.toString() &&
+                    t.type === "egreso" &&
+                    (t.status === "pagado" || t.status === "completed"),
                 )
                 .reduce((sum, t) => sum + (t.amount || 0), 0)
 

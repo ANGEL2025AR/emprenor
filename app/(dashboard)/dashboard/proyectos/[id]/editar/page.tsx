@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import type { Project } from "@/lib/db/models"
+import type { Project, ProjectType, Priority } from "@/lib/db/models"
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -214,7 +214,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 <Label htmlFor="type">Tipo de Proyecto</Label>
                 <Select
                   value={project.type || ""}
-                  onValueChange={(value) => setProject({ ...project, type: value })}
+                  onValueChange={(value) => setProject({ ...project, type: value as ProjectType })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar tipo" />
@@ -232,7 +232,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 <Label htmlFor="priority">Prioridad</Label>
                 <Select
                   value={project.priority || ""}
-                  onValueChange={(value) => setProject({ ...project, priority: value })}
+                  onValueChange={(value) => setProject({ ...project, priority: value as Priority })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar prioridad" />

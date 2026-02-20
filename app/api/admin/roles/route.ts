@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
-import { hasPermission, DEFAULT_PERMISSIONS, invalidatePermissionsCache } from "@/lib/auth/permissions"
+import { hasPermission, DEFAULT_PERMISSIONS } from "@/lib/auth/permissions"
+import { invalidatePermissionsCache } from "@/lib/auth/permissions-server"
 import type { UserRole } from "@/lib/db/models"
 
 // GET: Obtener la configuración de permisos actual

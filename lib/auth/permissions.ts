@@ -137,40 +137,9 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
 } as const
 
 // ============================================
-// CACHE DE PERMISOS DINÁMICOS
+// NOTA: Las funciones de MongoDB (loadDynamicPermissions, invalidatePermissionsCache)
+// están en lib/auth/permissions-server.ts para evitar importar MongoDB en Client Components
 // ============================================
-
-let dynamicPermissionsCache: Record<string, string[]> | null = null
-let cacheTimestamp = 0
-const CACHE_TTL = 60000
-
-export async function loadDynamicPermissions(): Promise<Record<string, string[]>> {
-  const now = Date.now()
-  if (dynamicPermissionsCache && now - cacheTimestamp < CACHE_TTL) {
-    return dynamicPermissionsCache
-  }
-
-  try {
-    const { getDb } = await import("@/lib/db/connection")
-    const db = await getDb()
-    const config = await db.collection("roles_config").findOne({ type: "permissions_override" })
-
-    if (config?.permissions) {
-      dynamicPermissionsCache = { ...DEFAULT_PERMISSIONS, ...config.permissions }
-    } else {
-      dynamicPermissionsCache = { ...DEFAULT_PERMISSIONS }
-    }
-    cacheTimestamp = now
-    return dynamicPermissionsCache
-  } catch {
-    return { ...DEFAULT_PERMISSIONS }
-  }
-}
-
-export function invalidatePermissionsCache(): void {
-  dynamicPermissionsCache = null
-  cacheTimestamp = 0
-}
 
 // ============================================
 // TIPOS Y CATEGORÍAS
@@ -286,15 +255,7 @@ export const PERMISSION_ACTION_LABELS: Record<string, string> = {
 // ============================================
 
 export function hasPermission(role: UserRole, permission: string): boolean {
-  const perms = dynamicPermissionsCache || DEFAULT_PERMISSIONS
-  const allowedRoles = perms[permission] as readonly string[] | undefined
-  if (!allowedRoles) return false
-  return allowedRoles.includes(role)
-}
-
-export async function hasPermissionAsync(role: UserRole, permission: string): Promise<boolean> {
-  const perms = await loadDynamicPermissions()
-  const allowedRoles = perms[permission] as readonly string[] | undefined
+  const allowedRoles = DEFAULT_PERMISSIONS[permission] as readonly string[] | undefined
   if (!allowedRoles) return false
   return allowedRoles.includes(role)
 }
@@ -308,9 +269,8 @@ export function hasAllPermissions(role: UserRole, permissions: string[]): boolea
 }
 
 export function getUserPermissions(role: UserRole): string[] {
-  const perms = dynamicPermissionsCache || DEFAULT_PERMISSIONS
-  return Object.keys(perms).filter((permission) => {
-    const allowedRoles = perms[permission]
+  return Object.keys(DEFAULT_PERMISSIONS).filter((permission) => {
+    const allowedRoles = DEFAULT_PERMISSIONS[permission]
     return allowedRoles?.includes(role)
   })
 }

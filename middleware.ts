@@ -22,6 +22,7 @@ const ROUTE_PERMISSION_MAP: Record<string, { permission: string; allowedRoles: s
   "/dashboard/sitio-web": { permission: "website.view", allowedRoles: ["super_admin", "admin"] },
   "/dashboard/auditoria": { permission: "admin.logs", allowedRoles: ["super_admin", "admin"] },
   "/dashboard/contactos": { permission: "contacts.view", allowedRoles: ["super_admin", "admin"] },
+  "/dashboard/roles": { permission: "admin.roles", allowedRoles: ["super_admin", "admin"] },
   "/dashboard/proveedores": { permission: "suppliers.view", allowedRoles: ["super_admin", "admin", "gerente"] },
   "/dashboard/inventario": { permission: "inventory.view", allowedRoles: ["super_admin", "admin", "gerente", "supervisor"] },
   "/dashboard/certificados": { permission: "certificates.view", allowedRoles: ["super_admin", "admin", "gerente", "supervisor", "cliente"] },

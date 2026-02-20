@@ -35,6 +35,8 @@ import {
   Zap,
   Globe,
   Shield,
+  ShieldCheck,
+  Inbox,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"

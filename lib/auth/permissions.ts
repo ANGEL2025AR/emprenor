@@ -363,4 +363,5 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/auditoria": "admin.logs",
   "/dashboard/notificaciones": "notifications.view",
   "/dashboard/contactos": "contacts.view",
+  "/dashboard/roles": "admin.roles",
 }

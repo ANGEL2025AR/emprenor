@@ -1,6 +1,5 @@
 import { Suspense } from "react"
-import { getCurrentUser } from "@/lib/auth/session"
-import { redirect } from "next/navigation"
+import { requirePermission } from "@/lib/auth/require-permission"
 import { QuotationsClient } from "@/components/quotations/quotations-client"
 
 export const metadata = {
@@ -9,11 +8,7 @@ export const metadata = {
 }
 
 export default async function QuotationsPage() {
-  const user = await getCurrentUser()
-
-  if (!user) {
-    redirect("/login")
-  }
+  await requirePermission("finance.view")
 
   return (
     <div className="flex-1 space-y-6 p-6 pt-8">

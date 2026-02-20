@@ -210,6 +210,18 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       permission: "admin.access" as const,
     },
     {
+      name: "Contactos Web",
+      href: "/dashboard/contactos",
+      icon: Inbox,
+      permission: "contacts.view" as const,
+    },
+    {
+      name: "Roles y Permisos",
+      href: "/dashboard/roles",
+      icon: ShieldCheck,
+      permission: "admin.roles" as const,
+    },
+    {
       name: "Auditoría",
       href: "/dashboard/auditoria",
       icon: Shield,

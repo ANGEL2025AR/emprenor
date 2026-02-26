@@ -223,7 +223,7 @@ export type PaymentMethod = "efectivo" | "transferencia" | "cheque" | "tarjeta" 
 export interface Transaction extends BaseDocument {
   type: TransactionType
   category: TransactionCategory
-  projectId: ObjectId
+  projectId?: ObjectId
   amount: number
   currency: string
   date: Date

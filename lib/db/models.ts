@@ -216,6 +216,16 @@ export type TransactionCategory =
   | "material"
   | "equipo"
   | "servicio"
+  | "materiales"
+  | "mano_obra"
+  | "equipos"
+  | "transporte"
+  | "servicios"
+  | "impuestos"
+  | "anticipo"
+  | "financiamiento"
+  | "otros_ingresos"
+  | "otros_gastos"
   | "otro"
 export type TransactionStatus = "pendiente" | "pagado" | "parcial" | "vencido" | "cancelado"
 export type PaymentMethod = "efectivo" | "transferencia" | "cheque" | "tarjeta" | "otro"
@@ -223,7 +233,7 @@ export type PaymentMethod = "efectivo" | "transferencia" | "cheque" | "tarjeta" 
 export interface Transaction extends BaseDocument {
   type: TransactionType
   category: TransactionCategory
-  projectId: ObjectId
+  projectId?: ObjectId
   amount: number
   currency: string
   date: Date

@@ -1,11 +1,11 @@
 import { MongoClient, type Db } from "mongodb"
 
-if (!process.env.MONGODB_URI) {
-  throw new Error("MONGODB_URI no está definida en las variables de entorno")
+const uri = process.env.MONGODB_URI || ""
+const options = {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
 }
-
-const uri = process.env.MONGODB_URI
-const options = {}
 
 let client: MongoClient
 let clientPromise: Promise<MongoClient>
@@ -15,16 +15,24 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined
 }
 
-if (process.env.NODE_ENV === "development") {
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options)
-    global._mongoClientPromise = client.connect()
+function getClientPromise(): Promise<MongoClient> {
+  if (!uri) {
+    return Promise.reject(new Error("MONGODB_URI no esta definida en las variables de entorno"))
   }
-  clientPromise = global._mongoClientPromise
-} else {
-  client = new MongoClient(uri, options)
-  clientPromise = client.connect()
+
+  if (process.env.NODE_ENV === "development") {
+    if (!global._mongoClientPromise) {
+      client = new MongoClient(uri, options)
+      global._mongoClientPromise = client.connect()
+    }
+    return global._mongoClientPromise
+  } else {
+    client = new MongoClient(uri, options)
+    return client.connect()
+  }
 }
+
+clientPromise = getClientPromise()
 
 export const connectToDatabase = async () => {
   const client = await clientPromise

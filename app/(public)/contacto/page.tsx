@@ -1,13 +1,23 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Phone, Mail, MapPin, Clock, Send, MessageSquare, CheckCircle2, AlertCircle } from "lucide-react"
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  ArrowRight,
+  Sparkles,
+  Building2,
+} from "lucide-react"
 
 export default function ContactoPage() {
   const [formData, setFormData] = useState({
@@ -52,13 +62,13 @@ export default function ContactoPage() {
         setSubmitStatus("error")
         setErrorMessage(
           data.error ||
-            "Hubo un problema al enviar su mensaje. Por favor, intente nuevamente o contáctenos por teléfono.",
+            "Hubo un problema al enviar su mensaje. Por favor, intente nuevamente o contactenos por telefono.",
         )
       }
     } catch {
       setSubmitStatus("error")
       setErrorMessage(
-        "No se pudo conectar con el servidor. Por favor, verifique su conexión a internet e intente nuevamente.",
+        "No se pudo conectar con el servidor. Por favor, verifique su conexion a internet e intente nuevamente.",
       )
     } finally {
       setIsSubmitting(false)
@@ -72,59 +82,83 @@ export default function ContactoPage() {
     })
   }
 
+  const offices = [
+    {
+      name: "Salta Capital",
+      address: "Ituzaingo 920",
+      city: "Salta Capital, Salta",
+    },
+    {
+      name: "Tartagal",
+      address: "Ituzaingo 1279",
+      city: "Tartagal, Salta",
+    },
+    {
+      name: "Campamento Vespucio",
+      address: "Av. Casiano Casas S/N",
+      city: "Campamento Vespucio, Salta",
+    },
+  ]
+
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col pt-20">
       {/* Hero Section */}
-      <section className="bg-primary text-primary-foreground py-16 md:py-24">
-        <div className="container px-4 md:px-6">
+      <section className="relative bg-foreground py-24 md:py-32 overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
+
+        <div className="container px-4 md:px-6 relative z-10">
           <div className="mx-auto max-w-3xl text-center space-y-6">
-            <div className="flex items-center justify-center gap-3">
-              <MessageSquare className="h-10 w-10" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm font-medium">Respuesta en menos de 24 horas</span>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-balance">Contáctenos</h1>
-            <p className="text-lg text-primary-foreground/90 leading-relaxed text-pretty">
-              Estamos aquí para ayudarle a hacer realidad su proyecto. Contáctenos hoy para una consulta gratuita.
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-background leading-tight text-balance">
+              Hagamos realidad tu{" "}
+              <span className="gradient-text">proyecto</span>
+            </h1>
+            <p className="text-lg md:text-xl text-background/70 leading-relaxed max-w-2xl mx-auto">
+              Estamos listos para ayudarte. Completale el formulario o contactanos directamente.
+              Cotizacion gratuita y sin compromiso.
             </p>
           </div>
         </div>
       </section>
 
       {/* Contact Content */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-12 lg:grid-cols-2">
+          <div className="grid gap-12 lg:grid-cols-5">
             {/* Contact Form */}
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold text-foreground">Solicite una Cotización</h2>
+            <div className="lg:col-span-3 space-y-8">
+              <div className="space-y-4">
+                <h2 className="text-3xl font-bold text-foreground">Solicita una Cotizacion</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Complete el formulario y nos pondremos en contacto con usted en menos de 24 horas.
                 </p>
               </div>
 
               {submitStatus === "success" && (
-                <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
-                  <p className="text-sm text-green-800">
-                    ¡Mensaje enviado exitosamente! Nos pondremos en contacto con usted pronto.
+                <div className="flex items-center gap-3 p-4 bg-primary/10 border border-primary/20 rounded-xl">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <p className="text-sm text-foreground">
+                    Mensaje enviado exitosamente! Nos pondremos en contacto con usted pronto.
                   </p>
                 </div>
               )}
 
               {submitStatus === "error" && (
-                <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-xl">
+                  <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-sm text-red-800 font-medium mb-1">Error al enviar mensaje</p>
-                    <p className="text-sm text-red-700">{errorMessage}</p>
-                    <p className="text-xs text-red-600 mt-2">
-                      Si el problema persiste, contáctenos directamente por WhatsApp o teléfono.
-                    </p>
+                    <p className="text-sm text-foreground font-medium mb-1">Error al enviar mensaje</p>
+                    <p className="text-sm text-muted-foreground">{errorMessage}</p>
                   </div>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-foreground">
                     Nombre Completo *
@@ -132,18 +166,19 @@ export default function ContactoPage() {
                   <Input
                     id="name"
                     name="name"
-                    placeholder="Juan Pérez"
+                    placeholder="Juan Perez"
                     value={formData.name}
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
+                    className="h-12 rounded-xl"
                   />
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium text-foreground">
-                      Correo Electrónico *
+                      Correo Electronico *
                     </label>
                     <Input
                       id="email"
@@ -154,12 +189,13 @@ export default function ContactoPage() {
                       onChange={handleChange}
                       required
                       disabled={isSubmitting}
+                      className="h-12 rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="phone" className="text-sm font-medium text-foreground">
-                      Teléfono *
+                      Telefono *
                     </label>
                     <Input
                       id="phone"
@@ -170,29 +206,30 @@ export default function ContactoPage() {
                       onChange={handleChange}
                       required
                       disabled={isSubmitting}
+                      className="h-12 rounded-xl"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="service" className="text-sm font-medium text-foreground">
-                    Servicio de Interés *
+                    Servicio de Interes *
                   </label>
                   <select
                     id="service"
                     name="service"
                     value={formData.service}
-                    onChange={handleChange as any}
+                    onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
+                    className="flex h-12 w-full rounded-xl border border-input bg-background px-4 py-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
                   >
                     <option value="">Seleccione un servicio</option>
-                    <option value="construccion">Construcción</option>
-                    <option value="remodelacion">Remodelación</option>
-                    <option value="albanileria">Albañilería</option>
+                    <option value="construccion">Construccion</option>
+                    <option value="remodelacion">Remodelacion</option>
+                    <option value="albanileria">Albanileria</option>
                     <option value="electricidad">Electricidad</option>
-                    <option value="plomeria">Plomería</option>
+                    <option value="plomeria">Plomeria</option>
                     <option value="pintura">Pintura</option>
                     <option value="gas">Instalaciones de Gas</option>
                     <option value="prefabricadas">Viviendas Prefabricadas</option>
@@ -208,176 +245,158 @@ export default function ContactoPage() {
                   <Textarea
                     id="message"
                     name="message"
-                    placeholder="Cuéntenos sobre su proyecto..."
+                    placeholder="Cuentenos sobre su proyecto..."
                     rows={6}
                     value={formData.message}
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
+                    className="rounded-xl resize-none"
                   />
                 </div>
 
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                  className="w-full h-14 rounded-xl text-lg hover-lift"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
-                  <Send className="ml-2 h-4 w-4" />
+                  <Send className="ml-2 h-5 w-5" />
                 </Button>
               </form>
             </div>
 
             {/* Contact Information */}
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold text-foreground">Información de Contacto</h2>
+            <div className="lg:col-span-2 space-y-6">
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-foreground">Contacto Directo</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Puede comunicarse con nosotros a través de cualquiera de los siguientes medios.
+                  Tambien puede comunicarse con nosotros directamente.
                 </p>
               </div>
 
               <div className="space-y-4">
-                <Card className="border-border">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                        <Phone className="h-6 w-6 text-accent" />
+                {/* Phone Card */}
+                <Card className="border-border hover:border-primary/30 transition-colors hover-lift">
+                  <CardContent className="p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-6 w-6 text-primary" />
                       </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">Teléfonos</h3>
-                        <p className="text-sm text-muted-foreground">
-                          <a href="tel:+5491127586521" className="hover:text-foreground transition-colors">
+                      <div className="space-y-2 flex-1">
+                        <h3 className="font-semibold text-foreground">Telefonos</h3>
+                        <div className="space-y-1">
+                          <a
+                            href="tel:+5491127586521"
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors block"
+                          >
                             +54 9 11 2758-6521
+                            <span className="block text-xs">Sebastian Romero</span>
                           </a>
-                          <span className="block text-xs">Sebastian Romero - Gerente General</span>
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          <a href="tel:+543873522920" className="hover:text-foreground transition-colors">
+                          <a
+                            href="tel:+543873522920"
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors block"
+                          >
                             +54 9 387 352-2920
+                            <span className="block text-xs">Carlos Guerrero</span>
                           </a>
-                          <span className="block text-xs">Carlos Guerrero - Coordinador</span>
-                        </p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-border">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                        <Mail className="h-6 w-6 text-accent" />
+                {/* Email Card */}
+                <Card className="border-border hover:border-primary/30 transition-colors hover-lift">
+                  <CardContent className="p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-6 w-6 text-primary" />
                       </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">Correo Electrónico</h3>
-                        <p className="text-sm text-muted-foreground">
-                          <a href="mailto:info@emprenor.com.ar" className="hover:text-foreground transition-colors">
-                            info@emprenor.com.ar
-                          </a>
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          <a href="mailto:ventas@emprenor.com.ar" className="hover:text-foreground transition-colors">
-                            ventas@emprenor.com.ar
-                          </a>
-                        </p>
+                      <div className="space-y-2 flex-1">
+                        <h3 className="font-semibold text-foreground">Email</h3>
+                        <a
+                          href="mailto:info@emprenor.com.ar"
+                          className="text-sm text-muted-foreground hover:text-primary transition-colors block"
+                        >
+                          info@emprenor.com.ar
+                        </a>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-border">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                        <MapPin className="h-6 w-6 text-accent" />
+                {/* Hours Card */}
+                <Card className="border-border hover:border-primary/30 transition-colors hover-lift">
+                  <CardContent className="p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Clock className="h-6 w-6 text-primary" />
                       </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">Oficina Salta Capital</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          Ituzaingó 920
-                          <br />
-                          Salta Capital, Salta
-                          <br />
-                          Argentina
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                        <MapPin className="h-6 w-6 text-accent" />
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">Oficina Tartagal</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          Ituzaingó 1279
-                          <br />
-                          Tartagal, Salta
-                          <br />
-                          Argentina
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                        <MapPin className="h-6 w-6 text-accent" />
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">Oficina Campamento Vespucio</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          Av. Casiano Casas S/N
-                          <br />
-                          Barrio Policial, Campamento Vespucio
-                          <br />
-                          Salta, Argentina
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                        <Clock className="h-6 w-6 text-accent" />
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">Horario de Atención</h3>
-                        <p className="text-sm text-muted-foreground">Lunes a Viernes: 8:00 AM - 6:00 PM</p>
-                        <p className="text-sm text-muted-foreground">Sábados: 9:00 AM - 2:00 PM</p>
-                        <p className="text-sm text-muted-foreground">Domingos: Cerrado</p>
+                      <div className="space-y-2 flex-1">
+                        <h3 className="font-semibold text-foreground">Horario</h3>
+                        <div className="text-sm text-muted-foreground space-y-1">
+                          <p>Lun - Vie: 8:00 - 18:00</p>
+                          <p>Sabados: 9:00 - 14:00</p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Map Placeholder */}
-              <Card className="border-border overflow-hidden">
-                <div className="aspect-[16/10] bg-muted relative">
-                  <img src="/map-location-pin.png" alt="Ubicación en el mapa" className="object-cover w-full h-full" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-sm">
-                    <div className="text-center space-y-2">
-                      <MapPin className="h-12 w-12 text-accent mx-auto" />
-                      <p className="text-sm font-medium text-foreground">3 Oficinas en Salta</p>
-                      <p className="text-xs text-muted-foreground">Capital, Tartagal y Campamento Vespucio</p>
+              {/* Offices */}
+              <div className="space-y-4 pt-4">
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-primary" />
+                  Nuestras Oficinas
+                </h3>
+                <div className="space-y-3">
+                  {offices.map((office, index) => (
+                    <div
+                      key={index}
+                      className="p-4 rounded-xl bg-muted/50 border border-border hover:border-primary/30 transition-colors"
+                    >
+                      <div className="flex items-start gap-3">
+                        <MapPin className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-medium text-foreground text-sm">{office.name}</p>
+                          <p className="text-sm text-muted-foreground">{office.address}</p>
+                          <p className="text-sm text-muted-foreground">{office.city}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </Card>
+              </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-primary">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-2">
+                Preferis hablar por WhatsApp?
+              </h2>
+              <p className="text-primary-foreground/80">
+                Respondemos al instante. Hace click en el boton flotante.
+              </p>
+            </div>
+            <Button
+              size="lg"
+              className="bg-background text-foreground hover:bg-background/90 rounded-xl px-8 hover-lift"
+              asChild
+            >
+              <a href="https://wa.me/5491127586521" target="_blank" rel="noopener noreferrer">
+                Chatear por WhatsApp
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </a>
+            </Button>
           </div>
         </div>
       </section>

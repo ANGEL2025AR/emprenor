@@ -5,24 +5,31 @@ import { MapPin, ArrowRight, ImageOff } from "lucide-react"
 import { getDb } from "@/lib/db/connection"
 import type { PublicProject } from "@/lib/db/models"
 
+function isMissingMongoUriError(error: unknown): boolean {
+  return error instanceof Error && error.message.includes("MONGODB_URI")
+}
+
 async function getFeaturedProjects(): Promise<PublicProject[]> {
+  if (!process.env.MONGODB_URI?.trim()) {
+    return []
+  }
+
   try {
     const db = await getDb()
 
-    // Obtener proyectos publicados y destacados, ordenados por orden y fecha
+    // Publicados: los destacados (featured) primero; sin exigir featured=true (antes quedaban fuera si featured=false explícito)
     const projects = await db
       .collection<PublicProject>("public_projects")
-      .find({
-        published: true,
-        $or: [{ featured: true }, { featured: { $exists: false } }],
-      })
+      .find({ published: true })
       .sort({ featured: -1, order: 1, createdAt: -1 })
       .limit(6)
       .toArray()
 
     return projects
   } catch (error) {
-    console.error("Error al obtener proyectos destacados:", error)
+    if (!isMissingMongoUriError(error)) {
+      console.error("Error al obtener proyectos destacados:", error)
+    }
     return []
   }
 }

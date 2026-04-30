@@ -45,6 +45,7 @@ import {
   Banknote,
   FolderOpen,
   BadgeDollarSign,
+  LayoutTemplate,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -215,6 +216,12 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       name: "Sitio Web",
       href: "/dashboard/sitio-web/proyectos",
       icon: Globe,
+      permission: "admin.access" as const,
+    },
+    {
+      name: "Portadas (slider)",
+      href: "/dashboard/sitio-web/paginas",
+      icon: LayoutTemplate,
       permission: "admin.access" as const,
     },
     {

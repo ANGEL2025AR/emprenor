@@ -668,6 +668,32 @@ export interface PublicProject extends BaseDocument {
 }
 
 // ============================================
+// CONTENIDO DEL SITIO PÚBLICO (CMS ligero)
+// ============================================
+
+export interface SitePageHeroSlide {
+  id: string
+  /** Ruta bajo /public o URL absoluta; vacío = portada tipo “simple” sin foto */
+  image: string
+  alt: string
+  badgeText?: string
+  title: string
+  /** Subcadena del título a resaltar (estilo gradiente en portada inmersiva) */
+  titleAccent?: string
+  subtitle?: string
+  primaryCtaLabel?: string
+  primaryCtaHref?: string
+  secondaryCtaLabel?: string
+  secondaryCtaHref?: string
+}
+
+export interface SitePageDocument extends BaseDocument {
+  slug: string
+  heroSlides: SitePageHeroSlide[]
+  updatedBy?: ObjectId
+}
+
+// ============================================
 // RECURSOS HUMANOS POR PROYECTO
 // ============================================
 

@@ -4,9 +4,10 @@ import { ArrowLeft, Mail, Phone, MapPin, Building2, FileText, DollarSign, Calend
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getInternalAppUrl } from "@/lib/site-url"
 
 async function getClient(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/clients/${id}`, {
+  const res = await fetch(`${getInternalAppUrl()}/api/clients/${id}`, {
     cache: "no-store",
   })
 

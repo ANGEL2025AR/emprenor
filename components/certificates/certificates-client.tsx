@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Award, Search, Plus, CheckCircle2, Clock, XCircle } from "lucide-react"
+import { Award, Search, Plus, CheckCircle2, Clock, XCircle, FileText } from "lucide-react"
 
 interface Certificate {
   _id: string

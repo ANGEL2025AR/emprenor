@@ -8,7 +8,6 @@ const options = {
 }
 
 let client: MongoClient
-let clientPromise: Promise<MongoClient>
 
 declare global {
   // eslint-disable-next-line no-var
@@ -26,24 +25,42 @@ function getClientPromise(): Promise<MongoClient> {
       global._mongoClientPromise = client.connect()
     }
     return global._mongoClientPromise
-  } else {
-    client = new MongoClient(uri, options)
-    return client.connect()
   }
+
+  client = new MongoClient(uri, options)
+  return client.connect()
 }
 
-clientPromise = getClientPromise()
+let clientPromiseSingleton: Promise<MongoClient> | undefined
+
+function ensureClientPromise(): Promise<MongoClient> {
+  if (clientPromiseSingleton === undefined) {
+    clientPromiseSingleton = getClientPromise()
+  }
+  return clientPromiseSingleton
+}
 
 export const connectToDatabase = async () => {
-  const client = await clientPromise
+  const client = await ensureClientPromise()
   return client.db("emprenor")
 }
 
 export async function getDb(): Promise<Db> {
-  const client = await clientPromise
+  const client = await ensureClientPromise()
   return client.db("emprenor")
 }
 
-export { clientPromise }
+/** Promesa lazy: no rechaza al importar el módulo si falta MONGODB_URI. */
+export const clientPromise: Promise<MongoClient> = {
+  then(onfulfilled, onrejected) {
+    return ensureClientPromise().then(onfulfilled, onrejected)
+  },
+  catch(onrejected) {
+    return ensureClientPromise().catch(onrejected)
+  },
+  finally(onfinally) {
+    return ensureClientPromise().finally(onfinally)
+  },
+} as Promise<MongoClient>
 
 export default clientPromise

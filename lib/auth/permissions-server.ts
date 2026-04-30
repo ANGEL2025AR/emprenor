@@ -22,13 +22,12 @@ export async function loadDynamicPermissions(): Promise<Record<string, string[]>
     const db = await getDb()
     const config = await db.collection("roles_config").findOne({ type: "permissions_override" })
 
-    if (config?.permissions) {
-      dynamicPermissionsCache = { ...DEFAULT_PERMISSIONS, ...config.permissions }
-    } else {
-      dynamicPermissionsCache = { ...DEFAULT_PERMISSIONS }
-    }
+    const merged: Record<string, string[]> = config?.permissions
+      ? { ...DEFAULT_PERMISSIONS, ...config.permissions }
+      : { ...DEFAULT_PERMISSIONS }
+    dynamicPermissionsCache = merged
     cacheTimestamp = now
-    return dynamicPermissionsCache
+    return merged
   } catch {
     return { ...DEFAULT_PERMISSIONS }
   }

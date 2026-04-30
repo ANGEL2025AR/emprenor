@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongodb"
+import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import type { PublicProject } from "@/lib/db/models"
@@ -42,9 +43,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const allowedFields = [
-      "title", "description", "category", "location", "client",
-      "year", "area", "duration", "images", "features", "published",
-      "featured", "order", "slug", "tags"
+      "title",
+      "description",
+      "detailedDescription",
+      "category",
+      "location",
+      "duration",
+      "image",
+      "gallery",
+      "published",
+      "featured",
+      "order",
+      "metadata",
+      "seo",
     ]
     const updateData: Record<string, unknown> = {}
     for (const key of allowedFields) {
@@ -59,6 +70,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     if (result.matchedCount === 0) {
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
     }
+
+    revalidatePath("/")
+    revalidatePath("/proyectos")
 
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -86,6 +100,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (result.deletedCount === 0) {
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
     }
+
+    revalidatePath("/")
+    revalidatePath("/proyectos")
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -5,6 +5,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/structured-data"
+import { SITE_URL } from "@/lib/site-url"
+
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION
 
 const _geist = Geist({
   subsets: ["latin"],
@@ -18,7 +21,7 @@ const _geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.emprenor.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "EMPRENOR - Construcción y Servicios en Salta, Jujuy, Tucumán y Formosa",
     template: "%s | EMPRENOR Construcciones",
@@ -45,7 +48,7 @@ export const metadata: Metadata = {
     "obras industriales NOA",
     "instalaciones gas Salta",
   ],
-  authors: [{ name: "EMPRENOR Construcciones", url: "https://www.emprenor.com" }],
+  authors: [{ name: "EMPRENOR Construcciones", url: SITE_URL }],
   creator: "EMPRENOR Construcciones",
   publisher: "EMPRENOR Construcciones",
   formatDetection: {
@@ -56,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_AR",
-    url: "https://www.emprenor.com",
+    url: SITE_URL,
     siteName: "EMPRENOR Construcciones",
     title: "EMPRENOR - Construcción y Servicios Profesionales en el NOA",
     description:
@@ -88,11 +91,11 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://www.emprenor.com",
+    canonical: SITE_URL,
   },
-  verification: {
-    google: "google-site-verification-code",
-  },
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
+    : {}),
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -102,7 +105,6 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
   },
-    generator: 'v0.app'
 }
 
 export const viewport: Viewport = {

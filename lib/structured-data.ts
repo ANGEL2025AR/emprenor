@@ -1,10 +1,14 @@
+import { SITE_URL } from "@/lib/site-url"
+
+const LOGO_PATH = "/emprenor-construction-company-logo-green.jpg"
+
 export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'EMPRENOR CONSTRUCCIONES',
-    url: 'https://www.emprenor.com',
-    logo: 'https://www.emprenor.com/images/logo-emprenor.png',
+    url: SITE_URL,
+    logo: `${SITE_URL}${LOGO_PATH}`,
     description: 'Empresa de construcción con más de 15 años de experiencia en Salta, Jujuy, Tucumán y Formosa',
     address: {
       '@type': 'PostalAddress',
@@ -30,12 +34,12 @@ export function generateLocalBusinessSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': 'https://www.emprenor.com/#business',
+    '@id': `${SITE_URL}/#business`,
     name: 'EMPRENOR CONSTRUCCIONES',
-    image: 'https://www.emprenor.com/images/logo-emprenor.png',
-    url: 'https://www.emprenor.com',
+    image: `${SITE_URL}${LOGO_PATH}`,
+    url: SITE_URL,
     telephone: '+54-9-11-2758-6521',
-    email: 'info@emprenor.com',
+    email: 'info@emprenor.com.ar',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Ituzaingó 920',
@@ -85,7 +89,7 @@ export function generateServiceSchema(service: {
     provider: {
       '@type': 'Organization',
       name: 'EMPRENOR CONSTRUCCIONES',
-      url: 'https://www.emprenor.com'
+      url: SITE_URL
     },
     areaServed: {
       '@type': 'State',

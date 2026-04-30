@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import type { PublicProject } from "@/lib/db/models"
@@ -54,6 +55,9 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await db.collection<PublicProject>("public_projects").insertOne(newProject as PublicProject)
+
+    revalidatePath("/")
+    revalidatePath("/proyectos")
 
     return NextResponse.json({
       success: true,

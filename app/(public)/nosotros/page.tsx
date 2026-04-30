@@ -2,24 +2,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Target, Award, Heart, CheckCircle, ArrowRight, MapPin } from "lucide-react"
 import Link from "next/link"
+import { PublicHeroSection } from "@/components/home/public-hero-section"
 
 export default function NosotrosPage() {
   return (
     <main className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-primary text-primary-foreground py-16 md:py-24">
-        <div className="container px-4 md:px-6">
-          <div className="mx-auto max-w-3xl text-center space-y-6">
-            <div className="flex items-center justify-center gap-3">
-              <Users className="h-10 w-10" />
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-balance">Sobre Nosotros</h1>
-            <p className="text-lg text-primary-foreground/90 leading-relaxed text-pretty">
-              Más de 15 años construyendo sueños y superando expectativas con compromiso, calidad y profesionalismo.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PublicHeroSection slug="nosotros" variant="simple" />
 
       {/* Company Story */}
       <section className="py-16 md:py-24">

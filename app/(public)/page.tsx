@@ -21,9 +21,9 @@ import {
   Factory,
   Flame,
   Star,
-  Wrench,
 } from "lucide-react"
 import FeaturedProjects from "@/components/home/featured-projects"
+import { PublicHeroSection } from "@/components/home/public-hero-section"
 
 const services = [
   {
@@ -148,63 +148,7 @@ const testimonials = [
 export default function HomePage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <Image
-          src="/construction-site-workers-blueprint.jpg"
-          alt="Equipo de construcción EMPRENOR trabajando"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50" />
-
-        <div className="container relative z-10 px-4 py-20">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium mb-6">
-              <Wrench className="w-4 h-4" />
-              Más de 15 años construyendo confianza
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Construimos tus{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
-                sueños
-              </span>{" "}
-              con excelencia y profesionalismo
-            </h1>
-            <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed">
-              Somos líderes en construcción y servicios en el NOA. Ofrecemos soluciones integrales en construcción,
-              remodelación, electricidad, plomería y más. Cobertura en Salta, Jujuy, Tucumán y Formosa.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-6 text-lg"
-                asChild
-              >
-                <Link href="/contacto">
-                  Solicitar Cotización
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg bg-transparent"
-                asChild
-              >
-                <Link href="/proyectos">Ver Proyectos</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-8 h-12 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-white/50 rounded-full animate-pulse" />
-          </div>
-        </div>
-      </section>
+      <PublicHeroSection slug="home" variant="immersive" />
 
       {/* Stats Section */}
       <section className="py-16 bg-slate-900">
@@ -404,10 +348,10 @@ export default function HomePage() {
               <div>
                 <div className="text-sm text-slate-400 mb-1">Escríbenos</div>
                 <a
-                  href="mailto:info@emprenor.com"
+                  href="mailto:info@emprenor.com.ar"
                   className="text-lg font-semibold text-white hover:text-green-400 transition-colors"
                 >
-                  info@emprenor.com
+                  info@emprenor.com.ar
                 </a>
               </div>
             </div>

@@ -4,9 +4,10 @@ import { ArrowLeft, Package, Tag, MapPin, Edit } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getInternalAppUrl } from "@/lib/site-url"
 
 async function getInventoryItem(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/inventory/${id}`, {
+  const res = await fetch(`${getInternalAppUrl()}/api/inventory/${id}`, {
     cache: "no-store",
   })
 

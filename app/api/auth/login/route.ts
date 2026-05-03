@@ -28,17 +28,35 @@ export async function POST(request: NextRequest) {
     const { email, password } = result.data
 
     const db = await getDb()
+    
+    // Debug: Check all users first
+    const allUsers = await db.collection<User>("users").find({}).toArray()
+    console.log("[v0] Total users in DB:", allUsers.length)
+    allUsers.forEach(u => {
+      console.log("[v0] User:", u.email, "isActive:", u.isActive, "role:", u.role)
+    })
+    
+    // Search for user - handle both isActive: true and isActive: undefined (legacy users)
     const user = await db.collection<User>("users").findOne({
       email: email.toLowerCase(),
-      isActive: true,
+      $or: [{ isActive: true }, { isActive: { $exists: false } }, { isActive: undefined }],
     })
 
+    console.log("[v0] Login attempt for:", email.toLowerCase())
+    console.log("[v0] User found:", user ? "Yes" : "No")
+    if (user) {
+      console.log("[v0] User role:", user.role)
+    }
+
     if (!user) {
+      console.log("[v0] User not found, returning 401")
       return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
     }
 
     const isValidPassword = verifyPassword(password, user.password)
+    console.log("[v0] Password valid:", isValidPassword)
     if (!isValidPassword) {
+      console.log("[v0] Password invalid, returning 401")
       return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
     }
 

@@ -125,17 +125,18 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "daily_logs.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
   "daily_logs.create": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
 
-  // Portal del Empleado
-  "portal.dashboard": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.wallet": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.payslips": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.personnel_file": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.leave_requests": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.art": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.accidents": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.help_desk": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.announcements": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "portal.advances": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+  // Portal del Empleado (solo autogestión del trabajador)
+  "portal.dashboard": ["supervisor", "trabajador"],
+  "portal.wallet": ["supervisor", "trabajador"],
+  "portal.payslips": ["supervisor", "trabajador"],
+  "portal.personnel_file": ["supervisor", "trabajador"],
+  "portal.leave_requests": ["supervisor", "trabajador"],
+  "portal.art": ["supervisor", "trabajador"],
+  "portal.accidents": ["supervisor", "trabajador"],
+  "portal.help_desk": ["supervisor", "trabajador"],
+  "portal.announcements": ["supervisor", "trabajador"],
+  "portal.advances": ["supervisor", "trabajador"],
+  // Administración del portal (supervisión, aprobaciones, comunicados)
   "portal.admin": ["super_admin", "admin", "gerente"],
 
   // Sitio Web público
@@ -377,4 +378,13 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/portal/art": "portal.art",
   "/dashboard/portal/mesa-ayuda": "portal.help_desk",
   "/dashboard/portal/comunicaciones": "portal.announcements",
+  "/dashboard/admin/portal": "portal.admin",
+  "/dashboard/admin/portal/billetera": "portal.admin",
+  "/dashboard/admin/portal/recibos": "portal.admin",
+  "/dashboard/admin/portal/legajo": "portal.admin",
+  "/dashboard/admin/portal/solicitudes": "portal.admin",
+  "/dashboard/admin/portal/art": "portal.admin",
+  "/dashboard/admin/portal/mesa-ayuda": "portal.admin",
+  "/dashboard/admin/portal/comunicaciones": "portal.admin",
+  "/dashboard/admin/portal/configuracion": "portal.admin",
 }

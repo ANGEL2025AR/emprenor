@@ -66,9 +66,9 @@ export const metadata: Metadata = {
       "Empresa líder en construcción y servicios en el NOA. Más de 15 años transformando espacios. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Cobertura en Salta, Jujuy, Tucumán y Formosa.",
     images: [
       {
-        url: "/emprenor-construction-company-logo-green.jpg",
-        width: 1200,
-        height: 630,
+        url: "/images/logo-emprenor-large.png",
+        width: 1024,
+        height: 168,
         alt: "EMPRENOR Construcciones - Servicios profesionales en el NOA",
       },
     ],
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "EMPRENOR - Construcción y Servicios Profesionales",
     description: "Empresa líder en construcción en el NOA. Servicios en Salta, Jujuy, Tucumán y Formosa.",
-    images: ["/emprenor-construction-company-logo-green.jpg"],
+    images: ["/images/logo-emprenor-large.png"],
   },
   robots: {
     index: true,
@@ -113,8 +113,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#22c55e" },
-    { media: "(prefers-color-scheme: dark)", color: "#10b981" },
+    { media: "(prefers-color-scheme: light)", color: "#2E2A6E" },
+    { media: "(prefers-color-scheme: dark)", color: "#2E2A6E" },
   ],
 }
 

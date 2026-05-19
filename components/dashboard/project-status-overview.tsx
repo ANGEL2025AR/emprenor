@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader } from "@/components/ui/card"
+import { DashboardPanel, DashboardSectionTitle } from "@/components/dashboard/dashboard-ui"
 import { Badge } from "@/components/ui/badge"
 import { FolderKanban } from "lucide-react"
 import { getDb } from "@/lib/db/connection"
@@ -36,12 +37,9 @@ export async function ProjectStatusOverview() {
   }
 
   return (
-    <Card>
+    <DashboardPanel>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FolderKanban className="w-5 h-5 text-blue-600" />
-          Estado de Proyectos Principales
-        </CardTitle>
+        <DashboardSectionTitle title="Estado de Proyectos Principales" icon={FolderKanban} />
       </CardHeader>
       <CardContent>
         {projects.length === 0 ? (
@@ -99,6 +97,6 @@ export async function ProjectStatusOverview() {
           </div>
         )}
       </CardContent>
-    </Card>
+    </DashboardPanel>
   )
 }

@@ -3,7 +3,8 @@ import { getDb } from "@/lib/db/connection"
 import { getClientProjectsFilter } from "@/lib/auth/project-access"
 import type { SerializableUser } from "@/lib/auth/session"
 import type { Project } from "@/lib/db/models"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { DashboardPageHeader, DashboardPanel, DashboardStatCard } from "@/components/dashboard/dashboard-ui"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -43,61 +44,28 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Mis obras</h1>
-        <p className="text-slate-600 mt-1">
-          Hola {user.name}, aquí ves el avance, documentación y pagos de tus proyectos con EMPRENOR.
-        </p>
-      </div>
+      <DashboardPageHeader
+        badge="Portal cliente"
+        title="Mis obras"
+        description={`Hola ${user.name}, aquí ves el avance, documentación y pagos de tus proyectos con EMPRENOR.`}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-              <FolderKanban className="w-4 h-4" /> Proyectos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{projects.length}</p>
-            <p className="text-xs text-slate-500">{active} en progreso</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-              <FileText className="w-4 h-4" /> Documentos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{documentsCount}</p>
-            <p className="text-xs text-slate-500">En tus obras</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
-              <Award className="w-4 h-4" /> Certificados
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{certificatesCount}</p>
-            <p className="text-xs text-slate-500">Certificaciones de obra</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
+        <DashboardStatCard title="Proyectos" value={projects.length} subtitle={`${active} en progreso`} icon={FolderKanban} accent="blue" />
+        <DashboardStatCard title="Documentos" value={documentsCount} subtitle="En tus obras" icon={FileText} accent="violet" />
+        <DashboardStatCard title="Certificados" value={certificatesCount} subtitle="Certificaciones de obra" icon={Award} accent="amber" />
+        <DashboardPanel className="py-0">
+          <CardContent className="p-6">
+            <p className="text-sm font-medium text-slate-500 flex items-center gap-2 mb-2">
               <Bell className="w-4 h-4" /> Avance promedio
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{avgProgress.toFixed(0)}%</p>
-            <Progress value={avgProgress} className="mt-2 h-2" />
+            </p>
+            <p className="text-3xl font-bold tracking-tight">{avgProgress.toFixed(0)}%</p>
+            <Progress value={avgProgress} className="mt-3 h-2" />
           </CardContent>
-        </Card>
+        </DashboardPanel>
       </div>
 
-      <Card>
+      <DashboardPanel>
         <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
           <CardTitle>Proyectos asignados</CardTitle>
           <div className="flex gap-2">
@@ -140,7 +108,7 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
             ))
           )}
         </CardContent>
-      </Card>
+      </DashboardPanel>
     </div>
   )
 }

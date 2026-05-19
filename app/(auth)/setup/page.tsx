@@ -11,13 +11,14 @@ import { CheckCircle2 } from "lucide-react"
 
 export default function SetupPage() {
   const [loading, setLoading] = useState(false)
-  const [step, setStep] = useState<"check" | "create" | "complete">("check")
+  const [step, setStep] = useState<"form" | "complete">("form")
+  const [secretKey, setSecretKey] = useState("")
   const [formData, setFormData] = useState({
-    name: "Admin",
-    lastName: "Sistema",
-    email: "admin@emprenor.com",
-    password: "Admin123!",
-    phone: "+5491112345678",
+    name: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phone: "",
   })
   const router = useRouter()
   const { toast } = useToast()
@@ -30,7 +31,7 @@ export default function SetupPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          secretKey: "emprenor-setup-2024",
+          secretKey,
         }),
       })
 
@@ -49,14 +50,14 @@ export default function SetupPage() {
         if (loginResponse.ok) {
           setStep("complete")
           toast({
-            title: "Setup completado",
-            description: "Usuario administrador creado exitosamente. Redirigiendo al dashboard...",
+            title: "Configuración completada",
+            description: "Administrador creado. Redirigiendo al panel...",
           })
           setTimeout(() => router.push("/dashboard"), 2000)
         } else {
           toast({
             title: "Usuario creado",
-            description: "Por favor inicia sesión manualmente",
+            description: "Inicia sesión con las credenciales que definiste.",
           })
           setTimeout(() => router.push("/login"), 2000)
         }
@@ -67,7 +68,7 @@ export default function SetupPage() {
           variant: "destructive",
         })
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Error al conectar con el servidor",
@@ -86,8 +87,8 @@ export default function SetupPage() {
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
               <CheckCircle2 className="w-10 h-10 text-green-600" />
             </div>
-            <CardTitle>¡Setup Completado!</CardTitle>
-            <CardDescription>El sistema está listo para usar. Serás redirigido al dashboard...</CardDescription>
+            <CardTitle>Configuración completada</CardTitle>
+            <CardDescription>El sistema está listo. Redirigiendo al panel...</CardDescription>
           </CardHeader>
         </Card>
       </div>
@@ -98,12 +99,25 @@ export default function SetupPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Configuración Inicial - EMPRENOR</CardTitle>
-          <CardDescription>Crea el usuario administrador del sistema</CardDescription>
+          <CardTitle>Configuración inicial — EMPRENOR</CardTitle>
+          <CardDescription>
+            Solo para el primer administrador. Usa la clave definida en ADMIN_SETUP_KEY del servidor.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nombre</Label>
+            <Label htmlFor="secretKey">Clave de configuración *</Label>
+            <Input
+              id="secretKey"
+              type="password"
+              value={secretKey}
+              onChange={(e) => setSecretKey(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="name">Nombre *</Label>
             <Input
               id="name"
               value={formData.name}
@@ -112,7 +126,7 @@ export default function SetupPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="lastName">Apellido</Label>
+            <Label htmlFor="lastName">Apellido *</Label>
             <Input
               id="lastName"
               value={formData.lastName}
@@ -121,7 +135,7 @@ export default function SetupPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email *</Label>
             <Input
               id="email"
               type="email"
@@ -131,14 +145,14 @@ export default function SetupPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Contraseña</Label>
+            <Label htmlFor="password">Contraseña *</Label>
             <Input
               id="password"
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
-            <p className="text-xs text-slate-500">Mínimo 8 caracteres, incluye mayúsculas, minúsculas y números</p>
+            <p className="text-xs text-slate-500">Mínimo 10 caracteres, mayúsculas, minúsculas y números</p>
           </div>
 
           <div className="space-y-2">
@@ -150,15 +164,9 @@ export default function SetupPage() {
             />
           </div>
 
-          <Button onClick={handleSetup} className="w-full" disabled={loading}>
-            {loading ? "Creando..." : "Crear Usuario Administrador"}
+          <Button onClick={handleSetup} className="w-full" disabled={loading || !secretKey}>
+            {loading ? "Creando..." : "Crear administrador"}
           </Button>
-
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
-            <p className="font-medium text-blue-900 mb-1">Credenciales por defecto:</p>
-            <p className="text-blue-700">Email: admin@emprenor.com</p>
-            <p className="text-blue-700">Contraseña: Admin123!</p>
-          </div>
         </CardContent>
       </Card>
     </div>

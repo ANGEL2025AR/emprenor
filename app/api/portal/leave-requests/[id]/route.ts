@@ -19,7 +19,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const body = await request.json()
     const { status, reviewNotes } = body
 
-    if (!["aprobado", "rechazado"].includes(status)) {
+    const normalized =
+      status === "aprobado" ? "aprobada" : status === "rechazado" ? "rechazada" : status
+
+    if (!["aprobada", "rechazada"].includes(normalized)) {
       return NextResponse.json({ error: "Estado inválido" }, { status: 400 })
     }
 
@@ -28,7 +31,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       { _id: new ObjectId(id) },
       {
         $set: {
-          status,
+          status: normalized,
           reviewedBy: `${user.name} ${user.lastName}`,
           reviewedAt: new Date(),
           reviewNotes: reviewNotes || null,

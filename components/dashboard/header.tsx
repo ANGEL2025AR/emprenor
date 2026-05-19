@@ -136,20 +136,20 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-4 md:px-6">
+      <header className="dashboard-header sticky top-0 z-30 h-[4.25rem] px-4 md:px-6 lg:px-8">
         <div className="flex h-full items-center justify-between gap-4">
           {/* Spacer for mobile menu button */}
           <div className="w-12 lg:hidden" />
 
           {/* Search */}
           <div className="flex-1 max-w-xl hidden md:block">
-            <button onClick={() => setSearchOpen(true)} className="w-full relative flex items-center">
+            <button onClick={() => setSearchOpen(true)} className="w-full relative flex items-center dashboard-search rounded-xl">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <Input
                   type="text"
                   placeholder="Buscar proyectos, tareas, documentos..."
-                  className="pl-10 bg-slate-50 border-slate-200 cursor-pointer"
+                  className="pl-10 h-10 border-0 bg-transparent shadow-none cursor-pointer focus-visible:ring-0"
                   readOnly
                 />
                 <kbd className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
@@ -165,7 +165,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-slate-600"
+              className="dashboard-icon-btn md:hidden text-slate-600"
               onClick={() => setSearchOpen(true)}
             >
               <Search className="w-5 h-5" />
@@ -174,10 +174,10 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             {/* Notifications dropdown */}
             <DropdownMenu open={notificationsOpen} onOpenChange={setNotificationsOpen}>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative text-slate-600">
+                <Button variant="ghost" size="icon" className="dashboard-icon-btn relative text-slate-600">
                   <Bell className="w-5 h-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gradient-to-br from-rose-500 to-red-600 text-white text-xs rounded-full flex items-center justify-center shadow-lg shadow-rose-500/40 ring-2 ring-white">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -236,8 +236,8 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             {/* User menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-3 px-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-sm font-semibold">
+                <Button variant="ghost" className="dashboard-user-trigger flex items-center gap-3 px-2.5 py-2 h-auto">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 via-green-500 to-teal-600 flex items-center justify-center text-white text-sm font-semibold shadow-md shadow-emerald-500/30 ring-2 ring-white">
                     {userInitials}
                   </div>
                   <div className="hidden md:block text-left">

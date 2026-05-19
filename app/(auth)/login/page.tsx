@@ -61,7 +61,7 @@ export default function LoginPage() {
         <div className="hidden lg:block space-y-8 px-8">
           <div className="space-y-4">
             <Image
-              src="/images/logo-emprenor.png"
+              src="/images/logo-emprenor-large.png"
               alt="EMPRENOR Logo"
               width={200}
               height={60}
@@ -102,7 +102,7 @@ export default function LoginPage() {
             {/* Logo móvil */}
             <div className="lg:hidden flex justify-center">
               <Image
-                src="/images/logo-emprenor.png"
+                src="/images/logo-emprenor-large.png"
                 alt="EMPRENOR Logo"
                 width={180}
                 height={54}

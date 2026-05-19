@@ -88,7 +88,7 @@ export default async function FeaturedProjects() {
             return (
               <Link
                 key={project._id?.toString()}
-                href={`/proyectos/${project._id}`}
+                href={`/proyectos/${project._id?.toString()}`}
                 className="group relative overflow-hidden rounded-2xl block"
               >
                 <div className="relative w-full h-72">

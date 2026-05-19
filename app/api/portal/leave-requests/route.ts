@@ -2,17 +2,15 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
-import { requirePortalApi } from "@/lib/auth/portal-api"
+import { requirePortalApi, requirePortalApiEmployeeOrAdmin } from "@/lib/auth/portal-api"
 
 export async function GET() {
   try {
-    const auth = await requirePortalApi("portal.leave_requests")
+    const auth = await requirePortalApiEmployeeOrAdmin("portal.leave_requests")
     if ("response" in auth) return auth.response
-    const user = auth.user
+    const { user, isAdmin } = auth
 
     const db = await getDb()
-    const isAdmin = ["super_admin", "admin", "gerente"].includes(user.role)
-
     const filter = isAdmin ? {} : { userId: new ObjectId(user._id) }
     const requests = await db
       .collection("leave_requests")

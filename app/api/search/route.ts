@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
+import { withProjectScope, getClientProjectsFilter, isClientRole } from "@/lib/auth/project-access"
 
-// GET - Búsqueda global
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser()
@@ -14,43 +14,40 @@ export async function GET(request: NextRequest) {
     const query = searchParams.get("q")
 
     if (!query || query.length < 2) {
-      return NextResponse.json({ results: [] })
+      return NextResponse.json({ results: { projects: [], tasks: [], documents: [] } })
     }
 
     const db = await getDb()
-    const searchRegex = new RegExp(query, "i")
+    const searchRegex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
 
-    // Buscar en proyectos
-    const projects = await db
-      .collection("projects")
-      .find({
-        $or: [
-          { name: searchRegex },
-          { code: searchRegex },
-          { description: searchRegex },
-          { "client.name": searchRegex },
-        ],
-      })
-      .limit(5)
-      .toArray()
+    const projectTextFilter = {
+      $or: [
+        { name: searchRegex },
+        { code: searchRegex },
+        { description: searchRegex },
+        { "client.name": searchRegex },
+      ],
+    }
 
-    // Buscar en tareas
-    const tasks = await db
-      .collection("tasks")
-      .find({
-        $or: [{ title: searchRegex }, { code: searchRegex }, { description: searchRegex }],
-      })
-      .limit(5)
-      .toArray()
+    let projectQuery: Record<string, unknown> = projectTextFilter
+    if (isClientRole(user.role)) {
+      const clientFilter = await getClientProjectsFilter(user)
+      projectQuery = { $and: [projectTextFilter, clientFilter] }
+    }
 
-    // Buscar en documentos
-    const documents = await db
-      .collection("documents")
-      .find({
-        $or: [{ name: searchRegex }, { description: searchRegex }],
-      })
-      .limit(5)
-      .toArray()
+    const projects = await db.collection("projects").find(projectQuery).limit(5).toArray()
+
+    const taskBase = {
+      $or: [{ title: searchRegex }, { code: searchRegex }, { description: searchRegex }],
+    }
+    const taskQuery = await withProjectScope(user, taskBase)
+    const tasks = await db.collection("tasks").find(taskQuery).limit(5).toArray()
+
+    const docBase = {
+      $or: [{ name: searchRegex }, { description: searchRegex }],
+    }
+    const docQuery = await withProjectScope(user, docBase)
+    const documents = await db.collection("documents").find(docQuery).limit(5).toArray()
 
     return NextResponse.json({
       results: {
@@ -66,7 +63,7 @@ export async function GET(request: NextRequest) {
           type: "task",
           title: t.title,
           subtitle: t.code,
-          href: `/dashboard/tareas`,
+          href: `/dashboard/tareas/${t._id}`,
         })),
         documents: documents.map((d) => ({
           id: d._id.toString(),

@@ -2,16 +2,24 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { redirect } from "next/navigation"
 import { getDb } from "@/lib/db/connection"
 import { safeDate } from "@/lib/utils"
+import { withProjectScope } from "@/lib/auth/project-access"
+import type { SerializableUser } from "@/lib/auth/session"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Plus, CheckCircle2, Clock, AlertTriangle, XCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { PunchListsClient } from "./punch-lists-client"
 
-async function getPunchLists() {
+async function getPunchLists(user: SerializableUser) {
   try {
     const db = await getDb()
-    const lists = await db.collection("punch_lists").find().sort({ createdAt: -1 }).limit(50).toArray()
+    const scopedQuery = await withProjectScope(user, {})
+    const lists = await db
+      .collection("punch_lists")
+      .find(scopedQuery)
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .toArray()
 
     return lists.map((list) => ({
       _id: list._id.toString(),
@@ -50,7 +58,7 @@ export default async function PunchListsPage() {
   const user = await getCurrentUser()
   if (!user) redirect("/login")
 
-  const lists = await getPunchLists()
+  const lists = await getPunchLists(user)
 
   const totalItems = lists.reduce((sum, list) => sum + (list.summary?.totalItems || 0), 0)
   const openItems = lists.reduce((sum, list) => sum + (list.summary?.openItems || 0), 0)

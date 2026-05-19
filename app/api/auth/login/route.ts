@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: "Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos." },
-        { status: 429 }
+        { status: 429 },
       )
     }
 
@@ -28,35 +28,25 @@ export async function POST(request: NextRequest) {
     const { email, password } = result.data
 
     const db = await getDb()
-    
-    // Debug: Check all users first
-    const allUsers = await db.collection<User>("users").find({}).toArray()
-    console.log("[v0] Total users in DB:", allUsers.length)
-    allUsers.forEach(u => {
-      console.log("[v0] User:", u.email, "isActive:", u.isActive, "role:", u.role)
-    })
-    
-    // Search for user - handle both isActive: true and isActive: undefined (legacy users)
+
     const user = await db.collection<User>("users").findOne({
       email: email.toLowerCase(),
-      $or: [{ isActive: true }, { isActive: { $exists: false } }, { isActive: undefined }],
+      $or: [{ isActive: true }, { isActive: { $exists: false } }],
     })
 
-    console.log("[v0] Login attempt for:", email.toLowerCase())
-    console.log("[v0] User found:", user ? "Yes" : "No")
-    if (user) {
-      console.log("[v0] User role:", user.role)
-    }
-
     if (!user) {
-      console.log("[v0] User not found, returning 401")
       return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
     }
 
+    if (user.isActive === false) {
+      return NextResponse.json(
+        { error: "Tu cuenta está pendiente de activación. Contacta al administrador." },
+        { status: 403 },
+      )
+    }
+
     const isValidPassword = verifyPassword(password, user.password)
-    console.log("[v0] Password valid:", isValidPassword)
     if (!isValidPassword) {
-      console.log("[v0] Password invalid, returning 401")
       return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
     }
 

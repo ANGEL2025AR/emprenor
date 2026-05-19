@@ -122,3 +122,305 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ——— Dashboard empresarial (shell premium) ——— */
+.dashboard-shell {
+  --dashboard-glow: rgba(16, 185, 129, 0.35);
+  background: #020617;
+}
+
+.dashboard-main {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 100% -10%, rgba(16, 185, 129, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(59, 130, 246, 0.08), transparent 50%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2f7 45%, #e8edf4 100%);
+}
+
+.dashboard-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, black 0%, transparent 85%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-sidebar {
+  background: linear-gradient(180deg, #030712 0%, #0f172a 50%, #0c1222 100%);
+  border-right: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow:
+    4px 0 40px -12px rgba(0, 0, 0, 0.5),
+    inset -1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+.dashboard-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.dashboard-sidebar-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.15), transparent);
+  pointer-events: none;
+}
+
+.dashboard-nav-active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.9) 100%);
+  box-shadow:
+    0 4px 20px -4px rgba(16, 185, 129, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-nav-item {
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.dashboard-nav-item:hover {
+  background: rgba(30, 41, 59, 0.8);
+  color: #f8fafc;
+}
+
+.dashboard-header {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 4px 24px -8px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-search {
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-search:hover,
+.dashboard-search:focus-within {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.dashboard-panel {
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 4px 32px -8px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 1rem;
+}
+
+.dashboard-stat-card:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 12px 40px -12px rgba(16, 185, 129, 0.2),
+    0 0 0 1px rgba(16, 185, 129, 0.12) !important;
+}
+
+.dashboard-title {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 60%, #0f172a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-subtitle {
+  color: #64748b;
+}
+
+.dashboard-badge {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.08));
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #047857;
+}
+
+.dashboard-btn-primary {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #14b8a6 100%) !important;
+  color: white !important;
+}
+
+.dashboard-btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.dashboard-btn-outline {
+  border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+.dashboard-icon-btn {
+  border-radius: 0.75rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.dashboard-icon-btn:hover {
+  background: rgba(241, 245, 249, 0.9);
+  color: #0f172a;
+}
+
+.dashboard-user-trigger {
+  border-radius: 0.875rem;
+  border: 1px solid transparent;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-user-trigger:hover {
+  background: rgba(248, 250, 252, 0.95);
+  border-color: rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 16px -6px rgba(15, 23, 42, 0.1);
+}
+
+.dashboard-alert {
+  border-radius: 0.875rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Contenedor de páginas */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  animation: dashboard-fade-in 0.45s ease-out;
+}
+
+@keyframes dashboard-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tarjetas glass en todas las páginas del dashboard */
+.dashboard-main [data-slot="card"]:not(.dashboard-card-plain) {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 4px 32px -8px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.dashboard-main [data-slot="card"]:not(.dashboard-card-plain):hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 8px 36px -10px rgba(15, 23, 42, 0.14),
+    0 0 0 1px rgba(16, 185, 129, 0.08);
+}
+
+/* Títulos legacy en páginas internas */
+.dashboard-main h1.text-2xl.font-bold.text-slate-900,
+.dashboard-main h1.text-3xl.font-bold.text-slate-900 {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 55%, #0f172a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-main h1.text-2xl.font-bold + p.text-slate-600,
+.dashboard-main h1.text-3xl.font-bold + p.text-slate-600 {
+  color: #64748b;
+  max-width: 42rem;
+}
+
+/* Formularios y filtros */
+.dashboard-main [data-slot="input"],
+.dashboard-main [data-slot="select-trigger"] {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(226, 232, 240, 0.95);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-main [data-slot="input"]:focus-visible,
+.dashboard-main [data-slot="select-trigger"]:focus-visible {
+  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+/* Botón primario del dashboard */
+.dashboard-main [data-slot="button"].bg-primary {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #14b8a6 100%) !important;
+  border: none;
+  box-shadow: 0 4px 14px -4px rgba(16, 185, 129, 0.55);
+}
+
+.dashboard-main [data-slot="button"].bg-primary:hover {
+  filter: brightness(1.06);
+}
+
+.dashboard-main [data-slot="button"].border.bg-background {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+/* Tablas */
+.dashboard-main [data-slot="table-container"] {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+}
+
+.dashboard-main [data-slot="table-head"] {
+  background: rgba(248, 250, 252, 0.95);
+}
+
+.dashboard-main [data-slot="table-row"]:hover {
+  background: rgba(16, 185, 129, 0.04);
+}
+
+/* Diálogos dentro del dashboard */
+.dashboard-main ~ [data-slot="alert-dialog-content"],
+body:has(.dashboard-shell) [data-slot="alert-dialog-content"] {
+  border-radius: 1rem;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 24px 64px -16px rgba(15, 23, 42, 0.25);
+}
+
+/* Scrollbar sidebar */
+.dashboard-sidebar nav {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 185, 129, 0.35) transparent;
+}
+
+.dashboard-sidebar nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dashboard-sidebar nav::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.35);
+  border-radius: 999px;
+}

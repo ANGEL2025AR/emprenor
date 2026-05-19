@@ -2,7 +2,8 @@ import Link from "next/link"
 import { getDb } from "@/lib/db/connection"
 import { ObjectId } from "mongodb"
 import type { SerializableUser } from "@/lib/auth/session"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { DashboardPageHeader, DashboardPanel } from "@/components/dashboard/dashboard-ui"
 import { Button } from "@/components/ui/button"
 import {
   Wallet,
@@ -54,15 +55,14 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Mi espacio de trabajo</h1>
-        <p className="text-slate-600 mt-1">
-          Hola {user.name}, gestioná tu legajo, recibos, tareas y documentación desde un solo lugar.
-        </p>
-      </div>
+      <DashboardPageHeader
+        badge="Portal empleado"
+        title="Mi espacio de trabajo"
+        description={`Hola ${user.name}, gestioná tu legajo, recibos, tareas y documentación desde un solo lugar.`}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-l-4 border-l-amber-500">
+        <DashboardPanel className="border-l-4 border-l-amber-400">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
               <FolderOpen className="w-4 h-4" /> Legajo digital
@@ -75,8 +75,8 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
               <Link href="/dashboard/portal/legajo">Gestionar legajo</Link>
             </Button>
           </CardContent>
-        </Card>
-        <Card className="border-l-4 border-l-blue-500">
+        </DashboardPanel>
+        <DashboardPanel className="border-l-4 border-l-blue-500">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
               <ListTodo className="w-4 h-4" /> Tareas
@@ -89,8 +89,8 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
               <Link href="/dashboard/tareas">Ver tareas</Link>
             </Button>
           </CardContent>
-        </Card>
-        <Card className="border-l-4 border-l-green-500">
+        </DashboardPanel>
+        <DashboardPanel className="border-l-4 border-l-green-500">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
               <FolderKanban className="w-4 h-4" /> Obras
@@ -103,8 +103,8 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
               <Link href="/dashboard/proyectos">Ver proyectos</Link>
             </Button>
           </CardContent>
-        </Card>
-        <Card className="border-l-4 border-l-emerald-500">
+        </DashboardPanel>
+        <DashboardPanel className="border-l-4 border-l-emerald-500">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-600 flex items-center gap-2">
               <Wallet className="w-4 h-4" /> Portal RRHH
@@ -119,10 +119,10 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
               </Link>
             </Button>
           </CardContent>
-        </Card>
+        </DashboardPanel>
       </div>
 
-      <Card>
+      <DashboardPanel>
         <CardHeader>
           <CardTitle>Accesos rápidos</CardTitle>
         </CardHeader>
@@ -132,7 +132,7 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
               <Link
                 key={item.label}
                 href={item.href}
-                className="flex items-center gap-3 p-4 rounded-xl border hover:bg-slate-50 transition-colors"
+                className="flex items-center gap-3 p-4 rounded-xl border border-slate-200/80 bg-white/50 hover:bg-white hover:shadow-md hover:border-emerald-200/60 transition-all duration-200"
               >
                 <div className={`w-10 h-10 rounded-lg ${item.color} flex items-center justify-center shrink-0`}>
                   <item.icon className="w-5 h-5 text-white" />
@@ -142,7 +142,7 @@ export async function EmployeeDashboard({ user }: EmployeeDashboardProps) {
             ))}
           </div>
         </CardContent>
-      </Card>
+      </DashboardPanel>
     </div>
   )
 }

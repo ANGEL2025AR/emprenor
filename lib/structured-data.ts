@@ -1,6 +1,6 @@
 import { SITE_URL } from "@/lib/site-url"
 
-const LOGO_PATH = "/emprenor-construction-company-logo-green.jpg"
+const LOGO_PATH = "/images/logo-emprenor-large.png"
 
 export function generateOrganizationSchema() {
   return {

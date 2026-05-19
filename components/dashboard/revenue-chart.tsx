@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader } from "@/components/ui/card"
+import { DashboardPanel, DashboardSectionTitle } from "@/components/dashboard/dashboard-ui"
 import { DollarSign } from "lucide-react"
 import { getDb } from "@/lib/db/connection"
 
@@ -46,12 +47,9 @@ export async function RevenueChart() {
 
   if (months.length === 0 || revenue.every((r) => r === 0)) {
     return (
-      <Card>
+      <DashboardPanel>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-green-600" />
-            Evolución de Ingresos
-          </CardTitle>
+          <DashboardSectionTitle title="Evolución de Ingresos" icon={DollarSign} />
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -62,19 +60,16 @@ export async function RevenueChart() {
             </p>
           </div>
         </CardContent>
-      </Card>
+      </DashboardPanel>
     )
   }
 
   const maxRevenue = Math.max(...revenue)
 
   return (
-    <Card>
+    <DashboardPanel>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <DollarSign className="w-5 h-5 text-green-600" />
-          Evolución de Ingresos
-        </CardTitle>
+        <DashboardSectionTitle title="Evolución de Ingresos" icon={DollarSign} />
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -105,6 +100,6 @@ export async function RevenueChart() {
           </p>
         </div>
       </CardContent>
-    </Card>
+    </DashboardPanel>
   )
 }

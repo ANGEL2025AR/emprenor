@@ -1,7 +1,15 @@
 import { getCurrentUser } from "@/lib/auth/session"
 import { getDb } from "@/lib/db/connection"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import {
+  DashboardPageHeader,
+  DashboardStatCard,
+  DashboardPanel,
+  DashboardSectionTitle,
+  DashboardPrimaryButton,
+  DashboardOutlineButton,
+} from "@/components/dashboard/dashboard-ui"
 import Link from "next/link"
 import {
   FolderKanban,
@@ -131,7 +139,7 @@ export default async function DashboardPage() {
       value: `$${(stats.balance / 1000000).toFixed(2)}M`,
       subtitle: stats.ingresos > 0 ? `${stats.balance >= 0 ? "+" : ""}${((stats.balance / stats.ingresos) * 100).toFixed(1)}% margen` : "Sin movimientos registrados",
       icon: DollarSign,
-      color: stats.balance >= 0 ? "bg-green-500" : "bg-red-500",
+      accent: stats.balance >= 0 ? ("emerald" as const) : ("rose" as const),
       trend: stats.balance >= 0 ? "up" : "down",
       href: "/dashboard/finanzas",
     },
@@ -140,7 +148,7 @@ export default async function DashboardPage() {
       value: stats.activeProjects,
       subtitle: `${stats.totalProjects} totales · ${stats.completedProjects} completados`,
       icon: FolderKanban,
-      color: "bg-blue-500",
+      accent: "blue" as const,
       trend: stats.activeProjects > stats.completedProjects ? "up" : "stable",
       href: "/dashboard/proyectos",
     },
@@ -149,7 +157,7 @@ export default async function DashboardPage() {
       value: `${stats.completionRate.toFixed(1)}%`,
       subtitle: `${stats.completedTasks} de ${stats.totalTasks} tareas completadas`,
       icon: Activity,
-      color: stats.completionRate >= 80 ? "bg-green-500" : stats.completionRate >= 60 ? "bg-amber-500" : "bg-red-500",
+      accent: stats.completionRate >= 80 ? ("violet" as const) : stats.completionRate >= 60 ? ("amber" as const) : ("rose" as const),
       trend: stats.completionRate >= 80 ? "up" : "down",
       href: "/dashboard/tareas",
     },
@@ -158,7 +166,7 @@ export default async function DashboardPage() {
       value: `${stats.onTimeRate.toFixed(1)}%`,
       subtitle: `${stats.onTimeProjects} proyectos entregados a tiempo`,
       icon: Clock,
-      color: stats.onTimeRate >= 80 ? "bg-green-500" : stats.onTimeRate >= 60 ? "bg-amber-500" : "bg-red-500",
+      accent: stats.onTimeRate >= 80 ? ("cyan" as const) : stats.onTimeRate >= 60 ? ("amber" as const) : ("rose" as const),
       trend: stats.onTimeRate >= 80 ? "up" : "down",
       href: "/dashboard/proyectos",
     },
@@ -167,12 +175,8 @@ export default async function DashboardPage() {
       value: `${stats.budgetUtilization.toFixed(1)}%`,
       subtitle: "Promedio de ejecución presupuestaria",
       icon: TrendingUp,
-      color:
-        stats.budgetUtilization <= 100
-          ? "bg-green-500"
-          : stats.budgetUtilization <= 110
-            ? "bg-amber-500"
-            : "bg-red-500",
+      accent:
+        stats.budgetUtilization <= 100 ? ("emerald" as const) : stats.budgetUtilization <= 110 ? ("amber" as const) : ("rose" as const),
       trend: stats.budgetUtilization <= 100 ? "up" : "down",
       href: "/dashboard/finanzas",
     },
@@ -181,8 +185,8 @@ export default async function DashboardPage() {
       value: stats.pendingInspections,
       subtitle: `${stats.totalInspections} totales realizadas`,
       icon: ClipboardCheck,
-      color:
-        stats.pendingInspections <= 5 ? "bg-green-500" : stats.pendingInspections <= 10 ? "bg-amber-500" : "bg-red-500",
+      accent:
+        stats.pendingInspections <= 5 ? ("emerald" as const) : stats.pendingInspections <= 10 ? ("amber" as const) : ("rose" as const),
       trend: stats.pendingInspections <= 5 ? "up" : "down",
       href: "/dashboard/inspecciones",
     },
@@ -190,49 +194,40 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Panel de Control Ejecutivo</h1>
-          <p className="text-slate-600 mt-1">Bienvenido, {userName} - Vista consolidada en tiempo real</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" asChild>
-            <Link href="/dashboard/reportes">
-              <FileText className="w-4 h-4 mr-2" />
-              Reportes
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href="/dashboard/proyectos/nuevo">
-              <Plus className="w-4 h-4 mr-2" />
-              Nuevo Proyecto
-            </Link>
-          </Button>
-        </div>
-      </div>
+      <DashboardPageHeader
+        badge="Command Center"
+        title="Panel de Control Ejecutivo"
+        description={`Bienvenido, ${userName}. Vista consolidada en tiempo real de operaciones, finanzas y cumplimiento.`}
+        actions={
+          <>
+            <DashboardOutlineButton asChild>
+              <Link href="/dashboard/reportes">
+                <FileText className="w-4 h-4 mr-2" />
+                Reportes
+              </Link>
+            </DashboardOutlineButton>
+            <DashboardPrimaryButton asChild>
+              <Link href="/dashboard/proyectos/nuevo">
+                <Plus className="w-4 h-4 mr-2" />
+                Nuevo Proyecto
+              </Link>
+            </DashboardPrimaryButton>
+          </>
+        }
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {executiveKPIs.map((kpi) => (
-          <Link key={kpi.title} href={kpi.href}>
-            <Card className="hover:shadow-lg transition-all cursor-pointer border-l-4 border-l-slate-300">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-slate-600">{kpi.title}</p>
-                      {kpi.trend === "up" && <TrendingUp className="w-4 h-4 text-green-600" />}
-                      {kpi.trend === "down" && <TrendingDown className="w-4 h-4 text-red-600" />}
-                    </div>
-                    <p className="text-3xl font-bold text-slate-900 mt-2">{kpi.value}</p>
-                    <p className="text-sm text-slate-500 mt-1">{kpi.subtitle}</p>
-                  </div>
-                  <div className={`w-12 h-12 ${kpi.color} rounded-xl flex items-center justify-center shrink-0`}>
-                    <kpi.icon className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+          <DashboardStatCard
+            key={kpi.title}
+            title={kpi.title}
+            value={kpi.value}
+            subtitle={kpi.subtitle}
+            icon={kpi.icon}
+            href={kpi.href}
+            trend={kpi.trend as "up" | "down" | "stable"}
+            accent={kpi.accent}
+          />
         ))}
       </div>
 
@@ -244,12 +239,9 @@ export default async function DashboardPage() {
       <DashboardCharts />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <DashboardPanel>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
-              Alertas Críticas
-            </CardTitle>
+            <DashboardSectionTitle title="Alertas Críticas" icon={AlertTriangle} />
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -313,14 +305,11 @@ export default async function DashboardPage() {
                 )}
             </div>
           </CardContent>
-        </Card>
+        </DashboardPanel>
 
-        <Card>
+        <DashboardPanel>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-blue-600" />
-              Acciones Ejecutivas
-            </CardTitle>
+            <DashboardSectionTitle title="Acciones Ejecutivas" icon={TrendingUp} />
           </CardHeader>
           <CardContent className="space-y-3">
             <Button variant="outline" className="w-full justify-start h-auto py-4 bg-transparent" asChild>
@@ -379,7 +368,7 @@ export default async function DashboardPage() {
               </Link>
             </Button>
           </CardContent>
-        </Card>
+        </DashboardPanel>
       </div>
 
       <ExecutiveMetrics stats={stats} />

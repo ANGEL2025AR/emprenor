@@ -15,3 +15,22 @@ export async function requirePortalApi(
   }
   return { user }
 }
+
+/** Empleado (autogestión) o administrador del portal. */
+export async function requirePortalApiEmployeeOrAdmin(
+  employeePermission: string,
+): Promise<{ user: SerializableUser; isAdmin: boolean } | { response: NextResponse }> {
+  const user = await getCurrentUser()
+  if (!user) {
+    return { response: NextResponse.json({ error: "No autorizado" }, { status: 401 }) }
+  }
+
+  const isAdmin = hasPermission(user.role as UserRole, "portal.admin")
+  const isEmployee = hasPermission(user.role as UserRole, employeePermission)
+
+  if (!isAdmin && !isEmployee) {
+    return { response: NextResponse.json({ error: "Sin permisos" }, { status: 403 }) }
+  }
+
+  return { user, isAdmin }
+}

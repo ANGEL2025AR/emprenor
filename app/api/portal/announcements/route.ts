@@ -2,18 +2,23 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
-import { requirePortalApi } from "@/lib/auth/portal-api"
+import { requirePortalApiEmployeeOrAdmin } from "@/lib/auth/portal-api"
+import { hasPermission } from "@/lib/auth/permissions"
+import type { UserRole } from "@/lib/db/models"
 
 export async function GET() {
   try {
-    const auth = await requirePortalApi("portal.announcements")
+    const auth = await requirePortalApiEmployeeOrAdmin("portal.announcements")
     if ("response" in auth) return auth.response
-    const user = auth.user
+    const { user, isAdmin } = auth
 
     const db = await getDb()
+    const filter = isAdmin
+      ? {}
+      : { $or: [{ targetRoles: user.role }, { targetRoles: "all" }] }
     const announcements = await db
       .collection("internal_announcements")
-      .find({ $or: [{ targetRoles: user.role }, { targetRoles: "all" }] })
+      .find(filter)
       .sort({ createdAt: -1 })
       .limit(30)
       .toArray()

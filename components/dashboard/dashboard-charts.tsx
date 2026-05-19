@@ -1,6 +1,7 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { DashboardPanel, DashboardSectionTitle } from "@/components/dashboard/dashboard-ui"
 import {
   BarChart,
   Bar,
@@ -172,14 +173,14 @@ export function DashboardCharts() {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i}>
+          <DashboardPanel key={i}>
             <CardContent className="p-6">
               <div className="animate-pulse space-y-4">
                 <div className="h-4 bg-slate-200 rounded w-1/3" />
                 <div className="h-[300px] bg-slate-100 rounded" />
               </div>
             </CardContent>
-          </Card>
+          </DashboardPanel>
         ))}
       </div>
     )
@@ -187,13 +188,13 @@ export function DashboardCharts() {
 
   if (!data || (data.monthlyRevenue.length === 0 && data.projectDistribution.length === 0)) {
     return (
-      <Card>
+      <DashboardPanel>
         <CardContent className="p-12 text-center">
           <Activity className="w-16 h-16 text-slate-300 mx-auto mb-4" />
           <p className="text-slate-500 font-medium">No hay suficientes datos para mostrar gráficos</p>
           <p className="text-sm text-slate-400 mt-1">Registra proyectos y transacciones para ver análisis</p>
         </CardContent>
-      </Card>
+      </DashboardPanel>
     )
   }
 
@@ -201,7 +202,7 @@ export function DashboardCharts() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Gráfico de Ingresos vs Egresos */}
       {data.monthlyRevenue.length > 0 && (
-        <Card>
+        <DashboardPanel>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
@@ -222,12 +223,12 @@ export function DashboardCharts() {
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
-        </Card>
+        </DashboardPanel>
       )}
 
       {/* Distribución de Proyectos */}
       {data.projectDistribution.length > 0 && (
-        <Card>
+        <DashboardPanel>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-blue-600" />
@@ -257,12 +258,12 @@ export function DashboardCharts() {
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
-        </Card>
+        </DashboardPanel>
       )}
 
       {/* Tareas Completadas vs Pendientes */}
       {data.taskCompletion.length > 0 && (
-        <Card>
+        <DashboardPanel>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5 text-purple-600" />
@@ -282,12 +283,12 @@ export function DashboardCharts() {
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
-        </Card>
+        </DashboardPanel>
       )}
 
       {/* Uso de Presupuesto por Proyecto */}
       {data.budgetUsage.length > 0 && (
-        <Card>
+        <DashboardPanel>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <DollarSign className="w-5 h-5 text-green-600" />
@@ -307,7 +308,7 @@ export function DashboardCharts() {
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
-        </Card>
+        </DashboardPanel>
       )}
     </div>
   )

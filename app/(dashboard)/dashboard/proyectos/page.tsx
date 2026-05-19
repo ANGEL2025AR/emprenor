@@ -6,6 +6,11 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  DashboardPageHeader,
+  DashboardPrimaryButton,
+  DashboardOutlineButton,
+} from "@/components/dashboard/dashboard-ui"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -135,19 +140,19 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Proyectos</h1>
-          <p className="text-slate-600">Gestiona todos tus proyectos de construcción</p>
-        </div>
-        <Button asChild>
-          <Link href="/dashboard/proyectos/nuevo">
-            <Plus className="w-4 h-4 mr-2" />
-            Nuevo Proyecto
-          </Link>
-        </Button>
-      </div>
+      <DashboardPageHeader
+        badge="Operaciones"
+        title="Proyectos"
+        description="Gestiona todos tus proyectos de construcción, avances y equipos asignados."
+        actions={
+          <DashboardPrimaryButton asChild>
+            <Link href="/dashboard/proyectos/nuevo">
+              <Plus className="w-4 h-4 mr-2" />
+              Nuevo Proyecto
+            </Link>
+          </DashboardPrimaryButton>
+        }
+      />
 
       {/* Filters */}
       <Card>
@@ -178,7 +183,7 @@ export default function ProjectsPage() {
                 <SelectItem value="cancelado">Cancelado</SelectItem>
               </SelectContent>
             </Select>
-            <Button type="submit">Buscar</Button>
+            <DashboardOutlineButton type="submit">Buscar</DashboardOutlineButton>
           </form>
         </CardContent>
       </Card>
@@ -204,7 +209,7 @@ export default function ProjectsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <Card key={project._id?.toString()} className="hover:shadow-lg transition-shadow">
+            <Card key={project._id?.toString()} className="group hover:-translate-y-0.5 transition-all duration-300">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div>

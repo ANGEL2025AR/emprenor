@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
+import { canAccessProjectId, withProjectScope } from "@/lib/auth/project-access"
+import type { UserRole } from "@/lib/db/models"
 
 export async function GET() {
   try {
@@ -10,8 +13,13 @@ export async function GET() {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    if (!hasPermission(user.role as UserRole, "incidents.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const db = await getDb()
-    const incidents = await db.collection("incidents").find({}).toArray()
+    const scopedQuery = await withProjectScope(user, {})
+    const incidents = await db.collection("incidents").find(scopedQuery).sort({ createdAt: -1 }).limit(100).toArray()
 
     return NextResponse.json({ incidents })
   } catch (error) {
@@ -27,21 +35,35 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { projectId, projectName, title, description, severity } = body
+    if (!hasPermission(user.role as UserRole, "incidents.create")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
 
-    if (!projectId || !projectName || !title) {
-      return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 })
+    const body = await request.json()
+    const projectId = String(body.projectId || "")
+    const title = String(body.title || "").trim()
+
+    if (!ObjectId.isValid(projectId) || !title) {
+      return NextResponse.json({ error: "Proyecto y título son obligatorios" }, { status: 400 })
+    }
+
+    if (!(await canAccessProjectId(user, projectId))) {
+      return NextResponse.json({ error: "Sin acceso al proyecto" }, { status: 403 })
     }
 
     const db = await getDb()
+    const project = await db.collection("projects").findOne({ _id: new ObjectId(projectId) })
+    const projectName = project?.name ? String(project.name) : String(body.projectName || "")
+
     const result = await db.collection("incidents").insertOne({
       projectId: new ObjectId(projectId),
       projectName,
       title,
-      description,
-      severity: severity || "media",
-      status: "abierta",
+      description: String(body.description || ""),
+      severity: body.severity || "media",
+      status: body.status || "reportada",
+      location: String(body.location || ""),
+      reportedBy: String(body.reportedBy || ""),
       date: new Date(),
       createdAt: new Date(),
       createdBy: new ObjectId(user._id),
@@ -49,10 +71,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      incidentId: result.insertedId,
+      incidentId: result.insertedId.toString(),
     })
-  } catch (error) {
-    console.error("[API] Incident create error:", error)
+  } catch {
     return NextResponse.json({ error: "Error al crear incidencia" }, { status: 500 })
   }
 }

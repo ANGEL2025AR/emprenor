@@ -5,7 +5,9 @@ import { getDb } from "@/lib/db/connection"
 import { ObjectId } from "mongodb"
 import type { UserRole } from "@/lib/db/models"
 
-const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "emprenor-secret-key-change-in-production-2024")
+import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
+
+const getSecretKey = () => getJwtSecretKey()
 
 const COOKIE_NAME = "emprenor_session"
 
@@ -52,7 +54,7 @@ export async function createSession(user: {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(SECRET_KEY)
+    .sign(getSecretKey())
 
   const cookieStore = await cookies()
   cookieStore.set(COOKIE_NAME, token, {
@@ -73,7 +75,7 @@ export async function getSession(): Promise<SessionPayload | null> {
   if (!token) return null
 
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY)
+    const { payload } = await jwtVerify(token, getSecretKey())
     return payload as SessionPayload
   } catch {
     return null
@@ -141,7 +143,7 @@ export async function verifyAuth(request: Request): Promise<SessionPayload | nul
   if (!token) return null
 
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY)
+    const { payload } = await jwtVerify(token, getSecretKey())
     return payload as SessionPayload
   } catch {
     return null

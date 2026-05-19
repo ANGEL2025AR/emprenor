@@ -51,6 +51,7 @@ import { ROLE_LABELS, ROLE_COLORS } from "@/lib/auth/permissions"
 import { usePermissions } from "@/lib/auth/access-control"
 import { useToast } from "@/hooks/use-toast"
 import type { UserRole } from "@/lib/db/models"
+import { DashboardPageHeader, DashboardPrimaryButton } from "@/components/dashboard/dashboard-ui"
 
 type UserRow = {
   _id: string
@@ -230,20 +231,21 @@ export default function UsersClient() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Usuarios</h1>
-          <p className="text-slate-600">Gestiona cuentas, roles, acceso y aprobaciones</p>
-        </div>
-        {can("users.create") && (
-          <Button asChild>
-            <Link href="/dashboard/usuarios/nuevo">
-              <UserPlus className="w-4 h-4 mr-2" />
-              Nuevo Usuario
-            </Link>
-          </Button>
-        )}
-      </div>
+      <DashboardPageHeader
+        badge="Administración"
+        title="Usuarios"
+        description="Gestiona cuentas, roles, acceso y aprobaciones del equipo."
+        actions={
+          can("users.create") ? (
+            <DashboardPrimaryButton asChild>
+              <Link href="/dashboard/usuarios/nuevo">
+                <UserPlus className="w-4 h-4 mr-2" />
+                Nuevo Usuario
+              </Link>
+            </DashboardPrimaryButton>
+          ) : undefined
+        }
+      />
 
       <Card>
         <CardContent className="p-4">

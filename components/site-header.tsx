@@ -42,12 +42,12 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center" aria-label="EMPRENOR - Ir a página de inicio">
           <Image
-            src="/images/logo-emprenor.png"
+            src="/images/logo-emprenor-large.png"
             alt="EMPRENOR Logo"
-            width={180}
-            height={48}
-            className="h-10 md:h-12 w-auto"
-            style={{ width: "auto", height: "2.5rem" }}
+            width={280}
+            height={46}
+            className="h-8 sm:h-10 md:h-12 w-auto"
+            style={{ width: "auto" }}
             priority
           />
         </Link>

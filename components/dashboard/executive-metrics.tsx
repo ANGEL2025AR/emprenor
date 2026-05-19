@@ -1,4 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardContent, CardHeader } from "@/components/ui/card"
+import { DashboardPanel, DashboardSectionTitle } from "@/components/dashboard/dashboard-ui"
+import { BarChart3 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
@@ -48,9 +50,9 @@ export function ExecutiveMetrics({ stats }: ExecutiveMetricsProps) {
   ]
 
   return (
-    <Card>
+    <DashboardPanel>
       <CardHeader>
-        <CardTitle>Métricas Ejecutivas de Performance</CardTitle>
+        <DashboardSectionTitle title="Métricas Ejecutivas de Performance" icon={BarChart3} />
       </CardHeader>
       <CardContent className="space-y-6">
         {metrics.map((metric) => (
@@ -77,6 +79,6 @@ export function ExecutiveMetrics({ stats }: ExecutiveMetricsProps) {
           </div>
         ))}
       </CardContent>
-    </Card>
+    </DashboardPanel>
   )
 }

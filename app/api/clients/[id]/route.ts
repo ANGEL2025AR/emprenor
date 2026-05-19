@@ -2,11 +2,17 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
+import type { UserRole } from "@/lib/db/models"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getCurrentUser()
     if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
+    if (!hasPermission(user.role as UserRole, "clients.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
 
     const { id } = await params
     const db = await getDb()
@@ -50,6 +56,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const user = await getCurrentUser()
     if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
 
+    if (!hasPermission(user.role as UserRole, "clients.edit")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const { id } = await params
     const body = await request.json()
     const db = await getDb()
@@ -85,6 +95,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   try {
     const user = await getCurrentUser()
     if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+
+    if (!hasPermission(user.role as UserRole, "clients.delete")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
 
     const { id } = await params
     const db = await getDb()

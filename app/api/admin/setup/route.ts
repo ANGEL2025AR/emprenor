@@ -1,22 +1,39 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { hashPassword } from "@/lib/auth/password"
+import { getAdminSetupKey } from "@/lib/env"
 import type { User } from "@/lib/db/models"
 
-// Clave secreta para crear el primer admin (cambiar en producción)
-const SETUP_SECRET_KEY = process.env.ADMIN_SETUP_KEY || "emprenor-setup-2024"
+export async function GET() {
+  try {
+    const db = await getDb()
+    const existingAdmin = await db.collection("users").findOne({ role: "super_admin" })
+    return NextResponse.json({
+      setupAvailable: !existingAdmin,
+      requiresSetupKey: Boolean(getAdminSetupKey()),
+    })
+  } catch {
+    return NextResponse.json({ setupAvailable: false, requiresSetupKey: true })
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
+    const setupKey = getAdminSetupKey()
+    if (!setupKey) {
+      return NextResponse.json(
+        { error: "Configuración inicial deshabilitada. Define ADMIN_SETUP_KEY en el servidor." },
+        { status: 503 },
+      )
+    }
+
     const body = await request.json()
     const { secretKey, email, password, name, lastName, phone } = body
 
-    // Verificar clave secreta
-    if (secretKey !== SETUP_SECRET_KEY) {
+    if (secretKey !== setupKey) {
       return NextResponse.json({ error: "Clave de configuración inválida" }, { status: 401 })
     }
 
-    // Validar campos requeridos
     if (!email || !password || !name || !lastName) {
       return NextResponse.json(
         { error: "Todos los campos son requeridos: email, password, name, lastName" },
@@ -24,9 +41,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (String(password).length < 10) {
+      return NextResponse.json({ error: "La contraseña debe tener al menos 10 caracteres" }, { status: 400 })
+    }
+
     const db = await getDb()
 
-    // Verificar si ya existe un super_admin
     const existingAdmin = await db.collection("users").findOne({
       role: "super_admin",
     })
@@ -38,7 +58,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Verificar si el email ya existe
     const existingUser = await db.collection("users").findOne({
       email: email.toLowerCase(),
     })
@@ -47,7 +66,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "El email ya está registrado" }, { status: 409 })
     }
 
-    // Crear el usuario administrador
     const hashedPassword = hashPassword(password)
 
     const adminUser: Omit<User, "_id"> = {

@@ -2,16 +2,24 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { redirect } from "next/navigation"
 import { getDb } from "@/lib/db/connection"
 import { safeDate } from "@/lib/utils"
+import { withProjectScope } from "@/lib/auth/project-access"
+import type { SerializableUser } from "@/lib/auth/session"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Plus, Calendar, Users, AlertTriangle, FileText } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { DailyLogsClient } from "./daily-logs-client"
 
-async function getDailyLogs() {
+async function getDailyLogs(user: SerializableUser) {
   try {
     const db = await getDb()
-    const logs = await db.collection("daily_logs").find().sort({ date: -1, createdAt: -1 }).limit(50).toArray()
+    const scopedQuery = await withProjectScope(user, {})
+    const logs = await db
+      .collection("daily_logs")
+      .find(scopedQuery)
+      .sort({ date: -1, createdAt: -1 })
+      .limit(50)
+      .toArray()
 
     return logs.map((log) => ({
       _id: log._id.toString(),
@@ -52,7 +60,7 @@ export default async function DailyLogsPage() {
   const user = await getCurrentUser()
   if (!user) redirect("/login")
 
-  const logs = await getDailyLogs()
+  const logs = await getDailyLogs(user)
 
   return (
     <div className="space-y-6">

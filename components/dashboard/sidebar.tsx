@@ -7,6 +7,12 @@ import type { SerializableUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
 import Image from "next/image"
+import { isPortalAdminRole, isPortalEmployeeRole } from "@/lib/auth/portal-roles"
+import {
+  isPortalModuleEnabled,
+  type PortalModuleKey,
+  type PortalSettings,
+} from "@/lib/portal/portal-settings-shared"
 import {
   LayoutDashboard,
   FolderKanban,
@@ -21,7 +27,6 @@ import {
   X,
   ChevronLeft,
   Menu,
-  LogOut,
   FileSignature,
   Receipt,
   CreditCard,
@@ -52,17 +57,36 @@ import { Button } from "@/components/ui/button"
 
 interface DashboardSidebarProps {
   user: SerializableUser
+  /** Configuración del portal cargada en el servidor (evita parpadeo y desajustes). */
+  initialPortalSettings?: PortalSettings | null
 }
 
-export function DashboardSidebar({ user }: DashboardSidebarProps) {
+export function DashboardSidebar({ user, initialPortalSettings = null }: DashboardSidebarProps) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
+
+  const [portalSettings, setPortalSettings] = useState<PortalSettings | null>(initialPortalSettings)
 
   // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
+
+  useEffect(() => {
+    setPortalSettings(initialPortalSettings)
+  }, [initialPortalSettings])
+
+  useEffect(() => {
+    if (!isPortalEmployeeRole(user?.role || "")) return
+    if (initialPortalSettings) return
+    fetch("/api/portal/settings")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.settings) setPortalSettings(data.settings)
+      })
+      .catch(() => {})
+  }, [user?.role, initialPortalSettings])
 
   // Ensure role is valid
   const userRole: UserRole = user?.role || "cliente"
@@ -225,52 +249,73 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       permission: "admin.access" as const,
     },
     {
-      name: "Portal Empleado",
+      name: "Portal Empleados",
+      href: "/dashboard/admin/portal",
+      icon: Wallet,
+      permission: "portal.admin" as const,
+    },
+    {
+      name: "Portal (mi espacio)",
       href: "/dashboard/portal",
       icon: Wallet,
       permission: "portal.dashboard" as const,
+      employeeOnly: true,
     },
     {
       name: "Billetera Virtual",
       href: "/dashboard/portal/billetera",
       icon: BadgeDollarSign,
       permission: "portal.wallet" as const,
+      employeeOnly: true,
+      moduleKey: "wallet" as const,
     },
     {
       name: "Recibos de Sueldo",
       href: "/dashboard/portal/recibos",
       icon: Banknote,
       permission: "portal.payslips" as const,
+      employeeOnly: true,
+      moduleKey: "payslips" as const,
     },
     {
       name: "Mi Legajo",
       href: "/dashboard/portal/legajo",
       icon: FolderOpen,
       permission: "portal.personnel_file" as const,
+      employeeOnly: true,
+      moduleKey: "personnelFile" as const,
     },
     {
       name: "Solicitudes",
       href: "/dashboard/portal/solicitudes",
       icon: Palmtree,
       permission: "portal.leave_requests" as const,
+      employeeOnly: true,
+      moduleKey: "leaveRequests" as const,
     },
     {
       name: "ART / Seguridad",
       href: "/dashboard/portal/art",
       icon: ShieldAlert,
       permission: "portal.art" as const,
+      employeeOnly: true,
+      moduleKey: "art" as const,
     },
     {
       name: "Mesa de Ayuda",
       href: "/dashboard/portal/mesa-ayuda",
       icon: HelpCircle,
       permission: "portal.help_desk" as const,
+      employeeOnly: true,
+      moduleKey: "helpDesk" as const,
     },
     {
       name: "Comunicaciones",
       href: "/dashboard/portal/comunicaciones",
       icon: Megaphone,
       permission: "portal.announcements" as const,
+      employeeOnly: true,
+      moduleKey: "announcements" as const,
     },
     {
       name: "Contactos Web",
@@ -305,28 +350,31 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
   ]
 
   const filteredNavigation = navigation.filter((item) => {
-    if (!item.permission) return true
+    const nav = item as {
+      employeeOnly?: boolean
+      permission: string | null
+      moduleKey?: PortalModuleKey
+    }
+
+    if (nav.employeeOnly) {
+      if (!isPortalEmployeeRole(userRole)) return false
+      if (nav.moduleKey && portalSettings && !isPortalModuleEnabled(portalSettings, nav.moduleKey)) {
+        return false
+      }
+      return nav.permission ? hasPermission(userRole, nav.permission) : true
+    }
+
+    if (nav.permission === "portal.admin") {
+      return isPortalAdminRole(userRole) && hasPermission(userRole, "portal.admin")
+    }
+
+    if (!nav.permission) return true
     try {
-      return hasPermission(userRole, item.permission)
+      return hasPermission(userRole, nav.permission)
     } catch {
       return false
     }
   })
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" })
-      window.location.href = "/login"
-    } catch {
-      window.location.href = "/login"
-    }
-  }
-
-  // Safe user display
-  const userInitials = `${user?.name?.charAt(0) || "U"}${user?.lastName?.charAt(0) || ""}`
-  const userName = user?.name || "Usuario"
-  const userLastName = user?.lastName || ""
-  const roleDisplay = userRole.replace("_", " ")
 
   return (
     <>
@@ -337,7 +385,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
 
       {/* Mobile toggle button */}
       <button
-        className="fixed top-4 left-4 z-50 lg:hidden p-2.5 rounded-xl bg-slate-900 text-white shadow-lg hover:bg-slate-800 transition-colors"
+        className="fixed top-4 left-4 z-50 lg:hidden p-2.5 rounded-xl border border-emerald-500/30 bg-slate-950 text-white shadow-lg shadow-emerald-500/20 hover:border-emerald-400/50 transition-all"
         onClick={() => setIsOpen(true)}
         aria-label="Abrir menú"
       >
@@ -347,26 +395,32 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:sticky top-0 inset-y-0 left-0 z-50 h-screen bg-slate-900 flex flex-col transform transition-all duration-300 ease-in-out",
+          "dashboard-sidebar relative fixed lg:sticky top-0 inset-y-0 left-0 z-50 h-screen flex flex-col transform transition-all duration-300 ease-in-out overflow-hidden",
           isOpen ? "translate-x-0" : "-translate-x-full",
           "lg:translate-x-0",
           isCollapsed ? "lg:w-20" : "lg:w-72",
           "w-72",
         )}
       >
+        <div className="dashboard-sidebar-glow" aria-hidden />
         {/* Header */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800 flex-shrink-0">
+        <div className="relative flex h-16 items-center justify-between px-4 border-b border-white/5 flex-shrink-0 z-10">
           <Link
             href="/dashboard"
             className={cn("flex items-center gap-3 transition-all", isCollapsed && "lg:justify-center")}
           >
-            <div className="relative w-20 h-20 flex-shrink-0">
+            <div
+              className={cn(
+                "relative flex-shrink-0 drop-shadow-[0_0_16px_rgba(99,102,241,0.35)]",
+                isCollapsed ? "h-10 w-10 lg:h-10 lg:w-10" : "h-10 w-36 sm:w-40",
+              )}
+            >
               <Image
-                src="/images/logo-emprenor.png"
+                src={isCollapsed ? "/images/logo-icon-inverted.png" : "/images/logo-emprenor-white.png"}
                 alt="EMPRENOR"
                 fill
-                sizes="80px"
-                className="object-contain"
+                sizes={isCollapsed ? "40px" : "160px"}
+                className="object-contain object-left"
                 priority
               />
             </div>
@@ -397,8 +451,8 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-6 px-3">
-          <ul className="space-y-1">
+        <nav className="relative z-10 flex-1 overflow-y-auto py-5 px-3 scrollbar-thin">
+          <ul className="space-y-0.5">
             {filteredNavigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
               return (
@@ -406,10 +460,8 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                   <Link
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all group relative",
-                      isActive
-                        ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-500/20"
-                        : "text-slate-400 hover:bg-slate-800 hover:text-white",
+                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
+                      isActive ? "dashboard-nav-active text-white" : "dashboard-nav-item",
                       isCollapsed && "lg:justify-center lg:px-2",
                     )}
                     title={isCollapsed ? item.name : undefined}
@@ -419,7 +471,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
 
                     {/* Tooltip for collapsed state */}
                     {isCollapsed && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-slate-800 text-white text-sm rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 hidden lg:block">
+                      <div className="absolute left-full ml-2 px-3 py-1.5 bg-slate-800/95 border border-white/10 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 hidden lg:block shadow-xl">
                         {item.name}
                       </div>
                     )}
@@ -430,37 +482,6 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
           </ul>
         </nav>
 
-        {/* User info */}
-        <div className="p-3 border-t border-slate-800 flex-shrink-0">
-          <div
-            className={cn(
-              "flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-800/50",
-              isCollapsed && "lg:justify-center lg:px-2",
-            )}
-          >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
-              {userInitials}
-            </div>
-            <div className={cn("flex-1 min-w-0", isCollapsed && "lg:hidden")}>
-              <p className="text-sm font-medium text-white truncate">
-                {userName} {userLastName}
-              </p>
-              <p className="text-xs text-slate-400 truncate capitalize">{roleDisplay}</p>
-            </div>
-          </div>
-
-          {/* Logout button */}
-          <button
-            onClick={handleLogout}
-            className={cn(
-              "flex items-center gap-3 w-full mt-2 px-3 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all",
-              isCollapsed && "lg:justify-center lg:px-2",
-            )}
-          >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            <span className={cn(isCollapsed && "lg:hidden")}>Cerrar Sesión</span>
-          </button>
-        </div>
       </aside>
     </>
   )

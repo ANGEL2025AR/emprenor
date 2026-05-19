@@ -169,13 +169,8 @@ export default function ProyectosPage() {
                       </span>
                     </div>
 
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full mt-3 bg-transparent"
-                      onClick={() => openDetails(project)}
-                    >
-                      Ver Detalles Completos
+                    <Button variant="outline" size="sm" className="w-full mt-3 bg-transparent" asChild>
+                      <Link href={`/proyectos/${project._id}`}>Ver Detalles Completos</Link>
                     </Button>
                   </CardContent>
                 </Card>

@@ -56,6 +56,11 @@ export default function RegisterPage() {
         return
       }
 
+      if (data.pendingApproval) {
+        router.push("/login?registered=pending")
+        return
+      }
+
       router.push("/dashboard")
       router.refresh()
     } catch {
@@ -77,7 +82,7 @@ export default function RegisterPage() {
         <div className="hidden lg:block space-y-8 px-8">
           <div className="space-y-4">
             <Image
-              src="/images/logo-emprenor.png"
+              src="/images/logo-emprenor-large.png"
               alt="EMPRENOR Logo"
               width={200}
               height={60}
@@ -114,7 +119,7 @@ export default function RegisterPage() {
           <CardHeader className="text-center space-y-4 pb-6 pt-8">
             <div className="lg:hidden flex justify-center">
               <Image
-                src="/images/logo-emprenor.png"
+                src="/images/logo-emprenor-large.png"
                 alt="EMPRENOR Logo"
                 width={180}
                 height={54}

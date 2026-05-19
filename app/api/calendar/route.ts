@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
+import { hasPermission } from "@/lib/auth/permissions"
+import { withProjectScope, getClientProjectsFilter, isClientRole } from "@/lib/auth/project-access"
+import type { UserRole } from "@/lib/db/models"
 
 export async function GET(request: Request) {
   try {
     const user = await getCurrentUser()
     if (!user || !user._id) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role as UserRole, "calendar.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -18,34 +25,31 @@ export async function GET(request: Request) {
 
     const db = await getDb()
 
-    // Obtener eventos de proyectos (fechas de inicio y fin)
-    const projects = await db
-      .collection("projects")
-      .find({
-        $or: [
-          { "dates.start": { $gte: startDate, $lte: endDate } },
-          { "dates.estimatedEnd": { $gte: startDate, $lte: endDate } },
-        ],
-      })
-      .toArray()
+    const dateRange = {
+      $or: [
+        { "dates.start": { $gte: startDate, $lte: endDate } },
+        { "dates.estimatedEnd": { $gte: startDate, $lte: endDate } },
+      ],
+    }
 
-    // Obtener tareas con fecha límite
-    const tasks = await db
-      .collection("tasks")
-      .find({
-        endDate: { $gte: startDate, $lte: endDate },
-      })
-      .toArray()
+    let projectQuery: Record<string, unknown> = dateRange
+    if (isClientRole(user.role)) {
+      const clientFilter = await getClientProjectsFilter(user)
+      projectQuery = { $and: [dateRange, clientFilter] }
+    }
 
-    // Obtener inspecciones programadas
-    const inspections = await db
-      .collection("inspections")
-      .find({
-        date: { $gte: startDate, $lte: endDate },
-      })
-      .toArray()
+    const projects = await db.collection("projects").find(projectQuery).toArray()
 
-    // Combinar todos los eventos
+    const taskQuery = await withProjectScope(user, {
+      endDate: { $gte: startDate, $lte: endDate },
+    })
+    const tasks = await db.collection("tasks").find(taskQuery).toArray()
+
+    const inspectionQuery = await withProjectScope(user, {
+      date: { $gte: startDate, $lte: endDate },
+    })
+    const inspections = await db.collection("inspections").find(inspectionQuery).toArray()
+
     const events = [
       ...projects.flatMap((p) => {
         const evts = []

@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
 import { buildMiddlewareRouteMap, isClientPathAllowed } from "@/lib/auth/client-routes"
 
-const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "emprenor-secret-key-change-in-production-2024")
+import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
 
 const protectedRoutes = ["/dashboard", "/proyectos-gestion", "/admin"]
 const authRoutes = ["/login", "/registro", "/recuperar-password", "/setup"]
@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
 
   if (token) {
     try {
-      const { payload } = await jwtVerify(token, SECRET_KEY)
+      const { payload } = await jwtVerify(token, getJwtSecretKey())
       isAuthenticated = true
       userRole = payload.role as string
     } catch {
@@ -47,6 +47,15 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
       }
       return NextResponse.next()
+    }
+
+    // Administradores del portal no usan /dashboard/portal (solo empleados)
+    if (
+      pathname.startsWith("/dashboard/portal") &&
+      ["super_admin", "admin", "gerente"].includes(userRole)
+    ) {
+      const subpath = pathname.slice("/dashboard/portal".length)
+      return NextResponse.redirect(new URL(`/dashboard/admin/portal${subpath}`, request.url))
     }
 
     for (const [route, allowedRoles] of Object.entries(ROUTE_PERMISSION_MAP)) {

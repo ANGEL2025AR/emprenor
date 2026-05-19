@@ -11,11 +11,11 @@ export function SiteFooter() {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/logo-emprenor.png"
+                src="/images/logo-emprenor-large.png"
                 alt="EMPRENOR Logo"
-                width={160}
-                height={42}
-                className="h-10 w-auto"
+                width={240}
+                height={40}
+                className="h-9 w-auto"
               />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">

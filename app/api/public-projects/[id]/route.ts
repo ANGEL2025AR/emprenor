@@ -14,13 +14,26 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "ID inválido" }, { status: 400 })
     }
 
-    const project = await db.collection<PublicProject>("public_projects").findOne({ _id: new ObjectId(id) })
+    const user = await verifyAuth(request)
+    const isStaff = user && ["super_admin", "admin"].includes(user.role)
+
+    const filter: { _id: ObjectId; published?: boolean } = { _id: new ObjectId(id) }
+    if (!isStaff) {
+      filter.published = true
+    }
+
+    const project = await db.collection<PublicProject>("public_projects").findOne(filter)
 
     if (!project) {
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
     }
 
-    return NextResponse.json({ project })
+    return NextResponse.json({
+      project: {
+        ...project,
+        _id: project._id.toString(),
+      },
+    })
   } catch (error) {
     console.error("Error al obtener proyecto:", error)
     return NextResponse.json({ error: "Error al obtener proyecto" }, { status: 500 })
@@ -73,6 +86,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     revalidatePath("/")
     revalidatePath("/proyectos")
+    revalidatePath(`/proyectos/${id}`)
 
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -103,6 +117,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     revalidatePath("/")
     revalidatePath("/proyectos")
+    revalidatePath(`/proyectos/${id}`)
 
     return NextResponse.json({ success: true })
   } catch (error) {

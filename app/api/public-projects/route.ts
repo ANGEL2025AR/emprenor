@@ -11,13 +11,19 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category")
     const published = searchParams.get("published")
 
+    const user = await verifyAuth(request)
+
     const filter: Record<string, unknown> = {}
 
     if (category && category !== "Todos") {
       filter.category = category
     }
 
-    if (published === "true") {
+    // Visitantes y SEO: solo publicados. Admin autenticado puede pedir borradores con ?published=false
+    const isStaff = user && ["super_admin", "admin"].includes(user.role)
+    if (published === "false" && isStaff) {
+      filter.published = false
+    } else {
       filter.published = true
     }
 

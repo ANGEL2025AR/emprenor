@@ -68,7 +68,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    if (!hasPermission(user.role, "daily_logs.create")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const body = await request.json()
+    const projectId = String(body.projectId || "")
+
+    if (!ObjectId.isValid(projectId)) {
+      return NextResponse.json({ error: "Proyecto inválido" }, { status: 400 })
+    }
+
+    if (!(await canAccessProjectId(user, projectId))) {
+      return NextResponse.json({ error: "Sin acceso al proyecto" }, { status: 403 })
+    }
+
     const db = await getDb()
 
     // Generar número de bitácora
@@ -78,7 +92,7 @@ export async function POST(request: Request) {
     const dailyLog = {
       ...body,
       logNumber,
-      projectId: new ObjectId(body.projectId),
+      projectId: new ObjectId(projectId),
       preparedBy: new ObjectId(user._id),
       preparedAt: new Date(),
       createdAt: new Date(),

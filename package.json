@@ -14,7 +14,8 @@
     "type-check": "tsc --noEmit",
     "verify": "npm run type-check && npm run build",
     "audit:routes": "node --require ./scripts/dns-windows-atlas.cjs --env-file=.env.local scripts/audit-dashboard-routes.mjs",
-    "audit:apis": "node --require ./scripts/dns-windows-atlas.cjs --env-file=.env.local scripts/audit-dashboard-apis.mjs"
+    "audit:apis": "node --require ./scripts/dns-windows-atlas.cjs --env-file=.env.local scripts/audit-dashboard-apis.mjs",
+    "verify:links": "node scripts/verify-dashboard-links.mjs"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "latest",

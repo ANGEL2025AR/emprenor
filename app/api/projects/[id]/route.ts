@@ -55,6 +55,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "ID inválido" }, { status: 400 })
     }
 
+    const existing = await findProjectForUser(user, id)
+    if (!existing) {
+      return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
+    }
+
     const db = await getDb()
 
     // Sanitizar: solo permitir campos seguros
@@ -113,6 +118,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     }
 
     const db = await getDb()
+    const existing = await findProjectForUser(user, id)
+    if (!existing) {
+      return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
+    }
+
     const deleteResult = await db.collection("projects").deleteOne({
       _id: new ObjectId(id),
     })

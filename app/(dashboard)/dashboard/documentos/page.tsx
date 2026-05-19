@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Upload, FileText, ImageIcon, File, Loader2, Download, Eye, Filter } from "lucide-react"
 import type { Document } from "@/lib/db/models"
+import { usePermissions } from "@/lib/auth/access-control"
 
 const TYPE_ICONS: Record<string, React.ElementType> = {
   plano: FileText,
@@ -34,6 +35,9 @@ const TYPE_COLORS: Record<string, string> = {
 }
 
 export default function DocumentsPage() {
+  const { role } = usePermissions()
+  const isClient = role === "cliente"
+  const canUpload = !isClient
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
@@ -97,21 +101,29 @@ export default function DocumentsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Documentos</h1>
-          <p className="text-slate-600">Gestiona planos, contratos y archivos del proyecto</p>
+          <h1 className="text-2xl font-bold text-slate-900">
+            {isClient ? "Documentación de mis obras" : "Documentos"}
+          </h1>
+          <p className="text-slate-600">
+            {isClient
+              ? "Solo ves archivos de tus proyectos asignados"
+              : "Gestiona planos, contratos y archivos del proyecto"}
+          </p>
         </div>
-        <div className="relative">
-          <Input
-            type="file"
-            onChange={handleUpload}
-            className="absolute inset-0 opacity-0 cursor-pointer"
-            disabled={uploading}
-          />
-          <Button disabled={uploading}>
-            {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-            Subir Documento
-          </Button>
-        </div>
+        {canUpload && (
+          <div className="relative">
+            <Input
+              type="file"
+              onChange={handleUpload}
+              className="absolute inset-0 opacity-0 cursor-pointer"
+              disabled={uploading}
+            />
+            <Button disabled={uploading}>
+              {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+              Subir Documento
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Filters */}

@@ -23,6 +23,8 @@ import { ExecutiveMetrics } from "@/components/dashboard/executive-metrics"
 import { ProjectStatusOverview } from "@/components/dashboard/project-status-overview"
 import { RevenueChart } from "@/components/dashboard/revenue-chart"
 import { ClientDashboard } from "@/components/dashboard/client-dashboard"
+import { EmployeeDashboard } from "@/components/dashboard/employee-dashboard"
+import { isClientRole, isEmployeePortalRole } from "@/lib/auth/project-access"
 
 async function getDashboardStats() {
   try {
@@ -111,8 +113,12 @@ async function getDashboardStats() {
 export default async function DashboardPage() {
   const user = await getCurrentUser()
 
-  if (user?.role === "cliente") {
+  if (user && isClientRole(user.role)) {
     return <ClientDashboard user={user} />
+  }
+
+  if (user && isEmployeePortalRole(user.role)) {
+    return <EmployeeDashboard user={user} />
   }
 
   const stats = await getDashboardStats()

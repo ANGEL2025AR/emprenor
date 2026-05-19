@@ -35,7 +35,15 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const { toast } = useToast()
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((data) => setIsClient(data?.user?.role === "cliente"))
+      .catch(() => setIsClient(false))
+  }, [])
 
   // Form state
   const [file, setFile] = useState<File | null>(null)
@@ -187,6 +195,7 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
         <p className="text-sm text-slate-600">
           {documents.length} documento{documents.length !== 1 ? "s" : ""}
         </p>
+        {!isClient && (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -260,6 +269,7 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
             </form>
           </DialogContent>
         </Dialog>
+        )}
       </div>
 
       {documents.length === 0 ? (
@@ -301,14 +311,16 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
                       >
                         <Download className="w-4 h-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(doc._id!.toString())}
-                        title="Eliminar"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-600" />
-                      </Button>
+                      {!isClient && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(doc._id!.toString())}
+                          title="Eliminar"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-600" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>

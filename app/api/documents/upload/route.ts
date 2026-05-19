@@ -3,6 +3,7 @@ import { put } from "@vercel/blob"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
+import { canAccessProjectId, isClientRole } from "@/lib/auth/project-access"
 import { ObjectId } from "mongodb"
 import type { Document } from "@/lib/db/models"
 
@@ -11,6 +12,10 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser()
     if (!user || !user._id) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    if (isClientRole(user.role)) {
+      return NextResponse.json({ error: "Los clientes no pueden subir documentos" }, { status: 403 })
     }
 
     if (!hasPermission(user.role, "documents.upload")) {
@@ -30,6 +35,10 @@ export async function POST(request: NextRequest) {
 
     if (!projectId) {
       return NextResponse.json({ error: "Se requiere projectId" }, { status: 400 })
+    }
+
+    if (!(await canAccessProjectId(user, projectId))) {
+      return NextResponse.json({ error: "Sin acceso a este proyecto" }, { status: 403 })
     }
 
     // Subir a Vercel Blob

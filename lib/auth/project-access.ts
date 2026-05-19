@@ -74,3 +74,23 @@ export async function canAccessProjectId(user: SerializableUser, projectId: stri
   const project = await findProjectForUser(user, projectId)
   return project !== null
 }
+
+export async function canAccessCertificateId(user: SerializableUser, certificateId: string): Promise<boolean> {
+  if (!ObjectId.isValid(certificateId)) return false
+  const db = await getDb()
+  const cert = await db.collection("certificates").findOne({ _id: new ObjectId(certificateId) })
+  if (!cert?.projectId) return false
+  return canAccessProjectId(user, cert.projectId.toString())
+}
+
+export async function canAccessDocumentId(user: SerializableUser, documentId: string): Promise<boolean> {
+  if (!ObjectId.isValid(documentId)) return false
+  const db = await getDb()
+  const doc = await db.collection("documents").findOne({ _id: new ObjectId(documentId) })
+  if (!doc?.projectId) return false
+  return canAccessProjectId(user, doc.projectId.toString())
+}
+
+export function isEmployeePortalRole(role: string): boolean {
+  return role === "trabajador" || role === "supervisor"
+}

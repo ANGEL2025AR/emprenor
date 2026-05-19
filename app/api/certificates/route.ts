@@ -3,7 +3,7 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 import { hasPermission } from "@/lib/auth/permissions"
-import { withProjectScope } from "@/lib/auth/project-access"
+import { canAccessProjectId, withProjectScope } from "@/lib/auth/project-access"
 
 export async function GET() {
   try {
@@ -39,6 +39,10 @@ export async function POST(request: Request) {
 
     if (!projectId || !projectName || !certificateNumber) {
       return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 })
+    }
+
+    if (!(await canAccessProjectId(user, projectId))) {
+      return NextResponse.json({ error: "Sin acceso a este proyecto" }, { status: 403 })
     }
 
     const db = await getDb()

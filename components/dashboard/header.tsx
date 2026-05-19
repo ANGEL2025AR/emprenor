@@ -171,13 +171,6 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
               <Search className="w-5 h-5" />
             </Button>
 
-            {/* Link to public site */}
-            <Button variant="ghost" size="icon" asChild className="text-slate-600">
-              <Link href="/" target="_blank">
-                <Home className="w-5 h-5" />
-              </Link>
-            </Button>
-
             {/* Notifications dropdown */}
             <DropdownMenu open={notificationsOpen} onOpenChange={setNotificationsOpen}>
               <DropdownMenuTrigger asChild>

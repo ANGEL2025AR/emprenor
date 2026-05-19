@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { UserCheck, Search, Plus, Phone, Mail, Briefcase, Trash2 } from "lucide-react"
+import { UserCheck, Search, Phone, Mail, Briefcase, Trash2 } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -93,18 +93,10 @@ export default function EmployeesClient() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <UserCheck className="w-5 h-5" />
-            Personal Activo
-          </CardTitle>
-          <Button asChild>
-            <Link href="/dashboard/empleados/nuevo">
-              <Plus className="w-4 h-4 mr-2" />
-              Nuevo Empleado
-            </Link>
-          </Button>
-        </div>
+        <CardTitle className="flex items-center gap-2">
+          <UserCheck className="w-5 h-5" />
+          Personal Activo
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-6">

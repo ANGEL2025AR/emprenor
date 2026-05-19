@@ -76,6 +76,10 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'recharts'],
   },
+
+  turbopack: {
+    root: import.meta.dirname,
+  },
   
   poweredByHeader: false,
   reactStrictMode: true,

@@ -3,6 +3,8 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 import type { Document } from "@/lib/db/models"
+import { hasPermission } from "@/lib/auth/permissions"
+import { canAccessProjectId, withProjectScope } from "@/lib/auth/project-access"
 
 // GET - Listar documentos
 export async function GET(request: NextRequest) {
@@ -10,6 +12,10 @@ export async function GET(request: NextRequest) {
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role, "documents.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -21,9 +27,15 @@ export async function GET(request: NextRequest) {
 
     const db = await getDb()
 
-    const filter: Record<string, unknown> = {}
-    if (projectId) filter.projectId = new ObjectId(projectId)
+    let filter: Record<string, unknown> = {}
+    if (projectId) {
+      if (!(await canAccessProjectId(user, projectId))) {
+        return NextResponse.json({ error: "Sin acceso a este proyecto" }, { status: 403 })
+      }
+      filter.projectId = new ObjectId(projectId)
+    }
     if (type) filter.type = type
+    filter = await withProjectScope(user, filter)
 
     const [documents, total] = await Promise.all([
       db.collection<Document>("documents").find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).toArray(),

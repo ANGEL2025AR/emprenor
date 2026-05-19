@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
+import { withProjectScope } from "@/lib/auth/project-access"
 
 export async function GET() {
   try {
@@ -10,8 +12,13 @@ export async function GET() {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    if (!hasPermission(user.role, "certificates.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const db = await getDb()
-    const certificates = await db.collection("certificates").find({}).toArray()
+    const filter = await withProjectScope(user, {})
+    const certificates = await db.collection("certificates").find(filter).toArray()
 
     return NextResponse.json({ certificates })
   } catch (error) {

@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
-import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { requirePortalApi } from "@/lib/auth/portal-api"
 
 export async function GET() {
   try {
-    const user = await getCurrentUser()
-    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    const auth = await requirePortalApi("portal.art")
+    if ("response" in auth) return auth.response
+    const user = auth.user
 
     const db = await getDb()
     const isAdmin = ["super_admin", "admin", "gerente"].includes(user.role)
@@ -28,11 +29,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const user = await getCurrentUser()
-    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    const auth = await requirePortalApi("portal.art")
+    if ("response" in auth) return auth.response
+    const user = auth.user
 
     const body = await request.json()
-    const { date, location, description, injuries, witnesses } = body
+    const { date, location, description, injuries, injuryType, witnesses, severity } = body
 
     if (!date || !location?.trim() || !description?.trim()) {
       return NextResponse.json({ error: "Fecha, lugar y descripción son requeridos" }, { status: 400 })
@@ -45,7 +47,9 @@ export async function POST(request: Request) {
       date: new Date(date),
       location: location.trim(),
       description: description.trim(),
-      injuries: injuries || "",
+      injuries: injuries || injuryType || "",
+      injuryType: injuryType || injuries || "",
+      severity: severity || "leve",
       witnesses: witnesses || "",
       status: "reportado",
       artNotified: false,

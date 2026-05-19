@@ -17,7 +17,9 @@ import {
   CreditCard, Banknote, CalendarDays,
 } from "lucide-react"
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+import { createPortalListFetcher, portalWalletFetcher } from "@/lib/portal/swr"
+
+const advancesFetcher = createPortalListFetcher("advances")
 
 function formatCurrency(amount: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(amount)
@@ -36,15 +38,17 @@ const STATUS_MAP: Record<string, { label: string; variant: "default" | "secondar
 
 export default function BilleteraPage() {
   const { toast } = useToast()
-  const { data: wallet, mutate: mutateWallet } = useSWR("/api/portal/wallet", fetcher)
-  const { data: advances, mutate: mutateAdvances } = useSWR("/api/portal/advances", fetcher)
+  const { data: walletData, mutate: mutateWallet } = useSWR("/api/portal/wallet", portalWalletFetcher)
+  const { data: advances = [], mutate: mutateAdvances } = useSWR("/api/portal/advances", advancesFetcher)
   const [openAdvance, setOpenAdvance] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ amount: "", reason: "" })
 
-  const balance = wallet?.balance ?? 0
-  const pendingAdvances = advances?.filter((a: any) => a.status === "pendiente") ?? []
-  const approvedTotal = advances?.filter((a: any) => a.status === "aprobado").reduce((s: number, a: any) => s + a.amount, 0) ?? 0
+  const balance = walletData?.wallet?.balance ?? 0
+  const pendingAdvances = advances.filter((a) => a.status === "pendiente")
+  const approvedTotal = advances
+    .filter((a) => a.status === "aprobado")
+    .reduce((s, a) => s + Number(a.amount ?? 0), 0)
 
   async function handleRequestAdvance() {
     if (!form.amount || Number(form.amount) <= 0) {
@@ -163,7 +167,7 @@ export default function BilleteraPage() {
           <CardDescription>Tus adelantos y transacciones recientes</CardDescription>
         </CardHeader>
         <CardContent>
-          {!advances || advances.length === 0 ? (
+          {advances.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               <Banknote className="h-12 w-12 mx-auto mb-3 opacity-40" />
               <p>No hay movimientos registrados</p>

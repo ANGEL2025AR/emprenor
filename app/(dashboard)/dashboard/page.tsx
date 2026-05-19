@@ -22,6 +22,7 @@ import { DashboardCharts } from "@/components/dashboard/dashboard-charts"
 import { ExecutiveMetrics } from "@/components/dashboard/executive-metrics"
 import { ProjectStatusOverview } from "@/components/dashboard/project-status-overview"
 import { RevenueChart } from "@/components/dashboard/revenue-chart"
+import { ClientDashboard } from "@/components/dashboard/client-dashboard"
 
 async function getDashboardStats() {
   try {
@@ -109,6 +110,11 @@ async function getDashboardStats() {
 
 export default async function DashboardPage() {
   const user = await getCurrentUser()
+
+  if (user?.role === "cliente") {
+    return <ClientDashboard user={user} />
+  }
+
   const stats = await getDashboardStats()
 
   const userName = user?.name || "Usuario"

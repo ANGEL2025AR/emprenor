@@ -87,6 +87,9 @@ export interface Project extends BaseDocument {
     phone: string
     address: string
   }
+  /** Vínculo opcional al registro clients / usuario portal cliente */
+  clientId?: ObjectId
+  clientUserId?: ObjectId
   location: {
     address: string
     city: string

@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    if (!hasPermission(user.role, "tasks.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const { searchParams } = new URL(request.url)
     const projectId = searchParams.get("projectId")
     const status = searchParams.get("status")

@@ -47,6 +47,15 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "users.delete": ["super_admin"],
   "users.roles": ["super_admin"],
 
+  // Empleados (RRHH)
+  "employees.view": ["super_admin", "admin", "gerente"],
+  "employees.manage": ["super_admin", "admin", "gerente"],
+
+  // Documentación de empleados / legajo
+  "employees.documents.view": ["super_admin", "admin", "gerente", "supervisor"],
+  "employees.documents.manage": ["super_admin", "admin", "gerente"],
+  "employees.documents.upload_own": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
+
   // Clientes
   "clients.view": ["super_admin", "admin", "gerente", "supervisor"],
   "clients.create": ["super_admin", "admin", "gerente"],
@@ -92,6 +101,10 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "chat.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
   "chat.create": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
   "notifications.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
+
+  // Vista cliente: finanzas y avances solo en sus obras
+  "client.project_finance.view": ["cliente"],
+  "client.project_progress.view": ["cliente"],
 
   // Calendario
   "calendar.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
@@ -171,6 +184,16 @@ export const PERMISSION_CATEGORIES: Record<string, { label: string; permissions:
   users: {
     label: "Usuarios",
     permissions: ["users.view", "users.create", "users.edit", "users.delete", "users.roles"],
+  },
+  employees: {
+    label: "Empleados",
+    permissions: [
+      "employees.view",
+      "employees.manage",
+      "employees.documents.view",
+      "employees.documents.manage",
+      "employees.documents.upload_own",
+    ],
   },
   clients: {
     label: "Clientes",
@@ -294,7 +317,7 @@ export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
   gerente: "Gestión de proyectos, finanzas, reportes y coordinación de equipos.",
   supervisor: "Supervisión de obra, tareas, inspecciones e incidencias en campo.",
   trabajador: "Acceso a tareas asignadas, bitácora diaria, chat e incidencias.",
-  cliente: "Vista de proyectos, documentos, certificados y notificaciones.",
+  cliente: "Portal de obra: solo proyectos asignados, documentación, avances y pagos de su obra.",
 }
 
 export const ROLE_COLORS: Record<UserRole, string> = {
@@ -330,7 +353,7 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/pagos": "finance.view",
   "/dashboard/documentos": "documents.view",
   "/dashboard/usuarios": "users.view",
-  "/dashboard/empleados": "users.view",
+  "/dashboard/empleados": "employees.view",
   "/dashboard/clientes": "clients.view",
   "/dashboard/certificados": "certificates.view",
   "/dashboard/inventario": "inventory.view",

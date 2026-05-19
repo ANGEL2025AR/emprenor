@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
 
 export async function GET() {
   try {
@@ -9,6 +10,10 @@ export async function GET() {
 
     if (!user) {
       return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role, "chat.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const db = await getDb()
@@ -34,6 +39,10 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role, "chat.create")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const data = await request.json()

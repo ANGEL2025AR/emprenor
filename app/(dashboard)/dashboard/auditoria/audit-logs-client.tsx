@@ -38,10 +38,12 @@ interface AuditLog {
   previousData?: Record<string, unknown>
   newData?: Record<string, unknown>
   changes?: Array<{ field: string; oldValue: unknown; newValue: unknown }>
-  metadata: {
-    ip: string
-    userAgent: string
+  metadata?: {
+    ip?: string
+    userAgent?: string
   }
+  ip?: string
+  userAgent?: string
   status: "success" | "failure"
   errorMessage?: string
   severity: "low" | "medium" | "high" | "critical"
@@ -91,6 +93,25 @@ const severityColors: Record<string, string> = {
   critical: "bg-red-100 text-red-800",
 }
 
+function getLogIp(log: AuditLog): string {
+  return log.metadata?.ip ?? log.ip ?? "—"
+}
+
+function getLogUserAgent(log: AuditLog): string {
+  return log.metadata?.userAgent ?? log.userAgent ?? "—"
+}
+
+function normalizeAuditLog(log: AuditLog): AuditLog {
+  const ip = log.metadata?.ip ?? log.ip
+  const userAgent = log.metadata?.userAgent ?? log.userAgent
+  return {
+    ...log,
+    userName: log.userName || "Sistema",
+    userEmail: log.userEmail || "—",
+    metadata: { ip, userAgent },
+  }
+}
+
 export function AuditLogsClient() {
   const [logs, setLogs] = useState<AuditLog[]>([])
   const [total, setTotal] = useState(0)
@@ -117,7 +138,7 @@ export function AuditLogsClient() {
       const response = await fetch(`/api/audit-logs?${params}`)
       if (response.ok) {
         const data = await response.json()
-        setLogs(data.logs)
+        setLogs((data.logs as AuditLog[]).map(normalizeAuditLog))
         setTotal(data.total)
       }
     } catch (error) {
@@ -155,7 +176,7 @@ export function AuditLogsClient() {
               log.entityId || "",
               log.status,
               log.severity,
-              log.metadata.ip,
+              getLogIp(log),
             ].join(","),
           ),
         ].join("\n")
@@ -374,7 +395,7 @@ export function AuditLogsClient() {
                           {log.severity === "critical" && "Crítica"}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">{log.metadata.ip}</TableCell>
+                      <TableCell className="text-xs text-muted-foreground">{getLogIp(log)}</TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm" onClick={() => setSelectedLog(log)}>
                           <Eye className="h-4 w-4" />
@@ -444,11 +465,11 @@ export function AuditLogsClient() {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">IP</label>
-                  <p>{selectedLog.metadata.ip}</p>
+                  <p>{getLogIp(selectedLog)}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">User Agent</label>
-                  <p className="text-xs truncate">{selectedLog.metadata.userAgent}</p>
+                  <p className="text-xs truncate">{getLogUserAgent(selectedLog)}</p>
                 </div>
               </div>
 

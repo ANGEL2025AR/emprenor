@@ -139,9 +139,9 @@ export default function PortalDashboardPage() {
             </div>
             <div>
               <p className="text-xs text-slate-500 font-medium uppercase">Proximo cobro</p>
-              <p className="text-lg font-bold text-slate-900">
+              <div className="text-lg font-bold text-slate-900 min-h-[1.75rem]">
                 {loading ? <Skeleton className="h-5 w-24" /> : data?.nextPayDate}
-              </p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -152,9 +152,9 @@ export default function PortalDashboardPage() {
             </div>
             <div>
               <p className="text-xs text-slate-500 font-medium uppercase">Aguinaldo</p>
-              <p className="text-lg font-bold text-slate-900">
+              <div className="text-lg font-bold text-slate-900 min-h-[1.75rem]">
                 {loading ? <Skeleton className="h-5 w-24" /> : data?.aguinaldoDate}
-              </p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -165,9 +165,9 @@ export default function PortalDashboardPage() {
             </div>
             <div>
               <p className="text-xs text-slate-500 font-medium uppercase">Vacaciones disponibles</p>
-              <p className="text-lg font-bold text-slate-900">
+              <div className="text-lg font-bold text-slate-900 min-h-[1.75rem]">
                 {loading ? <Skeleton className="h-5 w-16" /> : `${data?.vacationDays} dias`}
-              </p>
+              </div>
             </div>
           </CardContent>
         </Card>

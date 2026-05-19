@@ -2,12 +2,14 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { requirePortalApi } from "@/lib/auth/portal-api"
 
 // GET: Obtener saldo y movimientos de billetera
 export async function GET() {
   try {
-    const user = await getCurrentUser()
-    if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    const auth = await requirePortalApi("portal.wallet")
+    if ("response" in auth) return auth.response
+    const user = auth.user
 
     const db = await getDb()
     const wallet = await db.collection("wallets").findOne({ userId: new ObjectId(user._id) })

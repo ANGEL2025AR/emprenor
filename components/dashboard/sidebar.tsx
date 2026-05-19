@@ -102,7 +102,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       name: "Clientes",
       href: "/dashboard/clientes",
       icon: Users,
-      permission: null,
+      permission: "clients.view" as const,
     },
     {
       name: "Tareas",
@@ -150,7 +150,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       name: "Empleados",
       href: "/dashboard/empleados",
       icon: UserCheck,
-      permission: "users.view" as const,
+      permission: "employees.view" as const,
     },
     {
       name: "Inspecciones",
@@ -168,7 +168,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       name: "Calendario",
       href: "/dashboard/calendario",
       icon: Calendar,
-      permission: null,
+      permission: "calendar.view" as const,
     },
     {
       name: "Automatizaciones",
@@ -361,7 +361,14 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
             className={cn("flex items-center gap-3 transition-all", isCollapsed && "lg:justify-center")}
           >
             <div className="relative w-20 h-20 flex-shrink-0">
-              <Image src="/images/logo-emprenor.png" alt="EMPRENOR" fill className="object-contain" priority />
+              <Image
+                src="/images/logo-emprenor.png"
+                alt="EMPRENOR"
+                fill
+                sizes="80px"
+                className="object-contain"
+                priority
+              />
             </div>
           </Link>
 

@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileText, Download, Calendar, DollarSign, TrendingUp, Eye } from "lucide-react"
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+import { createPortalListFetcher } from "@/lib/portal/swr"
+
+const payslipsFetcher = createPortalListFetcher("payslips")
 
 function formatCurrency(n: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(n)
@@ -19,12 +21,12 @@ function formatPeriod(period: string) {
 }
 
 export default function RecibosPage() {
-  const { data: payslips } = useSWR("/api/portal/payslips", fetcher)
+  const { data: payslips = [] } = useSWR("/api/portal/payslips", payslipsFetcher)
 
   const currentYear = new Date().getFullYear()
   const thisYearTotal = payslips
-    ?.filter((p: any) => p.period?.startsWith(String(currentYear)))
-    .reduce((s: number, p: any) => s + (p.netAmount || 0), 0) ?? 0
+    .filter((p) => String(p.period ?? "").startsWith(String(currentYear)))
+    .reduce((s, p) => s + Number(p.netAmount ?? 0), 0)
 
   return (
     <div className="space-y-6">
@@ -61,7 +63,7 @@ export default function RecibosPage() {
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-foreground">
-              {payslips?.[0] ? formatPeriod(payslips[0].period) : "---"}
+              {payslips?.[0] ? formatPeriod(String(payslips[0].period ?? "")) : "---"}
             </div>
           </CardContent>
         </Card>
@@ -87,7 +89,7 @@ export default function RecibosPage() {
                       <FileText className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground">{formatPeriod(slip.period)}</p>
+                      <p className="font-medium text-foreground">{formatPeriod(String(slip.period ?? ""))}</p>
                       <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
                         <span className="flex items-center gap-1">
                           <DollarSign className="h-3.5 w-3.5" />

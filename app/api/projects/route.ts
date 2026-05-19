@@ -6,6 +6,7 @@ import { projectSchema } from "@/lib/validations/schemas"
 import { generateCode } from "@/lib/auth/password"
 import type { Project } from "@/lib/db/models"
 import { ObjectId } from "mongodb"
+import { getClientProjectsFilter, isClientRole } from "@/lib/auth/project-access"
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,31 +28,36 @@ export async function GET(request: NextRequest) {
 
     const db = await getDb()
 
-    const filter: Record<string, unknown> = {}
-
-    if (user.role === "cliente") {
-      filter["client.email"] = user.email
-    }
-
     const userObjectId = new ObjectId(user._id)
+    const andFilters: Record<string, unknown>[] = []
 
-    const restrictedRoles: string[] = ["trabajador", "supervisor"]
-    if (restrictedRoles.includes(user.role)) {
-      filter.$or = [
-        { "team.managerId": userObjectId },
-        { "team.supervisorId": userObjectId },
-        { "team.workers": userObjectId },
-      ]
+    if (isClientRole(user.role)) {
+      andFilters.push(await getClientProjectsFilter(user))
+    } else {
+      const restrictedRoles: string[] = ["trabajador", "supervisor"]
+      if (restrictedRoles.includes(user.role)) {
+        andFilters.push({
+          $or: [
+            { "team.managerId": userObjectId },
+            { "team.supervisorId": userObjectId },
+            { "team.workers": userObjectId },
+          ],
+        })
+      }
     }
 
-    if (status) filter.status = status
+    if (status) andFilters.push({ status })
     if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { code: { $regex: search, $options: "i" } },
-        { "client.name": { $regex: search, $options: "i" } },
-      ]
+      andFilters.push({
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { code: { $regex: search, $options: "i" } },
+          { "client.name": { $regex: search, $options: "i" } },
+        ],
+      })
     }
+
+    const filter: Record<string, unknown> = andFilters.length > 0 ? { $and: andFilters } : {}
 
     const [projects, total] = await Promise.all([
       db.collection<Project>("projects").find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).toArray(),

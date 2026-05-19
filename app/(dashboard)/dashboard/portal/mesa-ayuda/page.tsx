@@ -17,7 +17,9 @@ import {
   Wrench, Monitor, Key, HardDrive, Users,
 } from "lucide-react"
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+import { createPortalListFetcher } from "@/lib/portal/swr"
+
+const ticketsFetcher = createPortalListFetcher("tickets")
 
 const CATEGORIES = [
   { value: "sistemas", label: "Sistemas / IT", icon: Monitor },
@@ -48,7 +50,7 @@ function formatDate(d: string) {
 
 export default function MesaAyudaPage() {
   const { toast } = useToast()
-  const { data: tickets, mutate } = useSWR("/api/portal/help-desk", fetcher)
+  const { data: tickets = [], mutate } = useSWR("/api/portal/help-desk", ticketsFetcher)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({

@@ -37,6 +37,14 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((data) => setIsClient(data?.user?.role === "cliente"))
+      .catch(() => setIsClient(false))
+  }, [])
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -107,12 +115,14 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             <h1 className="text-2xl font-bold text-slate-900 mt-1">{project.name}</h1>
           </div>
         </div>
-        <Button asChild>
-          <Link href={`/dashboard/proyectos/${id}/editar`}>
-            <Edit className="w-4 h-4 mr-2" />
-            Editar Proyecto
-          </Link>
-        </Button>
+        {!isClient && (
+          <Button asChild>
+            <Link href={`/dashboard/proyectos/${id}/editar`}>
+              <Edit className="w-4 h-4 mr-2" />
+              Editar Proyecto
+            </Link>
+          </Button>
+        )}
       </div>
 
       {/* Stats */}
@@ -186,9 +196,9 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       <Tabs defaultValue="info" className="space-y-4">
         <TabsList>
           <TabsTrigger value="info">Información</TabsTrigger>
-          <TabsTrigger value="tasks">Tareas</TabsTrigger>
-          <TabsTrigger value="documents">Documentos</TabsTrigger>
-          <TabsTrigger value="finances">Finanzas</TabsTrigger>
+          {!isClient && <TabsTrigger value="tasks">Tareas</TabsTrigger>}
+          <TabsTrigger value="documents">Documentación</TabsTrigger>
+          <TabsTrigger value="finances">{isClient ? "Pagos y avances" : "Finanzas"}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="info" className="space-y-4">
@@ -268,9 +278,11 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </div>
         </TabsContent>
 
-        <TabsContent value="tasks">
-          <ProjectTasksClient projectId={id} />
-        </TabsContent>
+        {!isClient && (
+          <TabsContent value="tasks">
+            <ProjectTasksClient projectId={id} />
+          </TabsContent>
+        )}
 
         <TabsContent value="documents">
           <Card>

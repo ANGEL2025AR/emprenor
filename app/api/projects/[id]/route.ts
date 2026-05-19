@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { ObjectId } from "mongodb"
 import type { Project } from "@/lib/db/models"
+import { findProjectForUser } from "@/lib/auth/project-access"
 
 // GET - Obtener proyecto por ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -13,16 +14,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    if (!hasPermission(user.role, "projects.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const { id } = await params
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: "ID inválido" }, { status: 400 })
     }
 
-    const db = await getDb()
-    const project = await db.collection<Project>("projects").findOne({
-      _id: new ObjectId(id),
-    })
+    const project = await findProjectForUser(user, id)
 
     if (!project) {
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })

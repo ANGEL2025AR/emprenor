@@ -3,6 +3,8 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import type { Quotation } from "@/lib/db/models"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
+import { getAssignedProjectIds, isClientRole } from "@/lib/auth/project-access"
 
 export async function GET() {
   try {
@@ -11,8 +13,25 @@ export async function GET() {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    const canView =
+      hasPermission(user.role, "finance.view") || hasPermission(user.role, "client.project_finance.view")
+    if (!canView) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const db = await getDb()
-    const quotations = await db.collection<Quotation>("quotations").find({}).sort({ createdAt: -1 }).toArray()
+    let filter: Record<string, unknown> = {}
+    if (isClientRole(user.role)) {
+      const projectIds = await getAssignedProjectIds(user)
+      const clientRecord = await db.collection("clients").findOne({
+        email: { $regex: new RegExp(`^${user.email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
+      })
+      const or: Record<string, unknown>[] = []
+      if (projectIds.length) or.push({ projectId: { $in: projectIds } })
+      if (clientRecord?._id) or.push({ clientId: clientRecord._id })
+      filter = or.length ? { $or: or } : { _id: { $exists: false } }
+    }
+    const quotations = await db.collection<Quotation>("quotations").find(filter).sort({ createdAt: -1 }).toArray()
 
     const serializedQuotations = quotations.map((quotation) => ({
       ...quotation,

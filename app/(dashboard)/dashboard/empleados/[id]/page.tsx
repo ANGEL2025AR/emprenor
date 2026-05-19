@@ -5,9 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { ArrowLeft, Mail, Phone, Briefcase, Calendar, MapPin, Edit, Trash2 } from "lucide-react"
+import { ArrowLeft, Mail, Phone, Briefcase, Calendar, MapPin, Edit } from "lucide-react"
+import DeleteEmployeeButton from "@/components/employees/delete-employee-button"
 import { getCurrentUser } from "@/lib/auth/session"
 import { safeDate } from "@/lib/utils"
+import EmployeeDocumentsManager from "@/components/employees/employee-documents-manager"
 
 async function getEmployee(id: string) {
   try {
@@ -30,6 +32,7 @@ async function getEmployee(id: string) {
       emergencyContact: employee.emergencyContact,
       status: employee.status || "activo",
       createdAt: safeDate(employee.createdAt, null),
+      userId: employee.userId?.toString(),
     }
   } catch {
     return null
@@ -74,10 +77,7 @@ export default async function EmpleadoDetallePage({ params }: { params: Promise<
               Editar
             </Link>
           </Button>
-          <Button variant="destructive">
-            <Trash2 className="w-4 h-4 mr-2" />
-            Eliminar
-          </Button>
+          <DeleteEmployeeButton employeeId={id} />
         </div>
       </div>
 
@@ -181,6 +181,13 @@ export default async function EmpleadoDetallePage({ params }: { params: Promise<
               </CardContent>
             </Card>
           )}
+
+          <EmployeeDocumentsManager
+            mode="admin"
+            employeeId={id}
+            userId={employee.userId}
+            employeeName={`${employee.name} ${employee.lastName || ""}`.trim()}
+          />
         </div>
 
         <div className="space-y-6">

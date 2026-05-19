@@ -1,3 +1,5 @@
+import dns from "node:dns"
+import { platform } from "node:os"
 import { MongoClient, type Db } from "mongodb"
 
 const uri = process.env.MONGODB_URI || ""
@@ -14,10 +16,21 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined
 }
 
+function configureDnsForAtlas(): void {
+  if (platform() !== "win32") return
+  try {
+    dns.setServers(["8.8.8.8", "1.1.1.1"])
+  } catch {
+    /* DNS del sistema */
+  }
+}
+
 function getClientPromise(): Promise<MongoClient> {
   if (!uri) {
     return Promise.reject(new Error("MONGODB_URI no esta definida en las variables de entorno"))
   }
+
+  configureDnsForAtlas()
 
   if (process.env.NODE_ENV === "development") {
     if (!global._mongoClientPromise) {

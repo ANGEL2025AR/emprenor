@@ -3,12 +3,22 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 import { logActivity } from "@/lib/audit/audit-log"
+import { hasPermission } from "@/lib/auth/permissions"
+import { canAccessProjectId, withProjectScope } from "@/lib/auth/project-access"
+import { isClientRole } from "@/lib/auth/project-access"
 
 export async function GET(request: Request) {
   try {
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    const canView = isClientRole(user.role)
+      ? hasPermission(user.role, "client.project_progress.view")
+      : hasPermission(user.role, "daily_logs.view")
+    if (!canView) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -23,6 +33,9 @@ export async function GET(request: Request) {
     } = {}
 
     if (projectId) {
+      if (!(await canAccessProjectId(user, projectId))) {
+        return NextResponse.json({ error: "Sin acceso a este proyecto" }, { status: 403 })
+      }
       query.projectId = new ObjectId(projectId)
     }
 
@@ -32,9 +45,11 @@ export async function GET(request: Request) {
       if (endDate) query.date.$lte = new Date(endDate)
     }
 
+    const scopedQuery = await withProjectScope(user, query as Record<string, unknown>)
+
     const dailyLogs = await db
       .collection("daily_logs")
-      .find(query)
+      .find(scopedQuery)
       .sort({ date: -1, createdAt: -1 })
       .limit(100)
       .toArray()

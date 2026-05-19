@@ -17,7 +17,9 @@ import {
   HardHat, Activity, FileWarning,
 } from "lucide-react"
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+import { createPortalListFetcher } from "@/lib/portal/swr"
+
+const accidentsFetcher = createPortalListFetcher("reports")
 
 const SEVERITY_MAP: Record<string, { label: string; color: string }> = {
   leve: { label: "Leve", color: "bg-amber-100 text-amber-700" },
@@ -38,7 +40,7 @@ function formatDate(d: string) {
 
 export default function ARTPage() {
   const { toast } = useToast()
-  const { data: accidents, mutate } = useSWR("/api/portal/accidents", fetcher)
+  const { data: accidents = [], mutate } = useSWR("/api/portal/accidents", accidentsFetcher)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
@@ -60,7 +62,10 @@ export default function ARTPage() {
       const res = await fetch("/api/portal/accidents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          injuries: form.injuryType,
+        }),
       })
       if (!res.ok) {
         const err = await res.json()
@@ -202,7 +207,7 @@ export default function ARTPage() {
                           <AlertTriangle className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="font-medium text-foreground">{acc.injuryType || "Accidente laboral"}</p>
+                          <p className="font-medium text-foreground">{acc.injuryType || acc.injuries || "Accidente laboral"}</p>
                           <p className="text-sm text-muted-foreground mt-1">{acc.description}</p>
                           <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{formatDate(acc.date)}</span>

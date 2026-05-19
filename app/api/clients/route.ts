@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
+import { hasPermission } from "@/lib/auth/permissions"
 
 export async function GET() {
   try {
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role, "clients.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const db = await getDb()

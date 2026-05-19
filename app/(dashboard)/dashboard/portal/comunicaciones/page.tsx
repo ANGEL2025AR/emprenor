@@ -8,7 +8,9 @@ import {
   Info, Star, Bell, FileText,
 } from "lucide-react"
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+import { createPortalListFetcher } from "@/lib/portal/swr"
+
+const announcementsFetcher = createPortalListFetcher("announcements")
 
 const TYPE_MAP: Record<string, { label: string; icon: any; color: string }> = {
   informativo: { label: "Informativo", icon: Info, color: "bg-blue-100 text-blue-600" },
@@ -23,9 +25,9 @@ function formatDate(d: string) {
 }
 
 export default function ComunicacionesPage() {
-  const { data: announcements } = useSWR("/api/portal/announcements", fetcher)
+  const { data: announcements = [] } = useSWR("/api/portal/announcements", announcementsFetcher)
 
-  const unread = announcements?.filter((a: any) => !a.read) ?? []
+  const unread = announcements.filter((a) => !a.read)
 
   return (
     <div className="space-y-6">

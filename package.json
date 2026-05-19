@@ -4,14 +4,17 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "node --require ./scripts/dns-windows-atlas.cjs ./node_modules/next/dist/bin/next dev",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "next start",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "verify": "npm run type-check && npm run build",
+    "audit:routes": "node --require ./scripts/dns-windows-atlas.cjs --env-file=.env.local scripts/audit-dashboard-routes.mjs",
+    "audit:apis": "node --require ./scripts/dns-windows-atlas.cjs --env-file=.env.local scripts/audit-dashboard-apis.mjs"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "latest",

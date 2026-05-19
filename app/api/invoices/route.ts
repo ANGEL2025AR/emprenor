@@ -3,6 +3,8 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import type { Invoice } from "@/lib/db/models"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
+import { canAccessProjectId, withProjectScope } from "@/lib/auth/project-access"
 
 export async function GET(request: Request) {
   try {
@@ -11,13 +13,23 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    const canViewFinance =
+      hasPermission(user.role, "finance.view") || hasPermission(user.role, "client.project_finance.view")
+    if (!canViewFinance) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const { searchParams } = new URL(request.url)
     const projectId = searchParams.get("projectId")
 
-    const filter: Record<string, unknown> = {}
+    let filter: Record<string, unknown> = {}
     if (projectId) {
+      if (!(await canAccessProjectId(user, projectId))) {
+        return NextResponse.json({ error: "Sin acceso a este proyecto" }, { status: 403 })
+      }
       filter.projectId = new ObjectId(projectId)
     }
+    filter = await withProjectScope(user, filter)
 
     const db = await getDb()
     const invoices = await db.collection<Invoice>("invoices").find(filter).sort({ issueDate: -1 }).toArray()

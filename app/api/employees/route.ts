@@ -2,12 +2,18 @@ import { NextResponse } from "next/server"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
+import { hasPermission } from "@/lib/auth/permissions"
+import { linkEmployeeToUserByEmail } from "@/lib/employee-documents/resolve-target"
 
 export async function GET() {
   try {
     const user = await getCurrentUser()
     if (!user || !user._id) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role, "employees.view")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const db = await getDb()
@@ -27,6 +33,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
     }
 
+    if (!hasPermission(user.role, "employees.manage")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+    }
+
     const body = await request.json()
 
     // Support both form format (name as full name) and API format (name + lastName)
@@ -41,6 +51,13 @@ export async function POST(request: Request) {
     }
 
     const db = await getDb()
+    const email = (body.email || "").toLowerCase()
+    let linkedUserId: ObjectId | undefined
+    if (email) {
+      const linkedUser = await db.collection("users").findOne({ email })
+      if (linkedUser?._id) linkedUserId = linkedUser._id as ObjectId
+    }
+
     const result = await db.collection("employees").insertOne({
       name: fullName,
       firstName,
@@ -48,7 +65,7 @@ export async function POST(request: Request) {
       role,
       position: body.position || role,
       specialty: body.specialty || "",
-      email: body.email || "",
+      email,
       phone: body.phone || "",
       dni: body.dni || "",
       address: body.address || "",
@@ -59,10 +76,15 @@ export async function POST(request: Request) {
       emergencyPhone: body.emergencyPhone || "",
       notes: body.notes || "",
       status: "activo",
+      userId: linkedUserId,
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: new ObjectId(user._id),
     })
+
+    if (!linkedUserId && email) {
+      await linkEmployeeToUserByEmail(result.insertedId, email)
+    }
 
     return NextResponse.json({
       success: true,

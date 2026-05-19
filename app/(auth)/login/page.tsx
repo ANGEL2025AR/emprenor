@@ -66,6 +66,7 @@ export default function LoginPage() {
               width={200}
               height={60}
               className="h-12 w-auto"
+              style={{ width: "auto", height: "3rem" }}
               priority
             />
             <h1 className="text-4xl font-bold text-slate-900 leading-tight">Sistema de Gestión de Construcción</h1>
@@ -106,6 +107,7 @@ export default function LoginPage() {
                 width={180}
                 height={54}
                 className="h-10 w-auto"
+                style={{ width: "auto", height: "2.5rem" }}
                 priority
               />
             </div>

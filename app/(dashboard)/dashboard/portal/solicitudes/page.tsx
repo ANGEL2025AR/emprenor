@@ -18,7 +18,9 @@ import {
   FileText, AlertCircle, Loader2,
 } from "lucide-react"
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+import { createPortalListFetcher } from "@/lib/portal/swr"
+
+const leaveRequestsFetcher = createPortalListFetcher("requests")
 
 const LEAVE_TYPES = [
   { value: "vacaciones", label: "Vacaciones", icon: Palmtree, color: "text-emerald-600 bg-emerald-100" },
@@ -41,7 +43,7 @@ function formatDate(d: string) {
 
 export default function SolicitudesPage() {
   const { toast } = useToast()
-  const { data: requests, mutate } = useSWR("/api/portal/leave-requests", fetcher)
+  const { data: requests = [], mutate } = useSWR("/api/portal/leave-requests", leaveRequestsFetcher)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
@@ -51,8 +53,8 @@ export default function SolicitudesPage() {
     reason: "",
   })
 
-  const pending = requests?.filter((r: any) => r.status === "pendiente") ?? []
-  const approved = requests?.filter((r: any) => r.status === "aprobada") ?? []
+  const pending = requests.filter((r) => r.status === "pendiente")
+  const approved = requests.filter((r) => r.status === "aprobada")
   const rejected = requests?.filter((r: any) => r.status === "rechazada") ?? []
 
   async function handleSubmit() {

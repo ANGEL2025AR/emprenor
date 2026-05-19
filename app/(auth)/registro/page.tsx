@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, Eye, EyeOff, Loader2, ArrowRight, CheckCircle2, Shield, Building2, Users } from "lucide-react"
+import { LOGO_LIGHT } from "@/lib/brand/logo"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -82,10 +83,11 @@ export default function RegisterPage() {
         <div className="hidden lg:block space-y-8 px-8">
           <div className="space-y-4">
             <Image
-              src="/images/logo-emprenor-dark.png"
+              src={LOGO_LIGHT.src}
               alt="EMPRENOR Logo"
-              width={200}
-              height={60}
+              width={LOGO_LIGHT.width}
+              height={LOGO_LIGHT.height}
+              unoptimized
               className="h-12 w-auto"
               priority
             />
@@ -119,10 +121,11 @@ export default function RegisterPage() {
           <CardHeader className="text-center space-y-4 pb-6 pt-8">
             <div className="lg:hidden flex justify-center">
               <Image
-                src="/images/logo-emprenor-dark.png"
+                src={LOGO_LIGHT.src}
                 alt="EMPRENOR Logo"
-                width={180}
-                height={54}
+                width={LOGO_LIGHT.width}
+                height={LOGO_LIGHT.height}
+                unoptimized
                 className="h-10 w-auto"
                 priority
               />

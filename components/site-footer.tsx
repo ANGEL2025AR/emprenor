@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import { LOGO_LIGHT } from "@/lib/brand/logo"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export function SiteFooter() {
@@ -11,10 +12,11 @@ export function SiteFooter() {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/logo-emprenor-dark.png"
+                src={LOGO_LIGHT.src}
                 alt="EMPRENOR Logo"
-                width={176}
-                height={29}
+                width={LOGO_LIGHT.width}
+                height={LOGO_LIGHT.height}
+                unoptimized
                 className="h-9 w-auto"
               />
             </Link>

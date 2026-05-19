@@ -145,7 +145,7 @@ def create_icon_from_white_logo(white_logo: Path, icon_path: Path) -> None:
     ox = (side - left.width) // 2
     oy = (side - left.height) // 2
     square.paste(left, (ox, oy), left)
-    square = square.resize((128, 128), Image.Resampling.LANCZOS)
+    square = square.resize((256, 256), Image.Resampling.LANCZOS)
     square.save(icon_path, "PNG", optimize=True)
     print(f"  OK {icon_path.relative_to(ROOT)} (icono)")
 

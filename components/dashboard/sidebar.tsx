@@ -54,6 +54,7 @@ import {
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { LOGO_DARK_BG, LOGO_ICON_LIGHT } from "@/lib/brand/logo"
 
 interface DashboardSidebarProps {
   user: SerializableUser
@@ -416,9 +417,10 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
               )}
             >
               <Image
-                src={isCollapsed ? "/images/logo-icon-inverted.png" : "/images/logo-emprenor-white.png"}
+                src={isCollapsed ? LOGO_ICON_LIGHT.src : LOGO_DARK_BG.src}
                 alt="EMPRENOR"
                 fill
+                unoptimized
                 sizes={isCollapsed ? "40px" : "160px"}
                 className="object-contain object-left"
                 priority

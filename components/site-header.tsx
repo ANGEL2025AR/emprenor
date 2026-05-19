@@ -3,6 +3,7 @@
 import type React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { LOGO_LIGHT } from "@/lib/brand/logo"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -42,10 +43,11 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center" aria-label="EMPRENOR - Ir a página de inicio">
           <Image
-            src="/images/logo-emprenor-dark.png"
+            src={LOGO_LIGHT.src}
             alt="EMPRENOR Logo"
-            width={176}
-            height={29}
+            width={LOGO_LIGHT.width}
+            height={LOGO_LIGHT.height}
+            unoptimized
             className="h-8 sm:h-10 md:h-12 w-auto"
             style={{ width: "auto" }}
             priority

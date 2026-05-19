@@ -4,20 +4,11 @@ import { ArrowLeft, Mail, Phone, MapPin, Building2, FileText, DollarSign, Calend
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { getInternalAppUrl } from "@/lib/site-url"
-
-async function getClient(id: string) {
-  const res = await fetch(`${getInternalAppUrl()}/api/clients/${id}`, {
-    cache: "no-store",
-  })
-
-  if (!res.ok) return null
-  return res.json()
-}
+import { getClientById } from "@/lib/clients/get-client-by-id"
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const client = await getClient(id)
+  const client = await getClientById(id)
 
   if (!client) {
     notFound()
@@ -62,14 +53,14 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               <Phone className="w-5 h-5 text-muted-foreground mt-0.5" />
               <div>
                 <p className="text-sm text-muted-foreground">Teléfono</p>
-                <p className="font-medium">{client.phone}</p>
+                <p className="font-medium">{client.phone || "—"}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
               <div>
                 <p className="text-sm text-muted-foreground">Dirección</p>
-                <p className="font-medium">{client.address}</p>
+                <p className="font-medium">{client.address || "—"}</p>
               </div>
             </div>
           </CardContent>
@@ -110,7 +101,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Proyectos</p>
-                <p className="text-2xl font-bold">{client.stats?.projects || 0}</p>
+                <p className="text-2xl font-bold">{client.stats.projects}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -119,7 +110,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total Facturado</p>
-                <p className="text-2xl font-bold">${(client.stats?.totalInvoiced || 0).toLocaleString()}</p>
+                <p className="text-2xl font-bold">${client.stats.totalInvoiced.toLocaleString("es-AR")}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -128,7 +119,9 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Cliente desde</p>
-                <p className="text-xl font-bold">{new Date(client.createdAt).toLocaleDateString()}</p>
+                <p className="text-xl font-bold">
+                  {new Date(client.createdAt).toLocaleDateString("es-AR")}
+                </p>
               </div>
             </div>
           </div>

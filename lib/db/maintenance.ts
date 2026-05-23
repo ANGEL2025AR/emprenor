@@ -5,7 +5,7 @@ import {
   EMPRENOR_OFICINAS,
   RM_LEGAL,
 } from "@/lib/company/constants"
-import type { SiteService } from "@/lib/db/models"
+import type { SitePageDocument, SiteService } from "@/lib/db/models"
 import { DEFAULT_PORTAL_SETTINGS, mergePortalSettings } from "@/lib/portal/portal-settings-shared"
 import { SITE_DEFAULT_HERO } from "@/lib/site/defaults"
 import { SITE_PAGE_SLUGS } from "@/lib/site/constants"
@@ -312,16 +312,22 @@ export async function cleanupLegacyBrandInCms(db: Db): Promise<{
   for (const doc of services) {
     const { value, changed } = scrubLegacyBrandInValue(doc)
     if (changed) {
-      await db.collection("site_services").replaceOne({ _id: doc._id }, value as SiteService)
+      await db.collection<SiteService>("site_services").replaceOne(
+        { _id: doc._id },
+        value as SiteService,
+      )
       siteServices++
     }
   }
 
-  const pages = await db.collection("site_pages").find({}).toArray()
+  const pages = await db.collection<SitePageDocument>("site_pages").find({}).toArray()
   for (const doc of pages) {
     const { value, changed } = scrubLegacyBrandInValue(doc)
     if (changed) {
-      await db.collection("site_pages").replaceOne({ _id: doc._id }, value)
+      await db.collection<SitePageDocument>("site_pages").replaceOne(
+        { _id: doc._id },
+        value as SitePageDocument,
+      )
       sitePages++
     }
   }

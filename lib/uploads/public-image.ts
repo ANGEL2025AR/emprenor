@@ -11,9 +11,9 @@ export const PUBLIC_IMAGE_MIME_TYPES = [
   "image/avif",
 ] as const
 
-export type PublicImageFolder = "site" | "hero" | "public-projects" | "compliance"
+export type PublicImageFolder = "site" | "hero" | "public-projects" | "compliance" | "services"
 
-const ALLOWED_FOLDERS: PublicImageFolder[] = ["site", "hero", "public-projects", "compliance"]
+const ALLOWED_FOLDERS: PublicImageFolder[] = ["site", "hero", "public-projects", "compliance", "services"]
 
 export function sanitizeUploadFileName(name: string): string {
   return name.replace(/[^a-zA-Z0-9._-]/g, "_")

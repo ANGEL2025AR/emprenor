@@ -3,15 +3,18 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { CookieConsentBanner } from "@/components/public/cookie-consent-banner"
+import { getPublishedServices, toServiceNavItem } from "@/lib/site/get-services"
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const services = (await getPublishedServices()).map(toServiceNavItem)
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader services={services} />
       {children}
       <SiteFooter />
       <WhatsAppFloat />

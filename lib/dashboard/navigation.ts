@@ -40,6 +40,7 @@ import {
   Radio,
   ClipboardList,
   Globe,
+  Wrench,
 } from "lucide-react"
 import type { PortalModuleKey } from "@/lib/portal/portal-settings-shared"
 
@@ -233,6 +234,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     items: [
       { name: "Proyectos públicos", href: "/dashboard/sitio-web/proyectos", icon: Globe, permission: "admin.access" },
       { name: "Portadas (slider)", href: "/dashboard/sitio-web/paginas", icon: LayoutTemplate, permission: "admin.access" },
+      { name: "Servicios", href: "/dashboard/sitio-web/servicios", icon: Wrench, permission: "admin.access" },
     ],
   },
 ]

@@ -35,8 +35,15 @@ import {
   Shield,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import type { ServiceNavItem } from "@/lib/site/get-services"
+import { getServiceIcon } from "@/lib/site/service-icons"
 
-export function SiteHeader() {
+const FALLBACK_SERVICES: ServiceNavItem[] = [
+  { slug: "construccion", title: "Construcción", shortDescription: "", href: "/servicios/construccion", icon: "Building2" },
+  { slug: "remodelacion", title: "Remodelación", shortDescription: "", href: "/servicios/remodelacion", icon: "Hammer" },
+]
+
+export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: ServiceNavItem[] }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -74,33 +81,17 @@ export function SiteHeader() {
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[500px] gap-3 p-4 md:w-[600px] md:grid-cols-2">
-                    <ListItem href="/servicios/construccion" icon={Building2} title="Construcción">
-                      Proyectos residenciales, comerciales e industriales
+                    <ListItem href="/servicios" icon={Wrench} title="Todos los servicios">
+                      Ver catálogo completo
                     </ListItem>
-                    <ListItem href="/servicios/remodelacion" icon={Hammer} title="Remodelación">
-                      Renovación y actualización de espacios
-                    </ListItem>
-                    <ListItem href="/servicios/viviendas-prefabricadas" icon={Home} title="Viviendas Prefabricadas">
-                      Construcción rápida y eficiente de viviendas modulares
-                    </ListItem>
-                    <ListItem href="/servicios/obras-industriales" icon={Factory} title="Obras Industriales">
-                      Estructuras metálicas y establecimientos agropecuarios
-                    </ListItem>
-                    <ListItem href="/servicios/gas" icon={Flame} title="Instalaciones de Gas">
-                      Gas natural, envasado y GLP certificado
-                    </ListItem>
-                    <ListItem href="/servicios/albanileria" icon={Building2} title="Albañilería">
-                      Trabajos especializados en mampostería
-                    </ListItem>
-                    <ListItem href="/servicios/electricidad" icon={Zap} title="Electricidad">
-                      Instalaciones y reparaciones eléctricas
-                    </ListItem>
-                    <ListItem href="/servicios/plomeria" icon={Droplets} title="Plomería">
-                      Sistemas hidráulicos y sanitarios
-                    </ListItem>
-                    <ListItem href="/servicios/pintura" icon={PaintBucket} title="Pintura">
-                      Acabados y pintura profesional
-                    </ListItem>
+                    {services.map((s) => {
+                      const Icon = getServiceIcon(s.icon)
+                      return (
+                        <ListItem key={s.slug} href={s.href} icon={Icon} title={s.title}>
+                          {s.shortDescription}
+                        </ListItem>
+                      )
+                    })}
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>

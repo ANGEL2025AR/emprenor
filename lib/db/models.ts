@@ -833,6 +833,74 @@ export interface SitePageDocument extends BaseDocument {
   updatedBy?: ObjectId
 }
 
+/** Paso del proceso de un servicio (editable desde admin). */
+export interface SiteServiceProcessStep {
+  order: number
+  title: string
+  description: string
+}
+
+/** Categoría o tipo de trabajo dentro de un servicio. */
+export interface SiteServiceWorkCategory {
+  title: string
+  description?: string
+  image?: string
+  items: string[]
+}
+
+export type SiteServiceIconKey =
+  | "Building2"
+  | "Hammer"
+  | "Home"
+  | "Factory"
+  | "Flame"
+  | "Lightbulb"
+  | "Droplets"
+  | "Paintbrush"
+
+/** Servicio publicado en el sitio web (CMS). */
+export interface SiteService extends BaseDocument {
+  slug: string
+  title: string
+  shortDescription: string
+  heroImage: string
+  heroImageAlt: string
+  gallery: string[]
+  icon: SiteServiceIconKey
+  colorGradient: string
+  features: string[]
+  overviewTitle: string
+  overviewParagraphs: string[]
+  processSteps: SiteServiceProcessStep[]
+  workCategories: SiteServiceWorkCategory[]
+  benefits: string[]
+  published: boolean
+  order: number
+  seoTitle?: string
+  seoDescription?: string
+  updatedBy?: ObjectId
+}
+
+/** Sección de contenido editable (páginas institucionales, FAQ, nosotros). */
+export interface SiteContentSection {
+  id: string
+  title: string
+  body: string
+}
+
+export interface SiteContentPage extends BaseDocument {
+  slug: string
+  title: string
+  subtitle: string
+  heroImage?: string
+  heroImageAlt?: string
+  sections: SiteContentSection[]
+  ctaLabel?: string
+  ctaHref?: string
+  published: boolean
+  updatedBy?: ObjectId
+}
+
 // ============================================
 // RECURSOS HUMANOS POR PROYECTO
 // ============================================

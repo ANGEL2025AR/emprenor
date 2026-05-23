@@ -168,6 +168,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
 
   const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
   const homeItem = useMemo(() => getDashboardHome(userRole), [userRole])
+  const homeHref = homeItem?.href ?? "/dashboard"
 
   useEffect(() => {
     setIsOpen(false)
@@ -230,7 +231,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
         <div className="dashboard-sidebar-glow" aria-hidden />
         <div className="relative flex h-16 items-center justify-between px-4 border-b border-white/5 flex-shrink-0 z-10">
           <Link
-            href="/dashboard"
+            href={homeHref}
             className={cn("flex items-center gap-3 transition-all", isCollapsed && "lg:justify-center")}
           >
             <div

@@ -40,6 +40,7 @@ import { Input } from "@/components/ui/input"
 import { ROLE_LABELS } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
 import { isPortalEmployeeRole } from "@/lib/auth/portal-roles"
+import { useMounted } from "@/lib/hooks/use-mounted"
 
 interface DashboardHeaderProps {
   user: SerializableUser
@@ -56,6 +57,7 @@ interface NotificationPreview {
 
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   const router = useRouter()
+  const mounted = useMounted()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
@@ -303,27 +305,33 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
         </div>
       </header>
 
-      {/* Search Command Dialog */}
-      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-        <CommandInput placeholder="Buscar en el dashboard..." />
-        <CommandList>
-          <CommandEmpty>No se encontraron resultados.</CommandEmpty>
-          <CommandGroup heading="Navegación rápida">
-            {quickLinks.map((link) => (
-              <CommandItem
-                key={link.href}
-                onSelect={() => {
-                  router.push(link.href)
-                  setSearchOpen(false)
-                }}
-              >
-                <link.icon className="mr-2 h-4 w-4" />
-                <span>{link.name}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
+      {mounted ? (
+        <CommandDialog
+          open={searchOpen}
+          onOpenChange={setSearchOpen}
+          title="Buscar en el dashboard"
+          description="Accesos rápidos según tu rol"
+        >
+          <CommandInput placeholder="Buscar en el dashboard..." />
+          <CommandList>
+            <CommandEmpty>No se encontraron resultados.</CommandEmpty>
+            <CommandGroup heading="Navegación rápida">
+              {quickLinks.map((link) => (
+                <CommandItem
+                  key={link.href}
+                  onSelect={() => {
+                    router.push(link.href)
+                    setSearchOpen(false)
+                  }}
+                >
+                  <link.icon className="mr-2 h-4 w-4" />
+                  <span>{link.name}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </CommandDialog>
+      ) : null}
     </>
   )
 }

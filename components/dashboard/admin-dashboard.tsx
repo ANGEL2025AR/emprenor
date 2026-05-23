@@ -17,7 +17,7 @@ async function getAdminOverview() {
       db.collection("projects").countDocuments(),
       db.collection("projects").countDocuments({ status: "en_progreso" }),
       db.collection("clients").countDocuments(),
-      db.collection("contactos").countDocuments({ status: { $in: ["nuevo", "pendiente", "new", "pending"] } }),
+      db.collection("contactos").countDocuments({ status: { $in: ["nuevo", "pendiente", "en_proceso"] } }),
     ])
     return { projects, activeProjects, clients, pendingContacts }
   } catch {

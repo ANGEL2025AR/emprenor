@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, ClipboardList } from "lucide-react"
+import { formatClientComplianceBadge } from "@/lib/compliance/client-types"
 
 export default async function MiObraListPage() {
   const user = await getCurrentUser()
@@ -26,9 +27,10 @@ export default async function MiObraListPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Cumplimiento institucional</h1>
+        <h1 className="text-2xl font-bold">Cumplimiento de obra</h1>
         <p className="text-muted-foreground">
-          Nómina, ART, documentación social y ambiental exigida por clientes como FAO.
+          Nómina, ART, documentación y seguimiento exigido por tu contrato: municipios, ministerios,
+          empresas, consorcios, organismos internacionales o particulares.
         </p>
       </div>
 
@@ -47,7 +49,12 @@ export default async function MiObraListPage() {
                   <ClipboardList className="h-5 w-5" />
                   {p.name}
                 </CardTitle>
-                <Badge variant="secondary">{p.institutionalCompliance?.clientOrganization ?? "Cliente institucional"}</Badge>
+                <Badge variant="secondary">
+                  {formatClientComplianceBadge(
+                    p.institutionalCompliance?.clientType,
+                    p.institutionalCompliance?.clientOrganization,
+                  )}
+                </Badge>
               </CardHeader>
               <CardContent>
                 <Button asChild>

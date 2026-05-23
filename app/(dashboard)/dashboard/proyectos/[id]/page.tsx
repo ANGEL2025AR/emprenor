@@ -118,7 +118,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         {!isClient && (
           <Button variant="outline" asChild>
             <Link href={`/dashboard/proyectos/${id}/cumplimiento-cliente`}>
-              Cumplimiento cliente
+              Portal del cliente
             </Link>
           </Button>
         )}
@@ -126,7 +126,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           <Button variant="outline" asChild>
             <Link href={`/dashboard/mi-obra/${id}`}>
               <ClipboardList className="w-4 h-4 mr-2" />
-              Cumplimiento institucional
+              Cumplimiento de obra
             </Link>
           </Button>
         ) : null}

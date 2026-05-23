@@ -230,7 +230,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
   },
 ]
 
-/** Menú exclusivo rol cliente (portal de obra / FAO). */
+/** Menú exclusivo rol cliente (portal de obra). */
 export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
   {
     id: "mi-obra",
@@ -238,7 +238,7 @@ export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
     icon: HardHat,
     items: [
       { name: "Mis obras", href: "/dashboard", icon: LayoutDashboard, permission: null },
-      { name: "Cumplimiento institucional", href: "/dashboard/mi-obra", icon: ClipboardList, permission: "client.compliance.view" },
+      { name: "Cumplimiento de obra", href: "/dashboard/mi-obra", icon: ClipboardList, permission: "client.compliance.view" },
       { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" },
     ],
   },

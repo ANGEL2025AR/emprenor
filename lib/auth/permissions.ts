@@ -107,7 +107,7 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "client.project_progress.view": ["cliente"],
   "client.compliance.view": ["cliente"],
 
-  // Cumplimiento institucional (FAO / clientes exigentes) — gestión interna
+  // Cumplimiento de obra (portal del cliente) — gestión interna
   "compliance.manage": ["super_admin", "admin", "gerente", "supervisor"],
 
   // Calendario

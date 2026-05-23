@@ -56,14 +56,14 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
             <div>
               <p className="font-semibold flex items-center gap-2">
                 <ClipboardList className="h-5 w-5 text-emerald-600" />
-                Cumplimiento institucional (FAO / auditoría)
+                Cumplimiento de obra
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                Nómina, ART, documentos sociales, incidentes y compras locales de tu obra.
+                Nómina, ART, documentos, incidentes y compras locales según tu contrato con EMPRENOR.
               </p>
             </div>
             <Button asChild>
-              <Link href="/dashboard/mi-obra">Abrir portal de cumplimiento</Link>
+              <Link href="/dashboard/mi-obra">Abrir cumplimiento de obra</Link>
             </Button>
           </CardContent>
         </DashboardPanel>

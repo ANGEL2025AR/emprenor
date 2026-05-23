@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import type { ChecklistItem } from "@/lib/compliance/roster"
+import type { ClientComplianceType } from "@/lib/db/models"
+import { getClientComplianceLabel } from "@/lib/compliance/client-types"
 import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react"
 
 type SummaryPanelProps = {
@@ -11,6 +13,7 @@ type SummaryPanelProps = {
   checklist: ChecklistItem[]
   projectName: string
   clientOrganization?: string
+  clientType?: ClientComplianceType
   openIncidents: number
   openComplaints: number
   localPurchasesTotal: number
@@ -28,6 +31,7 @@ export function ComplianceSummaryPanel({
   checklist,
   projectName,
   clientOrganization,
+  clientType,
   openIncidents,
   openComplaints,
   localPurchasesTotal,
@@ -37,9 +41,12 @@ export function ComplianceSummaryPanel({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Centro de cumplimiento — {projectName}</CardTitle>
-          {clientOrganization ? (
-            <p className="text-sm text-muted-foreground">Cliente institucional: {clientOrganization}</p>
-          ) : null}
+          <p className="text-sm text-muted-foreground">
+            Cliente: {clientOrganization?.trim() || getClientComplianceLabel(clientType)}
+            {clientOrganization?.trim() && clientType ? (
+              <span className="text-muted-foreground/80"> · {getClientComplianceLabel(clientType)}</span>
+            ) : null}
+          </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

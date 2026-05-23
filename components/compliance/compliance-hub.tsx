@@ -17,8 +17,12 @@ import { useToast } from "@/hooks/use-toast"
 import { ComplianceSummaryPanel } from "@/components/compliance/summary-panel"
 import { COMPLIANCE_DOC_LABELS, COMPLAINT_STATUS_LABELS, INCIDENT_STATUS_LABELS, newRosterEntryId, uploadComplianceFile } from "@/components/compliance/constants"
 import type { ChecklistItem } from "@/lib/compliance/roster"
-import type { ComplianceDocumentCategory, ProjectInstitutionalCompliance, WorkforceRosterEntry } from "@/lib/db/models"
+import type { ClientComplianceType, ComplianceDocumentCategory, ProjectInstitutionalCompliance, WorkforceRosterEntry } from "@/lib/db/models"
 import { periodLabel } from "@/lib/compliance/period"
+import {
+  CLIENT_COMPLIANCE_TYPE_OPTIONS,
+  getClientComplianceProfile,
+} from "@/lib/compliance/client-types"
 import {
   ArrowLeft,
   Download,
@@ -222,7 +226,7 @@ export function ComplianceHub({
     return (
       <Card>
         <CardContent className="py-12 text-center text-muted-foreground">
-          El portal de cumplimiento institucional no está habilitado para esta obra.
+          El portal de cumplimiento de obra no está habilitado para este proyecto.
         </CardContent>
       </Card>
     )
@@ -239,7 +243,7 @@ export function ComplianceHub({
         </Button>
         <div>
           <h1 className="text-xl font-bold">{summary?.project.name}</h1>
-          <p className="text-sm text-muted-foreground">{summary?.project.code} · Cumplimiento institucional</p>
+          <p className="text-sm text-muted-foreground">{summary?.project.code} · Portal del cliente</p>
         </div>
         <div className="ml-auto flex gap-2">
           <Link href={`/dashboard/proyectos/${projectId}`}>
@@ -253,7 +257,7 @@ export function ComplianceHub({
       {!summary?.project.institutionalCompliance?.enabled && canManage ? (
         <Card className="border-amber-200 bg-amber-50/50">
           <CardContent className="py-4 text-sm">
-            Activá el cumplimiento institucional en la pestaña <strong>Configuración</strong> para habilitar el portal al cliente (FAO, etc.).
+            Activá el portal en la pestaña <strong>Configuración</strong>, elegí el tipo de cliente (municipio, empresa, consorcio, organismo internacional, etc.) y completá los datos del contratante.
           </CardContent>
         </Card>
       ) : null}
@@ -276,6 +280,7 @@ export function ComplianceHub({
               checklist={summary.checklist}
               projectName={summary.project.name}
               clientOrganization={summary.project.institutionalCompliance?.clientOrganization}
+              clientType={summary.project.institutionalCompliance?.clientType}
               openIncidents={summary.openIncidents}
               openComplaints={summary.openComplaints}
               localPurchasesTotal={summary.localPurchasesTotal}
@@ -400,7 +405,7 @@ function RosterTab({
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Completá domicilio, distancia y capacitaciones en <strong>Detalle FAO</strong> para que el export CSV incluya todas las columnas requeridas por auditoría.
+        Completá domicilio, distancia y capacitaciones en <strong>Detalle completo</strong> para que el export CSV incluya todas las columnas de auditoría.
       </p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
@@ -472,7 +477,7 @@ function RosterTab({
             <>
               <DialogHeader>
                 <DialogTitle>
-                  Detalle FAO — {detailEntry.lastName}, {detailEntry.firstName}
+                  Detalle completo — {detailEntry.lastName}, {detailEntry.firstName}
                 </DialogTitle>
               </DialogHeader>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -942,25 +947,60 @@ function SettingsTab({
   saving: boolean
 }) {
   const patch = (p: Partial<ProjectInstitutionalCompliance>) => onChange({ ...settings, ...p })
+  const profile = getClientComplianceProfile(settings.clientType)
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Configuración — Cliente institucional (FAO, etc.)</CardTitle>
+        <CardTitle>Configuración — Portal del cliente</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
           <Label>Habilitar portal de cumplimiento</Label>
-          <Switch checked={settings.enabled} onCheckedChange={(c) => patch({ enabled: c })} />
+          <Switch
+            checked={settings.enabled}
+            onCheckedChange={(c) =>
+              patch({
+                enabled: c,
+                clientType: settings.clientType ?? "otro",
+              })
+            }
+          />
         </div>
         <p className="text-sm text-muted-foreground rounded-md border bg-slate-50 p-3">
-          Activá el portal y completá los datos del cliente institucional. El cliente verá nómina, documentos e incidentes en <strong>Mi obra → Cumplimiento institucional</strong>.
+          El cliente verá nómina, documentos e incidentes en{" "}
+          <strong>Mi obra → Cumplimiento de obra</strong>. FAO, municipios, ministerios, empresas,
+          consorcios y particulares comparten el mismo portal; el checklist se adapta al tipo de cliente.
         </p>
-        <Input placeholder="Organización cliente (ej: FAO)" value={settings.clientOrganization ?? ""} onChange={(e) => patch({ clientOrganization: e.target.value })} />
+        <div className="space-y-2">
+          <Label>Tipo de cliente contratante</Label>
+          <Select
+            value={settings.clientType ?? "otro"}
+            onValueChange={(v) => patch({ clientType: v as ClientComplianceType })}
+          >
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {CLIENT_COMPLIANCE_TYPE_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">{profile.description}</p>
+          {profile.examples ? (
+            <p className="text-xs text-muted-foreground">Ejemplos: {profile.examples}</p>
+          ) : null}
+        </div>
+        <Input
+          placeholder={profile.organizationPlaceholder}
+          value={settings.clientOrganization ?? ""}
+          onChange={(e) => patch({ clientOrganization: e.target.value })}
+        />
         <Input placeholder="Nombre del sitio / obra" value={settings.siteName ?? ""} onChange={(e) => patch({ siteName: e.target.value })} />
         <Input placeholder="Referencia contrato / orden de compra" value={settings.contractReference ?? settings.orderReference ?? ""} onChange={(e) => patch({ contractReference: e.target.value, orderReference: e.target.value })} />
         <Input placeholder="Ubicación libro de quejas (obrador)" value={settings.complaintBookLocation ?? ""} onChange={(e) => patch({ complaintBookLocation: e.target.value })} />
-        <Input placeholder="Email salvaguardas (MAC)" value={settings.macEmail ?? ""} onChange={(e) => patch({ macEmail: e.target.value })} />
+        <Input placeholder="Email salvaguardas / contacto auditoría" value={settings.macEmail ?? ""} onChange={(e) => patch({ macEmail: e.target.value })} />
         <Input placeholder="Línea directa contratista" value={settings.contractorHotline ?? ""} onChange={(e) => patch({ contractorHotline: e.target.value })} />
         <div className="grid sm:grid-cols-2 gap-3">
           <Input placeholder="Responsable social — nombre" value={settings.socialResponsible?.name ?? ""} onChange={(e) => patch({ socialResponsible: { ...settings.socialResponsible, name: e.target.value, phone: settings.socialResponsible?.phone ?? "" } })} />

@@ -8,6 +8,7 @@ import type {
   WorkIncident,
 } from "@/lib/db/models"
 import { currentPeriod } from "@/lib/compliance/period"
+import { isChecklistOptional } from "@/lib/compliance/client-types"
 
 export type RosterStats = {
   total: number
@@ -57,12 +58,13 @@ export function buildComplianceChecklist(input: {
   if (!enabled) {
     return [{
       key: "roster_current",
-      label: "Cumplimiento institucional",
+      label: "Portal de cumplimiento",
       status: "na",
       detail: "No habilitado para esta obra",
     }]
   }
 
+  const clientType = project.institutionalCompliance?.clientType
   const period = currentPeriod()
   const rosterOk = roster && roster.period === period && roster.entries.filter((e) => e.active).length > 0
   const stats = roster ? computeRosterStats(roster.entries) : null
@@ -78,7 +80,7 @@ export function buildComplianceChecklist(input: {
   const genderDoc = documents.some((d) => d.category === "gender_commitment")
   const indigenousDoc = documents.some((d) => d.category === "indigenous_guidelines")
 
-  return [
+  const items: ChecklistItem[] = [
     {
       key: "roster_current",
       label: "Nómina del periodo",
@@ -136,6 +138,13 @@ export function buildComplianceChecklist(input: {
       detail: openIncidents === 0 ? "Sin incidentes abiertos" : `${openIncidents} incidente(s) abierto(s)`,
     },
   ]
+
+  return items.map((item) => {
+    if (isChecklistOptional(clientType, item.key)) {
+      return { ...item, status: "na" as const, detail: "No aplica para este tipo de cliente" }
+    }
+    return item
+  })
 }
 
 export function complianceScore(items: ChecklistItem[]): number {

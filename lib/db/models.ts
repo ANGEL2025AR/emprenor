@@ -122,13 +122,22 @@ export interface Project extends BaseDocument {
   tags: string[]
   coverImage?: string
   createdBy: ObjectId
-  /** Portal de cumplimiento para clientes institucionales (FAO, PNUD, etc.) */
+  /** Portal de cumplimiento para clientes de obra (FAO, municipios, empresas, consorcios, etc.) */
   institutionalCompliance?: ProjectInstitutionalCompliance
 }
 
 // ============================================
-// CUMPLIMIENTO INSTITUCIONAL (CLIENTE / FAO)
+// CUMPLIMIENTO DE OBRA (PORTAL DEL CLIENTE)
 // ============================================
+
+/** Perfil del cliente contratante; define qué exige el checklist de auditoría. */
+export type ClientComplianceType =
+  | "organismo_internacional"
+  | "estado_municipio"
+  | "empresa"
+  | "inmobiliaria_consorcio"
+  | "persona"
+  | "otro"
 
 export type ComplianceDocumentCategory =
   | "art_policy"
@@ -152,6 +161,8 @@ export type ComplianceChecklistKey =
 
 export interface ProjectInstitutionalCompliance {
   enabled: boolean
+  /** Tipo de cliente contratante (FAO es solo un caso de organismo_internacional). */
+  clientType?: ClientComplianceType
   clientOrganization?: string
   contractReference?: string
   orderReference?: string

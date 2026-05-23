@@ -1,5 +1,6 @@
 // Schemas de validación con Zod
 import { z } from "zod"
+import { PROJECT_TYPE_ZOD_ENUM } from "@/lib/projects/project-service-types"
 
 // ============================================
 // AUTENTICACIÓN
@@ -80,7 +81,7 @@ export const resetPasswordSchema = z
 export const projectSchema = z.object({
   name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
   description: z.string().min(10, "La descripción debe tener al menos 10 caracteres"),
-  type: z.enum(["construccion", "remodelacion", "mantenimiento", "industrial", "otro"]),
+  type: z.enum(PROJECT_TYPE_ZOD_ENUM, { errorMap: () => ({ message: "Servicio de proyecto inválido" }) }),
   client: z.object({
     name: z.string().min(2, "El nombre del cliente es requerido"),
     email: z.string().email("Email del cliente inválido"),

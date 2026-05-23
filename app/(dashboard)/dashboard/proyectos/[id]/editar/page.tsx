@@ -15,6 +15,7 @@ import { ArrowLeft, Save, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import type { Project, ProjectType, Priority } from "@/lib/db/models"
 import { ProjectClientPicker } from "@/components/projects/project-client-picker"
+import { ProjectTypeSelect } from "@/components/projects/project-type-select"
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -215,24 +216,10 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="type">Tipo de Proyecto</Label>
-                <Select
-                  value={project.type || ""}
-                  onValueChange={(value) => setProject({ ...project, type: value as ProjectType })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="construccion">Construccion</SelectItem>
-                    <SelectItem value="remodelacion">Remodelacion</SelectItem>
-                    <SelectItem value="mantenimiento">Mantenimiento</SelectItem>
-                    <SelectItem value="industrial">Industrial</SelectItem>
-                    <SelectItem value="otro">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <ProjectTypeSelect
+                value={project.type || ""}
+                onValueChange={(value) => setProject({ ...project, type: value as ProjectType })}
+              />
               <div className="space-y-2">
                 <Label htmlFor="priority">Prioridad</Label>
                 <Select

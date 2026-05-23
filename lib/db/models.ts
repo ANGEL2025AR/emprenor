@@ -73,7 +73,8 @@ export interface Company extends BaseDocument {
 // ============================================
 
 export type ProjectStatus = "borrador" | "aprobado" | "en_progreso" | "pausado" | "completado" | "cancelado"
-export type ProjectType = "construccion" | "remodelacion" | "mantenimiento" | "industrial" | "otro"
+import type { ProjectType } from "@/lib/projects/project-service-types"
+export type { ProjectType }
 export type Priority = "baja" | "media" | "alta" | "urgente"
 
 export interface Project extends BaseDocument {

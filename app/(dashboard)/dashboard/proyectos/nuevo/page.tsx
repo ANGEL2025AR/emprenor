@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, ArrowLeft, Loader2, Save, Upload, X, ImageIcon } from "lucide-react"
 import { ProjectClientPicker } from "@/components/projects/project-client-picker"
+import { ProjectTypeSelect } from "@/components/projects/project-type-select"
 
 export default function NewProjectPage() {
   return (
@@ -190,21 +191,11 @@ function NewProjectForm() {
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="type">Tipo de Proyecto *</Label>
-                <Select value={formData.type} onValueChange={(value) => updateFormData("type", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="construccion">Construcción</SelectItem>
-                    <SelectItem value="remodelacion">Remodelación</SelectItem>
-                    <SelectItem value="mantenimiento">Mantenimiento</SelectItem>
-                    <SelectItem value="industrial">Industrial</SelectItem>
-                    <SelectItem value="otro">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <ProjectTypeSelect
+                value={formData.type}
+                onValueChange={(value) => updateFormData("type", value)}
+                required
+              />
             </div>
 
             <div className="space-y-2">

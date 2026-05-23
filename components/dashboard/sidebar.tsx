@@ -6,15 +6,9 @@ import { cn } from "@/lib/utils"
 import type { SerializableUser } from "@/lib/auth/session"
 import type { UserRole } from "@/lib/db/models"
 import Image from "next/image"
-import { isPortalEmployeeRole } from "@/lib/auth/portal-roles"
-import type { PortalSettings } from "@/lib/portal/portal-settings-shared"
+import { isStaffZoneRole } from "@/lib/auth/employee-routes"
 import { isNavPathActive } from "@/lib/dashboard/navigation"
-import {
-  getDashboardHome,
-  filterNavGroups,
-  isHomeVisible,
-  getEmployeePortalNavItems,
-} from "@/lib/dashboard/filter-navigation"
+import { getDashboardHome, filterNavGroups, isHomeVisible } from "@/lib/dashboard/filter-navigation"
 import type { DashboardNavGroup, DashboardNavItem } from "@/lib/dashboard/navigation"
 import { X, ChevronLeft, Menu, ChevronDown } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
@@ -23,8 +17,6 @@ import { LOGO_DARK_BG, LOGO_ICON_LIGHT } from "@/lib/brand/logo"
 
 interface DashboardSidebarProps {
   user: SerializableUser
-  /** Configuración del portal cargada en el servidor (evita parpadeo y desajustes). */
-  initialPortalSettings?: PortalSettings | null
 }
 
 function getOpenGroupsForPath(
@@ -149,53 +141,28 @@ function NavGroupSection({
   )
 }
 
-export function DashboardSidebar({ user, initialPortalSettings = null }: DashboardSidebarProps) {
+export function DashboardSidebar({ user }: DashboardSidebarProps) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
 
-  const [portalSettings, setPortalSettings] = useState<PortalSettings | null>(initialPortalSettings)
-
   const userRole: UserRole = user?.role || "cliente"
 
-  const navGroups = useMemo(
-    () => filterNavGroups(userRole, portalSettings),
-    [userRole, portalSettings],
-  )
+  const navGroups = useMemo(() => filterNavGroups(userRole), [userRole])
 
-  const employeePortalItems = useMemo(
-    () => (isPortalEmployeeRole(userRole) ? getEmployeePortalNavItems(userRole, portalSettings) : []),
-    [userRole, portalSettings],
-  )
-
-  const isEmployeeNav = isPortalEmployeeRole(userRole)
+  const isStaffNav = isStaffZoneRole(userRole)
 
   const [openGroups, setOpenGroups] = useState<Set<string>>(() =>
-    getOpenGroupsForPath(pathname, filterNavGroups(userRole, initialPortalSettings)),
+    getOpenGroupsForPath(pathname, filterNavGroups(userRole)),
   )
 
   const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
   const homeItem = useMemo(() => getDashboardHome(userRole), [userRole])
-  const homeHref = isEmployeeNav ? "/dashboard/portal" : (homeItem?.href ?? "/dashboard")
+  const homeHref = isStaffNav ? "/dashboard/zona-empleados" : (homeItem?.href ?? "/dashboard")
 
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
-
-  useEffect(() => {
-    setPortalSettings(initialPortalSettings)
-  }, [initialPortalSettings])
-
-  useEffect(() => {
-    if (!isPortalEmployeeRole(user?.role || "")) return
-    if (initialPortalSettings) return
-    fetch("/api/portal/settings")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data?.settings) setPortalSettings(data.settings)
-      })
-      .catch(() => {})
-  }, [user?.role, initialPortalSettings])
 
   useEffect(() => {
     setOpenGroups((prev) => {
@@ -284,40 +251,28 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
 
         <nav className="relative z-10 flex-1 overflow-y-auto py-4 px-3 scrollbar-thin">
           <ul className="space-y-1">
-            {isEmployeeNav ? (
-              employeePortalItems.map((item) => (
-                <li key={item.href}>
+            <>
+              {showHome && homeItem ? (
+                <li className="mb-2">
                   <NavLink
-                    item={item}
-                    isActive={isNavPathActive(pathname, item.href)}
+                    item={homeItem}
+                    isActive={isNavPathActive(pathname, homeItem.href)}
                     isCollapsed={isCollapsed}
                   />
                 </li>
-              ))
-            ) : (
-              <>
-                {showHome && homeItem ? (
-                  <li className="mb-2">
-                    <NavLink
-                      item={homeItem}
-                      isActive={isNavPathActive(pathname, homeItem.href)}
-                      isCollapsed={isCollapsed}
-                    />
-                  </li>
-                ) : null}
+              ) : null}
 
-                {navGroups.map((group) => (
-                  <NavGroupSection
-                    key={group.id}
-                    group={group}
-                    isCollapsed={isCollapsed}
-                    isOpen={openGroups.has(group.id)}
-                    onToggle={() => toggleGroup(group.id)}
-                    pathname={pathname}
-                  />
-                ))}
-              </>
-            )}
+              {navGroups.map((group) => (
+                <NavGroupSection
+                  key={group.id}
+                  group={group}
+                  isCollapsed={isCollapsed}
+                  isOpen={openGroups.has(group.id)}
+                  onToggle={() => toggleGroup(group.id)}
+                  pathname={pathname}
+                />
+              ))}
+            </>
           </ul>
         </nav>
       </aside>

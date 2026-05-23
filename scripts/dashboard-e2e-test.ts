@@ -280,7 +280,6 @@ async function main() {
     "/dashboard/proyectos/nuevo",
     "/dashboard/contactos",
     "/dashboard/sitio-web/servicios",
-    "/dashboard/cumplimiento-obra",
   ]
   for (const path of dashPages) {
     const r = await fetch(`${BASE}${path}`, { headers: { Cookie: cookieHeader }, redirect: "manual" })

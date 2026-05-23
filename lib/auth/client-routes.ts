@@ -1,53 +1,49 @@
-import { DEFAULT_PERMISSIONS, ROUTE_PERMISSIONS } from "@/lib/auth/permissions"
+import { DEFAULT_PERMISSIONS } from "@/lib/auth/permissions"
 
 /** Rutas permitidas para rol cliente (portal de obra). */
 export const CLIENT_PATH_PATTERNS: RegExp[] = [
   /^\/dashboard\/?$/,
   /^\/dashboard\/perfil\/?$/,
-  /^\/dashboard\/configuracion\/?$/,
   /^\/dashboard\/proyectos\/?$/,
   /^\/dashboard\/proyectos\/[a-fA-F0-9]{24}\/?$/,
   /^\/dashboard\/documentos\/?$/,
-  /^\/dashboard\/certificados\/?$/,
-  /^\/dashboard\/certificados\/[a-fA-F0-9]{24}\/?$/,
-  /^\/dashboard\/notificaciones\/?$/,
   /^\/dashboard\/mi-obra\/?$/,
   /^\/dashboard\/mi-obra\/[a-fA-F0-9]{24}\/?$/,
 ]
 
-const CLIENT_BLOCKED_PATTERNS: RegExp[] = [
-  /\/nuevo\/?$/,
-  /\/editar\/?$/,
-]
+const CLIENT_BLOCKED_PATTERNS: RegExp[] = [/\/nuevo\/?$/, /\/editar\/?$/]
 
 export function isClientPathAllowed(pathname: string): boolean {
   if (CLIENT_BLOCKED_PATTERNS.some((p) => p.test(pathname))) return false
   return CLIENT_PATH_PATTERNS.some((p) => p.test(pathname))
 }
 
-/** Mapa middleware: prefijo → roles permitidos (derivado de permisos + reglas cliente). */
-export function buildMiddlewareRouteMap(): Record<string, string[]> {
-  const map: Record<string, string[]> = {}
+/** Rutas del panel admin reducido (super_admin / admin). */
+const ADMIN_DASHBOARD_ROUTES: Record<string, string[]> = {
+  "/dashboard": ["super_admin", "admin"],
+  "/dashboard/proyectos": ["super_admin", "admin"],
+  "/dashboard/clientes": ["super_admin", "admin"],
+  "/dashboard/contactos": ["super_admin", "admin"],
+  "/dashboard/sitio-web": ["super_admin", "admin"],
+  "/dashboard/perfil": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
+  "/dashboard/zona-empleados": ["gerente", "supervisor", "trabajador"],
+  "/dashboard/mi-obra": ["cliente", "super_admin", "admin"],
+}
 
-  for (const [route, permission] of Object.entries(ROUTE_PERMISSIONS)) {
+export function buildMiddlewareRouteMap(): Record<string, string[]> {
+  const map: Record<string, string[]> = { ...ADMIN_DASHBOARD_ROUTES }
+
+  for (const [route, permission] of Object.entries({
+    "/dashboard/proyectos": "projects.view",
+    "/dashboard/clientes": "clients.view",
+    "/dashboard/contactos": "contacts.view",
+    "/dashboard/sitio-web": "website.view",
+    "/dashboard/documentos": "documents.view",
+    "/dashboard/mi-obra": "client.compliance.view",
+  })) {
     const roles = getRolesForPermission(permission)
     if (roles.length) map[route] = roles
   }
-
-  // Rutas adicionales no listadas en ROUTE_PERMISSIONS
-  map["/dashboard/bitacora-diaria"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/punch-lists"] = ["super_admin", "admin", "gerente", "supervisor"]
-  map["/dashboard/rfis"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/tareas"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/inspecciones"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/incidencias"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/chat"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/calendario"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
-  map["/dashboard/clientes"] = ["super_admin", "admin", "gerente", "supervisor"]
-  map["/dashboard/empleados"] = ["super_admin", "admin", "gerente"]
-  map["/dashboard/mi-obra"] = ["cliente", "super_admin", "admin", "gerente", "supervisor"]
-  map["/dashboard/cumplimiento-obra"] = ["super_admin", "admin", "gerente", "supervisor"]
-  map["/dashboard/proyectos"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"]
 
   return map
 }

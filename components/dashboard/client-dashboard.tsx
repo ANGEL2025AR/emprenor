@@ -47,8 +47,8 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
     <div className="space-y-8">
       <DashboardPageHeader
         badge="Portal cliente"
-        title="Mis obras"
-        description={`Hola ${user.name}, aquí ves el avance, documentación y cumplimiento de tus proyectos con EMPRENOR.`}
+        title="Mis proyectos"
+        description={`Hola ${user.name}, acá ves todas tus obras con EMPRENOR, sin importar el tipo de cliente (particular, empresa, municipio, etc.).`}
       />
 
       <ClientPortalOnboarding />
@@ -89,7 +89,7 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
 
       <DashboardPanel>
         <CardHeader>
-          <CardTitle>Proyectos asignados</CardTitle>
+          <CardTitle>Todos mis proyectos</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {projects.length === 0 ? (

@@ -30,24 +30,15 @@ import {
   HelpCircle,
   Home,
   FolderKanban,
-  ListTodo,
-  ClipboardCheck,
-  DollarSign,
   FileText,
   Check,
-  Wallet,
-  BadgeDollarSign,
-  Banknote,
-  FolderOpen,
-  Palmtree,
-  ShieldAlert,
-  Headphones,
-  Megaphone,
+  Globe,
+  Users,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { ROLE_LABELS } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
-import { isPortalEmployeeRole } from "@/lib/auth/portal-roles"
+import { isStaffZoneRole } from "@/lib/auth/employee-routes"
 import { useMounted } from "@/lib/hooks/use-mounted"
 
 interface DashboardHeaderProps {
@@ -133,34 +124,23 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
   const userRole: UserRole = user?.role || "cliente"
   const roleLabel = ROLE_LABELS[userRole] || "Usuario"
 
-  const quickLinks = isPortalEmployeeRole(userRole)
-    ? [
-        { name: "Mi Portal", href: "/dashboard/portal", icon: Wallet },
-        { name: "Billetera Virtual", href: "/dashboard/portal/billetera", icon: BadgeDollarSign },
-        { name: "Recibos de Sueldo", href: "/dashboard/portal/recibos", icon: Banknote },
-        { name: "Mi Legajo", href: "/dashboard/portal/legajo", icon: FolderOpen },
-        { name: "Solicitudes", href: "/dashboard/portal/solicitudes", icon: Palmtree },
-        { name: "ART / Seguridad", href: "/dashboard/portal/art", icon: ShieldAlert },
-        { name: "Mesa de Ayuda", href: "/dashboard/portal/mesa-ayuda", icon: Headphones },
-        { name: "Comunicaciones", href: "/dashboard/portal/comunicaciones", icon: Megaphone },
-      ]
-    : userRole === "cliente"
+  const quickLinks =
+    userRole === "cliente"
       ? [
-          { name: "Mis obras", href: "/dashboard/mi-obra", icon: FolderKanban },
+          { name: "Mis proyectos", href: "/dashboard", icon: Home },
+          { name: "Todas mis obras", href: "/dashboard/mi-obra", icon: FolderKanban },
           { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
-          { name: "Certificados", href: "/dashboard/certificados", icon: FileText },
         ]
-      : [
-          { name: "Dashboard", href: "/dashboard", icon: Home },
-          { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban },
-          { name: "Nuevo Proyecto", href: "/dashboard/proyectos/nuevo", icon: FolderKanban },
-          { name: "Tareas", href: "/dashboard/tareas", icon: ListTodo },
-          { name: "Nueva Tarea", href: "/dashboard/tareas/nueva", icon: ListTodo },
-          { name: "Inspecciones", href: "/dashboard/inspecciones", icon: ClipboardCheck },
-          { name: "Finanzas", href: "/dashboard/finanzas", icon: DollarSign },
-          { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
-          { name: "Configuración", href: "/dashboard/configuracion", icon: Settings },
-        ]
+      : isStaffZoneRole(userRole)
+        ? [{ name: "Zona empleados", href: "/dashboard/zona-empleados", icon: Home }]
+        : [
+            { name: "Inicio", href: "/dashboard", icon: Home },
+            { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban },
+            { name: "Nuevo proyecto", href: "/dashboard/proyectos/nuevo", icon: FolderKanban },
+            { name: "Clientes", href: "/dashboard/clientes", icon: Users },
+            { name: "Consultas web", href: "/dashboard/contactos", icon: FileText },
+            { name: "Sitio web", href: "/dashboard/sitio-web/servicios", icon: Globe },
+          ]
 
   return (
     <>
@@ -177,9 +157,11 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                 <Input
                   type="text"
                   placeholder={
-                    isPortalEmployeeRole(userRole)
-                      ? "Buscar en Mi Portal..."
-                      : "Buscar proyectos, tareas, documentos..."
+                    userRole === "cliente"
+                      ? "Buscar en mis proyectos..."
+                      : isStaffZoneRole(userRole)
+                        ? "Zona empleados..."
+                        : "Buscar proyectos, clientes, consultas..."
                   }
                   className="pl-10 h-10 border-0 bg-transparent shadow-none cursor-pointer focus-visible:ring-0"
                   readOnly
@@ -289,7 +271,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                     Perfil
                   </Link>
                 </DropdownMenuItem>
-                {!isPortalEmployeeRole(userRole) && userRole !== "cliente" && (
+                {userRole !== "cliente" && !isStaffZoneRole(userRole) && (
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/configuracion" className="flex items-center gap-2 cursor-pointer">
                       <Settings className="w-4 h-4" />

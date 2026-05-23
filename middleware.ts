@@ -1,15 +1,31 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
-import { buildMiddlewareRouteMap, isClientPathAllowed } from "@/lib/auth/client-routes"
-import { getDefaultDashboardPath, isEmployeePathAllowed, isEmployeeRole } from "@/lib/auth/employee-routes"
+import { isClientPathAllowed } from "@/lib/auth/client-routes"
+import { getDefaultDashboardPath, isStaffZonePathAllowed, isStaffZoneRole } from "@/lib/auth/employee-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
 
 const protectedRoutes = ["/dashboard"]
 const authRoutes = ["/login", "/registro", "/setup"]
 
-const ROUTE_PERMISSION_MAP = buildMiddlewareRouteMap()
+const ADMIN_ROLES = new Set(["super_admin", "admin"])
+
+/** Solo estas áreas están activas en el panel admin. */
+const ADMIN_ALLOWED_PREFIXES = [
+  "/dashboard",
+  "/dashboard/proyectos",
+  "/dashboard/clientes",
+  "/dashboard/contactos",
+  "/dashboard/sitio-web",
+  "/dashboard/perfil",
+]
+
+function isAdminDashboardPathAllowed(pathname: string): boolean {
+  return ADMIN_ALLOWED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  )
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -46,30 +62,24 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    if (isEmployeeRole(userRole)) {
+    if (isStaffZoneRole(userRole)) {
       if (pathname === "/dashboard" || pathname === "/dashboard/") {
-        return NextResponse.redirect(new URL("/dashboard/portal", request.url))
+        return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
       }
-      if (!isEmployeePathAllowed(pathname, userRole)) {
-        return NextResponse.redirect(new URL("/dashboard/portal", request.url))
+      if (!isStaffZonePathAllowed(pathname, userRole)) {
+        return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
       }
       return NextResponse.next()
     }
 
-    // Administradores del portal no usan /dashboard/portal (solo empleados)
-    if (
-      pathname.startsWith("/dashboard/portal") &&
-      ["super_admin", "admin", "gerente"].includes(userRole)
-    ) {
-      const subpath = pathname.slice("/dashboard/portal".length)
-      return NextResponse.redirect(new URL(`/dashboard/admin/portal${subpath}`, request.url))
-    }
-
-    for (const [route, allowedRoles] of Object.entries(ROUTE_PERMISSION_MAP)) {
-      if (pathname.startsWith(route) && !allowedRoles.includes(userRole)) {
+    if (ADMIN_ROLES.has(userRole)) {
+      if (!isAdminDashboardPathAllowed(pathname)) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
       }
+      return NextResponse.next()
     }
+
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return NextResponse.next()
@@ -77,10 +87,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Excluir _next completo (HMR/RSC/Turbopack), API, assets estáticos.
-     * Si el middleware corre sobre rutas _next, HMR falla con "Failed to fetch".
-     */
     "/((?!_next|api/|favicon\\.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.webp$|.*\\.ico$|.*\\.css$|.*\\.js$|manifest\\.json$).*)",
   ],
 }

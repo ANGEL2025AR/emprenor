@@ -10,6 +10,15 @@ export const loginSchema = z.object({
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
 })
 
+import {
+  PUBLIC_CLIENT_TYPES,
+  REGISTRATION_INTENTS,
+  requiresOrganizationName,
+} from "@/lib/clients/public-registration-types"
+
+export const publicClientTypeSchema = z.enum(PUBLIC_CLIENT_TYPES)
+export const registrationIntentSchema = z.enum(REGISTRATION_INTENTS)
+
 export const registerSchema = z
   .object({
     email: z.string().email("Email inválido"),
@@ -21,11 +30,28 @@ export const registerSchema = z
     confirmPassword: z.string(),
     name: z.string().min(2, "El nombre es requerido"),
     lastName: z.string().min(2, "El apellido es requerido"),
-    phone: z.string().optional(),
+    phone: z.string().min(8, "El teléfono es requerido"),
+    publicClientType: publicClientTypeSchema,
+    registrationIntent: registrationIntentSchema.default("consulta"),
+    company: z.string().max(200).optional(),
+    cuit: z.string().max(20).optional(),
+    address: z.string().max(300).optional(),
+    city: z.string().max(100).optional(),
+    province: z.string().max(100).optional(),
+    message: z.string().max(2000).optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],
+  })
+  .superRefine((data, ctx) => {
+    if (requiresOrganizationName(data.publicClientType) && !data.company?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["company"],
+        message: "Indique el nombre de la organización",
+      })
+    }
   })
 
 export const forgotPasswordSchema = z.object({

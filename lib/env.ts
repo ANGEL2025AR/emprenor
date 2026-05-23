@@ -49,7 +49,3 @@ export function getAdminSetupKey(): string | null {
 export function isPublicRegistrationAllowed(): boolean {
   return process.env.ALLOW_PUBLIC_REGISTRATION === "true"
 }
-
-export function isAutomationsModuleEnabled(): boolean {
-  return process.env.ENABLE_AUTOMATIONS_MODULE === "true"
-}

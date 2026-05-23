@@ -20,8 +20,6 @@ import {
   BarChart3,
   Award,
   AlertOctagon,
-  Zap,
-  Globe,
   Shield,
   ShieldCheck,
   Inbox,
@@ -41,6 +39,7 @@ import {
   UserCircle,
   Radio,
   ClipboardList,
+  Globe,
 } from "lucide-react"
 import type { PortalModuleKey } from "@/lib/portal/portal-settings-shared"
 
@@ -66,6 +65,14 @@ export const DASHBOARD_HOME: DashboardNavItem = {
   href: "/dashboard",
   icon: LayoutDashboard,
   permission: null,
+}
+
+/** Inicio del portal empleado (evita duplicar /dashboard + Mi Portal > Inicio). */
+export const EMPLOYEE_PORTAL_HOME: DashboardNavItem = {
+  name: "Inicio",
+  href: "/dashboard/portal",
+  icon: Wallet,
+  permission: "portal.dashboard",
 }
 
 /** Menús agrupados por área de negocio. */
@@ -129,7 +136,6 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     label: "Mi Portal",
     icon: UserCircle,
     items: [
-      { name: "Inicio", href: "/dashboard/portal", icon: Wallet, permission: "portal.dashboard", employeeOnly: true },
       {
         name: "Billetera Virtual",
         href: "/dashboard/portal/billetera",
@@ -215,9 +221,8 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
       { name: "Usuarios", href: "/dashboard/usuarios", icon: Users, permission: "users.view" },
       { name: "Roles y Permisos", href: "/dashboard/roles", icon: ShieldCheck, permission: "admin.roles" },
       { name: "Auditoría", href: "/dashboard/auditoria", icon: Shield, permission: "admin.access" },
-      { name: "Automatizaciones", href: "/dashboard/automatizaciones", icon: Zap, permission: "admin.access" },
       { name: "Contactos Web", href: "/dashboard/contactos", icon: Inbox, permission: "contacts.view" },
-      { name: "Configuración", href: "/dashboard/configuracion", icon: Settings, permission: null },
+      { name: "Configuración", href: "/dashboard/configuracion", icon: Settings, permission: "admin.access" },
     ],
   },
   {
@@ -240,7 +245,6 @@ export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
     items: [
       { name: "Mis obras", href: "/dashboard", icon: LayoutDashboard, permission: null },
       { name: "Cumplimiento de obra", href: "/dashboard/mi-obra", icon: ClipboardList, permission: "client.compliance.view" },
-      { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" },
     ],
   },
   {

@@ -5,8 +5,8 @@ import { buildMiddlewareRouteMap, isClientPathAllowed } from "@/lib/auth/client-
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
 
-const protectedRoutes = ["/dashboard", "/proyectos-gestion", "/admin"]
-const authRoutes = ["/login", "/registro", "/recuperar-password", "/setup"]
+const protectedRoutes = ["/dashboard"]
+const authRoutes = ["/login", "/registro", "/setup"]
 
 const ROUTE_PERMISSION_MAP = buildMiddlewareRouteMap()
 
@@ -35,10 +35,6 @@ export async function middleware(request: NextRequest) {
     const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("from", pathname)
     return NextResponse.redirect(loginUrl)
-  }
-
-  if (pathname.startsWith("/admin") && !["super_admin", "admin"].includes(userRole)) {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   if (isAuthenticated && pathname.startsWith("/dashboard")) {

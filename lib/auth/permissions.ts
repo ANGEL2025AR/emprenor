@@ -115,11 +115,6 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "calendar.create": ["super_admin", "admin", "gerente", "supervisor"],
   "calendar.edit": ["super_admin", "admin", "gerente", "supervisor"],
 
-  // Automatizaciones
-  "automations.view": ["super_admin", "admin"],
-  "automations.create": ["super_admin", "admin"],
-  "automations.edit": ["super_admin", "admin"],
-
   // Contactos (formulario web)
   "contacts.view": ["super_admin", "admin"],
   "contacts.manage": ["super_admin", "admin"],
@@ -368,7 +363,6 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/chat": "chat.view",
   "/dashboard/calendario": "calendar.view",
   "/dashboard/bitacora-diaria": "daily_logs.view",
-  "/dashboard/automatizaciones": "automations.view",
   "/dashboard/sitio-web": "website.view",
   "/dashboard/auditoria": "admin.logs",
   "/dashboard/notificaciones": "notifications.view",

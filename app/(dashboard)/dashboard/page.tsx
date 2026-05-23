@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth/session"
 import { getDb } from "@/lib/db/connection"
 import { CardContent, CardHeader } from "@/components/ui/card"
@@ -31,7 +32,6 @@ import { ExecutiveMetrics } from "@/components/dashboard/executive-metrics"
 import { ProjectStatusOverview } from "@/components/dashboard/project-status-overview"
 import { RevenueChart } from "@/components/dashboard/revenue-chart"
 import { ClientDashboard } from "@/components/dashboard/client-dashboard"
-import { EmployeeDashboard } from "@/components/dashboard/employee-dashboard"
 import { isClientRole, isEmployeePortalRole } from "@/lib/auth/project-access"
 
 async function getDashboardStats() {
@@ -126,7 +126,7 @@ export default async function DashboardPage() {
   }
 
   if (user && isEmployeePortalRole(user.role)) {
-    return <EmployeeDashboard user={user} />
+    redirect("/dashboard/portal")
   }
 
   const stats = await getDashboardStats()

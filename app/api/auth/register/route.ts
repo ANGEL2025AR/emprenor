@@ -1,12 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { ObjectId } from "mongodb"
 import { getDb } from "@/lib/db/connection"
 import { hashPassword } from "@/lib/auth/password"
 import { registerSchema } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
 import { isPublicRegistrationAllowed } from "@/lib/env"
 import type { User } from "@/lib/db/models"
+import { buildPublicClientRecord, buildRegistrationContactMessage } from "@/lib/clients/create-public-client"
+import { getPublicClientTypeLabel, getRegistrationIntentLabel } from "@/lib/clients/public-registration-types"
 
-const registerRateLimit = rateLimit({ windowMs: 60000 * 60, maxRequests: 3 })
+const registerRateLimit = rateLimit({ windowMs: 60000 * 60, maxRequests: 5 })
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,49 +35,92 @@ export async function POST(request: NextRequest) {
 
     const result = registerSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: "Datos inválidos", details: result.error.flatten() }, { status: 400 })
+      const firstError = result.error.errors[0]?.message ?? "Datos inválidos"
+      return NextResponse.json({ error: firstError, details: result.error.flatten() }, { status: 400 })
     }
 
-    const { email, password, name, lastName, phone } = result.data
+    const data = result.data
+    const email = data.email.toLowerCase()
 
     const db = await getDb()
 
-    const existingUser = await db.collection("users").findOne({
-      email: email.toLowerCase(),
-    })
+    const [existingUser, existingClient] = await Promise.all([
+      db.collection("users").findOne({ email }),
+      db.collection("clients").findOne({ email }),
+    ])
 
     if (existingUser) {
       return NextResponse.json({ error: "El email ya está registrado" }, { status: 409 })
     }
 
-    const hashedPassword = hashPassword(password)
+    if (existingClient) {
+      return NextResponse.json(
+        { error: "Ya existe una ficha de cliente con este email. Contacte a EMPRENOR para activar su acceso." },
+        { status: 409 },
+      )
+    }
 
-    const newUser: Omit<User, "_id"> = {
-      email: email.toLowerCase(),
+    const hashedPassword = hashPassword(data.password)
+    const now = new Date()
+
+    const newUser: Omit<User, "_id"> & { linkedClientId?: ObjectId; publicClientType?: string; registrationIntent?: string } = {
+      email,
       password: hashedPassword,
-      name,
-      lastName,
-      phone,
+      name: data.name,
+      lastName: data.lastName,
+      phone: data.phone,
       role: "cliente",
       permissions: [],
       isActive: false,
       emailVerified: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      publicClientType: data.publicClientType,
+      registrationIntent: data.registrationIntent,
+      createdAt: now,
+      updatedAt: now,
     }
 
-    await db.collection("users").insertOne(newUser)
+    const userResult = await db.collection("users").insertOne(newUser)
+    const userId = userResult.insertedId
+
+    const clientRecord = buildPublicClientRecord(data, userId)
+    const clientResult = await db.collection("clients").insertOne(clientRecord)
+
+    await db.collection("users").updateOne(
+      { _id: userId },
+      { $set: { linkedClientId: clientResult.insertedId, updatedAt: new Date() } },
+    )
+
+    const contactMessage = buildRegistrationContactMessage(data)
+    await db.collection("contactos").insertOne({
+      name: `${data.name} ${data.lastName}`.trim(),
+      email,
+      phone: data.phone,
+      service: "otro",
+      message: contactMessage,
+      status: "nuevo",
+      source: "registro_publico",
+      publicClientType: data.publicClientType,
+      clientTypeLabel: getPublicClientTypeLabel(data.publicClientType),
+      registrationIntent: data.registrationIntent,
+      registrationIntentLabel: getRegistrationIntentLabel(data.registrationIntent),
+      clientId: clientResult.insertedId,
+      userId,
+      createdAt: now,
+    })
 
     return NextResponse.json(
       {
         success: true,
         message:
-          "Solicitud registrada. Un administrador revisará tu cuenta y te avisará cuando puedas ingresar.",
+          "Solicitud registrada. Un administrador revisará su cuenta y le avisará cuando pueda ingresar.",
         pendingApproval: true,
+        clientType: data.publicClientType,
+        registrationIntent: data.registrationIntent,
       },
       { status: 201 },
     )
-  } catch {
+  } catch (error) {
+    console.error("Error en registro público:", error)
     return NextResponse.json({ error: "Error al registrar usuario" }, { status: 500 })
   }
 }

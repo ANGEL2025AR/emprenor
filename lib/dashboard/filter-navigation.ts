@@ -3,7 +3,12 @@ import { hasPermission } from "@/lib/auth/permissions"
 import { isPortalAdminRole, isPortalEmployeeRole } from "@/lib/auth/portal-roles"
 import { isPortalModuleEnabled, type PortalSettings } from "@/lib/portal/portal-settings-shared"
 import type { DashboardNavItem, DashboardNavGroup } from "@/lib/dashboard/navigation"
-import { DASHBOARD_HOME, DASHBOARD_NAV_GROUPS, CLIENT_PORTAL_NAV_GROUPS } from "@/lib/dashboard/navigation"
+import {
+  DASHBOARD_HOME,
+  DASHBOARD_NAV_GROUPS,
+  CLIENT_PORTAL_NAV_GROUPS,
+  EMPLOYEE_PORTAL_HOME,
+} from "@/lib/dashboard/navigation"
 
 function isClientRole(role: UserRole): boolean {
   return role === "cliente"
@@ -48,9 +53,15 @@ export function filterNavGroups(
     .filter((group) => group.items.length > 0)
 }
 
-export function isHomeVisible(userRole: UserRole): boolean {
-  if (isClientRole(userRole)) return false
-  return isNavItemVisible(DASHBOARD_HOME, userRole, null)
+/** Un solo inicio por rol: empleados → portal RRHH; clientes → grupo Mi obra; resto → dashboard ejecutivo. */
+export function getDashboardHome(userRole: UserRole): DashboardNavItem | null {
+  if (isClientRole(userRole)) return null
+  if (isPortalEmployeeRole(userRole)) return EMPLOYEE_PORTAL_HOME
+  return DASHBOARD_HOME
 }
 
-export { DASHBOARD_HOME }
+export function isHomeVisible(userRole: UserRole): boolean {
+  return getDashboardHome(userRole) !== null
+}
+
+export { DASHBOARD_HOME, EMPLOYEE_PORTAL_HOME }

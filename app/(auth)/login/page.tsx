@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -12,8 +12,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { AlertCircle, Eye, EyeOff, Loader2, ArrowRight, Shield, Building2, CheckCircle } from "lucide-react"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
 
+import { getPublicClientTypeLabel, getRegistrationIntentLabel, type PublicClientType, type RegistrationIntent } from "@/lib/clients/public-registration-types"
+
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Cargando…</div>}>
+      <LoginForm />
+    </Suspense>
+  )
+}
+
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
@@ -21,6 +32,19 @@ export default function LoginPage() {
     email: "",
     password: "",
   })
+  const [successMessage, setSuccessMessage] = useState("")
+
+  useEffect(() => {
+    if (searchParams.get("registered") === "pending") {
+      const tipo = searchParams.get("tipo") as PublicClientType | null
+      const motivo = searchParams.get("motivo") as RegistrationIntent | null
+      const tipoLabel = tipo ? getPublicClientTypeLabel(tipo) : "cliente"
+      const motivoLabel = motivo ? getRegistrationIntentLabel(motivo) : "registro"
+      setSuccessMessage(
+        `Solicitud enviada como ${tipoLabel} (${motivoLabel}). EMPRENOR revisará su cuenta y le avisará por email cuando pueda ingresar.`,
+      )
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -125,6 +149,12 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-5 px-8">
+              {successMessage ? (
+                <div className="flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-sm">
+                  <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                  <span>{successMessage}</span>
+                </div>
+              ) : null}
               {error && (
                 <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm animate-in fade-in slide-in-from-top-2 duration-300">
                   <AlertCircle className="w-5 h-5 shrink-0" />
@@ -173,10 +203,10 @@ export default function LoginPage() {
 
               <div className="flex items-center justify-end pt-1">
                 <Link
-                  href="/recuperar-password"
+                  href="/contacto"
                   className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
                 >
-                  ¿Olvidaste tu contraseña?
+                  ¿Problemas de acceso? Contactanos
                 </Link>
               </div>
             </CardContent>

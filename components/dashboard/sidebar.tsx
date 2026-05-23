@@ -10,7 +10,7 @@ import { isPortalEmployeeRole } from "@/lib/auth/portal-roles"
 import type { PortalSettings } from "@/lib/portal/portal-settings-shared"
 import { isNavPathActive } from "@/lib/dashboard/navigation"
 import {
-  DASHBOARD_HOME,
+  getDashboardHome,
   filterNavGroups,
   isHomeVisible,
 } from "@/lib/dashboard/filter-navigation"
@@ -167,6 +167,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
   )
 
   const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
+  const homeItem = useMemo(() => getDashboardHome(userRole), [userRole])
 
   useEffect(() => {
     setIsOpen(false)
@@ -274,15 +275,15 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
 
         <nav className="relative z-10 flex-1 overflow-y-auto py-4 px-3 scrollbar-thin">
           <ul className="space-y-1">
-            {showHome && (
+            {showHome && homeItem ? (
               <li className="mb-2">
                 <NavLink
-                  item={DASHBOARD_HOME}
-                  isActive={isNavPathActive(pathname, DASHBOARD_HOME.href)}
+                  item={homeItem}
+                  isActive={isNavPathActive(pathname, homeItem.href)}
                   isCollapsed={isCollapsed}
                 />
               </li>
-            )}
+            ) : null}
 
             {navGroups.map((group) => (
               <NavGroupSection

@@ -85,16 +85,8 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
       </div>
 
       <DashboardPanel>
-        <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
+        <CardHeader>
           <CardTitle>Proyectos asignados</CardTitle>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/dashboard/documentos">Documentos</Link>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/dashboard/certificados">Certificados</Link>
-            </Button>
-          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {projects.length === 0 ? (

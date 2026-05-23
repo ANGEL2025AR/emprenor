@@ -94,9 +94,8 @@ Una vez configurada la variable de entorno:
 3. Selecciona la base de datos `emprenor` > colección `contactos`
 4. Verás todos los mensajes recibidos
 
-#### Opción B: Panel de Administración Web (Opcional)
-Accede a `/admin/contactos` en tu sitio web para ver los contactos en una interfaz web.
-*Nota: Requiere autenticación en producción*
+#### Opción B: Panel de Administración Web
+Ingresá al dashboard con rol admin y abrí **Contactos Web** (`/dashboard/contactos`).
 
 ### 6. API Endpoints
 

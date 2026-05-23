@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, Eye, EyeOff, Loader2, ArrowRight, Shield, Building2, CheckCircle } from "lucide-react"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
-import { EMPRENOR_BRAND } from "@/lib/company/constants"
+import { EMPRENOR_BRAND, EMPRENOR_SLOGAN } from "@/lib/company/constants"
+import { AuthTrustFooter } from "@/components/auth/auth-trust-footer"
 
 import { getPublicClientTypeLabel, getRegistrationIntentLabel, type PublicClientType, type RegistrationIntent } from "@/lib/clients/public-registration-types"
 import { getDefaultDashboardPath } from "@/lib/auth/employee-routes"
@@ -97,17 +98,17 @@ function LoginForm() {
               style={{ width: "auto", height: "3rem" }}
               priority
             />
-            <h1 className="text-4xl font-bold text-slate-900 leading-tight">Portal {EMPRENOR_BRAND.siglas}</h1>
+            <h1 className="text-4xl font-bold text-slate-900 leading-tight">Acceso {EMPRENOR_BRAND.siglas}</h1>
             <p className="text-lg text-slate-600 leading-relaxed">
-              Acceso según su rol: gestión de obra, portal del cliente, empleados en campo o administración corporativa.
+              {EMPRENOR_SLOGAN}. Portal para clientes con obras activas y administración de EMPRENOR.
             </p>
           </div>
 
           <div className="space-y-4 pt-8">
             {[
-              { icon: Building2, text: "Gestión completa de proyectos y obras" },
-              { icon: Shield, text: "Acceso por roles con sesión segura (HTTPS)" },
-              { icon: CheckCircle, text: "Control de costos y recursos en tiempo real" },
+              { icon: Building2, text: "Clientes: seguimiento de obras, documentación y cumplimiento" },
+              { icon: Shield, text: "Empresa registrada con políticas de calidad y privacidad publicadas" },
+              { icon: CheckCircle, text: "Administración: proyectos, clientes, consultas web y sitio público" },
             ].map((feature, index) => (
               <div key={index} className="flex items-start gap-4 group">
                 <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-all duration-300 group-hover:scale-110">
@@ -241,14 +242,15 @@ function LoginForm() {
               </div>
 
               <p className="text-center text-sm text-slate-600">
-                ¿No tienes cuenta?{" "}
+                ¿No tenés cuenta?{" "}
                 <Link
                   href="/registro"
                   className="text-emerald-600 hover:text-emerald-700 font-semibold transition-colors"
                 >
-                  Crear una cuenta nueva
+                  Registrate como cliente
                 </Link>
               </p>
+              <AuthTrustFooter />
             </CardFooter>
           </form>
         </Card>

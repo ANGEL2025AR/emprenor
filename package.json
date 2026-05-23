@@ -12,7 +12,9 @@
     "verify": "npm run type-check && npm run build",
     "db:test": "npx tsx scripts/sync-database.ts test",
     "db:sync": "npx tsx scripts/sync-database.ts sync",
-    "test:dashboard": "npx tsx scripts/dashboard-e2e-test.ts"
+    "test:dashboard": "npx tsx scripts/dashboard-e2e-test.ts",
+    "test:platform": "npx tsx scripts/platform-e2e-test.ts",
+    "test:all": "npm run test:dashboard && npm run test:platform"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "latest",

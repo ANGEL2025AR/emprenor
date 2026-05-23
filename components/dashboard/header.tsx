@@ -273,9 +273,9 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                 </DropdownMenuItem>
                 {userRole !== "cliente" && !isStaffZoneRole(userRole) && (
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/configuracion" className="flex items-center gap-2 cursor-pointer">
+                    <Link href="/dashboard/perfil" className="flex items-center gap-2 cursor-pointer">
                       <Settings className="w-4 h-4" />
-                      Configuración
+                      Mi perfil
                     </Link>
                   </DropdownMenuItem>
                 )}

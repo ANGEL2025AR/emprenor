@@ -1,12 +1,8 @@
 /** Roles que usarán la zona de empleados (desarrollo aparte del panel admin). */
 
-const STAFF_ZONE_ROLES = new Set(["gerente", "supervisor", "trabajador"])
+import { isStaffZonePath } from "@/lib/platform/active-routes"
 
-const STAFF_ZONE_PATTERNS: RegExp[] = [
-  /^\/dashboard\/?$/,
-  /^\/dashboard\/perfil\/?$/,
-  /^\/dashboard\/zona-empleados\/?$/,
-]
+const STAFF_ZONE_ROLES = new Set(["gerente", "supervisor", "trabajador"])
 
 export function isStaffZoneRole(role: string): boolean {
   return STAFF_ZONE_ROLES.has(role)
@@ -19,7 +15,7 @@ export function isEmployeeRole(role: string): boolean {
 
 export function isStaffZonePathAllowed(pathname: string, role: string): boolean {
   if (!isStaffZoneRole(role)) return true
-  return STAFF_ZONE_PATTERNS.some((p) => p.test(pathname))
+  return isStaffZonePath(pathname)
 }
 
 /** @deprecated */

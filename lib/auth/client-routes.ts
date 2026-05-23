@@ -1,46 +1,25 @@
 import { DEFAULT_PERMISSIONS } from "@/lib/auth/permissions"
+import {
+  CLIENT_DASHBOARD_PATTERNS,
+  isClientDashboardPath,
+} from "@/lib/platform/active-routes"
 
-/** Rutas permitidas para rol cliente (portal de obra). */
-export const CLIENT_PATH_PATTERNS: RegExp[] = [
-  /^\/dashboard\/?$/,
-  /^\/dashboard\/perfil\/?$/,
-  /^\/dashboard\/proyectos\/?$/,
-  /^\/dashboard\/proyectos\/[a-fA-F0-9]{24}\/?$/,
-  /^\/dashboard\/documentos\/?$/,
-  /^\/dashboard\/mi-obra\/?$/,
-  /^\/dashboard\/mi-obra\/[a-fA-F0-9]{24}\/?$/,
-]
+export { CLIENT_DASHBOARD_PATTERNS as CLIENT_PATH_PATTERNS, isClientDashboardPath as isClientPathAllowed }
 
-const CLIENT_BLOCKED_PATTERNS: RegExp[] = [/\/nuevo\/?$/, /\/editar\/?$/]
-
-export function isClientPathAllowed(pathname: string): boolean {
-  if (CLIENT_BLOCKED_PATTERNS.some((p) => p.test(pathname))) return false
-  return CLIENT_PATH_PATTERNS.some((p) => p.test(pathname))
-}
-
-/** Rutas del panel admin reducido (super_admin / admin). */
-const ADMIN_DASHBOARD_ROUTES: Record<string, string[]> = {
-  "/dashboard": ["super_admin", "admin"],
-  "/dashboard/proyectos": ["super_admin", "admin"],
-  "/dashboard/clientes": ["super_admin", "admin"],
-  "/dashboard/contactos": ["super_admin", "admin"],
-  "/dashboard/sitio-web": ["super_admin", "admin"],
-  "/dashboard/perfil": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
-  "/dashboard/zona-empleados": ["gerente", "supervisor", "trabajador"],
-  "/dashboard/mi-obra": ["cliente", "super_admin", "admin"],
-}
-
+/** Mapa middleware legacy (APIs y rutas no cubiertas por active-routes). */
 export function buildMiddlewareRouteMap(): Record<string, string[]> {
-  const map: Record<string, string[]> = { ...ADMIN_DASHBOARD_ROUTES }
+  const map: Record<string, string[]> = {}
 
-  for (const [route, permission] of Object.entries({
+  const legacy: Record<string, string> = {
+    "/dashboard/documentos": "documents.view",
+    "/dashboard/mi-obra": "client.compliance.view",
     "/dashboard/proyectos": "projects.view",
     "/dashboard/clientes": "clients.view",
     "/dashboard/contactos": "contacts.view",
     "/dashboard/sitio-web": "website.view",
-    "/dashboard/documentos": "documents.view",
-    "/dashboard/mi-obra": "client.compliance.view",
-  })) {
+  }
+
+  for (const [route, permission] of Object.entries(legacy)) {
     const roles = getRolesForPermission(permission)
     if (roles.length) map[route] = roles
   }

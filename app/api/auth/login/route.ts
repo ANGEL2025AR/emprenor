@@ -31,23 +31,25 @@ export async function POST(request: NextRequest) {
 
     const user = await db.collection<User>("users").findOne({
       email: email.toLowerCase(),
-      $or: [{ isActive: true }, { isActive: { $exists: false } }],
     })
 
     if (!user) {
       return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
     }
 
-    if (user.isActive === false) {
-      return NextResponse.json(
-        { error: "Tu cuenta está pendiente de activación. Contacta al administrador." },
-        { status: 403 },
-      )
-    }
-
     const isValidPassword = verifyPassword(password, user.password)
     if (!isValidPassword) {
       return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
+    }
+
+    if (user.isActive === false) {
+      return NextResponse.json(
+        {
+          error:
+            "Su cuenta está pendiente de activación por EMPRENOR. Si ya se registró, aguarde la confirmación o escríbanos desde Contacto.",
+        },
+        { status: 403 },
+      )
     }
 
     await createSession(user)

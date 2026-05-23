@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
-import { isClientPathAllowed } from "@/lib/auth/client-routes"
-import { getDefaultDashboardPath, isStaffZonePathAllowed, isStaffZoneRole } from "@/lib/auth/employee-routes"
+import { getDefaultDashboardPath, isStaffZoneRole } from "@/lib/auth/employee-routes"
+import {
+  isAdminDashboardPath,
+  isClientDashboardPath,
+  isStaffZonePath,
+} from "@/lib/platform/active-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
 
@@ -10,22 +14,6 @@ const protectedRoutes = ["/dashboard"]
 const authRoutes = ["/login", "/registro", "/setup"]
 
 const ADMIN_ROLES = new Set(["super_admin", "admin"])
-
-/** Solo estas áreas están activas en el panel admin. */
-const ADMIN_ALLOWED_PREFIXES = [
-  "/dashboard",
-  "/dashboard/proyectos",
-  "/dashboard/clientes",
-  "/dashboard/contactos",
-  "/dashboard/sitio-web",
-  "/dashboard/perfil",
-]
-
-function isAdminDashboardPathAllowed(pathname: string): boolean {
-  return ADMIN_ALLOWED_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  )
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -56,7 +44,7 @@ export async function middleware(request: NextRequest) {
 
   if (isAuthenticated && pathname.startsWith("/dashboard")) {
     if (userRole === "cliente") {
-      if (!isClientPathAllowed(pathname)) {
+      if (!isClientDashboardPath(pathname)) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
       }
       return NextResponse.next()
@@ -66,20 +54,20 @@ export async function middleware(request: NextRequest) {
       if (pathname === "/dashboard" || pathname === "/dashboard/") {
         return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
       }
-      if (!isStaffZonePathAllowed(pathname, userRole)) {
+      if (!isStaffZonePath(pathname)) {
         return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
       }
       return NextResponse.next()
     }
 
     if (ADMIN_ROLES.has(userRole)) {
-      if (!isAdminDashboardPathAllowed(pathname)) {
+      if (!isAdminDashboardPath(pathname)) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
       }
       return NextResponse.next()
     }
 
-    return NextResponse.redirect(new URL("/dashboard", request.url))
+    return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
   }
 
   return NextResponse.next()

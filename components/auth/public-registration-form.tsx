@@ -40,6 +40,7 @@ import {
   type RegistrationIntent,
 } from "@/lib/clients/public-registration-types"
 import { cn } from "@/lib/utils"
+import { AuthTrustFooter } from "@/components/auth/auth-trust-footer"
 
 const TYPE_ICONS: Record<PublicClientType, React.ComponentType<{ className?: string }>> = {
   persona: User,
@@ -463,6 +464,7 @@ export function PublicRegistrationForm() {
                   Iniciá sesión
                 </Link>
               </p>
+              <AuthTrustFooter />
             </CardFooter>
           </form>
         </Card>

@@ -13,6 +13,7 @@ import { AlertCircle, Eye, EyeOff, Loader2, ArrowRight, Shield, Building2, Check
 import { LOGO_LIGHT } from "@/lib/brand/logo"
 
 import { getPublicClientTypeLabel, getRegistrationIntentLabel, type PublicClientType, type RegistrationIntent } from "@/lib/clients/public-registration-types"
+import { getDefaultDashboardPath } from "@/lib/auth/employee-routes"
 
 export default function LoginPage() {
   return (
@@ -65,7 +66,7 @@ function LoginForm() {
         return
       }
 
-      router.push("/dashboard")
+      router.push(getDefaultDashboardPath(data.user?.role || "cliente"))
       router.refresh()
     } catch {
       setError("Error de conexión. Intenta nuevamente.")
@@ -95,10 +96,9 @@ function LoginForm() {
               style={{ width: "auto", height: "3rem" }}
               priority
             />
-            <h1 className="text-4xl font-bold text-slate-900 leading-tight">Sistema de Gestión de Construcción</h1>
+            <h1 className="text-4xl font-bold text-slate-900 leading-tight">Portal EMPRENOR</h1>
             <p className="text-lg text-slate-600 leading-relaxed">
-              Administra proyectos, equipos y recursos desde una plataforma profesional diseñada para la industria de la
-              construcción.
+              Acceso según su rol: gestión de obra, portal del cliente, empleados en campo o administración corporativa.
             </p>
           </div>
 

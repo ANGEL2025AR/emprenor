@@ -76,5 +76,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|api/|favicon\\.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.webp$|.*\\.ico$|.*\\.css$|.*\\.js$|manifest\\.json$).*)"],
+  matcher: [
+    /*
+     * Excluir _next completo (HMR/RSC/Turbopack), API, assets estáticos.
+     * Si el middleware corre sobre rutas _next, HMR falla con "Failed to fetch".
+     */
+    "/((?!_next|api/|favicon\\.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.webp$|.*\\.ico$|.*\\.css$|.*\\.js$|manifest\\.json$).*)",
+  ],
 }

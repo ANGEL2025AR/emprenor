@@ -88,11 +88,11 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{bodyText}</p>
             </div>
 
-            {project.metadata && (project.metadata.client || project.metadata.area || project.metadata.year) && (
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 pt-4 border-t border-border">
+            {project.metadata && (project.metadata.client || project.metadata.area || project.metadata.year || project.metadata.budget) && (
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 pt-4 border-t border-border">
                 {project.metadata.client && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Cliente</p>
+                    <p className="text-xs text-muted-foreground mb-1">Cliente / contratante</p>
                     <p className="text-sm font-medium">{String(project.metadata.client)}</p>
                   </div>
                 )}
@@ -106,6 +106,18 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Año</p>
                     <p className="text-sm font-medium">{String(project.metadata.year)}</p>
+                  </div>
+                )}
+                {project.metadata.budget != null && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Alcance referencial</p>
+                    <p className="text-sm font-medium">
+                      {typeof project.metadata.budget === "number"
+                        ? new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(
+                            project.metadata.budget,
+                          )
+                        : String(project.metadata.budget)}
+                    </p>
                   </div>
                 )}
               </div>

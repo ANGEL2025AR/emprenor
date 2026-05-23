@@ -98,6 +98,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    { url: `${baseUrl}/privacidad`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${baseUrl}/cookies`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${baseUrl}/codigo-etica`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.5 },
+    { url: `${baseUrl}/seguridad-y-salud`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${baseUrl}/sostenibilidad`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${baseUrl}/linea-etica`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.5 },
+    { url: `${baseUrl}/licitaciones`, lastModified: currentDate, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/trabaja-con-nosotros`, lastModified: currentDate, changeFrequency: "monthly", priority: 0.6 },
   ]
 
   // Obtener proyectos públicos dinámicamente desde MongoDB

@@ -221,6 +221,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
       { name: "Usuarios", href: "/dashboard/usuarios", icon: Users, permission: "users.view" },
       { name: "Roles y Permisos", href: "/dashboard/roles", icon: ShieldCheck, permission: "admin.roles" },
       { name: "Auditoría", href: "/dashboard/auditoria", icon: Shield, permission: "admin.access" },
+      { name: "Línea de ética", href: "/dashboard/linea-etica", icon: ShieldAlert, permission: "admin.access" },
       { name: "Contactos Web", href: "/dashboard/contactos", icon: Inbox, permission: "contacts.view" },
       { name: "Configuración", href: "/dashboard/configuracion", icon: Settings, permission: "admin.access" },
     ],

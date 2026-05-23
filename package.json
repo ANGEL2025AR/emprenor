@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "node --require ./scripts/dns-windows-atlas.cjs ./node_modules/next/dist/bin/next dev",
+    "dev": "node --require ./scripts/dns-windows-atlas.cjs ./node_modules/next/dist/bin/next dev --port 3001",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "next start",

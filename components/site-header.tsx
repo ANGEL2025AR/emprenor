@@ -32,6 +32,7 @@ import {
   PaintBucket,
   LogIn,
   UserPlus,
+  Shield,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -121,6 +122,33 @@ export function SiteHeader() {
             <Users className="h-4 w-4" />
             Nosotros
           </Link>
+
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="flex items-center gap-2 text-sm font-medium">
+                  <Shield className="h-4 w-4" />
+                  Empresa
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[280px] gap-1 p-3">
+                    <ListItem href="/licitaciones" title="Licitaciones" icon={Building2}>
+                      Sector público y documentación
+                    </ListItem>
+                    <ListItem href="/seguridad-y-salud" title="Seguridad y salud" icon={Shield}>
+                      Política SST y ART
+                    </ListItem>
+                    <ListItem href="/sostenibilidad" title="Sostenibilidad" icon={Factory}>
+                      Comunidad y medio ambiente
+                    </ListItem>
+                    <ListItem href="/linea-etica" title="Línea de ética" icon={HelpCircle}>
+                      Reporte confidencial
+                    </ListItem>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
           <Link
             href="/preguntas-frecuentes"

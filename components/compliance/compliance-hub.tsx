@@ -245,7 +245,13 @@ export function ComplianceHub({
           <h1 className="text-xl font-bold">{summary?.project.name}</h1>
           <p className="text-sm text-muted-foreground">{summary?.project.code} · Portal del cliente</p>
         </div>
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex flex-wrap gap-2">
+          <a href={`/api/compliance/audit-pack/${projectId}?period=${period}`} download>
+            <Button variant="outline" size="sm" type="button">
+              <Download className="h-4 w-4 mr-1" />
+              Pack auditoría
+            </Button>
+          </a>
           <Link href={`/dashboard/proyectos/${projectId}`}>
             <Button variant="ghost" size="sm">
               Ver obra <ExternalLink className="h-3 w-3 ml-1" />

@@ -1,13 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
+import { FOOTER_LEGAL_LINKS } from "@/lib/company/constants"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-muted/30">
       <div className="container px-4 py-12 md:px-6 lg:py-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <Link href="/" className="inline-block">
@@ -163,6 +164,29 @@ export function SiteFooter() {
                   Contacto
                 </Link>
               </li>
+              <li>
+                <Link href="/licitaciones" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Licitaciones
+                </Link>
+              </li>
+              <li>
+                <Link href="/trabaja-con-nosotros" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Trabajá con nosotros
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-foreground">Legal y ética</h3>
+            <ul className="space-y-2 text-sm">
+              {FOOTER_LEGAL_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -16,6 +16,8 @@ export async function ensureComplianceIndexes(): Promise<void> {
       db.collection("work_incidents").createIndex({ projectId: 1, occurredAt: -1 }),
       db.collection("local_purchases").createIndex({ projectId: 1, date: -1 }),
       db.collection("site_complaints").createIndex({ projectId: 1, date: -1 }),
+      db.collection("ethics_reports").createIndex({ status: 1, createdAt: -1 }),
+      db.collection("ethics_reports").createIndex({ ticket: 1 }, { unique: true }),
     ])
     indexesEnsured = true
   })()

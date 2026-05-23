@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { FolderKanban, FileText, Award, Bell, ArrowRight, ClipboardList } from "lucide-react"
+import { ClientPortalOnboarding } from "@/components/dashboard/client-portal-onboarding"
 
 const STATUS_LABELS: Record<string, string> = {
   borrador: "Borrador",
@@ -49,6 +50,8 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
         title="Mis obras"
         description={`Hola ${user.name}, aquí ves el avance, documentación y cumplimiento de tus proyectos con EMPRENOR.`}
       />
+
+      <ClientPortalOnboarding />
 
       {projects.some((p) => p.institutionalCompliance?.enabled) ? (
         <DashboardPanel>

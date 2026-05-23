@@ -35,6 +35,7 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import type { Project } from "@/lib/db/models"
+import { SCHEDULE_STATUS_LABELS } from "@/lib/projects/project-manager"
 
 const STATUS_COLORS: Record<string, string> = {
   borrador: "bg-slate-100 text-slate-700",
@@ -141,9 +142,9 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6">
       <DashboardPageHeader
-        badge="Operaciones"
+        badge="Gestor de obras"
         title="Proyectos"
-        description="Gestiona todos tus proyectos de construcción, avances y equipos asignados."
+        description="Gestión completa de obras: cronograma por hitos, cuenta corriente, documentación y equipo."
         actions={
           <DashboardPrimaryButton asChild>
             <Link href="/dashboard/proyectos/nuevo">
@@ -214,6 +215,11 @@ export default function ProjectsPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <Badge className={STATUS_COLORS[project.status] || "bg-slate-100 text-slate-700"}>{STATUS_LABELS[project.status] || project.status}</Badge>
+                    {project.scheduleStatus ? (
+                      <Badge variant="outline" className="text-xs">
+                        {SCHEDULE_STATUS_LABELS[project.scheduleStatus] ?? project.scheduleStatus}
+                      </Badge>
+                    ) : null}
                     <CardTitle className="mt-2 text-lg">{project.name}</CardTitle>
                     <p className="text-sm text-slate-500">{project.code}</p>
                   </div>

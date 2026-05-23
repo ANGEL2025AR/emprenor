@@ -3,9 +3,9 @@ import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
 import { getDefaultDashboardPath, isStaffZoneRole } from "@/lib/auth/employee-routes"
 import {
-  isAdminDashboardPath,
   isClientDashboardPath,
-  isStaffZonePath,
+  isProjectManagerPath,
+  isStaffProjectPath,
 } from "@/lib/platform/active-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
@@ -52,22 +52,25 @@ export async function middleware(request: NextRequest) {
 
     if (isStaffZoneRole(userRole)) {
       if (pathname === "/dashboard" || pathname === "/dashboard/") {
-        return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
+        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
       }
-      if (!isStaffZonePath(pathname)) {
-        return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
+      if (!isStaffProjectPath(pathname)) {
+        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
       }
       return NextResponse.next()
     }
 
     if (ADMIN_ROLES.has(userRole)) {
-      if (!isAdminDashboardPath(pathname)) {
-        return NextResponse.redirect(new URL("/dashboard", request.url))
+      if (pathname === "/dashboard" || pathname === "/dashboard/") {
+        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
+      }
+      if (!isProjectManagerPath(pathname)) {
+        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
       }
       return NextResponse.next()
     }
 
-    return NextResponse.redirect(new URL("/dashboard/zona-empleados", request.url))
+    return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
   }
 
   return NextResponse.next()

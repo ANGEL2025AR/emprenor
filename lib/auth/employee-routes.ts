@@ -1,6 +1,6 @@
-/** Roles que usarán la zona de empleados (desarrollo aparte del panel admin). */
+/** Rutas por defecto del personal operativo (gestor de obras). */
 
-import { isStaffZonePath } from "@/lib/platform/active-routes"
+import { isStaffProjectPath } from "@/lib/platform/active-routes"
 
 const STAFF_ZONE_ROLES = new Set(["gerente", "supervisor", "trabajador"])
 
@@ -15,7 +15,7 @@ export function isEmployeeRole(role: string): boolean {
 
 export function isStaffZonePathAllowed(pathname: string, role: string): boolean {
   if (!isStaffZoneRole(role)) return true
-  return isStaffZonePath(pathname)
+  return isStaffProjectPath(pathname)
 }
 
 /** @deprecated */
@@ -25,6 +25,7 @@ export function isEmployeePathAllowed(pathname: string, role?: string): boolean 
 
 export function getDefaultDashboardPath(role: string): string {
   if (role === "cliente") return "/dashboard"
-  if (isStaffZoneRole(role)) return "/dashboard/zona-empleados"
-  return "/dashboard"
+  if (isStaffZoneRole(role)) return "/dashboard/proyectos"
+  if (role === "super_admin" || role === "admin") return "/dashboard/proyectos"
+  return "/dashboard/proyectos"
 }

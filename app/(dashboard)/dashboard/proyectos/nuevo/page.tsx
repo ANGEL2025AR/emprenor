@@ -37,6 +37,7 @@ function NewProjectForm() {
     description: "",
     type: "",
     priority: "",
+    branch: "",
     client: {
       name: "",
       email: "",
@@ -109,6 +110,7 @@ function NewProjectForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          branch: formData.branch || undefined,
           clientId: clientId || undefined,
           budget: {
             ...formData.budget,
@@ -221,6 +223,20 @@ function NewProjectForm() {
                   <SelectItem value="media">Media</SelectItem>
                   <SelectItem value="alta">Alta</SelectItem>
                   <SelectItem value="urgente">Urgente</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="branch">Sede</Label>
+              <Select value={formData.branch} onValueChange={(value) => updateFormData("branch", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar sede (opcional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="salta">Salta Capital</SelectItem>
+                  <SelectItem value="tartagal">Tartagal</SelectItem>
+                  <SelectItem value="vespucio">Campamento Vespucio</SelectItem>
+                  <SelectItem value="central">Central</SelectItem>
                 </SelectContent>
               </Select>
             </div>

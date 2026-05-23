@@ -110,6 +110,12 @@ export async function POST(request: NextRequest) {
       code,
       status: "borrador",
       progress: 0,
+      scheduleStatus: "en_tiempo",
+      milestones: [],
+      installments: [],
+      budgetCurrent: result.data.budget.estimated,
+      totalCollected: 0,
+      totalPending: result.data.budget.estimated,
       budget: {
         ...result.data.budget,
         approved: 0,

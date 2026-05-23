@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { getDb } from "@/lib/db/connection"
-import { countPendingRegistrations } from "@/lib/users/activate-portal-user"
 import { CardContent, CardHeader } from "@/components/ui/card"
 import {
   DashboardPageHeader,
@@ -9,141 +8,133 @@ import {
   DashboardSectionTitle,
   DashboardPrimaryButton,
 } from "@/components/dashboard/dashboard-ui"
-import { FolderKanban, Users, Inbox, Globe, Plus, ArrowRight, ShieldCheck } from "lucide-react"
+import { FolderKanban, Plus, ArrowRight, AlertTriangle, Calendar } from "lucide-react"
+import type { Project } from "@/lib/db/models"
+import { SCHEDULE_STATUS_LABELS } from "@/lib/projects/project-manager"
 
-async function getAdminOverview() {
+async function getProjectManagerOverview() {
   try {
     const db = await getDb()
-    const [projects, activeProjects, clients, pendingContacts, pendingAccess] = await Promise.all([
+    const projects = await db
+      .collection<Project>("projects")
+      .find({})
+      .sort({ updatedAt: -1 })
+      .limit(8)
+      .toArray()
+
+    const [total, active, critical, overdueInstallments] = await Promise.all([
       db.collection("projects").countDocuments(),
       db.collection("projects").countDocuments({ status: "en_progreso" }),
-      db.collection("clients").countDocuments(),
-      db.collection("contactos").countDocuments({ status: { $in: ["nuevo", "pendiente", "en_proceso"] } }),
-      countPendingRegistrations(),
+      db.collection("projects").countDocuments({ scheduleStatus: "critico" }),
+      db.collection("projects").countDocuments({
+        "installments.status": "vencida",
+      }),
     ])
-    return { projects, activeProjects, clients, pendingContacts, pendingAccess }
+
+    return { projects, total, active, critical, overdueInstallments }
   } catch {
-    return { projects: 0, activeProjects: 0, clients: 0, pendingContacts: 0, pendingAccess: 0 }
+    return { projects: [], total: 0, active: 0, critical: 0, overdueInstallments: 0 }
   }
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  borrador: "Borrador",
+  aprobado: "Aprobado",
+  en_progreso: "En progreso",
+  pausado: "Pausado",
+  completado: "Completado",
+  cancelado: "Cancelado",
+}
+
 export async function AdminDashboard({ userName }: { userName: string }) {
-  const stats = await getAdminOverview()
+  const stats = await getProjectManagerOverview()
 
   return (
     <div className="space-y-8">
       <DashboardPageHeader
-        badge="Administración EMPRENOR"
-        title="Panel de gestión"
-        description={`Hola ${userName}. Desde aquí administrás obras, clientes, consultas del sitio y el contenido público.`}
+        badge="Gestor de obras EMPRENOR"
+        title="Project Manager"
+        description={`Hola ${userName}. Panel exclusivo para gestionar el ciclo de vida de cada obra: cronograma, hitos, cuenta corriente y documentación.`}
         actions={
           <DashboardPrimaryButton asChild>
             <Link href="/dashboard/proyectos/nuevo">
               <Plus className="w-4 h-4 mr-2" />
-              Nuevo proyecto
+              Nueva obra
             </Link>
           </DashboardPrimaryButton>
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <DashboardStatCard
-          title="Proyectos"
-          value={stats.projects}
-          subtitle={`${stats.activeProjects} en progreso`}
+          title="Obras"
+          value={stats.total}
+          subtitle={`${stats.active} en progreso`}
           icon={FolderKanban}
           accent="blue"
           href="/dashboard/proyectos"
         />
         <DashboardStatCard
-          title="Clientes"
-          value={stats.clients}
-          subtitle="Fichas y accesos al portal"
-          icon={Users}
-          accent="emerald"
-          href="/dashboard/clientes"
+          title="Cronograma crítico"
+          value={stats.critical}
+          subtitle="Obras con retraso severo"
+          icon={AlertTriangle}
+          accent={stats.critical > 0 ? "amber" : "emerald"}
+          href="/dashboard/proyectos?status=en_progreso"
         />
         <DashboardStatCard
-          title="Accesos pendientes"
-          value={stats.pendingAccess}
-          subtitle="Registros por activar"
-          icon={ShieldCheck}
-          accent={stats.pendingAccess > 0 ? "amber" : "violet"}
-          href="/dashboard/accesos"
+          title="Cuotas vencidas"
+          value={stats.overdueInstallments}
+          subtitle="En alguna obra activa"
+          icon={Calendar}
+          accent={stats.overdueInstallments > 0 ? "red" : "violet"}
+          href="/dashboard/proyectos"
         />
         <DashboardStatCard
-          title="Consultas pendientes"
-          value={stats.pendingContacts}
-          subtitle="Formulario web y contacto"
-          icon={Inbox}
-          accent={stats.pendingContacts > 0 ? "amber" : "violet"}
-          href="/dashboard/contactos"
-        />
-        <DashboardStatCard
-          title="Sitio web"
-          value="CMS"
-          subtitle="Portadas, servicios y obras públicas"
-          icon={Globe}
+          title="Ver todas"
+          value="→"
+          subtitle="Listado completo de proyectos"
+          icon={FolderKanban}
           accent="cyan"
-          href="/dashboard/sitio-web/servicios"
+          href="/dashboard/proyectos"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardPanel>
-          <CardHeader>
-            <DashboardSectionTitle title="Operación" icon={FolderKanban} />
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Link
-              href="/dashboard/proyectos"
-              className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
-            >
-              <span className="font-medium">Gestionar proyectos y obras</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground" />
-            </Link>
-            <Link
-              href="/dashboard/clientes/nuevo"
-              className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
-            >
-              <span className="font-medium">Alta de cliente con acceso al portal</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground" />
-            </Link>
-          </CardContent>
-        </DashboardPanel>
-
-        <DashboardPanel>
-          <CardHeader>
-            <DashboardSectionTitle title="Web y atención" icon={Inbox} />
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Link
-              href="/dashboard/accesos"
-              className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
-            >
-              <span className="font-medium">
-                Activar solicitudes de acceso
-                {stats.pendingAccess > 0 ? ` (${stats.pendingAccess} pendientes)` : ""}
-              </span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground" />
-            </Link>
-            <Link
-              href="/dashboard/contactos"
-              className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
-            >
-              <span className="font-medium">Consultas y mensajes del sitio</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground" />
-            </Link>
-            <Link
-              href="/dashboard/sitio-web/paginas"
-              className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
-            >
-              <span className="font-medium">Editar portadas y servicios públicos</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground" />
-            </Link>
-          </CardContent>
-        </DashboardPanel>
-      </div>
+      <DashboardPanel>
+        <CardHeader>
+          <DashboardSectionTitle title="Obras recientes" icon={FolderKanban} />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {stats.projects.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Creá tu primera obra para comenzar.</p>
+          ) : (
+            stats.projects.map((p) => (
+              <Link
+                key={p._id?.toString()}
+                href={`/dashboard/proyectos/${p._id}`}
+                className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
+              >
+                <div>
+                  <p className="font-medium">{p.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {p.code} · {STATUS_LABELS[p.status] || p.status} · {p.progress ?? 0}%
+                    {p.scheduleStatus
+                      ? ` · ${SCHEDULE_STATUS_LABELS[p.scheduleStatus] ?? p.scheduleStatus}`
+                      : ""}
+                  </p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              </Link>
+            ))
+          )}
+          <Link
+            href="/dashboard/proyectos"
+            className="flex items-center justify-center rounded-lg border border-dashed p-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
+          >
+            Ir al listado de proyectos
+          </Link>
+        </CardContent>
+      </DashboardPanel>
     </div>
   )
 }

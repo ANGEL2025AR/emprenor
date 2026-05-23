@@ -8,12 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Edit, MapPin, Calendar, Users, DollarSign, ListTodo, Loader2, Phone, Mail, ClipboardList } from "lucide-react"
+import { ArrowLeft, Edit, MapPin, Calendar, Users, DollarSign, ListTodo, Loader2, Phone, Mail, ClipboardList, GanttChart } from "lucide-react"
 import type { Project } from "@/lib/db/models"
 import type { ProjectTeamMember } from "@/lib/projects/project-team-display"
 import { ProjectDocumentsClient } from "@/components/projects/project-documents-client"
-import { ProjectFinancesClient } from "@/components/projects/project-finances-client"
 import { ProjectTasksClient } from "@/components/projects/project-tasks-client"
+import { ProjectMilestonesClient } from "@/components/projects/project-milestones-client"
+import { ProjectInstallmentsClient } from "@/components/projects/project-installments-client"
+import { BRANCH_LABELS, SCHEDULE_STATUS_COLORS, SCHEDULE_STATUS_LABELS } from "@/lib/projects/project-manager"
+import type { ScheduleStatus } from "@/lib/projects/project-manager-types"
 import { ComplianceSetupChecklist } from "@/components/compliance/compliance-setup-checklist"
 import { getClientComplianceLabel } from "@/lib/compliance/client-types"
 
@@ -41,6 +44,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const [project, setProject] = useState<(Project & { teamDisplay?: ProjectTeamMember[] }) | null>(null)
   const [loading, setLoading] = useState(true)
   const [isClient, setIsClient] = useState(false)
+  const [liveProgress, setLiveProgress] = useState<number | null>(null)
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -56,6 +60,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         if (response.ok) {
           const data = await response.json()
           setProject(data.project)
+          setLiveProgress(data.project.progress ?? 0)
         } else {
           router.push(isClient ? "/dashboard" : "/dashboard/proyectos")
         }
@@ -108,6 +113,18 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         ? String(project.clientId)
         : ""
   const portalEnabled = !!project.institutionalCompliance?.enabled
+  const displayProgress = liveProgress ?? project.progress ?? 0
+  const scheduleStatus = (project.scheduleStatus ?? "en_tiempo") as ScheduleStatus
+  const branchLabel = project.branch ? BRANCH_LABELS[project.branch] : null
+  const totalDays =
+    project.dates?.start && project.dates?.estimatedEnd
+      ? Math.ceil(
+          (new Date(project.dates.estimatedEnd).getTime() - new Date(project.dates.start).getTime()) / 86400000,
+        )
+      : null
+  const elapsedDays = project.dates?.start
+    ? Math.max(0, Math.ceil((Date.now() - new Date(project.dates.start).getTime()) / 86400000))
+    : null
 
   return (
     <div className="space-y-6">
@@ -120,8 +137,12 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </Link>
           </Button>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge className={STATUS_COLORS[project.status] || "bg-slate-100 text-slate-700"}>{STATUS_LABELS[project.status] || project.status}</Badge>
+              <Badge variant="outline" className={SCHEDULE_STATUS_COLORS[scheduleStatus]}>
+                {SCHEDULE_STATUS_LABELS[scheduleStatus]}
+              </Badge>
+              {branchLabel ? <Badge variant="outline">{branchLabel}</Badge> : null}
               <span className="text-sm text-slate-500">{project.code}</span>
             </div>
             <h1 className="text-2xl font-bold text-slate-900 mt-1">{project.name}</h1>
@@ -187,7 +208,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <ListTodo className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{project.progress || 0}%</p>
+                <p className="text-2xl font-bold">{displayProgress}%</p>
                 <p className="text-sm text-slate-600">Progreso</p>
               </div>
             </div>
@@ -241,22 +262,31 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Progreso General</span>
-            <span className="text-sm font-bold text-green-600">{project.progress || 0}%</span>
+            <span className="text-sm font-bold text-green-600">{displayProgress}%</span>
           </div>
-          <Progress value={project.progress || 0} className="h-3" />
+          <Progress value={displayProgress} className="h-3" />
+          {totalDays != null && elapsedDays != null ? (
+            <p className="text-xs text-slate-500 mt-2">
+              Cronograma: {elapsedDays} / {totalDays} días · Fin estimado {formatDate(project.dates?.estimatedEnd)}
+            </p>
+          ) : null}
         </CardContent>
       </Card>
 
       {/* Tabs */}
-      <Tabs defaultValue="info" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="info">Información</TabsTrigger>
+      <Tabs defaultValue="resumen" className="space-y-4">
+        <TabsList className="flex flex-wrap h-auto gap-1">
+          <TabsTrigger value="resumen">Resumen</TabsTrigger>
+          <TabsTrigger value="cronograma">
+            <GanttChart className="w-4 h-4 mr-1 hidden sm:inline" />
+            Cronograma
+          </TabsTrigger>
+          <TabsTrigger value="cuenta">Cuenta corriente</TabsTrigger>
+          <TabsTrigger value="documents">Documentos</TabsTrigger>
           {!isClient && <TabsTrigger value="tasks">Tareas</TabsTrigger>}
-          <TabsTrigger value="documents">Documentación</TabsTrigger>
-          {!isClient && <TabsTrigger value="finances">Finanzas</TabsTrigger>}
         </TabsList>
 
-        <TabsContent value="info" className="space-y-4">
+        <TabsContent value="resumen" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Descripción */}
             <Card>
@@ -384,6 +414,36 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </div>
         </TabsContent>
 
+        <TabsContent value="cronograma">
+          <Card>
+            <CardHeader>
+              <CardTitle>Cronograma e hitos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ProjectMilestonesClient
+                projectId={id}
+                readOnly={isClient}
+                onProgressChange={setLiveProgress}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="cuenta">
+          <Card>
+            <CardHeader>
+              <CardTitle>Cuenta corriente</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ProjectInstallmentsClient
+                projectId={id}
+                readOnly={isClient}
+                currency={project.budget?.currency || "ARS"}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {!isClient && (
           <TabsContent value="tasks">
             <ProjectTasksClient projectId={id} />
@@ -401,11 +461,6 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </Card>
         </TabsContent>
 
-        {!isClient && (
-          <TabsContent value="finances">
-            <ProjectFinancesClient projectId={id} />
-          </TabsContent>
-        )}
       </Tabs>
     </div>
   )

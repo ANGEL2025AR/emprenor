@@ -73,6 +73,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const allowedFields = [
       "name", "description", "type", "priority", "status", "progress",
       "client", "location", "dates", "budget", "team", "notes", "clientId",
+      "branch", "scheduleStatus", "milestones", "installments", "budgetCurrent",
+      "totalCollected", "totalPending",
     ]
     const sanitizedUpdate: Record<string, unknown> = {}
     for (const key of allowedFields) {

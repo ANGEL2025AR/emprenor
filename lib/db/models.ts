@@ -74,8 +74,15 @@ export interface Company extends BaseDocument {
 
 export type ProjectStatus = "borrador" | "aprobado" | "en_progreso" | "pausado" | "completado" | "cancelado"
 import type { ProjectType } from "@/lib/projects/project-service-types"
+import type {
+  ProjectBranch,
+  ProjectInstallment,
+  ProjectMilestone,
+  ScheduleStatus,
+} from "@/lib/projects/project-manager-types"
 export type { ProjectType }
 export type Priority = "baja" | "media" | "alta" | "urgente"
+export type { ProjectBranch, ProjectMilestone, ProjectInstallment, ScheduleStatus }
 
 export interface Project extends BaseDocument {
   code: string // PRY-2025-001
@@ -125,6 +132,14 @@ export interface Project extends BaseDocument {
   createdBy: ObjectId
   /** Portal de cumplimiento para clientes de obra (FAO, municipios, empresas, consorcios, etc.) */
   institutionalCompliance?: ProjectInstitutionalCompliance
+  /** Project Manager — Plan Maestro v4 */
+  branch?: ProjectBranch
+  scheduleStatus?: ScheduleStatus
+  milestones?: ProjectMilestone[]
+  installments?: ProjectInstallment[]
+  budgetCurrent?: number
+  totalCollected?: number
+  totalPending?: number
 }
 
 // ============================================

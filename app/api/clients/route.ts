@@ -4,6 +4,11 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { projectsFilterForClient } from "@/lib/clients/project-queries"
+import { adminCreateClientSchema } from "@/lib/validations/schemas"
+import {
+  ClientCreateError,
+  createClientWithOptionalPortal,
+} from "@/lib/clients/create-client-with-portal"
 
 export async function GET() {
   try {
@@ -56,22 +61,46 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
-    const data = await request.json()
-    const db = await getDb()
-
-    const client = {
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: user._id,
+    const body = await request.json()
+    const parsed = adminCreateClientSchema.safeParse(body)
+    if (!parsed.success) {
+      const firstError = parsed.error.errors[0]?.message ?? "Datos inválidos"
+      return NextResponse.json({ error: firstError, details: parsed.error.flatten() }, { status: 400 })
     }
 
-    const result = await db.collection("clients").insertOne(client)
+    const data = parsed.data
+    const db = await getDb()
 
-    return NextResponse.json({
-      client: { ...client, _id: result.insertedId.toString() },
-    })
+    const result = await createClientWithOptionalPortal(
+      db,
+      {
+        contactName: data.contactName,
+        contactLastName: data.contactLastName,
+        email: data.email,
+        phone: data.phone,
+        company: data.company,
+        address: data.address,
+        city: data.city,
+        province: data.province,
+        cuit: data.cuit,
+        taxCondition: data.taxCondition,
+        publicClientType: data.publicClientType,
+        status: data.status,
+        notes: data.notes,
+      },
+      {
+        enabled: data.portalAccess.enabled,
+        password: data.portalAccess.password,
+        isActive: data.portalAccess.isActive,
+      },
+      ObjectId.isValid(user._id) ? new ObjectId(user._id) : undefined,
+    )
+
+    return NextResponse.json(result, { status: 201 })
   } catch (error) {
+    if (error instanceof ClientCreateError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
     console.error("Error creating client:", error)
     return NextResponse.json({ error: "Error al crear cliente" }, { status: 500 })
   }

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { ObjectId } from "mongodb"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
@@ -102,6 +103,15 @@ export async function POST(request: NextRequest) {
     const insertResult = await db.collection("users").insertOne(newUser)
 
     if (body.role === "cliente" && typeof body.linkedClientId === "string" && body.linkedClientId) {
+      const clientOid = new ObjectId(body.linkedClientId)
+      await db.collection("users").updateOne(
+        { _id: insertResult.insertedId },
+        { $set: { linkedClientId: clientOid, updatedAt: new Date() } },
+      )
+      await db.collection("clients").updateOne(
+        { _id: clientOid },
+        { $set: { userId: insertResult.insertedId, updatedAt: new Date() } },
+      )
       await assignClientUserToProjects(insertResult.insertedId.toString(), body.linkedClientId)
     }
 

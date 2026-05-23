@@ -129,12 +129,20 @@ async function main() {
 
   const ts = Date.now()
   const testClient = {
-    name: `Cliente QA ${ts}`,
+    publicClientType: "empresa",
+    contactName: "Cliente",
+    contactLastName: `QA ${ts}`,
     company: `Empresa QA ${ts}`,
     email: `qa.cliente.${ts}@emprenor-test.local`,
     phone: "+54 9 11 5555-0100",
-    address: "Ituzaingó 920, Salta",
-    complianceType: "empresa",
+    address: "Ituzaingó 920",
+    city: "Salta",
+    province: "Salta",
+    taxCondition: "responsable_inscripto",
+    status: "activo",
+    portalAccess: {
+      enabled: false,
+    },
   }
 
   let clientId = ""
@@ -168,7 +176,7 @@ async function main() {
     priority: "media",
     clientId: clientId || undefined,
     client: {
-      name: testClient.name,
+      name: testClient.company,
       email: testClient.email,
       phone: testClient.phone,
       address: testClient.address,

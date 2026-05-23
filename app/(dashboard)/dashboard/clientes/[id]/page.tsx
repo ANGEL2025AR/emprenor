@@ -58,7 +58,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
     {
       id: "user",
       label: "Usuario portal (rol cliente) creado",
-      description: "Acceso con email del cliente o contacto de la institución.",
+      description: "Acceso con email y contraseña. Podés crearlo al dar de alta el cliente o desde aquí.",
       done: hasPortalUser,
       href: `/dashboard/usuarios/nuevo?role=cliente&linkedClientId=${id}&email=${encodeURIComponent(client.email)}&name=${encodeURIComponent(client.name)}`,
       hrefLabel: "Crear usuario",

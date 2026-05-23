@@ -47,5 +47,9 @@ export function getAdminSetupKey(): string | null {
 }
 
 export function isPublicRegistrationAllowed(): boolean {
-  return process.env.ALLOW_PUBLIC_REGISTRATION === "true"
+  const flag = process.env.ALLOW_PUBLIC_REGISTRATION?.trim().toLowerCase()
+  if (flag === "true") return true
+  if (flag === "false") return false
+  // En desarrollo el registro público está habilitado salvo desactivación explícita
+  return process.env.NODE_ENV !== "production"
 }

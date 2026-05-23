@@ -226,6 +226,54 @@ export const userSchema = z.object({
   isActive: z.boolean().default(true),
 })
 
+export const adminCreateClientSchema = z
+  .object({
+    contactName: z.string().min(2, "El nombre del contacto es requerido"),
+    contactLastName: z.string().min(2, "El apellido del contacto es requerido"),
+    email: z.string().email("Email inválido"),
+    phone: z.string().min(8, "Teléfono inválido"),
+    company: z.string().max(200).optional(),
+    address: z.string().min(5, "Dirección requerida"),
+    city: z.string().min(2, "Ciudad requerida"),
+    province: z.string().min(2, "Provincia requerida"),
+    cuit: z.string().max(20).optional(),
+    taxCondition: z.enum(["consumidor_final", "responsable_inscripto", "monotributo", "exento"]),
+    publicClientType: publicClientTypeSchema,
+    status: z.enum(["prospecto", "activo", "inactivo"]).default("activo"),
+    notes: z.string().max(2000).optional(),
+    portalAccess: z.object({
+      enabled: z.boolean(),
+      password: z.string().optional(),
+      confirmPassword: z.string().optional(),
+      isActive: z.boolean().optional(),
+    }),
+  })
+  .superRefine((data, ctx) => {
+    if (requiresOrganizationName(data.publicClientType) && !data.company?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["company"],
+        message: "Indique el nombre de la organización",
+      })
+    }
+    if (data.portalAccess.enabled) {
+      if (!data.portalAccess.password || data.portalAccess.password.length < 8) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["portalAccess", "password"],
+          message: "La contraseña debe tener al menos 8 caracteres",
+        })
+      }
+      if (data.portalAccess.password !== data.portalAccess.confirmPassword) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["portalAccess", "confirmPassword"],
+          message: "Las contraseñas no coinciden",
+        })
+      }
+    }
+  })
+
 // ============================================
 // FORMULARIO DE CONTACTO
 // ============================================
@@ -288,4 +336,5 @@ export type TransactionInput = z.infer<typeof transactionSchema>
 export type CertificateInput = z.infer<typeof certificateSchema>
 export type DocumentInput = z.infer<typeof documentSchema>
 export type UserInput = z.infer<typeof userSchema>
+export type AdminCreateClientInput = z.infer<typeof adminCreateClientSchema>
 export type ContactFormData = z.infer<typeof contactFormSchema>

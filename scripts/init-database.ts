@@ -58,6 +58,13 @@ async function initDatabase() {
   await db.collection("messages").createIndex({ createdAt: -1 })
   await db.collection("conversations").createIndex({ participants: 1 })
 
+  // Índices para cumplimiento institucional (FAO)
+  await db.collection("workforce_rosters").createIndex({ projectId: 1, period: 1 }, { unique: true })
+  await db.collection("compliance_documents").createIndex({ projectId: 1, category: 1 })
+  await db.collection("work_incidents").createIndex({ projectId: 1, occurredAt: -1 })
+  await db.collection("local_purchases").createIndex({ projectId: 1, date: -1 })
+  await db.collection("site_complaints").createIndex({ projectId: 1, date: -1 })
+
   console.log("Índices creados exitosamente!")
 
   // Crear usuario admin por defecto si no existe

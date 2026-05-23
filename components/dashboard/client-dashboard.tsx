@@ -117,12 +117,22 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
                   <Progress value={project.progress || 0} className="h-2 max-w-md" />
                   <p className="text-xs text-slate-500">{project.progress || 0}% completado</p>
                 </div>
-                <Button asChild>
-                  <Link href={`/dashboard/proyectos/${project._id?.toString()}`}>
-                    Ver obra
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-2 shrink-0">
+                  <Button asChild>
+                    <Link href={`/dashboard/proyectos/${project._id?.toString()}`}>
+                      Ver obra
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                  {project.institutionalCompliance?.enabled ? (
+                    <Button variant="outline" asChild>
+                      <Link href={`/dashboard/mi-obra/${project._id?.toString()}`}>
+                        <ClipboardList className="w-4 h-4 mr-2" />
+                        Cumplimiento
+                      </Link>
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             ))
           )}

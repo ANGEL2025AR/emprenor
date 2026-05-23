@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
-import { ArrowLeft, Edit, MapPin, Calendar, Users, DollarSign, ListTodo, Loader2, Phone, Mail } from "lucide-react"
+import { ArrowLeft, Edit, MapPin, Calendar, Users, DollarSign, ListTodo, Loader2, Phone, Mail, ClipboardList } from "lucide-react"
 import type { Project } from "@/lib/db/models"
 import { ProjectDocumentsClient } from "@/components/projects/project-documents-client"
 import { ProjectFinancesClient } from "@/components/projects/project-finances-client"
@@ -122,6 +122,14 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </Link>
           </Button>
         )}
+        {isClient && project.institutionalCompliance?.enabled ? (
+          <Button variant="outline" asChild>
+            <Link href={`/dashboard/mi-obra/${id}`}>
+              <ClipboardList className="w-4 h-4 mr-2" />
+              Cumplimiento institucional
+            </Link>
+          </Button>
+        ) : null}
         {!isClient && (
           <Button asChild>
             <Link href={`/dashboard/proyectos/${id}/editar`}>

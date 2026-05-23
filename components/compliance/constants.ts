@@ -16,6 +16,11 @@ export const COMPLAINT_STATUS_LABELS = {
   resuelta: "Resuelta",
 } as const
 
+export const INCIDENT_STATUS_LABELS = {
+  abierto: "Abierto",
+  cerrado: "Cerrado",
+} as const
+
 export async function uploadComplianceFile(file: File): Promise<{
   url: string
   fileName: string

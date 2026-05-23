@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
 import { ComplianceSummaryPanel } from "@/components/compliance/summary-panel"
-import { COMPLIANCE_DOC_LABELS, COMPLAINT_STATUS_LABELS, newRosterEntryId, uploadComplianceFile } from "@/components/compliance/constants"
+import { COMPLIANCE_DOC_LABELS, COMPLAINT_STATUS_LABELS, INCIDENT_STATUS_LABELS, newRosterEntryId, uploadComplianceFile } from "@/components/compliance/constants"
 import type { ChecklistItem } from "@/lib/compliance/roster"
 import type { ComplianceDocumentCategory, ProjectInstitutionalCompliance, WorkforceRosterEntry } from "@/lib/db/models"
 import { periodLabel } from "@/lib/compliance/period"
@@ -29,7 +29,16 @@ import {
   Trash2,
   Upload,
   ExternalLink,
+  Pencil,
+  CheckCircle2,
 } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 type SummaryData = {
   project: {
@@ -346,6 +355,9 @@ function RosterTab({
   projectId: string
   onReload: () => void
 }) {
+  const [detailId, setDetailId] = useState<string | null>(null)
+  const detailEntry = entries.find((e) => e.id === detailId) ?? null
+
   const update = (id: string, patch: Partial<WorkforceRosterEntry>) => {
     onEntriesChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)))
   }
@@ -387,6 +399,10 @@ function RosterTab({
         ) : null}
       </div>
 
+      <p className="text-xs text-muted-foreground">
+        Completá domicilio, distancia y capacitaciones en <strong>Detalle FAO</strong> para que el export CSV incluya todas las columnas requeridas por auditoría.
+      </p>
+
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
         <Card><CardContent className="p-3"><p className="text-muted-foreground">Total</p><p className="text-xl font-bold">{total}</p></CardContent></Card>
         <Card><CardContent className="p-3"><p className="text-muted-foreground">Mujeres</p><p className="text-xl font-bold">{women}</p></CardContent></Card>
@@ -395,7 +411,7 @@ function RosterTab({
       </div>
 
       <div className="overflow-x-auto rounded-lg border">
-        <table className="w-full text-sm min-w-[900px]">
+        <table className="w-full text-sm min-w-[1000px]">
           <thead className="bg-slate-50">
             <tr>
               <th className="p-2 text-left">Apellido</th>
@@ -406,7 +422,8 @@ function RosterTab({
               <th className="p-2">ART / Seguro</th>
               <th className="p-2">Local</th>
               <th className="p-2">Conducta</th>
-              {canManage ? <th className="p-2" /> : null}
+              <th className="p-2">Capacit.</th>
+              <th className="p-2" />
             </tr>
           </thead>
           <tbody>
@@ -425,19 +442,152 @@ function RosterTab({
                 <td className="p-1"><Input value={e.artInsuranceNumber ?? ""} disabled={!canManage} onChange={(ev) => update(e.id, { artInsuranceNumber: ev.target.value })} className="h-8" placeholder="Nº asegurado" /></td>
                 <td className="p-1 text-center"><Checkbox checked={e.isLocalWorkforce} disabled={!canManage} onCheckedChange={(c) => update(e.id, { isLocalWorkforce: !!c })} /></td>
                 <td className="p-1 text-center"><Checkbox checked={e.codeOfConductSigned} disabled={!canManage} onCheckedChange={(c) => update(e.id, { codeOfConductSigned: !!c })} /></td>
-                {canManage ? (
-                  <td className="p-1">
+                <td className="p-1 text-center text-xs">
+                  {e.patrimonyTrainingSigned && e.genderTrainingSigned ? (
+                    <Badge variant="secondary" className="text-[10px]">OK</Badge>
+                  ) : (
+                    <span className="text-amber-600">Pend.</span>
+                  )}
+                </td>
+                <td className="p-1 flex gap-1">
+                  <Button type="button" variant="outline" size="sm" className="h-8" onClick={() => setDetailId(e.id)}>
+                    <Pencil className="h-3 w-3 mr-1" /> Detalle
+                  </Button>
+                  {canManage ? (
                     <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={() => update(e.id, { active: false })}>
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
-                  </td>
-                ) : null}
+                  ) : null}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       {entries.length === 0 ? <p className="text-sm text-muted-foreground text-center py-6">Sin personal cargado para este periodo.</p> : null}
+
+      <Dialog open={!!detailEntry} onOpenChange={(open) => !open && setDetailId(null)}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          {detailEntry ? (
+            <>
+              <DialogHeader>
+                <DialogTitle>
+                  Detalle FAO — {detailEntry.lastName}, {detailEntry.firstName}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-1 sm:col-span-2">
+                  <Label>Fecha de nacimiento</Label>
+                  <Input
+                    type="date"
+                    value={detailEntry.birthDate?.slice(0, 10) ?? ""}
+                    disabled={!canManage}
+                    onChange={(ev) => update(detailEntry.id, { birthDate: ev.target.value })}
+                  />
+                </div>
+                <div className="space-y-1 sm:col-span-2">
+                  <Label>Domicilio</Label>
+                  <Input
+                    value={detailEntry.address}
+                    disabled={!canManage}
+                    onChange={(ev) => update(detailEntry.id, { address: ev.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Localidad</Label>
+                  <Input
+                    value={detailEntry.city}
+                    disabled={!canManage}
+                    onChange={(ev) => update(detailEntry.id, { city: ev.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Provincia</Label>
+                  <Input
+                    value={detailEntry.province}
+                    disabled={!canManage}
+                    onChange={(ev) => update(detailEntry.id, { province: ev.target.value })}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Distancia al sitio (km)</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={detailEntry.distanceKm ?? ""}
+                    disabled={!canManage}
+                    onChange={(ev) =>
+                      update(detailEntry.id, {
+                        distanceKm: ev.target.value === "" ? undefined : Number(ev.target.value),
+                      })
+                    }
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Condición ART</Label>
+                  <Input
+                    value={detailEntry.artCondition ?? ""}
+                    disabled={!canManage}
+                    placeholder="Ej: alta, baja temporal"
+                    onChange={(ev) => update(detailEntry.id, { artCondition: ev.target.value })}
+                  />
+                </div>
+                <div className="flex items-center gap-2 sm:col-span-2">
+                  <Checkbox
+                    id="indigenous"
+                    checked={detailEntry.indigenousCommunity?.yes ?? false}
+                    disabled={!canManage}
+                    onCheckedChange={(c) =>
+                      update(detailEntry.id, {
+                        indigenousCommunity: {
+                          yes: !!c,
+                          name: c ? detailEntry.indigenousCommunity?.name : undefined,
+                        },
+                      })
+                    }
+                  />
+                  <Label htmlFor="indigenous">Pertenece a comunidad indígena</Label>
+                </div>
+                {detailEntry.indigenousCommunity?.yes ? (
+                  <div className="space-y-1 sm:col-span-2">
+                    <Label>Comunidad / pueblo</Label>
+                    <Input
+                      value={detailEntry.indigenousCommunity?.name ?? ""}
+                      disabled={!canManage}
+                      onChange={(ev) =>
+                        update(detailEntry.id, {
+                          indigenousCommunity: { yes: true, name: ev.target.value },
+                        })
+                      }
+                    />
+                  </div>
+                ) : null}
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="patrimony"
+                    checked={detailEntry.patrimonyTrainingSigned}
+                    disabled={!canManage}
+                    onCheckedChange={(c) => update(detailEntry.id, { patrimonyTrainingSigned: !!c })}
+                  />
+                  <Label htmlFor="patrimony">Capacitación patrimonio cultural</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="gender-training"
+                    checked={detailEntry.genderTrainingSigned}
+                    disabled={!canManage}
+                    onCheckedChange={(c) => update(detailEntry.id, { genderTrainingSigned: !!c })}
+                  />
+                  <Label htmlFor="gender-training">Capacitación violencia de género</Label>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setDetailId(null)}>Cerrar</Button>
+              </DialogFooter>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
@@ -457,6 +607,7 @@ function DocumentsTab({
   const [uploading, setUploading] = useState(false)
   const [category, setCategory] = useState<ComplianceDocumentCategory>("art_policy")
   const [title, setTitle] = useState("")
+  const [validUntil, setValidUntil] = useState("")
 
   const handleUpload = async (file: File) => {
     setUploading(true)
@@ -473,12 +624,14 @@ function DocumentsTab({
           fileName: up.fileName,
           mimeType: up.mimeType,
           fileSize: up.fileSize,
+          validUntil: validUntil || undefined,
         }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       toast({ title: "Documento cargado" })
       setTitle("")
+      setValidUntil("")
       onRefresh()
     } catch (e) {
       toast({ title: "Error", description: e instanceof Error ? e.message : "", variant: "destructive" })
@@ -513,6 +666,10 @@ function DocumentsTab({
               <Label>Título (opcional)</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={COMPLIANCE_DOC_LABELS[category]} />
             </div>
+            <div className="space-y-2">
+              <Label>Vigencia hasta (ART / pólizas)</Label>
+              <Input type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} />
+            </div>
             <div className="sm:col-span-2">
               <Label htmlFor="doc-file" className="cursor-pointer inline-flex items-center gap-2 border rounded-lg px-4 py-3 hover:bg-slate-50">
                 <Upload className="h-4 w-4" />
@@ -530,7 +687,10 @@ function DocumentsTab({
           <div key={d._id} className="flex items-center justify-between gap-2 rounded-lg border p-3">
             <div>
               <p className="font-medium">{d.title}</p>
-              <p className="text-xs text-muted-foreground">{COMPLIANCE_DOC_LABELS[d.category]} · {d.fileName}</p>
+              <p className="text-xs text-muted-foreground">
+                {COMPLIANCE_DOC_LABELS[d.category]} · {d.fileName}
+                {d.validUntil ? ` · Vigente hasta ${new Date(d.validUntil).toLocaleDateString("es-AR")}` : ""}
+              </p>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" asChild><a href={d.fileUrl} target="_blank" rel="noreferrer">Ver</a></Button>
@@ -546,6 +706,21 @@ function DocumentsTab({
 function IncidentsTab({ incidents, canManage, projectId, onRefresh }: { incidents: { _id: string; workerName: string; cuilOrDni: string; description: string; status: string; occurredAt: string }[]; canManage: boolean; projectId: string; onRefresh: () => void }) {
   const { toast } = useToast()
   const [form, setForm] = useState({ cuilOrDni: "", workerName: "", description: "", careProvided: "", artManagementDetail: "" })
+
+  const closeIncident = async (incidentId: string) => {
+    const res = await fetch(`/api/compliance/incidents/${projectId}/${incidentId}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "cerrado" }),
+    })
+    if (!res.ok) {
+      toast({ title: "Error al cerrar incidente", variant: "destructive" })
+      return
+    }
+    toast({ title: "Incidente cerrado" })
+    onRefresh()
+  }
 
   const submit = async () => {
     const res = await fetch(`/api/compliance/incidents/${projectId}`, {
@@ -585,8 +760,15 @@ function IncidentsTab({ incidents, canManage, projectId, onRefresh }: { incident
                 <p className="text-sm text-muted-foreground">{new Date(i.occurredAt).toLocaleDateString("es-AR")}</p>
                 <p className="text-sm mt-2">{i.description}</p>
               </div>
-              <Badge>{i.status}</Badge>
+              <Badge variant={i.status === "cerrado" ? "secondary" : "destructive"}>
+                {INCIDENT_STATUS_LABELS[i.status as keyof typeof INCIDENT_STATUS_LABELS] ?? i.status}
+              </Badge>
             </div>
+            {canManage && i.status === "abierto" ? (
+              <Button variant="outline" size="sm" className="mt-3" onClick={() => closeIncident(i._id)}>
+                <CheckCircle2 className="h-4 w-4 mr-1" /> Marcar como cerrado
+              </Button>
+            ) : null}
           </CardContent>
         </Card>
       ))}
@@ -649,6 +831,24 @@ function PurchasesTab({ purchases, canManage, projectId, onRefresh }: { purchase
 function ComplaintsTab({ complaints, canManage, projectId, onRefresh }: { complaints: { _id: string; date: string; source: string; description: string; status: string; response?: string }[]; canManage: boolean; projectId: string; onRefresh: () => void }) {
   const { toast } = useToast()
   const [desc, setDesc] = useState("")
+  const [managingId, setManagingId] = useState<string | null>(null)
+  const [manageForm, setManageForm] = useState({ status: "en_gestion" as "abierta" | "en_gestion" | "resuelta", response: "" })
+
+  const updateComplaint = async (complaintId: string) => {
+    const res = await fetch(`/api/compliance/complaints/${projectId}/${complaintId}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(manageForm),
+    })
+    if (!res.ok) {
+      toast({ title: "Error al actualizar queja", variant: "destructive" })
+      return
+    }
+    toast({ title: "Queja actualizada" })
+    setManagingId(null)
+    onRefresh()
+  }
 
   const submit = async () => {
     const res = await fetch(`/api/compliance/complaints/${projectId}`, {
@@ -682,6 +882,47 @@ function ComplaintsTab({ complaints, canManage, projectId, onRefresh }: { compla
             <p className="font-medium mt-2">{c.source}</p>
             <p className="text-sm">{c.description}</p>
             {c.response ? <p className="text-sm text-muted-foreground mt-2">Respuesta: {c.response}</p> : null}
+            {canManage ? (
+              <div className="mt-3 space-y-2">
+                {managingId === c._id ? (
+                  <>
+                    <Select
+                      value={manageForm.status}
+                      onValueChange={(v) =>
+                        setManageForm({ ...manageForm, status: v as "abierta" | "en_gestion" | "resuelta" })
+                      }
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(COMPLAINT_STATUS_LABELS).map(([k, label]) => (
+                          <SelectItem key={k} value={k}>{label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Textarea
+                      placeholder="Respuesta / gestión realizada"
+                      value={manageForm.response}
+                      onChange={(e) => setManageForm({ ...manageForm, response: e.target.value })}
+                    />
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={() => updateComplaint(c._id)}>Guardar</Button>
+                      <Button size="sm" variant="ghost" onClick={() => setManagingId(null)}>Cancelar</Button>
+                    </div>
+                  </>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setManagingId(c._id)
+                      setManageForm({ status: (c.status as "abierta" | "en_gestion" | "resuelta") || "en_gestion", response: c.response ?? "" })
+                    }}
+                  >
+                    Gestionar queja
+                  </Button>
+                )}
+              </div>
+            ) : null}
           </CardContent>
         </Card>
       ))}
@@ -712,7 +953,11 @@ function SettingsTab({
           <Label>Habilitar portal de cumplimiento</Label>
           <Switch checked={settings.enabled} onCheckedChange={(c) => patch({ enabled: c })} />
         </div>
+        <p className="text-sm text-muted-foreground rounded-md border bg-slate-50 p-3">
+          Activá el portal y completá los datos del cliente institucional. El cliente verá nómina, documentos e incidentes en <strong>Mi obra → Cumplimiento institucional</strong>.
+        </p>
         <Input placeholder="Organización cliente (ej: FAO)" value={settings.clientOrganization ?? ""} onChange={(e) => patch({ clientOrganization: e.target.value })} />
+        <Input placeholder="Nombre del sitio / obra" value={settings.siteName ?? ""} onChange={(e) => patch({ siteName: e.target.value })} />
         <Input placeholder="Referencia contrato / orden de compra" value={settings.contractReference ?? settings.orderReference ?? ""} onChange={(e) => patch({ contractReference: e.target.value, orderReference: e.target.value })} />
         <Input placeholder="Ubicación libro de quejas (obrador)" value={settings.complaintBookLocation ?? ""} onChange={(e) => patch({ complaintBookLocation: e.target.value })} />
         <Input placeholder="Email salvaguardas (MAC)" value={settings.macEmail ?? ""} onChange={(e) => patch({ macEmail: e.target.value })} />
@@ -720,6 +965,11 @@ function SettingsTab({
         <div className="grid sm:grid-cols-2 gap-3">
           <Input placeholder="Responsable social — nombre" value={settings.socialResponsible?.name ?? ""} onChange={(e) => patch({ socialResponsible: { ...settings.socialResponsible, name: e.target.value, phone: settings.socialResponsible?.phone ?? "" } })} />
           <Input placeholder="Responsable social — teléfono" value={settings.socialResponsible?.phone ?? ""} onChange={(e) => patch({ socialResponsible: { name: settings.socialResponsible?.name ?? "", phone: e.target.value, email: settings.socialResponsible?.email } })} />
+          <Input className="sm:col-span-2" placeholder="Responsable social — email" value={settings.socialResponsible?.email ?? ""} onChange={(e) => patch({ socialResponsible: { name: settings.socialResponsible?.name ?? "", phone: settings.socialResponsible?.phone ?? "", email: e.target.value } })} />
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Input placeholder="Responsable de sitio — nombre" value={settings.siteResponsible?.name ?? ""} onChange={(e) => patch({ siteResponsible: { ...settings.siteResponsible, name: e.target.value, phone: settings.siteResponsible?.phone ?? "" } })} />
+          <Input placeholder="Responsable de sitio — teléfono" value={settings.siteResponsible?.phone ?? ""} onChange={(e) => patch({ siteResponsible: { name: settings.siteResponsible?.name ?? "", phone: e.target.value, email: settings.siteResponsible?.email } })} />
         </div>
         <Button onClick={onSave} disabled={saving}>{saving ? "Guardando…" : "Guardar configuración"}</Button>
       </CardContent>

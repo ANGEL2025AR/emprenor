@@ -9,6 +9,10 @@ import {
   CLIENT_PORTAL_NAV_GROUPS,
   EMPLOYEE_PORTAL_HOME,
 } from "@/lib/dashboard/navigation"
+import {
+  EMPLOYEE_NAV_GROUPS,
+  EMPLOYEE_SUPERVISOR_ONLY_GROUP_IDS,
+} from "@/lib/dashboard/employee-navigation"
 
 function isClientRole(role: UserRole): boolean {
   return role === "cliente"
@@ -44,13 +48,28 @@ export function filterNavGroups(
   userRole: UserRole,
   portalSettings: PortalSettings | null,
 ): DashboardNavGroup[] {
-  const groups = isClientRole(userRole) ? CLIENT_PORTAL_NAV_GROUPS : DASHBOARD_NAV_GROUPS
-  return groups
-    .map((group) => ({
+  if (isClientRole(userRole)) {
+    return CLIENT_PORTAL_NAV_GROUPS.map((group) => ({
       ...group,
       items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
-    }))
-    .filter((group) => group.items.length > 0)
+    })).filter((group) => group.items.length > 0)
+  }
+
+  if (isPortalEmployeeRole(userRole)) {
+    return EMPLOYEE_NAV_GROUPS.filter(
+      (group) => userRole === "supervisor" || !EMPLOYEE_SUPERVISOR_ONLY_GROUP_IDS.has(group.id),
+    )
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
+      }))
+      .filter((group) => group.items.length > 0)
+  }
+
+  return DASHBOARD_NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
+  })).filter((group) => group.items.length > 0)
 }
 
 /** Un solo inicio por rol: empleados → portal RRHH; clientes → grupo Mi obra; resto → dashboard ejecutivo. */

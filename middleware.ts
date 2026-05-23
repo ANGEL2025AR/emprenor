@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
 import { buildMiddlewareRouteMap, isClientPathAllowed } from "@/lib/auth/client-routes"
+import { getDefaultDashboardPath, isEmployeePathAllowed, isEmployeeRole } from "@/lib/auth/employee-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
 
@@ -28,7 +29,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (authRoutes.some((route) => pathname.startsWith(route)) && isAuthenticated) {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
+    return NextResponse.redirect(new URL(getDefaultDashboardPath(userRole), request.url))
   }
 
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !isAuthenticated) {
@@ -41,6 +42,16 @@ export async function middleware(request: NextRequest) {
     if (userRole === "cliente") {
       if (!isClientPathAllowed(pathname)) {
         return NextResponse.redirect(new URL("/dashboard", request.url))
+      }
+      return NextResponse.next()
+    }
+
+    if (isEmployeeRole(userRole)) {
+      if (pathname === "/dashboard" || pathname === "/dashboard/") {
+        return NextResponse.redirect(new URL("/dashboard/portal", request.url))
+      }
+      if (!isEmployeePathAllowed(pathname, userRole)) {
+        return NextResponse.redirect(new URL("/dashboard/portal", request.url))
       }
       return NextResponse.next()
     }

@@ -39,6 +39,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { ROLE_LABELS } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
+import { isPortalEmployeeRole } from "@/lib/auth/portal-roles"
 
 interface DashboardHeaderProps {
   user: SerializableUser
@@ -122,17 +123,33 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
   const userRole: UserRole = user?.role || "cliente"
   const roleLabel = ROLE_LABELS[userRole] || "Usuario"
 
-  const quickLinks = [
-    { name: "Dashboard", href: "/dashboard", icon: Home },
-    { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban },
-    { name: "Nuevo Proyecto", href: "/dashboard/proyectos/nuevo", icon: FolderKanban },
-    { name: "Tareas", href: "/dashboard/tareas", icon: ListTodo },
-    { name: "Nueva Tarea", href: "/dashboard/tareas/nueva", icon: ListTodo },
-    { name: "Inspecciones", href: "/dashboard/inspecciones", icon: ClipboardCheck },
-    { name: "Finanzas", href: "/dashboard/finanzas", icon: DollarSign },
-    { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
-    { name: "Configuración", href: "/dashboard/configuracion", icon: Settings },
-  ]
+  const quickLinks = isPortalEmployeeRole(userRole)
+    ? [
+        { name: "Mi Portal", href: "/dashboard/portal", icon: Home },
+        { name: "Mis obras", href: "/dashboard/proyectos", icon: FolderKanban },
+        { name: "Tareas", href: "/dashboard/tareas", icon: ListTodo },
+        { name: "Bitácora diaria", href: "/dashboard/bitacora-diaria", icon: FileText },
+        { name: "Incidencias", href: "/dashboard/incidencias", icon: FileText },
+        { name: "Inspecciones", href: "/dashboard/inspecciones", icon: ClipboardCheck },
+        { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
+      ]
+    : userRole === "cliente"
+      ? [
+          { name: "Mis obras", href: "/dashboard/mi-obra", icon: FolderKanban },
+          { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
+          { name: "Certificados", href: "/dashboard/certificados", icon: FileText },
+        ]
+      : [
+          { name: "Dashboard", href: "/dashboard", icon: Home },
+          { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban },
+          { name: "Nuevo Proyecto", href: "/dashboard/proyectos/nuevo", icon: FolderKanban },
+          { name: "Tareas", href: "/dashboard/tareas", icon: ListTodo },
+          { name: "Nueva Tarea", href: "/dashboard/tareas/nueva", icon: ListTodo },
+          { name: "Inspecciones", href: "/dashboard/inspecciones", icon: ClipboardCheck },
+          { name: "Finanzas", href: "/dashboard/finanzas", icon: DollarSign },
+          { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
+          { name: "Configuración", href: "/dashboard/configuracion", icon: Settings },
+        ]
 
   return (
     <>
@@ -257,12 +274,14 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                     Perfil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/configuracion" className="flex items-center gap-2 cursor-pointer">
-                    <Settings className="w-4 h-4" />
-                    Configuración
-                  </Link>
-                </DropdownMenuItem>
+                {!isPortalEmployeeRole(userRole) && userRole !== "cliente" && (
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/configuracion" className="flex items-center gap-2 cursor-pointer">
+                      <Settings className="w-4 h-4" />
+                      Configuración
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem asChild>
                   <Link href="/preguntas-frecuentes" className="flex items-center gap-2 cursor-pointer">
                     <HelpCircle className="w-4 h-4" />

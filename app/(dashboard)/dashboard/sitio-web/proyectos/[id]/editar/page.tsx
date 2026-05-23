@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { ArrowLeft, Upload, X, ImagePlus } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import { ImageUploadField } from "@/components/site/image-upload-field"
+import { GalleryUploadField } from "@/components/site/gallery-upload-field"
 
 const categorias = [
   "Edificio Municipal",
@@ -74,9 +76,6 @@ export default function EditarProyectoPage() {
     order: 0,
   })
 
-  const [newImage, setNewImage] = useState<File | null>(null)
-  const [previewImage, setPreviewImage] = useState<string>("")
-
   useEffect(() => {
     if (id) {
       loadProject()
@@ -89,7 +88,6 @@ export default function EditarProyectoPage() {
       if (res.ok) {
         const data = await res.json()
         setFormData(data.project)
-        setPreviewImage(data.project.image)
       } else {
         alert("Error al cargar el proyecto")
         router.push("/dashboard/sitio-web/proyectos")
@@ -102,97 +100,17 @@ export default function EditarProyectoPage() {
     }
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setNewImage(file)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    if (files.length === 0) return
-
-    setUploading(true)
-    try {
-      const uploadedUrls: string[] = []
-
-      for (const file of files) {
-        const formData = new FormData()
-        formData.append("file", file)
-
-        const res = await fetch("/api/public-projects/upload-image", {
-          method: "POST",
-          body: formData,
-        })
-
-        const data = await res.json()
-        if (data.success) {
-          uploadedUrls.push(data.url)
-        }
-      }
-
-      setFormData((prev) => ({
-        ...prev,
-        gallery: [...(prev.gallery || []), ...uploadedUrls],
-      }))
-    } catch (error) {
-      console.error("Error al subir imágenes:", error)
-      alert("Error al subir imágenes")
-    } finally {
-      setUploading(false)
-    }
-  }
-
-  const removeGalleryImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      gallery: (prev.gallery || []).filter((_, i) => i !== index),
-    }))
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
 
     try {
-      let imageUrl = formData.image
-
-      // Si hay nueva imagen, subirla primero
-      if (newImage) {
-        setUploading(true)
-        const imageFormData = new FormData()
-        imageFormData.append("file", newImage)
-
-        const uploadRes = await fetch("/api/public-projects/upload-image", {
-          method: "POST",
-          body: imageFormData,
-        })
-
-        if (uploadRes.ok) {
-          const uploadData = await uploadRes.json()
-          imageUrl = uploadData.url
-        } else {
-          throw new Error("Error al subir la imagen")
-        }
-        setUploading(false)
-      }
-
-      // Actualizar proyecto
       const res = await fetch(`/api/public-projects/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...formData,
-          image: imageUrl,
-        }),
+        body: JSON.stringify(formData),
       })
 
       if (res.ok) {
@@ -206,7 +124,6 @@ export default function EditarProyectoPage() {
       alert("Error al actualizar el proyecto")
     } finally {
       setSaving(false)
-      setUploading(false)
     }
   }
 
@@ -316,109 +233,24 @@ export default function EditarProyectoPage() {
               <p className="text-xs text-muted-foreground">Los proyectos se ordenan de menor a mayor número</p>
             </div>
 
-            <div className="space-y-2">
-              <Label>Imagen Principal del Proyecto</Label>
-              <div className="border-2 border-dashed rounded-lg p-6 text-center">
-                {previewImage ? (
-                  <div className="relative">
-                    <img
-                      src={previewImage || "/placeholder.svg"}
-                      alt="Preview"
-                      className="max-h-64 mx-auto rounded-lg"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-2 right-2"
-                      onClick={() => {
-                        setPreviewImage("")
-                        setNewImage(null)
-                        setFormData({ ...formData, image: "" })
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
-                    <div className="text-sm text-muted-foreground">
-                      <label htmlFor="image-upload" className="cursor-pointer text-primary hover:underline">
-                        Selecciona una imagen
-                      </label>
-                      <input
-                        id="image-upload"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageChange}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-              {!previewImage && (
-                <p className="text-xs text-muted-foreground">
-                  Formatos soportados: JPG, PNG, WEBP. Tamaño recomendado: 1200x800px
-                </p>
-              )}
-            </div>
+            <ImageUploadField
+              label="Imagen principal del proyecto"
+              hint="Subí o reemplazá la foto desde tu PC. Se publica al guardar el proyecto."
+              value={formData.image}
+              onChange={(image) => setFormData((prev) => ({ ...prev, image }))}
+              folder="public-projects"
+              onUploadingChange={setUploading}
+              previewClassName="max-w-md aspect-[3/2]"
+            />
 
-            <div className="space-y-2">
-              <Label>Galería de Imágenes Adicionales</Label>
-              <p className="text-sm text-muted-foreground">
-                Agrega más imágenes para mostrar avances o diferentes etapas del proyecto
-              </p>
-
-              {formData.gallery && formData.gallery.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
-                  {formData.gallery.map((url, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={url || "/placeholder.svg"}
-                        alt={`Imagen ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg border"
-                      />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7"
-                        onClick={() => removeGalleryImage(index)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                      <div className="absolute bottom-2 left-2 bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded text-xs">
-                        {index + 1}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div className="border-2 border-dashed rounded-lg p-6 text-center">
-                <ImagePlus className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
-                <Label htmlFor="gallery-upload" className="cursor-pointer">
-                  <span className="text-primary hover:underline">
-                    {formData.gallery && formData.gallery.length > 0
-                      ? "Agregar más imágenes"
-                      : "Subir imágenes a la galería"}
-                  </span>
-                  <Input
-                    id="gallery-upload"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={handleGalleryUpload}
-                    disabled={uploading}
-                  />
-                </Label>
-                <p className="text-xs text-muted-foreground mt-2">Puedes seleccionar múltiples imágenes a la vez</p>
-                {uploading && <p className="text-sm text-primary mt-2">Subiendo imágenes...</p>}
-              </div>
-            </div>
+            <GalleryUploadField
+              label="Galería de imágenes adicionales"
+              hint="Más fotos: avances, etapas o distintas vistas del proyecto."
+              value={formData.gallery || []}
+              onChange={(gallery) => setFormData((prev) => ({ ...prev, gallery }))}
+              folder="public-projects"
+              onUploadingChange={setUploading}
+            />
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">

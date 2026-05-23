@@ -4,55 +4,19 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import type { SerializableUser } from "@/lib/auth/session"
-import { hasPermission } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
 import Image from "next/image"
-import { isPortalAdminRole, isPortalEmployeeRole } from "@/lib/auth/portal-roles"
+import { isPortalEmployeeRole } from "@/lib/auth/portal-roles"
+import type { PortalSettings } from "@/lib/portal/portal-settings-shared"
+import { isNavPathActive } from "@/lib/dashboard/navigation"
 import {
-  isPortalModuleEnabled,
-  type PortalModuleKey,
-  type PortalSettings,
-} from "@/lib/portal/portal-settings-shared"
-import {
-  LayoutDashboard,
-  FolderKanban,
-  ListTodo,
-  ClipboardCheck,
-  DollarSign,
-  FileText,
-  Bell,
-  MessageSquare,
-  Users,
-  Settings,
-  X,
-  ChevronLeft,
-  Menu,
-  FileSignature,
-  Receipt,
-  CreditCard,
-  Calendar,
-  Package,
-  Truck,
-  UserCheck,
-  BarChart3,
-  Award,
-  AlertOctagon,
-  Zap,
-  Globe,
-  Shield,
-  ShieldCheck,
-  Inbox,
-  Wallet,
-  Palmtree,
-  HelpCircle,
-  Megaphone,
-  ShieldAlert,
-  Banknote,
-  FolderOpen,
-  BadgeDollarSign,
-  LayoutTemplate,
-} from "lucide-react"
-import { useState, useEffect } from "react"
+  DASHBOARD_HOME,
+  filterNavGroups,
+  isHomeVisible,
+} from "@/lib/dashboard/filter-navigation"
+import type { DashboardNavGroup, DashboardNavItem } from "@/lib/dashboard/navigation"
+import { X, ChevronLeft, Menu, ChevronDown } from "lucide-react"
+import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { LOGO_DARK_BG, LOGO_ICON_LIGHT } from "@/lib/brand/logo"
 
@@ -62,6 +26,128 @@ interface DashboardSidebarProps {
   initialPortalSettings?: PortalSettings | null
 }
 
+function getOpenGroupsForPath(
+  pathname: string,
+  groups: DashboardNavGroup[],
+): Set<string> {
+  const open = new Set<string>()
+  for (const group of groups) {
+    if (group.items.some((item) => isNavPathActive(pathname, item.href))) {
+      open.add(group.id)
+    }
+  }
+  return open
+}
+
+function NavLink({
+  item,
+  isActive,
+  isCollapsed,
+  nested = false,
+}: {
+  item: DashboardNavItem
+  isActive: boolean
+  isCollapsed: boolean
+  nested?: boolean
+}) {
+  const Icon = item.icon
+
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        "flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 group relative",
+        nested && !isCollapsed && "pl-9",
+        isActive ? "dashboard-nav-active text-white" : "dashboard-nav-item",
+        isCollapsed && "lg:justify-center lg:px-2",
+      )}
+      title={isCollapsed ? item.name : undefined}
+    >
+      <Icon className={cn("flex-shrink-0", nested && !isCollapsed ? "w-4 h-4" : "w-5 h-5")} />
+      <span className={cn(isCollapsed && "lg:hidden")}>{item.name}</span>
+
+      {isCollapsed && (
+        <div className="absolute left-full ml-2 px-3 py-1.5 bg-slate-800/95 border border-white/10 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 hidden lg:block shadow-xl">
+          {item.name}
+        </div>
+      )}
+    </Link>
+  )
+}
+
+function NavGroupSection({
+  group,
+  isCollapsed,
+  isOpen,
+  onToggle,
+  pathname,
+}: {
+  group: DashboardNavGroup
+  isCollapsed: boolean
+  isOpen: boolean
+  onToggle: () => void
+  pathname: string
+}) {
+  const GroupIcon = group.icon
+  const hasActiveItem = group.items.some((item) => isNavPathActive(pathname, item.href))
+
+  if (isCollapsed) {
+    return (
+      <li className="space-y-0.5">
+        <div
+          className="hidden lg:block h-px bg-white/5 mx-2 my-2 first:hidden"
+          aria-hidden
+        />
+        {group.items.map((item) => (
+          <NavLink
+            key={item.href}
+            item={item}
+            isActive={isNavPathActive(pathname, item.href)}
+            isCollapsed={isCollapsed}
+          />
+        ))}
+      </li>
+    )
+  }
+
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={cn(
+          "flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200",
+          hasActiveItem
+            ? "text-emerald-300/90 bg-white/[0.04]"
+            : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]",
+        )}
+        aria-expanded={isOpen}
+      >
+        <GroupIcon className="w-5 h-5 flex-shrink-0 opacity-80" />
+        <span className="flex-1 text-left">{group.label}</span>
+        <ChevronDown
+          className={cn("w-4 h-4 flex-shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
+        />
+      </button>
+
+      {isOpen && (
+        <ul className="mt-0.5 space-y-0.5">
+          {group.items.map((item) => (
+            <li key={item.href}>
+              <NavLink
+                item={item}
+                isActive={isNavPathActive(pathname, item.href)}
+                isCollapsed={isCollapsed}
+                nested
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  )
+}
+
 export function DashboardSidebar({ user, initialPortalSettings = null }: DashboardSidebarProps) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
@@ -69,7 +155,19 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
 
   const [portalSettings, setPortalSettings] = useState<PortalSettings | null>(initialPortalSettings)
 
-  // Close mobile menu on route change
+  const userRole: UserRole = user?.role || "cliente"
+
+  const navGroups = useMemo(
+    () => filterNavGroups(userRole, portalSettings),
+    [userRole, portalSettings],
+  )
+
+  const [openGroups, setOpenGroups] = useState<Set<string>>(() =>
+    getOpenGroupsForPath(pathname, filterNavGroups(userRole, initialPortalSettings)),
+  )
+
+  const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
+
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
@@ -89,302 +187,28 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
       .catch(() => {})
   }, [user?.role, initialPortalSettings])
 
-  // Ensure role is valid
-  const userRole: UserRole = user?.role || "cliente"
+  useEffect(() => {
+    setOpenGroups((prev) => {
+      const active = getOpenGroupsForPath(pathname, navGroups)
+      return new Set([...prev, ...active])
+    })
+  }, [pathname, navGroups])
 
-  const navigation = [
-    {
-      name: "Dashboard",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-      permission: null,
-    },
-    {
-      name: "Proyectos",
-      href: "/dashboard/proyectos",
-      icon: FolderKanban,
-      permission: "projects.view" as const,
-    },
-    {
-      name: "Bitácora Diaria",
-      href: "/dashboard/bitacora-diaria",
-      icon: FileText,
-      permission: "projects.view" as const,
-    },
-    {
-      name: "Punch Lists",
-      href: "/dashboard/punch-lists",
-      icon: ClipboardCheck,
-      permission: "quality.view" as const,
-    },
-    {
-      name: "RFIs",
-      href: "/dashboard/rfis",
-      icon: MessageSquare,
-      permission: "projects.view" as const,
-    },
-    {
-      name: "Clientes",
-      href: "/dashboard/clientes",
-      icon: Users,
-      permission: "clients.view" as const,
-    },
-    {
-      name: "Tareas",
-      href: "/dashboard/tareas",
-      icon: ListTodo,
-      permission: "tasks.view" as const,
-    },
-    {
-      name: "Cotizaciones",
-      href: "/dashboard/cotizaciones",
-      icon: FileText,
-      permission: "finance.view" as const,
-    },
-    {
-      name: "Contratos",
-      href: "/dashboard/contratos",
-      icon: FileSignature,
-      permission: "finance.view" as const,
-    },
-    {
-      name: "Facturas",
-      href: "/dashboard/facturas",
-      icon: Receipt,
-      permission: "finance.view" as const,
-    },
-    {
-      name: "Pagos",
-      href: "/dashboard/pagos",
-      icon: CreditCard,
-      permission: "finance.view" as const,
-    },
-    {
-      name: "Inventario",
-      href: "/dashboard/inventario",
-      icon: Package,
-      permission: "inventory.view" as const,
-    },
-    {
-      name: "Proveedores",
-      href: "/dashboard/proveedores",
-      icon: Truck,
-      permission: "suppliers.view" as const,
-    },
-    {
-      name: "Empleados",
-      href: "/dashboard/empleados",
-      icon: UserCheck,
-      permission: "employees.view" as const,
-    },
-    {
-      name: "Inspecciones",
-      href: "/dashboard/inspecciones",
-      icon: ClipboardCheck,
-      permission: "inspections.view" as const,
-    },
-    {
-      name: "Finanzas",
-      href: "/dashboard/finanzas",
-      icon: DollarSign,
-      permission: "finance.view" as const,
-    },
-    {
-      name: "Calendario",
-      href: "/dashboard/calendario",
-      icon: Calendar,
-      permission: "calendar.view" as const,
-    },
-    {
-      name: "Automatizaciones",
-      href: "/dashboard/automatizaciones",
-      icon: Zap,
-      permission: "admin.access" as const,
-    },
-    {
-      name: "Reportes",
-      href: "/dashboard/reportes",
-      icon: BarChart3,
-      permission: "reports.view" as const,
-    },
-    {
-      name: "Certificados",
-      href: "/dashboard/certificados",
-      icon: Award,
-      permission: "quality.view" as const,
-    },
-    {
-      name: "Incidencias",
-      href: "/dashboard/incidencias",
-      icon: AlertOctagon,
-      permission: "incidents.view" as const,
-    },
-    {
-      name: "Documentos",
-      href: "/dashboard/documentos",
-      icon: FileText,
-      permission: "documents.view" as const,
-    },
-    {
-      name: "Notificaciones",
-      href: "/dashboard/notificaciones",
-      icon: Bell,
-      permission: "notifications.view" as const,
-    },
-    {
-      name: "Chat",
-      href: "/dashboard/chat",
-      icon: MessageSquare,
-      permission: "chat.view" as const,
-    },
-    {
-      name: "Sitio Web",
-      href: "/dashboard/sitio-web/proyectos",
-      icon: Globe,
-      permission: "admin.access" as const,
-    },
-    {
-      name: "Portadas (slider)",
-      href: "/dashboard/sitio-web/paginas",
-      icon: LayoutTemplate,
-      permission: "admin.access" as const,
-    },
-    {
-      name: "Portal Empleados",
-      href: "/dashboard/admin/portal",
-      icon: Wallet,
-      permission: "portal.admin" as const,
-    },
-    {
-      name: "Portal (mi espacio)",
-      href: "/dashboard/portal",
-      icon: Wallet,
-      permission: "portal.dashboard" as const,
-      employeeOnly: true,
-    },
-    {
-      name: "Billetera Virtual",
-      href: "/dashboard/portal/billetera",
-      icon: BadgeDollarSign,
-      permission: "portal.wallet" as const,
-      employeeOnly: true,
-      moduleKey: "wallet" as const,
-    },
-    {
-      name: "Recibos de Sueldo",
-      href: "/dashboard/portal/recibos",
-      icon: Banknote,
-      permission: "portal.payslips" as const,
-      employeeOnly: true,
-      moduleKey: "payslips" as const,
-    },
-    {
-      name: "Mi Legajo",
-      href: "/dashboard/portal/legajo",
-      icon: FolderOpen,
-      permission: "portal.personnel_file" as const,
-      employeeOnly: true,
-      moduleKey: "personnelFile" as const,
-    },
-    {
-      name: "Solicitudes",
-      href: "/dashboard/portal/solicitudes",
-      icon: Palmtree,
-      permission: "portal.leave_requests" as const,
-      employeeOnly: true,
-      moduleKey: "leaveRequests" as const,
-    },
-    {
-      name: "ART / Seguridad",
-      href: "/dashboard/portal/art",
-      icon: ShieldAlert,
-      permission: "portal.art" as const,
-      employeeOnly: true,
-      moduleKey: "art" as const,
-    },
-    {
-      name: "Mesa de Ayuda",
-      href: "/dashboard/portal/mesa-ayuda",
-      icon: HelpCircle,
-      permission: "portal.help_desk" as const,
-      employeeOnly: true,
-      moduleKey: "helpDesk" as const,
-    },
-    {
-      name: "Comunicaciones",
-      href: "/dashboard/portal/comunicaciones",
-      icon: Megaphone,
-      permission: "portal.announcements" as const,
-      employeeOnly: true,
-      moduleKey: "announcements" as const,
-    },
-    {
-      name: "Contactos Web",
-      href: "/dashboard/contactos",
-      icon: Inbox,
-      permission: "contacts.view" as const,
-    },
-    {
-      name: "Roles y Permisos",
-      href: "/dashboard/roles",
-      icon: ShieldCheck,
-      permission: "admin.roles" as const,
-    },
-    {
-      name: "Auditoría",
-      href: "/dashboard/auditoria",
-      icon: Shield,
-      permission: "admin.access" as const,
-    },
-    {
-      name: "Usuarios",
-      href: "/dashboard/usuarios",
-      icon: Users,
-      permission: "users.view" as const,
-    },
-    {
-      name: "Configuración",
-      href: "/dashboard/configuracion",
-      icon: Settings,
-      permission: null,
-    },
-  ]
-
-  const filteredNavigation = navigation.filter((item) => {
-    const nav = item as {
-      employeeOnly?: boolean
-      permission: string | null
-      moduleKey?: PortalModuleKey
-    }
-
-    if (nav.employeeOnly) {
-      if (!isPortalEmployeeRole(userRole)) return false
-      if (nav.moduleKey && portalSettings && !isPortalModuleEnabled(portalSettings, nav.moduleKey)) {
-        return false
-      }
-      return nav.permission ? hasPermission(userRole, nav.permission) : true
-    }
-
-    if (nav.permission === "portal.admin") {
-      return isPortalAdminRole(userRole) && hasPermission(userRole, "portal.admin")
-    }
-
-    if (!nav.permission) return true
-    try {
-      return hasPermission(userRole, nav.permission)
-    } catch {
-      return false
-    }
-  })
+  const toggleGroup = (groupId: string) => {
+    setOpenGroups((prev) => {
+      const next = new Set(prev)
+      if (next.has(groupId)) next.delete(groupId)
+      else next.add(groupId)
+      return next
+    })
+  }
 
   return (
     <>
-      {/* Mobile overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setIsOpen(false)} />
       )}
 
-      {/* Mobile toggle button */}
       <button
         className="fixed top-4 left-4 z-50 lg:hidden p-2.5 rounded-xl border border-emerald-500/30 bg-slate-950 text-white shadow-lg shadow-emerald-500/20 hover:border-emerald-400/50 transition-all"
         onClick={() => setIsOpen(true)}
@@ -393,7 +217,6 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
         <Menu className="w-6 h-6" />
       </button>
 
-      {/* Sidebar */}
       <aside
         className={cn(
           "dashboard-sidebar relative fixed lg:sticky top-0 inset-y-0 left-0 z-50 h-screen flex flex-col transform transition-all duration-300 ease-in-out overflow-hidden",
@@ -404,7 +227,6 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
         )}
       >
         <div className="dashboard-sidebar-glow" aria-hidden />
-        {/* Header */}
         <div className="relative flex h-16 items-center justify-between px-4 border-b border-white/5 flex-shrink-0 z-10">
           <Link
             href="/dashboard"
@@ -428,7 +250,6 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
             </div>
           </Link>
 
-          {/* Mobile close button */}
           <Button
             variant="ghost"
             size="icon"
@@ -438,7 +259,6 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
             <X className="w-5 h-5" />
           </Button>
 
-          {/* Desktop collapse button */}
           <Button
             variant="ghost"
             size="icon"
@@ -452,38 +272,30 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
           </Button>
         </div>
 
-        {/* Navigation */}
-        <nav className="relative z-10 flex-1 overflow-y-auto py-5 px-3 scrollbar-thin">
-          <ul className="space-y-0.5">
-            {filteredNavigation.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
-              return (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
-                      isActive ? "dashboard-nav-active text-white" : "dashboard-nav-item",
-                      isCollapsed && "lg:justify-center lg:px-2",
-                    )}
-                    title={isCollapsed ? item.name : undefined}
-                  >
-                    <item.icon className="w-5 h-5 flex-shrink-0" />
-                    <span className={cn(isCollapsed && "lg:hidden")}>{item.name}</span>
+        <nav className="relative z-10 flex-1 overflow-y-auto py-4 px-3 scrollbar-thin">
+          <ul className="space-y-1">
+            {showHome && (
+              <li className="mb-2">
+                <NavLink
+                  item={DASHBOARD_HOME}
+                  isActive={isNavPathActive(pathname, DASHBOARD_HOME.href)}
+                  isCollapsed={isCollapsed}
+                />
+              </li>
+            )}
 
-                    {/* Tooltip for collapsed state */}
-                    {isCollapsed && (
-                      <div className="absolute left-full ml-2 px-3 py-1.5 bg-slate-800/95 border border-white/10 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 hidden lg:block shadow-xl">
-                        {item.name}
-                      </div>
-                    )}
-                  </Link>
-                </li>
-              )
-            })}
+            {navGroups.map((group) => (
+              <NavGroupSection
+                key={group.id}
+                group={group}
+                isCollapsed={isCollapsed}
+                isOpen={openGroups.has(group.id)}
+                onToggle={() => toggleGroup(group.id)}
+                pathname={pathname}
+              />
+            ))}
           </ul>
         </nav>
-
       </aside>
     </>
   )

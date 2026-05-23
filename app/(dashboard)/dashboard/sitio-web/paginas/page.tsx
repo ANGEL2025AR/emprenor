@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast"
 import type { SitePageHeroSlide } from "@/lib/db/models"
 import { SITE_PAGE_SLUGS, type SitePageSlug } from "@/lib/site/constants"
 import { Loader2, Plus, Trash2, ChevronUp, ChevronDown, Save } from "lucide-react"
+import { ImageUploadField } from "@/components/site/image-upload-field"
 
 const SLUG_LABEL: Record<SitePageSlug, string> = {
   home: "Inicio",
@@ -148,7 +149,7 @@ export default function SitioWebPaginasPage() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Portadas y slider</h1>
         <p className="text-slate-600">
-          Editá el carrusel del inicio (imagen a pantalla completa) y las portadas simples de Nosotros y Contacto.
+          Editá el carrusel del inicio y las portadas de Nosotros y Contacto. Subí las fotos directamente desde tu PC.
           Guardá cada pestaña por separado.
         </p>
       </div>
@@ -248,12 +249,19 @@ export default function SitioWebPaginasPage() {
                       </div>
                     </CardHeader>
                     <CardContent className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2 md:col-span-2">
-                        <Label>URL de imagen (vacío en Nosotros/Contacto = sin foto)</Label>
-                        <Input
+                      <div className="md:col-span-2">
+                        <ImageUploadField
+                          label="Imagen de portada"
+                          hint={
+                            slug === "home"
+                              ? "Subí la foto desde tu PC. Se publicará en el slider del inicio."
+                              : "Opcional: dejá sin imagen para usar el fondo corporativo sólido."
+                          }
                           value={slide.image}
-                          onChange={(e) => updateSlide(slug, index, { image: e.target.value })}
-                          placeholder="/mi-imagen.jpg"
+                          onChange={(image) => updateSlide(slug, index, { image })}
+                          allowEmpty={slug !== "home"}
+                          folder="hero"
+                          previewClassName="max-w-full aspect-[21/9] min-h-[140px]"
                         />
                       </div>
                       <div className="space-y-2">

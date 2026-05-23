@@ -2,9 +2,12 @@ import { type NextRequest, NextResponse } from "next/server"
 import { verifyAuth } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
-import { storePublicImage, validatePublicImageFile } from "@/lib/uploads/public-image"
+import {
+  parsePublicImageFolder,
+  storePublicImage,
+  validatePublicImageFile,
+} from "@/lib/uploads/public-image"
 
-/** Compatibilidad: misma lógica que /api/site/upload-image con carpeta public-projects. */
 export async function POST(request: NextRequest) {
   try {
     const user = await verifyAuth(request)
@@ -13,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!hasPermission(user.role as UserRole, "website.edit")) {
-      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
+      return NextResponse.json({ error: "Sin permisos para editar el sitio web" }, { status: 403 })
     }
 
     const formData = await request.formData()
@@ -28,11 +31,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validationError }, { status: 400 })
     }
 
-    const url = await storePublicImage(file, "public-projects")
+    const folder = parsePublicImageFolder(formData.get("folder"))
+    const url = await storePublicImage(file, folder)
 
     return NextResponse.json({ success: true, url })
   } catch (error) {
-    console.error("[public-projects/upload-image]", error)
+    console.error("[site/upload-image]", error)
     return NextResponse.json({ error: "Error al subir imagen" }, { status: 500 })
   }
 }

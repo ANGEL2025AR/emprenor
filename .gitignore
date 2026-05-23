@@ -27,5 +27,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# salidas locales de auditoría
-scripts/audit-*-local.txt
+# uploads locales (desarrollo sin Vercel Blob)
+/public/uploads/**
+!/public/uploads/.gitkeep

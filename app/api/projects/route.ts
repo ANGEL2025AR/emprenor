@@ -7,6 +7,8 @@ import { generateCode } from "@/lib/auth/password"
 import type { Project } from "@/lib/db/models"
 import { ObjectId } from "mongodb"
 import { getClientProjectsFilter, isClientRole } from "@/lib/auth/project-access"
+import { loadClientRecord } from "@/lib/clients/project-link"
+import { projectSyncFromClient } from "@/lib/clients/compliance-sync"
 
 export async function GET(request: NextRequest) {
   try {
@@ -101,8 +103,10 @@ export async function POST(request: NextRequest) {
 
     const userObjectId = new ObjectId(user._id)
 
+    const { clientId: bodyClientId, ...projectFields } = result.data
+
     const newProject: Omit<Project, "_id"> = {
-      ...result.data,
+      ...projectFields,
       code,
       status: "borrador",
       progress: 0,
@@ -119,6 +123,16 @@ export async function POST(request: NextRequest) {
       createdBy: userObjectId,
       createdAt: new Date(),
       updatedAt: new Date(),
+    }
+
+    if (bodyClientId && ObjectId.isValid(bodyClientId)) {
+      const client = await loadClientRecord(bodyClientId)
+      if (client) {
+        const sync = projectSyncFromClient(client)
+        newProject.clientId = new ObjectId(bodyClientId)
+        newProject.client = sync.client
+        newProject.institutionalCompliance = sync.institutionalCompliance
+      }
     }
 
     const insertResult = await db.collection("projects").insertOne(newProject)

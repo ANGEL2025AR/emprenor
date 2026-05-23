@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, ArrowLeft, Loader2, Save, Upload, X, ImageIcon } from "lucide-react"
+import { ProjectClientPicker } from "@/components/projects/project-client-picker"
 
 export default function NewProjectPage() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function NewProjectPage() {
   const [error, setError] = useState("")
   const [images, setImages] = useState<Array<{ url: string; filename: string }>>([])
   const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [clientId, setClientId] = useState("")
 
   const [formData, setFormData] = useState({
     name: "",
@@ -92,6 +94,7 @@ export default function NewProjectPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          clientId: clientId || undefined,
           budget: {
             ...formData.budget,
             estimated: Number.parseFloat(formData.budget.estimated) || 0,
@@ -300,6 +303,16 @@ export default function NewProjectPage() {
             <CardDescription>Datos de contacto del cliente</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <ProjectClientPicker
+              clientId={clientId}
+              onClientIdChange={setClientId}
+              onClientFieldsChange={(fields) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  client: fields,
+                }))
+              }
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="clientName">Nombre del Cliente *</Label>
@@ -309,6 +322,7 @@ export default function NewProjectPage() {
                   onChange={(e) => updateFormData("client.name", e.target.value)}
                   placeholder="Nombre completo"
                   required
+                  disabled={!!clientId}
                 />
               </div>
               <div className="space-y-2">
@@ -320,6 +334,7 @@ export default function NewProjectPage() {
                   onChange={(e) => updateFormData("client.email", e.target.value)}
                   placeholder="email@ejemplo.com"
                   required
+                  disabled={!!clientId}
                 />
               </div>
               <div className="space-y-2">
@@ -331,6 +346,7 @@ export default function NewProjectPage() {
                   onChange={(e) => updateFormData("client.phone", e.target.value)}
                   placeholder="+54 9 11 1234-5678"
                   required
+                  disabled={!!clientId}
                 />
               </div>
               <div className="space-y-2">
@@ -341,9 +357,15 @@ export default function NewProjectPage() {
                   onChange={(e) => updateFormData("client.address", e.target.value)}
                   placeholder="Dirección del cliente"
                   required
+                  disabled={!!clientId}
                 />
               </div>
             </div>
+            {clientId ? (
+              <p className="text-xs text-muted-foreground">
+                Datos tomados de la ficha del cliente. Para modificarlos, editá el cliente en Clientes o elegí ingreso manual.
+              </p>
+            ) : null}
           </CardContent>
         </Card>
 

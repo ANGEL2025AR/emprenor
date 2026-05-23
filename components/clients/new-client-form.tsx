@@ -12,6 +12,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, ArrowLeft, Loader2, Save } from "lucide-react"
+import { ClientComplianceTypeSelect } from "@/components/clients/client-compliance-type-select"
+import type { ClientComplianceType } from "@/lib/db/models"
 
 export default function NewClientForm() {
   const router = useRouter()
@@ -27,6 +29,7 @@ export default function NewClientForm() {
     province: "",
     cuit: "",
     taxCondition: "consumidor_final",
+    complianceType: "persona" as ClientComplianceType,
     status: "prospecto",
     notes: "",
   })
@@ -112,6 +115,10 @@ export default function NewClientForm() {
               />
             </div>
           </div>
+          <ClientComplianceTypeSelect
+            value={formData.complianceType}
+            onChange={(complianceType) => setFormData({ ...formData, complianceType })}
+          />
         </CardContent>
       </Card>
 

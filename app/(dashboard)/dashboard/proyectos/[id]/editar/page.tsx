@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Save, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import type { Project, ProjectType, Priority } from "@/lib/db/models"
+import { ProjectClientPicker } from "@/components/projects/project-client-picker"
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -22,6 +23,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [project, setProject] = useState<Partial<Project>>({})
+  const [linkedClientId, setLinkedClientId] = useState("")
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -30,6 +32,8 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
         if (response.ok) {
           const data = await response.json()
           setProject(data.project)
+          const cid = data.project?.clientId
+          setLinkedClientId(typeof cid === "string" ? cid : cid?.toString?.() ?? "")
         } else {
           router.push("/dashboard/proyectos")
         }
@@ -76,6 +80,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
           spent: Number(project.budget?.spent) || 0,
           currency: project.budget?.currency || "ARS",
         },
+        clientId: linkedClientId || "",
       }
 
       const response = await fetch(`/api/projects/${id}`, {
@@ -348,6 +353,16 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
             <CardDescription>Datos de contacto del cliente</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <ProjectClientPicker
+              clientId={linkedClientId}
+              onClientIdChange={setLinkedClientId}
+              onClientFieldsChange={(fields) =>
+                setProject((prev) => ({
+                  ...prev,
+                  client: fields,
+                }))
+              }
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="client_name">Nombre del Cliente</Label>
@@ -356,6 +371,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                   value={project.client?.name || ""}
                   onChange={(e) => updateNested("client.name", e.target.value)}
                   placeholder="Nombre completo"
+                  disabled={!!linkedClientId}
                 />
               </div>
               <div className="space-y-2">
@@ -366,6 +382,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                   value={project.client?.email || ""}
                   onChange={(e) => updateNested("client.email", e.target.value)}
                   placeholder="email@ejemplo.com"
+                  disabled={!!linkedClientId}
                 />
               </div>
               <div className="space-y-2">
@@ -376,6 +393,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                   value={project.client?.phone || ""}
                   onChange={(e) => updateNested("client.phone", e.target.value)}
                   placeholder="+54 9 11 1234-5678"
+                  disabled={!!linkedClientId}
                 />
               </div>
               <div className="space-y-2">
@@ -388,6 +406,11 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 />
               </div>
             </div>
+            {linkedClientId ? (
+              <p className="text-xs text-muted-foreground">
+                Vinculado a ficha de clientes. El tipo de cumplimiento se sincroniza al guardar.
+              </p>
+            ) : null}
           </CardContent>
         </Card>
 

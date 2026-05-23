@@ -82,6 +82,7 @@ export const projectSchema = z.object({
   }),
   priority: z.enum(["baja", "media", "alta", "urgente"]),
   tags: z.array(z.string()).optional(),
+  clientId: z.string().optional(),
 })
 
 // ============================================

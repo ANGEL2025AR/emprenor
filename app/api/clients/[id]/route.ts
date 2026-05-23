@@ -3,6 +3,8 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 import { hasPermission } from "@/lib/auth/permissions"
+import { propagateClientToLinkedProjects } from "@/lib/clients/project-link"
+import type { ClientRecord } from "@/lib/clients/compliance-sync"
 import type { UserRole } from "@/lib/db/models"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -65,8 +67,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const db = await getDb()
 
     const allowedFields = [
-      "name", "email", "phone", "company", "cuit", "type",
-      "fiscalCondition", "address", "city", "province", "country",
+      "name", "email", "phone", "company", "cuit", "type", "complianceType",
+      "fiscalCondition", "taxCondition", "address", "city", "province", "country",
       "industry", "website", "notes", "status"
     ]
     const data: Record<string, unknown> = {}
@@ -82,6 +84,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     if (result.matchedCount === 0) {
       return NextResponse.json({ error: "Cliente no encontrado" }, { status: 404 })
+    }
+
+    const updated = await db.collection<ClientRecord>("clients").findOne({ _id: new ObjectId(id) })
+    if (updated && (body.complianceType !== undefined || body.type !== undefined || body.name !== undefined || body.company !== undefined)) {
+      await propagateClientToLinkedProjects(id, updated)
     }
 
     return NextResponse.json({ success: true })

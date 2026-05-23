@@ -13,6 +13,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { ClientComplianceTypeSelect } from "@/components/clients/client-compliance-type-select"
+import { resolveClientRecordComplianceType } from "@/lib/clients/compliance-sync"
+import type { ClientComplianceType } from "@/lib/db/models"
 
 interface ClientData {
   _id: string
@@ -22,7 +25,8 @@ interface ClientData {
   address: string
   city: string
   province: string
-  type: string
+  type?: string
+  complianceType?: ClientComplianceType
   cuit: string
   notes: string
   fiscalCondition: string
@@ -42,7 +46,10 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
         const response = await fetch(`/api/clients/${id}`)
         if (response.ok) {
           const data = await response.json()
-          setClient(data)
+          setClient({
+            ...data,
+            complianceType: resolveClientRecordComplianceType(data),
+          })
         } else {
           router.push("/dashboard/clientes")
         }
@@ -71,6 +78,7 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
           city: client.city,
           province: client.province,
           type: client.type,
+          complianceType: client.complianceType,
           cuit: client.cuit,
           notes: client.notes,
           fiscalCondition: client.fiscalCondition,
@@ -161,21 +169,14 @@ export default function EditClientPage({ params }: { params: Promise<{ id: strin
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="type">Tipo de Cliente</Label>
-                <Select
-                  value={client.type || "particular"}
-                  onValueChange={(value) => setClient({ ...client, type: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="particular">Particular</SelectItem>
-                    <SelectItem value="empresa">Empresa</SelectItem>
-                    <SelectItem value="gobierno">Gobierno</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="space-y-2 sm:col-span-2">
+                <ClientComplianceTypeSelect
+                  value={client.complianceType ?? "otro"}
+                  onChange={(complianceType) => setClient({ ...client, complianceType, type: complianceType === "persona" ? "particular" : complianceType === "estado_municipio" ? "gobierno" : complianceType === "empresa" ? "empresa" : client.type })}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Los proyectos vinculados a este cliente heredan este tipo en el portal de cumplimiento.
+                </p>
               </div>
             </div>
           </CardContent>

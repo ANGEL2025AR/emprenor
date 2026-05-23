@@ -17,6 +17,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { getClientComplianceLabel } from "@/lib/compliance/client-types"
+import { resolveClientRecordComplianceType } from "@/lib/clients/compliance-sync"
+import type { ClientComplianceType } from "@/lib/db/models"
 import { useToast } from "@/hooks/use-toast"
 
 interface Client {
@@ -31,6 +34,8 @@ interface Client {
   projects: number
   totalInvoiced: number
   status: "activo" | "inactivo" | "prospecto"
+  complianceType?: ClientComplianceType
+  type?: string
   createdAt: string
 }
 
@@ -142,6 +147,9 @@ export default function ClientsClient() {
                       {client.company}
                     </div>
                   )}
+                  <Badge variant="secondary" className="mt-2 text-xs">
+                    {getClientComplianceLabel(resolveClientRecordComplianceType(client))}
+                  </Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge className={getStatusColor(client.status)}>{client.status}</Badge>

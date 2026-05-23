@@ -5,6 +5,7 @@ import { hasPermission } from "@/lib/auth/permissions"
 import { ObjectId } from "mongodb"
 import type { Project } from "@/lib/db/models"
 import { findProjectForUser } from "@/lib/auth/project-access"
+import { applyClientToProjectUpdate } from "@/lib/clients/project-link"
 
 // GET - Obtener proyecto por ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -65,7 +66,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     // Sanitizar: solo permitir campos seguros
     const allowedFields = [
       "name", "description", "type", "priority", "status", "progress",
-      "client", "location", "dates", "budget", "team", "notes",
+      "client", "location", "dates", "budget", "team", "notes", "clientId",
     ]
     const sanitizedUpdate: Record<string, unknown> = {}
     for (const key of allowedFields) {
@@ -73,17 +74,33 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         sanitizedUpdate[key] = body[key]
       }
     }
+
+    if (typeof body.clientId === "string" && body.clientId && ObjectId.isValid(body.clientId)) {
+      sanitizedUpdate.clientId = new ObjectId(body.clientId)
+    } else if (body.clientId === "" || body.clientId === null) {
+      delete sanitizedUpdate.clientId
+    }
+
     sanitizedUpdate.updatedAt = new Date()
+
+    const updateOps: { $set: Record<string, unknown>; $unset?: Record<string, string> } = {
+      $set: sanitizedUpdate,
+    }
+    if (body.clientId === "" || body.clientId === null) {
+      updateOps.$unset = { clientId: "" }
+    }
 
     const updateResult = await db.collection("projects").updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: sanitizedUpdate,
-      },
+      updateOps,
     )
 
     if (updateResult.matchedCount === 0) {
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
+    }
+
+    if (typeof body.clientId === "string" && body.clientId && ObjectId.isValid(body.clientId)) {
+      await applyClientToProjectUpdate(id, body.clientId, existing.institutionalCompliance)
     }
 
     const updatedProject = await db.collection("projects").findOne({

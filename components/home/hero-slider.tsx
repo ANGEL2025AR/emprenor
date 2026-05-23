@@ -45,6 +45,57 @@ function SimpleHeroIcon({ pageSlug }: { pageSlug: string }) {
   )
 }
 
+/** Controles abajo del hero: no superponen título ni CTAs. */
+function HeroCarouselControls({
+  slides,
+  selected,
+  onPrev,
+  onNext,
+  onGoTo,
+  variant,
+}: {
+  slides: SitePageHeroSlide[]
+  selected: number
+  onPrev: () => void
+  onNext: () => void
+  onGoTo: (index: number) => void
+  variant: "immersive" | "simple"
+}) {
+  const arrowClass =
+    variant === "immersive"
+      ? "rounded-full bg-white/10 p-2.5 text-white backdrop-blur hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400"
+      : "rounded-full bg-black/30 p-2.5 text-white hover:bg-black/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+  const dotActive = variant === "immersive" ? "w-8 bg-green-400" : "w-8 bg-white"
+  const dotIdle = variant === "immersive" ? "w-2 bg-white/40" : "w-2 bg-white/50"
+
+  return (
+    <div
+      className="absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-3 px-4 sm:gap-4"
+      role="group"
+      aria-label="Navegación del carrusel"
+    >
+      <button type="button" aria-label="Diapositiva anterior" className={arrowClass} onClick={onPrev}>
+        <ChevronLeft className="h-6 w-6 shrink-0" />
+      </button>
+      <div className="flex max-w-[min(100%,12rem)] flex-wrap items-center justify-center gap-2 sm:max-w-none">
+        {slides.map((s, i) => (
+          <button
+            key={s.id}
+            type="button"
+            aria-label={`Ir a diapositiva ${i + 1}`}
+            aria-current={selected === i ? "true" : undefined}
+            className={`h-2 shrink-0 rounded-full transition-all ${selected === i ? dotActive : dotIdle}`}
+            onClick={() => onGoTo(i)}
+          />
+        ))}
+      </div>
+      <button type="button" aria-label="Diapositiva siguiente" className={arrowClass} onClick={onNext}>
+        <ChevronRight className="h-6 w-6 shrink-0" />
+      </button>
+    </div>
+  )
+}
+
 export function HeroSlider({
   slides,
   variant,
@@ -123,7 +174,9 @@ export function HeroSlider({
                 ) : (
                   <div className="absolute inset-0 bg-primary" />
                 )}
-                <div className="relative z-10 container px-4 md:px-6 py-16 md:py-24">
+                <div
+                  className={`relative z-10 container px-4 md:px-6 py-16 md:py-24 ${loop ? "pb-28 md:pb-32" : ""}`}
+                >
                   <div className="mx-auto max-w-3xl text-center space-y-6">
                     <SimpleHeroIcon pageSlug={pageSlug} />
                     <HeroTitle
@@ -141,35 +194,14 @@ export function HeroSlider({
           </div>
         </div>
         {loop ? (
-          <>
-            <button
-              type="button"
-              aria-label="Anterior"
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/30 p-2 text-white hover:bg-black/50"
-              onClick={() => emblaApi?.scrollPrev()}
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              type="button"
-              aria-label="Siguiente"
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/30 p-2 text-white hover:bg-black/50"
-              onClick={() => emblaApi?.scrollNext()}
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-            <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
-              {slides.map((s, i) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  aria-label={`Ir a diapositiva ${i + 1}`}
-                  className={`h-2 rounded-full transition-all ${selected === i ? "w-8 bg-white" : "w-2 bg-white/50"}`}
-                  onClick={() => emblaApi?.scrollTo(i)}
-                />
-              ))}
-            </div>
-          </>
+          <HeroCarouselControls
+            slides={slides}
+            selected={selected}
+            variant="simple"
+            onPrev={() => emblaApi?.scrollPrev()}
+            onNext={() => emblaApi?.scrollNext()}
+            onGoTo={(i) => emblaApi?.scrollTo(i)}
+          />
         ) : null}
       </section>
     )
@@ -193,7 +225,9 @@ export function HeroSlider({
                 <div className="absolute inset-0 bg-slate-900" />
               )}
               <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50" />
-              <div className="container relative z-10 mx-auto flex min-h-[90vh] items-center px-4 py-20">
+              <div
+                className={`container relative z-10 mx-auto flex min-h-[90vh] items-center px-4 py-20 ${loop ? "pb-28 md:pb-32" : ""}`}
+              >
                 <div className="max-w-3xl">
                   {slide.badgeText ? (
                     <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-sm font-medium text-green-400">
@@ -241,42 +275,23 @@ export function HeroSlider({
       </div>
 
       {loop ? (
-        <>
-          <button
-            type="button"
-            aria-label="Anterior"
-            className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white backdrop-blur hover:bg-white/20"
-            onClick={() => emblaApi?.scrollPrev()}
-          >
-            <ChevronLeft className="h-7 w-7" />
-          </button>
-          <button
-            type="button"
-            aria-label="Siguiente"
-            className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white backdrop-blur hover:bg-white/20"
-            onClick={() => emblaApi?.scrollNext()}
-          >
-            <ChevronRight className="h-7 w-7" />
-          </button>
-          <div className="absolute bottom-24 left-0 right-0 z-20 flex justify-center gap-2">
-            {slides.map((s, i) => (
-              <button
-                key={s.id}
-                type="button"
-                aria-label={`Ir a diapositiva ${i + 1}`}
-                className={`h-2 rounded-full transition-all ${selected === i ? "w-8 bg-green-400" : "w-2 bg-white/40"}`}
-                onClick={() => emblaApi?.scrollTo(i)}
-              />
-            ))}
-          </div>
-        </>
+        <HeroCarouselControls
+          slides={slides}
+          selected={selected}
+          variant="immersive"
+          onPrev={() => emblaApi?.scrollPrev()}
+          onNext={() => emblaApi?.scrollNext()}
+          onGoTo={(i) => emblaApi?.scrollTo(i)}
+        />
       ) : null}
 
-      <div className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce">
-        <div className="flex h-12 w-8 items-start justify-center rounded-full border-2 border-white/30 p-2">
-          <div className="h-3 w-1 animate-pulse rounded-full bg-white/50" />
+      {!loop ? (
+        <div className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 animate-bounce">
+          <div className="flex h-12 w-8 items-start justify-center rounded-full border-2 border-white/30 p-2">
+            <div className="h-3 w-1 animate-pulse rounded-full bg-white/50" />
+          </div>
         </div>
-      </div>
+      ) : null}
     </section>
   )
 }

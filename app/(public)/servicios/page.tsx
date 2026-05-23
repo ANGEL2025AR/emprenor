@@ -5,12 +5,15 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Wrench } from "lucide-react"
 import { getPublishedServices } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { EMPRENOR_BRAND } from "@/lib/company/constants"
 
-export const metadata = {
-  title: "Servicios - EMPRENOR Construcciones",
+export const metadata = buildPageMetadata({
+  title: `Servicios — ${EMPRENOR_BRAND.siglas}`,
   description:
-    "Servicios integrales de construcción, remodelación, albañilería, electricidad, plomería, pintura, instalaciones de gas, viviendas prefabricadas y obras industriales en el NOA.",
-}
+    "Nueve especialidades: construcción, remodelación, albañilería, electricidad, plomería, pintura, gas, prefabricadas e industrial en el NOA.",
+  path: "/servicios",
+})
 
 export default async function ServiciosPage() {
   const services = await getPublishedServices()
@@ -22,7 +25,7 @@ export default async function ServiciosPage() {
           <div className="mx-auto max-w-4xl text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium mb-4">
               <Wrench className="w-4 h-4" />
-              Más de 15 años construyendo con excelencia
+              Desde 2018 · 9 especialidades en el NOA
             </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-balance">
               Servicios Integrales de{" "}
@@ -55,8 +58,8 @@ export default async function ServiciosPage() {
             <CardContent className="p-0 space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Nuestros Servicios Especializados</h2>
               <p className="text-lg text-slate-600">
-                Equipos profesionales certificados en cada especialidad. Calidad, seguridad y cumplimiento normativo
-                garantizados en todo el NOA.
+                Nueve servicios con alcance, plazos y garantías definidos en cada contrato. Políticas de calidad y SST
+                publicadas en este sitio.
               </p>
             </CardContent>
           </Card>

@@ -33,10 +33,13 @@ import {
   LogIn,
   UserPlus,
   Shield,
+  FileCheck,
+  ClipboardList,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { ServiceNavItem } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
+import { EMPRENOR_BRAND } from "@/lib/company/constants"
 
 const FALLBACK_SERVICES: ServiceNavItem[] = [
   { slug: "construccion", title: "Construcción", shortDescription: "", href: "/servicios/construccion", icon: "Building2" },
@@ -49,10 +52,10 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center" aria-label="EMPRENOR - Ir a página de inicio">
+        <Link href="/" className="flex items-center" aria-label={`${EMPRENOR_BRAND.siglas} — Ir a inicio`}>
           <Image
             src={LOGO_LIGHT.src}
-            alt="EMPRENOR Logo"
+            alt={`${EMPRENOR_BRAND.siglas} Logo`}
             width={LOGO_LIGHT.width}
             height={LOGO_LIGHT.height}
             unoptimized
@@ -123,6 +126,12 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[280px] gap-1 p-3">
+                    <ListItem href="/politica-calidad" title="Política de calidad" icon={FileCheck}>
+                      Compromisos verificables en obra
+                    </ListItem>
+                    <ListItem href="/gestion-documental" title="Gestión documental" icon={ClipboardList}>
+                      Entregables y trazabilidad
+                    </ListItem>
                     <ListItem href="/licitaciones" title="Licitaciones" icon={Building2}>
                       Sector público y documentación
                     </ListItem>
@@ -195,67 +204,70 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
                 Servicios
               </p>
               <Link
-                href="/servicios/construccion"
+                href="/servicios"
+                className="text-sm font-medium text-accent hover:text-accent/80 transition-colors py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Ver todos los servicios
+              </Link>
+              {services.map((s) => (
+                <Link
+                  key={s.slug}
+                  href={s.href}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {s.title}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-2 pl-6 border-t border-border pt-4">
+              <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <Shield className="h-4 w-4" />
+                Empresa
+              </p>
+              <Link
+                href="/politica-calidad"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Construcción
+                Política de calidad
               </Link>
               <Link
-                href="/servicios/remodelacion"
+                href="/gestion-documental"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Remodelación
+                Gestión documental
               </Link>
               <Link
-                href="/servicios/viviendas-prefabricadas"
+                href="/licitaciones"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Viviendas Prefabricadas
+                Licitaciones
               </Link>
               <Link
-                href="/servicios/obras-industriales"
+                href="/seguridad-y-salud"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Obras Industriales
+                Seguridad y salud
               </Link>
               <Link
-                href="/servicios/gas"
+                href="/sostenibilidad"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Instalaciones de Gas
+                Sostenibilidad
               </Link>
               <Link
-                href="/servicios/albanileria"
+                href="/linea-etica"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Albañilería
-              </Link>
-              <Link
-                href="/servicios/electricidad"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Electricidad
-              </Link>
-              <Link
-                href="/servicios/plomeria"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Plomería
-              </Link>
-              <Link
-                href="/servicios/pintura"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Pintura
+                Línea de ética
               </Link>
             </div>
 

@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb"
 import { getDb } from "@/lib/db/connection"
 import { currentPeriod } from "@/lib/compliance/period"
+import { EMPRENOR_BRAND, RM_LEGAL } from "@/lib/company/constants"
 import {
   buildComplianceChecklist,
   complianceScore,
@@ -49,7 +50,7 @@ export async function buildComplianceAuditPack(projectId: string, period?: strin
 
   return {
     generatedAt: new Date().toISOString(),
-    emprenor: "EMPRENOR CONSTRUCCIONES",
+    emprenor: `${EMPRENOR_BRAND.siglas} — ${EMPRENOR_BRAND.nombreExtendido} (${RM_LEGAL.razonSocial})`,
     period: p,
     project: {
       id: projectId,

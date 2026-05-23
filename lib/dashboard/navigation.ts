@@ -68,9 +68,9 @@ export const DASHBOARD_HOME: DashboardNavItem = {
   permission: null,
 }
 
-/** Inicio del portal empleado (evita duplicar /dashboard + Mi Portal > Inicio). */
+/** Inicio del portal empleado. */
 export const EMPLOYEE_PORTAL_HOME: DashboardNavItem = {
-  name: "Inicio",
+  name: "Mi Portal",
   href: "/dashboard/portal",
   icon: Wallet,
   permission: "portal.dashboard",

@@ -80,11 +80,40 @@ La aplicación creará automáticamente:
 
 ### 4. Verificar la Conexión
 
-Una vez configurada la variable de entorno:
+#### Opción A — Script local (recomendado)
+
+Con `.env.local` configurado:
+
+```bash
+npm run db:test    # solo ping + conteos de colecciones
+npm run db:sync    # índices + marca EMPRENOR C&S + servicios CMS + portadas
+```
+
+#### Opción B — API de salud
+
+```bash
+curl http://localhost:3001/api/health/db
+```
+
+En producción podés definir `HEALTH_CHECK_SECRET` y enviar el header `x-health-secret`.
+
+#### Opción C — Formulario web
 
 1. Abre el formulario de contacto en tu sitio web
 2. Completa y envía un formulario de prueba
-3. Verifica en MongoDB Atlas (o tu cliente MongoDB) que el documento se haya guardado en la colección `contactos`
+3. Verifica en MongoDB Atlas que el documento esté en la colección `contactos`
+
+### 4.1 Sincronizar CMS y marca (EMPRENOR C&S)
+
+El comando `npm run db:sync` actualiza:
+
+- **settings** (`type: company`) — CUIT, titular RM, marca C&S
+- **settings** (`type: portal_employee`) — módulos del portal
+- **site_services** — los 9 servicios con textos del código
+- **site_pages** — portadas home, nosotros, contacto
+- **Índices** en users, projects, contactos, site_services, cumplimiento, etc.
+
+Desde el panel admin: **Sitio Web → Servicios → “Sincronizar desde código”** usa `POST /api/site-services/seed?force=true` para forzar actualización sin borrar datos de otros módulos.
 
 ### 5. Ver Contactos Recibidos
 

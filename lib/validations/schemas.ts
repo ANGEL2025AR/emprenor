@@ -256,6 +256,12 @@ export const contactFormSchema = z.object({
     { errorMap: () => ({ message: "Servicio inválido" }) },
   ),
 
+  clientType: z
+    .enum(["particular", "empresa", "sector_publico", "otro"], {
+      errorMap: () => ({ message: "Tipo de cliente inválido" }),
+    })
+    .optional(),
+
   message: z
     .string()
     .min(10, "El mensaje debe tener al menos 10 caracteres")

@@ -13,6 +13,7 @@ import {
   getDashboardHome,
   filterNavGroups,
   isHomeVisible,
+  getEmployeePortalNavItems,
 } from "@/lib/dashboard/filter-navigation"
 import type { DashboardNavGroup, DashboardNavItem } from "@/lib/dashboard/navigation"
 import { X, ChevronLeft, Menu, ChevronDown } from "lucide-react"
@@ -162,13 +163,20 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
     [userRole, portalSettings],
   )
 
+  const employeePortalItems = useMemo(
+    () => (isPortalEmployeeRole(userRole) ? getEmployeePortalNavItems(userRole, portalSettings) : []),
+    [userRole, portalSettings],
+  )
+
+  const isEmployeeNav = isPortalEmployeeRole(userRole)
+
   const [openGroups, setOpenGroups] = useState<Set<string>>(() =>
     getOpenGroupsForPath(pathname, filterNavGroups(userRole, initialPortalSettings)),
   )
 
   const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
   const homeItem = useMemo(() => getDashboardHome(userRole), [userRole])
-  const homeHref = homeItem?.href ?? "/dashboard"
+  const homeHref = isEmployeeNav ? "/dashboard/portal" : (homeItem?.href ?? "/dashboard")
 
   useEffect(() => {
     setIsOpen(false)
@@ -276,26 +284,40 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
 
         <nav className="relative z-10 flex-1 overflow-y-auto py-4 px-3 scrollbar-thin">
           <ul className="space-y-1">
-            {showHome && homeItem ? (
-              <li className="mb-2">
-                <NavLink
-                  item={homeItem}
-                  isActive={isNavPathActive(pathname, homeItem.href)}
-                  isCollapsed={isCollapsed}
-                />
-              </li>
-            ) : null}
+            {isEmployeeNav ? (
+              employeePortalItems.map((item) => (
+                <li key={item.href}>
+                  <NavLink
+                    item={item}
+                    isActive={isNavPathActive(pathname, item.href)}
+                    isCollapsed={isCollapsed}
+                  />
+                </li>
+              ))
+            ) : (
+              <>
+                {showHome && homeItem ? (
+                  <li className="mb-2">
+                    <NavLink
+                      item={homeItem}
+                      isActive={isNavPathActive(pathname, homeItem.href)}
+                      isCollapsed={isCollapsed}
+                    />
+                  </li>
+                ) : null}
 
-            {navGroups.map((group) => (
-              <NavGroupSection
-                key={group.id}
-                group={group}
-                isCollapsed={isCollapsed}
-                isOpen={openGroups.has(group.id)}
-                onToggle={() => toggleGroup(group.id)}
-                pathname={pathname}
-              />
-            ))}
+                {navGroups.map((group) => (
+                  <NavGroupSection
+                    key={group.id}
+                    group={group}
+                    isCollapsed={isCollapsed}
+                    isOpen={openGroups.has(group.id)}
+                    onToggle={() => toggleGroup(group.id)}
+                    pathname={pathname}
+                  />
+                ))}
+              </>
+            )}
           </ul>
         </nav>
       </aside>

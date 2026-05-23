@@ -15,7 +15,7 @@ export async function GET() {
 
     return NextResponse.json({
       settings: settings || {
-        companyName: "EMPRENOR Construcciones",
+        companyName: "EMPRENOR C&S",
         cuit: "",
         email: "info@emprenor.com",
         phone: "+54 9 11 2758-6521",

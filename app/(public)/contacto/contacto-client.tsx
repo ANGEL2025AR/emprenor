@@ -14,6 +14,7 @@ export default function ContactoClient() {
     name: "",
     email: "",
     phone: "",
+    clientType: "",
     service: "",
     message: "",
   })
@@ -45,6 +46,7 @@ export default function ContactoClient() {
           name: "",
           email: "",
           phone: "",
+          clientType: "",
           service: "",
           message: "",
         })
@@ -154,6 +156,26 @@ export default function ContactoClient() {
                     disabled={isSubmitting}
                   />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="clientType" className="text-sm font-medium text-foreground">
+                  Tipo de cliente
+                </label>
+                <select
+                  id="clientType"
+                  name="clientType"
+                  value={formData.clientType}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
+                >
+                  <option value="">Seleccione (opcional)</option>
+                  <option value="particular">Particular / vivienda</option>
+                  <option value="empresa">Empresa privada</option>
+                  <option value="sector_publico">Sector público / licitación</option>
+                  <option value="otro">Otro</option>
+                </select>
               </div>
 
               <div className="space-y-2">
@@ -346,14 +368,11 @@ export default function ContactoClient() {
             </div>
 
             <Card className="border-border overflow-hidden">
-              <div className="aspect-[16/10] bg-muted relative">
-                <img src="/map-location-pin.png" alt="Ubicación en el mapa" className="object-cover w-full h-full" />
-                <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-sm">
-                  <div className="text-center space-y-2">
-                    <MapPin className="h-12 w-12 text-accent mx-auto" />
-                    <p className="text-sm font-medium text-foreground">3 Oficinas en Salta</p>
-                    <p className="text-xs text-muted-foreground">Capital, Tartagal y Campamento Vespucio</p>
-                  </div>
+              <div className="aspect-[16/10] bg-muted flex items-center justify-center">
+                <div className="text-center space-y-2 p-6">
+                  <MapPin className="h-12 w-12 text-accent mx-auto" />
+                  <p className="text-sm font-medium text-foreground">3 oficinas operativas en Salta</p>
+                  <p className="text-xs text-muted-foreground">Capital, Tartagal y Campamento Vespucio</p>
                 </div>
               </div>
             </Card>

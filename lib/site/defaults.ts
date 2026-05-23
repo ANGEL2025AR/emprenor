@@ -5,13 +5,13 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
   home: [
     {
       id: "home-default-1",
-      image: "/construction-site-workers-blueprint.jpg",
-      alt: "Equipo de construcción EMPRENOR trabajando",
-      badgeText: "Más de 15 años construyendo confianza",
-      title: "Construimos tus sueños con excelencia y profesionalismo",
-      titleAccent: "sueños",
+      image: "",
+      alt: "EMPRENOR C&S — construcción y servicios en el NOA",
+      badgeText: "Desde 2018 en el NOA",
+      title: "Construimos con planificación, calidad y cumplimiento",
+      titleAccent: "calidad",
       subtitle:
-        "Somos líderes en construcción y servicios en el NOA. Ofrecemos soluciones integrales en construcción, remodelación, electricidad, plomería y más. Cobertura en Salta, Jujuy, Tucumán y Formosa.",
+        "EMPRENOR C&S (Construcciones y Servicios). Presencia en Salta, Jujuy, Tucumán y Formosa. Nueve especialidades integradas con presupuesto y alcance por escrito.",
       primaryCtaLabel: "Solicitar Cotización",
       primaryCtaHref: "/contacto",
       secondaryCtaLabel: "Ver Proyectos",
@@ -19,13 +19,13 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
     },
     {
       id: "home-default-2",
-      image: "/industrial-plant-construction.jpg",
-      alt: "Obra industrial EMPRENOR",
-      badgeText: "Obras de gran envergadura",
-      title: "Infraestructura industrial con estándares de excelencia",
-      titleAccent: "excelencia",
+      image: "",
+      alt: "Obra industrial EMPRENOR C&S",
+      badgeText: "Obras industriales y sector público",
+      title: "Infraestructura con gestión documentada",
+      titleAccent: "Infraestructura",
       subtitle:
-        "Plantas, depósitos y naves con planificación integral, seguridad y cumplimiento de normativa en todo el NOA.",
+        "Naves, plantas y obra institucional con cronograma, SST y entregables según contrato.",
       primaryCtaLabel: "Solicitar Cotización",
       primaryCtaHref: "/contacto",
       secondaryCtaLabel: "Ver servicios",
@@ -39,7 +39,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       alt: "",
       title: "Sobre Nosotros",
       subtitle:
-        "Más de 15 años construyendo sueños y superando expectativas con compromiso, calidad y profesionalismo.",
+        "EMPRENOR C&S — Construcciones y Servicios. Marca de RM International Group S.A.S. en el NOA.",
     },
   ],
   contacto: [
@@ -49,7 +49,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       alt: "",
       title: "Contáctenos",
       subtitle:
-        "Estamos aquí para ayudarle a hacer realidad su proyecto. Contáctenos hoy para una consulta gratuita.",
+        "Estamos aquí para ayudarle con su proyecto. Consulta comercial sin compromiso.",
     },
   ],
 }

@@ -1,7 +1,7 @@
 {
-  "name": "EMPRENOR Construcciones - Servicios Profesionales",
-  "short_name": "EMPRENOR",
-  "description": "Empresa líder en construcción, remodelación y servicios en el NOA. Más de 15 años de experiencia en Salta, Jujuy, Tucumán y Formosa.",
+  "name": "EMPRENOR C&S — Construcciones y Servicios",
+  "short_name": "EMPRENOR C&S",
+  "description": "EMPRENOR Construcciones y Servicios. Marca de RM INTERNATIONAL GROUP S.A.S. Obra en Salta, Jujuy, Tucumán y Formosa.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#2E2A6E",
@@ -11,14 +11,6 @@
   "lang": "es-AR",
   "dir": "ltr",
   "categories": ["business", "construction", "services"],
-  "screenshots": [
-    {
-      "src": "/construction-site-workers-blueprint.jpg",
-      "sizes": "1920x1080",
-      "type": "image/jpeg",
-      "form_factor": "wide"
-    }
-  ],
   "icons": [
     {
       "src": "/icon-192.png",
@@ -42,38 +34,23 @@
     {
       "name": "Contacto",
       "short_name": "Contacto",
-      "description": "Solicitar cotización gratuita",
+      "description": "Solicitar cotización",
       "url": "/contacto",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Proyectos",
       "short_name": "Proyectos",
-      "description": "Ver nuestros proyectos completados",
+      "description": "Ver proyectos publicados",
       "url": "/proyectos",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Servicios",
       "short_name": "Servicios",
-      "description": "Explorar nuestros servicios",
-      "url": "/#servicios",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "description": "Catálogo de servicios",
+      "url": "/servicios",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

@@ -36,10 +36,13 @@ export default function SitioWebServiciosPage() {
   const seedAll = async () => {
     setSeeding(true)
     try {
-      const res = await fetch("/api/site-services/seed", { method: "POST", credentials: "include" })
+      const res = await fetch("/api/site-services/seed?force=true", { method: "POST", credentials: "include" })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || "Error al inicializar")
-      toast({ title: "Listo", description: `Servicios inicializados (${data.inserted} nuevos de ${data.total})` })
+      if (!res.ok) throw new Error(data.error || "Error al sincronizar")
+      toast({
+        title: "Sincronizado",
+        description: `Servicios actualizados desde código (${data.inserted} de ${data.total})`,
+      })
       await load()
     } catch (e) {
       toast({ title: "Error", description: e instanceof Error ? e.message : "No se pudo inicializar", variant: "destructive" })
@@ -59,7 +62,7 @@ export default function SitioWebServiciosPage() {
         </div>
         <Button variant="outline" onClick={seedAll} disabled={seeding}>
           {seeding ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Database className="h-4 w-4 mr-2" />}
-          Cargar contenido inicial
+          Sincronizar desde código
         </Button>
       </div>
 

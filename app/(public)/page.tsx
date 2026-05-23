@@ -20,10 +20,20 @@ import {
   Home,
   Factory,
   Flame,
-  Star,
 } from "lucide-react"
 import FeaturedProjects from "@/components/home/featured-projects"
 import { PublicHeroSection } from "@/components/home/public-hero-section"
+import { TrustBar } from "@/components/public/trust-bar"
+import { PublicSectorBand } from "@/components/public/public-sector-band"
+import { EMPRENOR_SECTORS, EMPRENOR_BRAND, EMPRENOR_SITE } from "@/lib/company/constants"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
+
+export const metadata = buildPageMetadata({
+  title: EMPRENOR_SITE.defaultTitle,
+  description:
+    `${EMPRENOR_BRAND.nombreExtendido}. Marca de RM International Group S.A.S. Obra en Salta, Jujuy, Tucumán y Formosa desde 2018.`,
+  path: "/",
+})
 
 const services = [
   {
@@ -84,7 +94,7 @@ const services = [
   },
   {
     title: "Instalaciones de Gas",
-    description: "Instalaciones de gas seguras y certificadas por profesionales matriculados.",
+    description: "Instalaciones de gas con gasista habilitado según normativa local y trámites cuando correspondan.",
     icon: Flame,
     href: "/servicios/gas",
     color: "from-red-500 to-red-600",
@@ -92,56 +102,32 @@ const services = [
 ]
 
 const stats = [
-  { number: "500+", label: "Proyectos Completados", icon: CheckCircle },
-  { number: "15+", label: "Años de Experiencia", icon: Clock },
-  { number: "50+", label: "Profesionales", icon: Users },
-  { number: "98%", label: "Clientes Satisfechos", icon: Award },
+  { number: "9", label: "Especialidades", icon: CheckCircle },
+  { number: "2018", label: "Fundación", icon: Clock },
+  { number: "4", label: "Provincias NOA", icon: MapPin },
+  { number: "3", label: "Oficinas en Salta", icon: Building2 },
 ]
 
 const features = [
   {
-    title: "Calidad Garantizada",
-    description: "Utilizamos los mejores materiales y técnicas de construcción para garantizar resultados duraderos.",
+    title: "Calidad en obra",
+    description: "Controles en hitos acordados. Ver nuestra política de calidad publicada.",
     icon: Award,
   },
   {
-    title: "Equipo Profesional",
-    description: "Contamos con un equipo de profesionales altamente capacitados y con amplia experiencia.",
+    title: "Equipo coordinado",
+    description: "Profesionales y gremios bajo cronograma único con interlocutor comercial.",
     icon: Users,
   },
   {
-    title: "Cumplimiento de Plazos",
-    description: "Nos comprometemos con los tiempos de entrega establecidos en cada proyecto.",
+    title: "Plazos acordados",
+    description: "Cronograma y modificaciones documentados; comunicación ante desvíos.",
     icon: Clock,
   },
   {
-    title: "Presupuestos Claros",
-    description: "Ofrecemos presupuestos detallados y transparentes, sin costos ocultos.",
+    title: "Presupuesto detallado",
+    description: "Alcance, materiales y plazos por escrito antes de iniciar la obra.",
     icon: Target,
-  },
-]
-
-const testimonials = [
-  {
-    name: "Carlos Mendoza",
-    role: "Propietario",
-    content:
-      "EMPRENOR construyó nuestra casa de ensueño. El equipo fue profesional, cumplió con los plazos y el resultado superó nuestras expectativas.",
-    rating: 5,
-  },
-  {
-    name: "María García",
-    role: "Empresaria",
-    content:
-      "Excelente trabajo en la remodelación de nuestras oficinas. Muy satisfechos con la calidad y el trato recibido.",
-    rating: 5,
-  },
-  {
-    name: "Roberto Sánchez",
-    role: "Director de Operaciones",
-    content:
-      "Profesionales de primera. Realizaron las instalaciones eléctricas de nuestra planta industrial sin contratiempos.",
-    rating: 5,
   },
 ]
 
@@ -150,7 +136,7 @@ export default function HomePage() {
     <div className="flex flex-col">
       <PublicHeroSection slug="home" variant="immersive" />
 
-      {/* Stats Section */}
+      <TrustBar />
       <section className="py-16 bg-slate-900">
         <div className="container px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -164,6 +150,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <PublicSectorBand />
 
       {/* Services Section */}
       <section className="py-20 bg-slate-50" id="servicios">
@@ -213,8 +201,8 @@ export default function HomePage() {
                 ¿Por qué elegir <span className="text-green-600">EMPRENOR</span>?
               </h2>
               <p className="text-lg text-slate-600 mb-8">
-                Con más de 15 años de experiencia en el mercado de la construcción del NOA, nos hemos consolidado como
-                una empresa líder gracias a nuestro compromiso con la calidad y la satisfacción del cliente.
+                Desde 2018 acompañamos proyectos residenciales, comerciales, industriales y de sector público en el NOA,
+                con políticas de calidad, SST y gestión documental disponibles en este sitio.
               </p>
               <div className="grid sm:grid-cols-2 gap-6">
                 {features.map((feature, index) => (
@@ -231,12 +219,13 @@ export default function HomePage() {
               </div>
             </div>
             <div className="relative">
-              <div className="rounded-2xl shadow-2xl overflow-hidden aspect-[4/3]">
+              <div className="rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-slate-800 via-emerald-900 to-slate-900 flex items-center justify-center">
                 <Image
-                  src="/professional-construction-team-working.jpg"
-                  alt="Equipo profesional de EMPRENOR"
-                  fill
-                  className="object-cover"
+                  src="/images/logo-emprenor-white.png"
+                  alt={`${EMPRENOR_BRAND.siglas} — ${EMPRENOR_BRAND.significadoSiglas} en el NOA`}
+                  width={320}
+                  height={120}
+                  className="opacity-90"
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl">
@@ -245,8 +234,8 @@ export default function HomePage() {
                     <Award className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-slate-900">15+ años</div>
-                    <div className="text-slate-600">de experiencia</div>
+                    <div className="text-2xl font-bold text-slate-900">Desde 2018</div>
+                    <div className="text-slate-600">en el NOA</div>
                   </div>
                 </div>
               </div>
@@ -257,33 +246,29 @@ export default function HomePage() {
 
       <FeaturedProjects />
 
-      {/* Testimonials Section */}
+      {/* Sectores atendidos */}
       <section className="py-20 bg-slate-50">
         <div className="container px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Lo que dicen nuestros clientes</h2>
-            <p className="text-lg text-slate-600">La satisfacción de nuestros clientes es nuestra mayor recompensa.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Sectores que atendemos</h2>
+            <p className="text-lg text-slate-600">
+              Obra pública, industrial, comercial y residencial con los mismos estándares de calidad y cumplimiento.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-slate-600 mb-6 italic">{`"${testimonial.content}"`}</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-semibold">
-                      {testimonial.name && testimonial.name.length > 0 ? testimonial.name.charAt(0) : "U"}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-slate-900">{testimonial.name}</div>
-                      <div className="text-sm text-slate-500">{testimonial.role}</div>
-                    </div>
-                  </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {EMPRENOR_SECTORS.map((sector) => (
+              <Card key={sector.title} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <CardContent className="p-6 flex flex-col h-full">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{sector.title}</h3>
+                  <p className="text-sm text-slate-600 mb-4 flex-1">{sector.description}</p>
+                  <Link
+                    href={sector.href}
+                    className="inline-flex items-center text-green-600 font-medium hover:text-green-700 text-sm"
+                  >
+                    Conocer más
+                    <ArrowRight className="ml-1 w-4 h-4" />
+                  </Link>
                 </CardContent>
               </Card>
             ))}

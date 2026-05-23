@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
-import { FOOTER_LEGAL_LINKS } from "@/lib/company/constants"
+import { FOOTER_LEGAL_LINKS, EMPRENOR_LEGAL, EMPRENOR_SOCIAL, EMPRENOR_BRAND, getMarcaLegalNotice } from "@/lib/company/constants"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export function SiteFooter() {
@@ -14,7 +14,7 @@ export function SiteFooter() {
             <Link href="/" className="inline-block">
               <Image
                 src={LOGO_LIGHT.src}
-                alt="EMPRENOR Logo"
+                alt={`${EMPRENOR_BRAND.siglas} Logo`}
                 width={LOGO_LIGHT.width}
                 height={LOGO_LIGHT.height}
                 unoptimized
@@ -22,12 +22,12 @@ export function SiteFooter() {
               />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Construyendo el futuro con excelencia, calidad y compromiso. Más de 15 años de experiencia en proyectos
-              residenciales, comerciales e industriales.
+              {getMarcaLegalNotice()} Construcción en el NOA con oficinas en Salta Capital, Tartagal y Campamento
+              Vespucio.
             </p>
             <div className="flex gap-3">
               <Link
-                href="https://facebook.com"
+                href={EMPRENOR_SOCIAL.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
@@ -36,7 +36,7 @@ export function SiteFooter() {
                 <Facebook className="h-4 w-4" />
               </Link>
               <Link
-                href="https://instagram.com"
+                href={EMPRENOR_SOCIAL.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
@@ -45,7 +45,7 @@ export function SiteFooter() {
                 <Instagram className="h-4 w-4" />
               </Link>
               <Link
-                href="https://linkedin.com"
+                href={EMPRENOR_SOCIAL.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
@@ -232,9 +232,12 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-8">
-          <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} EMPRENOR CONSTRUCCIONES. Todos los derechos reservados.
+        <div className="mt-12 border-t border-border pt-8 space-y-2">
+          <p className="text-center text-sm text-muted-foreground" suppressHydrationWarning>
+            © {new Date().getFullYear()} {EMPRENOR_LEGAL.razonSocial} · {EMPRENOR_LEGAL.marcaComercial}
+          </p>
+          <p className="text-center text-xs text-muted-foreground">
+            CUIT {EMPRENOR_LEGAL.cuit} · {EMPRENOR_LEGAL.domicilioFiscal}
           </p>
         </div>
       </div>

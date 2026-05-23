@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, Eye, EyeOff, Loader2, ArrowRight, Shield, Building2, CheckCircle } from "lucide-react"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
+import { EMPRENOR_BRAND } from "@/lib/company/constants"
 
 import { getPublicClientTypeLabel, getRegistrationIntentLabel, type PublicClientType, type RegistrationIntent } from "@/lib/clients/public-registration-types"
 import { getDefaultDashboardPath } from "@/lib/auth/employee-routes"
@@ -42,7 +43,7 @@ function LoginForm() {
       const tipoLabel = tipo ? getPublicClientTypeLabel(tipo) : "cliente"
       const motivoLabel = motivo ? getRegistrationIntentLabel(motivo) : "registro"
       setSuccessMessage(
-        `Solicitud enviada como ${tipoLabel} (${motivoLabel}). EMPRENOR revisará su cuenta y le avisará por email cuando pueda ingresar.`,
+        `Solicitud enviada como ${tipoLabel} (${motivoLabel}). ${EMPRENOR_BRAND.siglas} revisará su cuenta y le avisará por email cuando pueda ingresar.`,
       )
     }
   }, [searchParams])
@@ -88,7 +89,7 @@ function LoginForm() {
           <div className="space-y-4">
             <Image
               src={LOGO_LIGHT.src}
-              alt="EMPRENOR Logo"
+              alt={`${EMPRENOR_BRAND.siglas} Logo`}
               width={LOGO_LIGHT.width}
               height={LOGO_LIGHT.height}
               unoptimized
@@ -96,7 +97,7 @@ function LoginForm() {
               style={{ width: "auto", height: "3rem" }}
               priority
             />
-            <h1 className="text-4xl font-bold text-slate-900 leading-tight">Portal EMPRENOR</h1>
+            <h1 className="text-4xl font-bold text-slate-900 leading-tight">Portal {EMPRENOR_BRAND.siglas}</h1>
             <p className="text-lg text-slate-600 leading-relaxed">
               Acceso según su rol: gestión de obra, portal del cliente, empleados en campo o administración corporativa.
             </p>
@@ -105,7 +106,7 @@ function LoginForm() {
           <div className="space-y-4 pt-8">
             {[
               { icon: Building2, text: "Gestión completa de proyectos y obras" },
-              { icon: Shield, text: "Seguridad empresarial garantizada" },
+              { icon: Shield, text: "Acceso por roles con sesión segura (HTTPS)" },
               { icon: CheckCircle, text: "Control de costos y recursos en tiempo real" },
             ].map((feature, index) => (
               <div key={index} className="flex items-start gap-4 group">
@@ -129,7 +130,7 @@ function LoginForm() {
             <div className="lg:hidden flex justify-center">
               <Image
                 src={LOGO_LIGHT.src}
-                alt="EMPRENOR Logo"
+                alt={`${EMPRENOR_BRAND.siglas} Logo`}
                 width={LOGO_LIGHT.width}
                 height={LOGO_LIGHT.height}
                 unoptimized

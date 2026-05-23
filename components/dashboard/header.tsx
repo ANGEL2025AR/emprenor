@@ -35,6 +35,14 @@ import {
   DollarSign,
   FileText,
   Check,
+  Wallet,
+  BadgeDollarSign,
+  Banknote,
+  FolderOpen,
+  Palmtree,
+  ShieldAlert,
+  Headphones,
+  Megaphone,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { ROLE_LABELS } from "@/lib/auth/permissions"
@@ -127,13 +135,14 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
   const quickLinks = isPortalEmployeeRole(userRole)
     ? [
-        { name: "Mi Portal", href: "/dashboard/portal", icon: Home },
-        { name: "Mis obras", href: "/dashboard/proyectos", icon: FolderKanban },
-        { name: "Tareas", href: "/dashboard/tareas", icon: ListTodo },
-        { name: "Bitácora diaria", href: "/dashboard/bitacora-diaria", icon: FileText },
-        { name: "Incidencias", href: "/dashboard/incidencias", icon: FileText },
-        { name: "Inspecciones", href: "/dashboard/inspecciones", icon: ClipboardCheck },
-        { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
+        { name: "Mi Portal", href: "/dashboard/portal", icon: Wallet },
+        { name: "Billetera Virtual", href: "/dashboard/portal/billetera", icon: BadgeDollarSign },
+        { name: "Recibos de Sueldo", href: "/dashboard/portal/recibos", icon: Banknote },
+        { name: "Mi Legajo", href: "/dashboard/portal/legajo", icon: FolderOpen },
+        { name: "Solicitudes", href: "/dashboard/portal/solicitudes", icon: Palmtree },
+        { name: "ART / Seguridad", href: "/dashboard/portal/art", icon: ShieldAlert },
+        { name: "Mesa de Ayuda", href: "/dashboard/portal/mesa-ayuda", icon: Headphones },
+        { name: "Comunicaciones", href: "/dashboard/portal/comunicaciones", icon: Megaphone },
       ]
     : userRole === "cliente"
       ? [
@@ -167,7 +176,11 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <Input
                   type="text"
-                  placeholder="Buscar proyectos, tareas, documentos..."
+                  placeholder={
+                    isPortalEmployeeRole(userRole)
+                      ? "Buscar en Mi Portal..."
+                      : "Buscar proyectos, tareas, documentos..."
+                  }
                   className="pl-10 h-10 border-0 bg-transparent shadow-none cursor-pointer focus-visible:ring-0"
                   readOnly
                 />

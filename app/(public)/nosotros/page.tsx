@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Users, Target, Award, Heart, CheckCircle, ArrowRight, MapPin } from "lucide-react"
 import Link from "next/link"
 import { PublicHeroSection } from "@/components/home/public-hero-section"
+import { EMPRENOR_BRAND, RM_LEGAL } from "@/lib/company/constants"
 
 export default function NosotrosPage() {
   return (
@@ -16,8 +17,9 @@ export default function NosotrosPage() {
             <div className="space-y-4">
               <h2 className="text-3xl font-bold text-foreground text-center">Nuestra Historia</h2>
               <p className="text-muted-foreground leading-relaxed text-center">
-                EMPRENOR CONSTRUCCIONES nació en 2009 con una visión clara: ofrecer servicios de construcción de la más
-                alta calidad con un enfoque en la satisfacción del cliente y la excelencia operativa.
+                {EMPRENOR_BRAND.siglas} ({EMPRENOR_BRAND.significadoSiglas}) es marca comercial de{" "}
+                <strong>{RM_LEGAL.razonSocial}</strong>, constituida en mayo de 2018, con operaciones de construcción y
+                servicios en el NOA desde oficinas en Salta Capital, Tartagal y Campamento Vespucio.
               </p>
             </div>
 
@@ -43,9 +45,8 @@ export default function NosotrosPage() {
                   </div>
                   <h3 className="text-xl font-semibold text-foreground">Visión</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Ser la empresa de construcción líder reconocida por nuestra innovación, calidad y compromiso con la
-                    satisfacción del cliente, expandiendo nuestros servicios y manteniéndonos a la vanguardia de las
-                    mejores prácticas de la industria.
+                    Ser una constructora de referencia en el NOA por calidad de ejecución, cumplimiento contractual y
+                    transparencia con clientes públicos y privados.
                   </p>
                 </CardContent>
               </Card>
@@ -73,8 +74,12 @@ export default function NosotrosPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">Calidad</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Comprometidos con los más altos estándares en cada proyecto, utilizando materiales de primera y
-                    técnicas comprobadas.
+                    Compromiso con especificaciones acordadas, materiales del presupuesto y controles en obra. Consulte
+                    nuestra{" "}
+                    <Link href="/politica-calidad" className="text-emerald-700 underline">
+                      política de calidad
+                    </Link>
+                    .
                   </p>
                 </CardContent>
               </Card>
@@ -99,8 +104,8 @@ export default function NosotrosPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">Profesionalismo</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Equipo altamente capacitado y certificado que actúa con ética, respeto y transparencia en todo
-                    momento.
+                    Equipo técnico y de obra con roles definidos; habilitaciones de gas y electricidad cuando la normativa
+                    lo exige para cada proyecto.
                   </p>
                 </CardContent>
               </Card>
@@ -167,7 +172,7 @@ export default function NosotrosPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">Ingenieros</h3>
-                    <p className="text-sm text-muted-foreground">Civiles y Arquitectos Certificados</p>
+                    <p className="text-sm text-muted-foreground">Ingeniería y arquitectura según proyecto</p>
                   </div>
                 </CardContent>
               </Card>
@@ -179,7 +184,7 @@ export default function NosotrosPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">Maestros de Obra</h3>
-                    <p className="text-sm text-muted-foreground">Expertos con 15+ años</p>
+                    <p className="text-sm text-muted-foreground">Maestros y capataces de obra</p>
                   </div>
                 </CardContent>
               </Card>
@@ -222,7 +227,7 @@ export default function NosotrosPage() {
               </div>
               <h2 className="text-3xl font-bold text-foreground">Cobertura de Servicios</h2>
               <p className="text-muted-foreground leading-relaxed text-pretty">
-                Atendemos a toda la región del norte argentino con tres oficinas estratégicamente ubicadas.
+                Operamos desde Salta con despliegues coordinados en Jujuy, Tucumán y Formosa según alcance de cada contrato.
               </p>
             </div>
 
@@ -286,19 +291,19 @@ export default function NosotrosPage() {
                   <ul className="grid grid-cols-2 gap-3 text-sm text-muted-foreground max-w-md mx-auto">
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Salta - Cobertura completa</span>
+                      <span>Salta — base operativa principal</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Jujuy - Todas las localidades</span>
+                      <span>Jujuy — obras según contrato</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Tucumán - Servicio completo</span>
+                      <span>Tucumán — obras según contrato</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Formosa - Toda la provincia</span>
+                      <span>Formosa — obras según contrato</span>
                     </li>
                   </ul>
                 </div>
@@ -328,8 +333,11 @@ export default function NosotrosPage() {
                   ¿Listo para trabajar con nosotros?
                 </h2>
                 <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
-                  Únase a cientos de clientes satisfechos que han confiado en EMPRENOR para sus proyectos de
-                  construcción en Salta, Jujuy, Tucumán y Formosa.
+                  Consulte nuestros{" "}
+                  <Link href="/proyectos" className="text-emerald-700 underline">
+                    proyectos publicados
+                  </Link>{" "}
+                  o escríbanos para referencias adicionales bajo solicitud.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">

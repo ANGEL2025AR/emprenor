@@ -2,15 +2,18 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, HelpCircle } from "lucide-react"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { generateFAQSchema } from "@/lib/structured-data"
+import { EMPRENOR_BRAND } from "@/lib/company/constants"
 
-export const metadata = {
-  title: "Preguntas Frecuentes",
+export const metadata = buildPageMetadata({
+  title: `Preguntas Frecuentes — ${EMPRENOR_BRAND.siglas}`,
   description:
-    "Respuestas a las preguntas más comunes sobre nuestros servicios de construcción, remodelación y renovación en Salta, Jujuy, Tucumán y Formosa.",
-}
+    "Respuestas sobre construcción, licitaciones, cotizaciones y cobertura en Salta, Jujuy, Tucumán y Formosa.",
+  path: "/preguntas-frecuentes",
+})
 
-export default function PreguntasFrecuentesPage() {
-  const faqs = [
+const FAQ_DATA = [
     {
       categoria: "Servicios y Cobertura",
       preguntas: [
@@ -77,17 +80,17 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Ofrecen garantía en sus trabajos?",
           respuesta:
-            "Sí, todos nuestros trabajos cuentan con garantía. La duración varía según el tipo de trabajo: desde 6 meses para pintura hasta 5 años para estructuras.",
+            "Las garantías se establecen por escrito en cada contrato según el tipo de obra y materiales. No hay un plazo único publicado: consulte su propuesta o contrato para el detalle.",
         },
         {
           pregunta: "¿Se encargan de los permisos y trámites?",
           respuesta:
-            "Sí, gestionamos todos los permisos municipales y documentación necesaria. Incluimos esto en nuestro servicio integral para su comodidad.",
+            "La gestión de permisos municipales y trámites se incluye solo cuando está expresamente acordada en presupuesto y contrato. De lo contrario, coordinamos con el cliente quién gestiona cada habilitación.",
         },
         {
           pregunta: "¿Tienen seguro de responsabilidad civil?",
           respuesta:
-            "Sí, contamos con seguro de responsabilidad civil y todos nuestros trabajadores están asegurados. Su propiedad y nuestro equipo están protegidos.",
+            "Ante licitaciones o contratos mayores, acreditamos ART y pólizas vigentes a solicitud del organismo o cliente. Los requisitos específicos se detallan en cada pliego.",
         },
       ],
     },
@@ -111,10 +114,17 @@ export default function PreguntasFrecuentesPage() {
         },
       ],
     },
-  ]
+]
+
+export default function PreguntasFrecuentesPage() {
+  const faqs = FAQ_DATA
+  const faqSchema = generateFAQSchema(
+    FAQ_DATA.flatMap((c) => c.preguntas.map((p) => ({ question: p.pregunta, answer: p.respuesta }))),
+  )
 
   return (
     <main className="flex flex-col min-h-screen">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero Section */}
       <section className="relative bg-primary text-primary-foreground py-16 md:py-20">
         <div className="container px-4 md:px-6">

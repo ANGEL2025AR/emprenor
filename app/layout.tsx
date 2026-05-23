@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/structured-data"
 import { SITE_URL } from "@/lib/site-url"
+import { EMPRENOR_BRAND, RM_LEGAL, EMPRENOR_SITE } from "@/lib/company/constants"
 
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION
 
@@ -23,11 +24,11 @@ const _geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "EMPRENOR - Construcción y Servicios en Salta, Jujuy, Tucumán y Formosa",
-    template: "%s | EMPRENOR Construcciones",
+    default: EMPRENOR_SITE.defaultTitle,
+    template: EMPRENOR_SITE.titleTemplate,
   },
   description:
-    "Empresa líder en construcción, remodelación, albañilería, electricidad, plomería y pintura. Más de 15 años de experiencia. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Servicios en Salta, Jujuy, Tucumán y Formosa. Cotización gratuita.",
+    "Constructora en Salta, Jujuy, Tucumán y Formosa desde 2018. Construcción, remodelación, instalaciones y obra industrial. Políticas de calidad y SST publicadas.",
   keywords: [
     "construcción Salta",
     "construcción Jujuy",
@@ -48,9 +49,9 @@ export const metadata: Metadata = {
     "obras industriales NOA",
     "instalaciones gas Salta",
   ],
-  authors: [{ name: "EMPRENOR Construcciones", url: SITE_URL }],
-  creator: "EMPRENOR Construcciones",
-  publisher: "EMPRENOR Construcciones",
+  authors: [{ name: EMPRENOR_BRAND.siglas, url: SITE_URL }],
+  creator: RM_LEGAL.razonSocial,
+  publisher: RM_LEGAL.razonSocial,
   formatDetection: {
     email: false,
     address: true,
@@ -60,23 +61,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_AR",
     url: SITE_URL,
-    siteName: "EMPRENOR Construcciones",
-    title: "EMPRENOR - Construcción y Servicios Profesionales en el NOA",
+    siteName: EMPRENOR_SITE.siteName,
+    title: EMPRENOR_SITE.defaultTitle,
     description:
-      "Empresa líder en construcción y servicios en el NOA. Más de 15 años transformando espacios. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Cobertura en Salta, Jujuy, Tucumán y Formosa.",
+      "Constructora en el NOA desde 2018. Oficinas en Salta Capital, Tartagal y Campamento Vespucio.",
     images: [
       {
         url: "/images/logo-emprenor-large.png",
         width: 1024,
         height: 168,
-        alt: "EMPRENOR Construcciones - Servicios profesionales en el NOA",
+        alt: `${EMPRENOR_BRAND.siglas} — ${EMPRENOR_BRAND.significadoSiglas} en el NOA`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "EMPRENOR - Construcción y Servicios Profesionales",
-    description: "Empresa líder en construcción en el NOA. Servicios en Salta, Jujuy, Tucumán y Formosa.",
+    title: EMPRENOR_SITE.defaultTitle,
+    description: "Constructora en el NOA. Servicios en Salta, Jujuy, Tucumán y Formosa.",
     images: ["/images/logo-emprenor-large.png"],
   },
   robots: {
@@ -89,9 +90,6 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  alternates: {
-    canonical: SITE_URL,
   },
   ...(googleSiteVerification
     ? { verification: { google: googleSiteVerification } }
@@ -130,10 +128,10 @@ export default function RootLayout({
     <html lang="es-AR">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="application-name" content="EMPRENOR" />
+        <meta name="application-name" content={EMPRENOR_BRAND.siglas} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="EMPRENOR" />
+        <meta name="apple-mobile-web-app-title" content={EMPRENOR_BRAND.siglas} />
         <meta name="mobile-web-app-capable" content="yes" />
 
         <script

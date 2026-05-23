@@ -17,20 +17,34 @@ export async function POST(request: NextRequest) {
     const now = new Date()
     let inserted = 0
 
+    const force =
+      request.nextUrl.searchParams.get("force") === "true" ||
+      request.nextUrl.searchParams.get("mode") === "force"
+
     for (const seed of SITE_SERVICE_DEFAULTS) {
+      const { slug, ...fields } = seed
       const result = await db.collection<SiteService>("site_services").updateOne(
-        { slug: seed.slug },
-        {
-          $setOnInsert: {
-            ...seed,
-            createdAt: now,
-            updatedAt: now,
-            updatedBy: new ObjectId(user.userId),
-          },
-        },
+        { slug },
+        force
+          ? {
+              $set: {
+                ...fields,
+                updatedAt: now,
+                updatedBy: new ObjectId(user.userId),
+              },
+              $setOnInsert: { slug, createdAt: now },
+            }
+          : {
+              $setOnInsert: {
+                ...seed,
+                createdAt: now,
+                updatedAt: now,
+                updatedBy: new ObjectId(user.userId),
+              },
+            },
         { upsert: true },
       )
-      if (result.upsertedCount) inserted++
+      if (result.upsertedCount || (force && result.modifiedCount)) inserted++
     }
 
     revalidatePath("/servicios")

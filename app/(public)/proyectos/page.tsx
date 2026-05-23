@@ -90,8 +90,7 @@ export default function ProyectosPage() {
             </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-balance">Nuestros Proyectos</h1>
             <p className="text-lg text-primary-foreground/90 leading-relaxed text-pretty">
-              Descubra la calidad y profesionalismo de nuestro trabajo a través de proyectos completados exitosamente
-              para clientes satisfechos.
+              Obras publicadas con autorización del cliente. Cada proyecto refleja alcance, ubicación y tipo de obra real.
             </p>
           </div>
         </div>

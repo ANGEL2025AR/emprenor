@@ -7,11 +7,10 @@ import {
   DASHBOARD_HOME,
   DASHBOARD_NAV_GROUPS,
   CLIENT_PORTAL_NAV_GROUPS,
-  EMPLOYEE_PORTAL_HOME,
 } from "@/lib/dashboard/navigation"
 import {
   EMPLOYEE_NAV_GROUPS,
-  EMPLOYEE_SUPERVISOR_ONLY_GROUP_IDS,
+  EMPLOYEE_PORTAL_NAV_ITEMS,
 } from "@/lib/dashboard/employee-navigation"
 
 function isClientRole(role: UserRole): boolean {
@@ -56,14 +55,10 @@ export function filterNavGroups(
   }
 
   if (isPortalEmployeeRole(userRole)) {
-    return EMPLOYEE_NAV_GROUPS.filter(
-      (group) => userRole === "supervisor" || !EMPLOYEE_SUPERVISOR_ONLY_GROUP_IDS.has(group.id),
-    )
-      .map((group) => ({
-        ...group,
-        items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
-      }))
-      .filter((group) => group.items.length > 0)
+    return EMPLOYEE_NAV_GROUPS.map((group) => ({
+      ...group,
+      items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
+    })).filter((group) => group.items.length > 0)
   }
 
   return DASHBOARD_NAV_GROUPS.map((group) => ({
@@ -72,10 +67,10 @@ export function filterNavGroups(
   })).filter((group) => group.items.length > 0)
 }
 
-/** Un solo inicio por rol: empleados → portal RRHH; clientes → grupo Mi obra; resto → dashboard ejecutivo. */
+/** Un solo inicio por rol: clientes y staff; empleados usan lista plana del portal. */
 export function getDashboardHome(userRole: UserRole): DashboardNavItem | null {
   if (isClientRole(userRole)) return null
-  if (isPortalEmployeeRole(userRole)) return EMPLOYEE_PORTAL_HOME
+  if (isPortalEmployeeRole(userRole)) return null
   return DASHBOARD_HOME
 }
 
@@ -83,4 +78,11 @@ export function isHomeVisible(userRole: UserRole): boolean {
   return getDashboardHome(userRole) !== null
 }
 
-export { DASHBOARD_HOME, EMPLOYEE_PORTAL_HOME }
+export function getEmployeePortalNavItems(
+  userRole: UserRole,
+  portalSettings: PortalSettings | null,
+): DashboardNavItem[] {
+  return EMPLOYEE_PORTAL_NAV_ITEMS.filter((item) => isNavItemVisible(item, userRole, portalSettings))
+}
+
+export { DASHBOARD_HOME }

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { getDb } from "@/lib/db/connection"
+import { getPublishedServices } from "@/lib/site/get-services"
 import { SITE_URL } from "@/lib/site-url"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -44,60 +45,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.9,
     },
-    {
-      url: `${baseUrl}/servicios/construccion`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/remodelacion`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/albanileria`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/electricidad`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/plomeria`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/pintura`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/gas`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/viviendas-prefabricadas`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/obras-industriales`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+    { url: `${baseUrl}/aviso-legal`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.5 },
+    { url: `${baseUrl}/politica-calidad`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${baseUrl}/gestion-documental`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.6 },
     { url: `${baseUrl}/privacidad`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.4 },
     { url: `${baseUrl}/cookies`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.4 },
     { url: `${baseUrl}/codigo-etica`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.5 },
@@ -107,6 +57,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/licitaciones`, lastModified: currentDate, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/trabaja-con-nosotros`, lastModified: currentDate, changeFrequency: "monthly", priority: 0.6 },
   ]
+
+  // Servicios dinámicos desde CMS
+  let dynamicServices: MetadataRoute.Sitemap = []
+  try {
+    const services = await getPublishedServices()
+    dynamicServices = services.map((service) => ({
+      url: `${baseUrl}/servicios/${service.slug}`,
+      lastModified: service.updatedAt || currentDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }))
+  } catch {
+    console.error("Error fetching services for sitemap")
+  }
 
   // Obtener proyectos públicos dinámicamente desde MongoDB
   let dynamicProjects: MetadataRoute.Sitemap = []
@@ -129,5 +93,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Error fetching projects for sitemap")
   }
 
-  return [...staticPages, ...dynamicProjects]
+  return [...staticPages, ...dynamicServices, ...dynamicProjects]
 }

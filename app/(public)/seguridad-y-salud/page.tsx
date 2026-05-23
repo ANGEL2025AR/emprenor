@@ -11,7 +11,7 @@ export default function SeguridadSaludPage() {
     <InstitutionalPage
       slug="seguridad-y-salud"
       title="Seguridad y salud en el trabajo"
-      subtitle="Construimos con cultura de prevención, alineada a buenas prácticas ISO 45001 y normativa argentina."
+      subtitle="Política SST, ART y cultura de prevención en obra. Buenas prácticas alineadas a normativa argentina; no implica certificación ISO 45001 salvo acreditación expresa."
       sections={[
         {
           title: "Política de SST",

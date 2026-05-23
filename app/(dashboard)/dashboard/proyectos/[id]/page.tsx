@@ -116,6 +116,13 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </div>
         </div>
         {!isClient && (
+          <Button variant="outline" asChild>
+            <Link href={`/dashboard/proyectos/${id}/cumplimiento-cliente`}>
+              Cumplimiento cliente
+            </Link>
+          </Button>
+        )}
+        {!isClient && (
           <Button asChild>
             <Link href={`/dashboard/proyectos/${id}/editar`}>
               <Edit className="w-4 h-4 mr-2" />

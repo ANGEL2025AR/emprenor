@@ -11,6 +11,8 @@ export const CLIENT_PATH_PATTERNS: RegExp[] = [
   /^\/dashboard\/certificados\/?$/,
   /^\/dashboard\/certificados\/[a-fA-F0-9]{24}\/?$/,
   /^\/dashboard\/notificaciones\/?$/,
+  /^\/dashboard\/mi-obra\/?$/,
+  /^\/dashboard\/mi-obra\/[a-fA-F0-9]{24}\/?$/,
 ]
 
 const CLIENT_BLOCKED_PATTERNS: RegExp[] = [
@@ -43,6 +45,8 @@ export function buildMiddlewareRouteMap(): Record<string, string[]> {
   map["/dashboard/calendario"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador"]
   map["/dashboard/clientes"] = ["super_admin", "admin", "gerente", "supervisor"]
   map["/dashboard/empleados"] = ["super_admin", "admin", "gerente"]
+  map["/dashboard/mi-obra"] = ["cliente", "super_admin", "admin", "gerente", "supervisor"]
+  map["/dashboard/proyectos"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"]
 
   return map
 }

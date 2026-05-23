@@ -105,6 +105,10 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   // Vista cliente: finanzas y avances solo en sus obras
   "client.project_finance.view": ["cliente"],
   "client.project_progress.view": ["cliente"],
+  "client.compliance.view": ["cliente"],
+
+  // Cumplimiento institucional (FAO / clientes exigentes) — gestión interna
+  "compliance.manage": ["super_admin", "admin", "gerente", "supervisor"],
 
   // Calendario
   "calendar.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
@@ -387,4 +391,5 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/admin/portal/mesa-ayuda": "portal.admin",
   "/dashboard/admin/portal/comunicaciones": "portal.admin",
   "/dashboard/admin/portal/configuracion": "portal.admin",
+  "/dashboard/mi-obra": "client.compliance.view",
 }

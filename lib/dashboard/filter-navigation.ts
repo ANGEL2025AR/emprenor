@@ -3,7 +3,11 @@ import { hasPermission } from "@/lib/auth/permissions"
 import { isPortalAdminRole, isPortalEmployeeRole } from "@/lib/auth/portal-roles"
 import { isPortalModuleEnabled, type PortalSettings } from "@/lib/portal/portal-settings-shared"
 import type { DashboardNavItem, DashboardNavGroup } from "@/lib/dashboard/navigation"
-import { DASHBOARD_HOME, DASHBOARD_NAV_GROUPS } from "@/lib/dashboard/navigation"
+import { DASHBOARD_HOME, DASHBOARD_NAV_GROUPS, CLIENT_PORTAL_NAV_GROUPS } from "@/lib/dashboard/navigation"
+
+function isClientRole(role: UserRole): boolean {
+  return role === "cliente"
+}
 
 export function isNavItemVisible(
   item: DashboardNavItem,
@@ -35,13 +39,17 @@ export function filterNavGroups(
   userRole: UserRole,
   portalSettings: PortalSettings | null,
 ): DashboardNavGroup[] {
-  return DASHBOARD_NAV_GROUPS.map((group) => ({
-    ...group,
-    items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
-  })).filter((group) => group.items.length > 0)
+  const groups = isClientRole(userRole) ? CLIENT_PORTAL_NAV_GROUPS : DASHBOARD_NAV_GROUPS
+  return groups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => isNavItemVisible(item, userRole, portalSettings)),
+    }))
+    .filter((group) => group.items.length > 0)
 }
 
 export function isHomeVisible(userRole: UserRole): boolean {
+  if (isClientRole(userRole)) return false
   return isNavItemVisible(DASHBOARD_HOME, userRole, null)
 }
 

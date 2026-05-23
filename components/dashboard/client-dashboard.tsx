@@ -8,7 +8,7 @@ import { DashboardPageHeader, DashboardPanel, DashboardStatCard } from "@/compon
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { FolderKanban, FileText, Award, Bell, ArrowRight } from "lucide-react"
+import { FolderKanban, FileText, Award, Bell, ArrowRight, ClipboardList } from "lucide-react"
 
 const STATUS_LABELS: Record<string, string> = {
   borrador: "Borrador",
@@ -47,8 +47,27 @@ export async function ClientDashboard({ user }: ClientDashboardProps) {
       <DashboardPageHeader
         badge="Portal cliente"
         title="Mis obras"
-        description={`Hola ${user.name}, aquí ves el avance, documentación y pagos de tus proyectos con EMPRENOR.`}
+        description={`Hola ${user.name}, aquí ves el avance, documentación y cumplimiento de tus proyectos con EMPRENOR.`}
       />
+
+      {projects.some((p) => p.institutionalCompliance?.enabled) ? (
+        <DashboardPanel>
+          <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold flex items-center gap-2">
+                <ClipboardList className="h-5 w-5 text-emerald-600" />
+                Cumplimiento institucional (FAO / auditoría)
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Nómina, ART, documentos sociales, incidentes y compras locales de tu obra.
+              </p>
+            </div>
+            <Button asChild>
+              <Link href="/dashboard/mi-obra">Abrir portal de cumplimiento</Link>
+            </Button>
+          </CardContent>
+        </DashboardPanel>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <DashboardStatCard title="Proyectos" value={projects.length} subtitle={`${active} en progreso`} icon={FolderKanban} accent="blue" />

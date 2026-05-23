@@ -122,6 +122,132 @@ export interface Project extends BaseDocument {
   tags: string[]
   coverImage?: string
   createdBy: ObjectId
+  /** Portal de cumplimiento para clientes institucionales (FAO, PNUD, etc.) */
+  institutionalCompliance?: ProjectInstitutionalCompliance
+}
+
+// ============================================
+// CUMPLIMIENTO INSTITUCIONAL (CLIENTE / FAO)
+// ============================================
+
+export type ComplianceDocumentCategory =
+  | "art_policy"
+  | "employee_insurance"
+  | "code_of_conduct"
+  | "patrimony_training"
+  | "indigenous_guidelines"
+  | "gender_commitment"
+  | "other"
+
+export type ComplianceChecklistKey =
+  | "roster_current"
+  | "art_valid"
+  | "insurance_valid"
+  | "code_of_conduct_signed"
+  | "patrimony_training"
+  | "gender_commitment"
+  | "indigenous_guidelines"
+  | "complaint_book_active"
+  | "incidents_reported"
+
+export interface ProjectInstitutionalCompliance {
+  enabled: boolean
+  clientOrganization?: string
+  contractReference?: string
+  orderReference?: string
+  siteName?: string
+  socialResponsible?: { name: string; phone: string; email?: string }
+  siteResponsible?: { name: string; phone: string; email?: string }
+  complaintBookLocation?: string
+  macEmail?: string
+  contractorHotline?: string
+}
+
+export interface WorkforceRosterEntry {
+  id: string
+  lastName: string
+  firstName: string
+  birthDate?: string
+  cuil: string
+  roleOnSite: string
+  gender: "M" | "F"
+  artInsuranceNumber?: string
+  artCondition?: string
+  address: string
+  city: string
+  province: string
+  distanceKm?: number
+  isLocalWorkforce: boolean
+  indigenousCommunity?: { yes: boolean; name?: string }
+  codeOfConductSigned: boolean
+  codeOfConductSignedAt?: Date
+  patrimonyTrainingSigned: boolean
+  genderTrainingSigned: boolean
+  active: boolean
+}
+
+export interface WorkforceRoster extends BaseDocument {
+  projectId: ObjectId
+  /** Periodo YYYY-MM */
+  period: string
+  entries: WorkforceRosterEntry[]
+  status: "borrador" | "enviado"
+  submittedAt?: Date
+  submittedBy?: ObjectId
+  notes?: string
+}
+
+export interface ComplianceDocument extends BaseDocument {
+  projectId: ObjectId
+  category: ComplianceDocumentCategory
+  title: string
+  fileUrl: string
+  fileName: string
+  mimeType?: string
+  fileSize?: number
+  validFrom?: Date
+  validUntil?: Date
+  notes?: string
+  uploadedBy: ObjectId
+}
+
+export interface WorkIncident extends BaseDocument {
+  projectId: ObjectId
+  cuilOrDni: string
+  workerName: string
+  description: string
+  careProvided: string
+  artManagementDetail: string
+  attachments: { url: string; name: string }[]
+  occurredAt: Date
+  reportedBy: ObjectId
+  status: "abierto" | "cerrado"
+  closedAt?: Date
+}
+
+export interface LocalPurchase extends BaseDocument {
+  projectId: ObjectId
+  date: Date
+  detail: string
+  provider: string
+  location: string
+  amount: number
+  currency: string
+  notes?: string
+  createdBy: ObjectId
+}
+
+export type SiteComplaintStatus = "abierta" | "en_gestion" | "resuelta"
+
+export interface SiteComplaint extends BaseDocument {
+  projectId: ObjectId
+  date: Date
+  source: string
+  description: string
+  status: SiteComplaintStatus
+  response?: string
+  resolvedAt?: Date
+  createdBy: ObjectId
 }
 
 // ============================================

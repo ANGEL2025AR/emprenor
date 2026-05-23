@@ -40,6 +40,7 @@ import {
   Boxes,
   UserCircle,
   Radio,
+  ClipboardList,
 } from "lucide-react"
 import type { PortalModuleKey } from "@/lib/portal/portal-settings-shared"
 
@@ -225,6 +226,30 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     items: [
       { name: "Proyectos públicos", href: "/dashboard/sitio-web/proyectos", icon: Globe, permission: "admin.access" },
       { name: "Portadas (slider)", href: "/dashboard/sitio-web/paginas", icon: LayoutTemplate, permission: "admin.access" },
+    ],
+  },
+]
+
+/** Menú exclusivo rol cliente (portal de obra / FAO). */
+export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
+  {
+    id: "mi-obra",
+    label: "Mi obra",
+    icon: HardHat,
+    items: [
+      { name: "Mis obras", href: "/dashboard", icon: LayoutDashboard, permission: null },
+      { name: "Cumplimiento institucional", href: "/dashboard/mi-obra", icon: ClipboardList, permission: "client.compliance.view" },
+      { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" },
+    ],
+  },
+  {
+    id: "cliente-docs",
+    label: "Documentación",
+    icon: FileText,
+    items: [
+      { name: "Documentos", href: "/dashboard/documentos", icon: FileText, permission: "documents.view" },
+      { name: "Certificados", href: "/dashboard/certificados", icon: Award, permission: "certificates.view" },
+      { name: "Notificaciones", href: "/dashboard/notificaciones", icon: Bell, permission: "notifications.view" },
     ],
   },
 ]

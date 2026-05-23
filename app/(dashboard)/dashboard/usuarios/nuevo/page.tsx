@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,7 +15,16 @@ import { useToast } from "@/hooks/use-toast"
 import type { UserRole } from "@/lib/db/models"
 
 export default function NewUserPage() {
+  return (
+    <Suspense fallback={<div className="py-12 text-center">Cargando…</div>}>
+      <NewUserForm />
+    </Suspense>
+  )
+}
+
+function NewUserForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -28,6 +37,21 @@ export default function NewUserPage() {
     password: "",
     confirmPassword: "",
   })
+  const [linkedClientId, setLinkedClientId] = useState("")
+
+  useEffect(() => {
+    const role = searchParams.get("role")
+    const email = searchParams.get("email")
+    const name = searchParams.get("name")
+    const clientId = searchParams.get("linkedClientId")
+    setFormData((prev) => ({
+      ...prev,
+      ...(role === "cliente" ? { role: "cliente" as UserRole } : {}),
+      ...(email ? { email } : {}),
+      ...(name ? { name: name.split(" ")[0] ?? name, lastName: name.split(" ").slice(1).join(" ") || prev.lastName } : {}),
+    }))
+    if (clientId) setLinkedClientId(clientId)
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,6 +82,7 @@ export default function NewUserPage() {
         body: JSON.stringify({
           ...formData,
           isActive: true,
+          linkedClientId: linkedClientId || undefined,
         }),
       })
 
@@ -101,7 +126,11 @@ export default function NewUserPage() {
       <Card>
         <CardHeader>
           <CardTitle>Información del Usuario</CardTitle>
-          <CardDescription>Completa todos los campos para crear una nueva cuenta de usuario</CardDescription>
+          <CardDescription>
+            {linkedClientId
+              ? "Usuario portal: quedará vinculado a las obras del cliente seleccionado."
+              : "Completa todos los campos para crear una nueva cuenta de usuario"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">

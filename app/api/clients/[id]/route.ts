@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb"
 import { hasPermission } from "@/lib/auth/permissions"
 import { propagateClientToLinkedProjects } from "@/lib/clients/project-link"
 import type { ClientRecord } from "@/lib/clients/compliance-sync"
+import { projectsFilterForClient } from "@/lib/clients/project-queries"
 import type { UserRole } from "@/lib/db/models"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -27,14 +28,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Cliente no encontrado" }, { status: 404 })
     }
 
-    const projects = await db.collection("projects").countDocuments({
-      "clientInfo.email": client.email,
-    })
+    const projects = await db.collection("projects").countDocuments(
+      projectsFilterForClient(client._id as ObjectId, String(client.email ?? "")),
+    )
 
     const invoices = await db
       .collection("invoices")
       .find({
-        clientEmail: client.email,
+        $or: [{ clientEmail: client.email }, { clientId: client._id }],
       })
       .toArray()
 

@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server"
+import { ObjectId } from "mongodb"
 import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
+import { projectsFilterForClient } from "@/lib/clients/project-queries"
 
 export async function GET() {
   try {
@@ -19,8 +21,12 @@ export async function GET() {
 
     const clientsWithStats = await Promise.all(
       clients.map(async (client) => {
-        const projects = await db.collection("projects").countDocuments({ "client.email": client.email })
-        const invoices = await db.collection("invoices").find({ clientId: client._id }).toArray()
+        const filter = projectsFilterForClient(client._id as ObjectId, String(client.email ?? ""))
+        const projects = await db.collection("projects").countDocuments(filter)
+        const invoices = await db
+          .collection("invoices")
+          .find({ $or: [{ clientId: client._id }, { clientEmail: client.email }] })
+          .toArray()
         const totalInvoiced = invoices.reduce((sum, inv) => sum + (inv.total || 0), 0)
 
         return {
@@ -44,6 +50,10 @@ export async function POST(request: Request) {
     const user = await getCurrentUser()
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 })
+    }
+
+    if (!hasPermission(user.role, "clients.create")) {
+      return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 
     const data = await request.json()

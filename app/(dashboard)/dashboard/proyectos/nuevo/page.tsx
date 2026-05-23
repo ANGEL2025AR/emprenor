@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +15,16 @@ import { AlertCircle, ArrowLeft, Loader2, Save, Upload, X, ImageIcon } from "luc
 import { ProjectClientPicker } from "@/components/projects/project-client-picker"
 
 export default function NewProjectPage() {
+  return (
+    <Suspense fallback={<div className="py-12 text-center">Cargando…</div>}>
+      <NewProjectForm />
+    </Suspense>
+  )
+}
+
+function NewProjectForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [images, setImages] = useState<Array<{ url: string; filename: string }>>([])
@@ -47,6 +56,11 @@ export default function NewProjectPage() {
       currency: "ARS",
     },
   })
+
+  useEffect(() => {
+    const cid = searchParams.get("clientId")
+    if (cid) setClientId(cid)
+  }, [searchParams])
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -110,7 +124,11 @@ export default function NewProjectPage() {
         return
       }
 
-      router.push(`/dashboard/proyectos/${data.project._id}`)
+      router.push(
+        clientId
+          ? `/dashboard/proyectos/${data.project._id}/cumplimiento-cliente?tab=config`
+          : `/dashboard/proyectos/${data.project._id}`,
+      )
     } catch {
       setError("Error de conexión")
     } finally {

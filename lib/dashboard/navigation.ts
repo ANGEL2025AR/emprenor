@@ -76,6 +76,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     icon: HardHat,
     items: [
       { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" },
+      { name: "Cumplimiento de obra", href: "/dashboard/cumplimiento-obra", icon: ClipboardList, permission: "compliance.manage" },
       { name: "Bitácora Diaria", href: "/dashboard/bitacora-diaria", icon: FileText, permission: "projects.view" },
       { name: "Punch Lists", href: "/dashboard/punch-lists", icon: ClipboardCheck, permission: "quality.view" },
       { name: "RFIs", href: "/dashboard/rfis", icon: MessageSquare, permission: "projects.view" },

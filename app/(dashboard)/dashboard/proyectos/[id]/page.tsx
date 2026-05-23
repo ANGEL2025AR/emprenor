@@ -13,6 +13,8 @@ import type { Project } from "@/lib/db/models"
 import { ProjectDocumentsClient } from "@/components/projects/project-documents-client"
 import { ProjectFinancesClient } from "@/components/projects/project-finances-client"
 import { ProjectTasksClient } from "@/components/projects/project-tasks-client"
+import { ComplianceSetupChecklist } from "@/components/compliance/compliance-setup-checklist"
+import { getClientComplianceLabel } from "@/lib/compliance/client-types"
 
 const STATUS_COLORS: Record<string, string> = {
   borrador: "bg-slate-100 text-slate-700",
@@ -96,6 +98,13 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const budgetDisplay = budgetTotal > 0 ? `$${(budgetTotal / 1000000).toFixed(1)}M` : "Sin definir"
 
   const teamSize = project.team?.workers?.length || 0
+  const linkedClientId =
+    typeof project.clientId === "string"
+      ? project.clientId
+      : project.clientId
+        ? String(project.clientId)
+        : ""
+  const portalEnabled = !!project.institutionalCompliance?.enabled
 
   return (
     <div className="space-y-6">
@@ -140,6 +149,32 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         )}
       </div>
 
+      {!isClient && !portalEnabled ? (
+        <ComplianceSetupChecklist
+          title="Activar portal del cliente en esta obra"
+          steps={[
+            {
+              id: "enable",
+              label: "Habilitar portal de cumplimiento",
+              description: "Municipio, FAO, empresa, consorcio o particular — según el cliente vinculado.",
+              done: false,
+              href: `/dashboard/proyectos/${id}/cumplimiento-cliente?tab=config`,
+              hrefLabel: "Configurar ahora",
+            },
+            {
+              id: "user",
+              label: "Usuario portal (rol cliente)",
+              description: "Creá acceso para que el contratante vea la obra.",
+              done: false,
+              href: linkedClientId
+                ? `/dashboard/usuarios/nuevo?role=cliente&linkedClientId=${linkedClientId}&email=${encodeURIComponent(project.client?.email ?? "")}&name=${encodeURIComponent(project.client?.name ?? "")}`
+                : `/dashboard/usuarios/nuevo?role=cliente&email=${encodeURIComponent(project.client?.email ?? "")}`,
+              hrefLabel: "Crear usuario",
+            },
+          ]}
+        />
+      ) : null}
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
@@ -155,6 +190,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </div>
           </CardContent>
         </Card>
+        {!isClient ? (
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -168,6 +204,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             </div>
           </CardContent>
         </Card>
+        ) : null}
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -213,7 +250,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           <TabsTrigger value="info">Información</TabsTrigger>
           {!isClient && <TabsTrigger value="tasks">Tareas</TabsTrigger>}
           <TabsTrigger value="documents">Documentación</TabsTrigger>
-          <TabsTrigger value="finances">{isClient ? "Pagos y avances" : "Finanzas"}</TabsTrigger>
+          {!isClient && <TabsTrigger value="finances">Finanzas</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="info" className="space-y-4">
@@ -238,6 +275,16 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               </CardHeader>
               <CardContent className="space-y-2">
                 <p className="font-semibold">{project.client?.name || "Cliente no especificado"}</p>
+                {project.institutionalCompliance?.clientType ? (
+                  <Badge variant="outline" className="text-xs">
+                    {getClientComplianceLabel(project.institutionalCompliance.clientType)}
+                  </Badge>
+                ) : null}
+                {linkedClientId && !isClient ? (
+                  <Button variant="link" className="h-auto p-0 text-sm" asChild>
+                    <Link href={`/dashboard/clientes/${linkedClientId}`}>Ver ficha del cliente</Link>
+                  </Button>
+                ) : null}
                 <div className="flex items-center gap-2 text-sm text-slate-600">
                   <Phone className="w-4 h-4" />
                   {project.client?.phone || "No disponible"}
@@ -310,9 +357,11 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </Card>
         </TabsContent>
 
-        <TabsContent value="finances">
-          <ProjectFinancesClient projectId={id} />
-        </TabsContent>
+        {!isClient && (
+          <TabsContent value="finances">
+            <ProjectFinancesClient projectId={id} />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   )

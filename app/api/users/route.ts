@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { hashPassword } from "@/lib/auth/password"
 import type { User } from "@/lib/db/models"
+import { assignClientUserToProjects } from "@/lib/clients/project-link"
 
 // GET - Listar usuarios
 export async function GET(request: NextRequest) {
@@ -99,6 +100,10 @@ export async function POST(request: NextRequest) {
     }
 
     const insertResult = await db.collection("users").insertOne(newUser)
+
+    if (body.role === "cliente" && typeof body.linkedClientId === "string" && body.linkedClientId) {
+      await assignClientUserToProjects(insertResult.insertedId.toString(), body.linkedClientId)
+    }
 
     return NextResponse.json(
       {

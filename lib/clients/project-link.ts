@@ -39,6 +39,17 @@ export async function applyClientToProjectUpdate(
   return sync
 }
 
+/** Asigna un usuario portal (rol cliente) a todos los proyectos del registro clients. */
+export async function assignClientUserToProjects(userId: string, clientId: string): Promise<number> {
+  if (!ObjectId.isValid(userId) || !ObjectId.isValid(clientId)) return 0
+  const db = await getDb()
+  const result = await db.collection("projects").updateMany(
+    { clientId: new ObjectId(clientId) },
+    { $set: { clientUserId: new ObjectId(userId), updatedAt: new Date() } },
+  )
+  return result.modifiedCount
+}
+
 export async function propagateClientToLinkedProjects(clientId: string, client: ClientRecord) {
   const db = await getDb()
   const oid = new ObjectId(clientId)

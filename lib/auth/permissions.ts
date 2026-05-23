@@ -392,4 +392,5 @@ export const ROUTE_PERMISSIONS: Record<string, string> = {
   "/dashboard/admin/portal/comunicaciones": "portal.admin",
   "/dashboard/admin/portal/configuracion": "portal.admin",
   "/dashboard/mi-obra": "client.compliance.view",
+  "/dashboard/cumplimiento-obra": "compliance.manage",
 }

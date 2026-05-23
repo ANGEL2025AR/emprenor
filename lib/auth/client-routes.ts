@@ -46,6 +46,7 @@ export function buildMiddlewareRouteMap(): Record<string, string[]> {
   map["/dashboard/clientes"] = ["super_admin", "admin", "gerente", "supervisor"]
   map["/dashboard/empleados"] = ["super_admin", "admin", "gerente"]
   map["/dashboard/mi-obra"] = ["cliente", "super_admin", "admin", "gerente", "supervisor"]
+  map["/dashboard/cumplimiento-obra"] = ["super_admin", "admin", "gerente", "supervisor"]
   map["/dashboard/proyectos"] = ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"]
 
   return map

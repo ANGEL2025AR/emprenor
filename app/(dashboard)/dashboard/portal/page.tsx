@@ -78,7 +78,7 @@ export default function PortalDashboardPage() {
     { label: "ART / Seguros", href: "/dashboard/portal/art", icon: ShieldCheck, color: "bg-rose-500", permission: "portal.art" },
     { label: "Mesa de Ayuda", href: "/dashboard/portal/mesa-ayuda", icon: Headphones, color: "bg-cyan-500", permission: "portal.help_desk" },
     { label: "Comunicaciones", href: "/dashboard/portal/comunicaciones", icon: Megaphone, color: "bg-orange-500", permission: "portal.announcements" },
-    { label: "Adelantos", href: "/dashboard/portal/adelantos", icon: CreditCard, color: "bg-teal-500", permission: "portal.advances" },
+    { label: "Adelantos", href: "/dashboard/portal/billetera", icon: CreditCard, color: "bg-teal-500", permission: "portal.advances" },
   ]
 
   return (

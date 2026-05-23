@@ -45,13 +45,20 @@ export const EMPRENOR_BRAND = {
   titularLegal: RM_LEGAL.razonSocial,
 } as const
 
+/** Slogan visible en pie de página, heroes y metadatos cortos. */
+export const EMPRENOR_SLOGAN = "Construcción y servicios en el NOA"
+
+/** Texto breve bajo el logo del footer (sin titular legal). */
+export const EMPRENOR_FOOTER_TAGLINE =
+  "Salta, Jujuy, Tucumán y Formosa · Oficinas en Salta Capital, Tartagal y Campamento Vespucio."
+
 /** Metadatos SEO / PWA — una sola fuente. */
 export const EMPRENOR_SITE = {
   siteName: EMPRENOR_BRAND.siglas,
   titleTemplate: `%s | ${EMPRENOR_BRAND.siglas}`,
-  defaultTitle: `${EMPRENOR_BRAND.siglas} — Construcción y servicios en el NOA`,
-  manifestDescription: `${EMPRENOR_BRAND.nombreExtendido}. Marca de ${RM_LEGAL.razonSocial}. Obra en Salta, Jujuy, Tucumán y Formosa.`,
-  manifestShortName: "EMPRENOR C&S",
+  defaultTitle: `${EMPRENOR_BRAND.siglas} — ${EMPRENOR_SLOGAN}`,
+  manifestDescription: `${EMPRENOR_BRAND.siglas}. ${EMPRENOR_SLOGAN}. Obra en Salta, Jujuy, Tucumán y Formosa.`,
+  manifestShortName: EMPRENOR_BRAND.siglas,
 } as const
 
 /** Oficinas operativas NOA (presencia comercial; domicilio fiscal en CABA). */
@@ -147,9 +154,9 @@ export const FOOTER_LEGAL_LINKS = [
   { href: "/trabaja-con-nosotros", label: "Trabajá con nosotros" },
 ] as const
 
-/** Texto legal estándar para aviso de marca. */
+/** Párrafo completo marca/titular — solo en aviso legal y documentos formales. */
 export function getMarcaLegalNotice() {
-  return `${EMPRENOR_BRAND.siglas} (${EMPRENOR_BRAND.nombreExtendido}) es marca comercial de ${RM_LEGAL.razonSocial} (CUIT ${RM_LEGAL.cuit}).`
+  return `${EMPRENOR_BRAND.siglas} es marca comercial de ${RM_LEGAL.razonSocial} (CUIT ${RM_LEGAL.cuit}). El significado de «C&S» es ${EMPRENOR_BRAND.significadoSiglas}.`
 }
 
 /** Sufijo para textos alt de imágenes de servicio. */

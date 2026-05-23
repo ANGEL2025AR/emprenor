@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { InstitutionalPage } from "@/components/public/institutional-page"
-import { EMPRENOR_BRAND, RM_LEGAL } from "@/lib/company/constants"
+import { EMPRENOR_BRAND } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 
 export const metadata: Metadata = buildPageMetadata({
   title: `Política de calidad | ${EMPRENOR_BRAND.siglas}`,
   description:
-    `Compromisos de calidad en obra — ${EMPRENOR_BRAND.nombreExtendido}. RM International Group S.A.S., NOA.`,
+    `Compromisos de calidad en obra — ${EMPRENOR_BRAND.siglas}, NOA.`,
   path: "/politica-calidad",
 })
 
@@ -23,7 +23,7 @@ export default function PoliticaCalidadPage() {
           content: (
             <p>
               Esta política aplica a los servicios de construcción, remodelación e instalaciones que{" "}
-              {RM_LEGAL.razonSocial} presta bajo la marca {EMPRENOR_BRAND.siglas} ({EMPRENOR_BRAND.significadoSiglas}) en Salta, Jujuy, Tucumán y Formosa.
+              {EMPRENOR_BRAND.siglas} presta servicios en Salta, Jujuy, Tucumán y Formosa.
               Los requisitos específicos de cada contrato — pliegos, normas técnicas, ensayos — prevalecen sobre este
               documento general.
             </p>
@@ -45,7 +45,7 @@ export default function PoliticaCalidadPage() {
           title: "Lo que no afirmamos",
           content: (
             <p>
-              EMPRENOR no publica certificaciones ISO, IRAM o INTI de sistema de gestión salvo que exista certificado vigente
+              {EMPRENOR_BRAND.siglas} no publica certificaciones ISO, IRAM o INTI de sistema de gestión salvo que exista certificado vigente
               y el cliente lo solicite. Las garantías, plazos y alcances se establecen en cada contrato; no hay garantía
               universal publicada fuera de ese marco.
             </p>

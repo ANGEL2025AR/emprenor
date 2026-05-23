@@ -26,7 +26,7 @@ export default function LicitacionesPage() {
                   <strong>Razón social:</strong> {RM_LEGAL.razonSocial}
                 </li>
                 <li>
-                  <strong>Marca comercial:</strong> {EMPRENOR_BRAND.siglas} ({EMPRENOR_BRAND.nombreExtendido})
+                  <strong>Marca:</strong> {EMPRENOR_BRAND.siglas}
                 </li>
                 <li>
                   <strong>CUIT:</strong> {EMPRENOR_LEGAL.cuit}

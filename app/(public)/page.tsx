@@ -31,7 +31,7 @@ import { buildPageMetadata } from "@/lib/site/page-metadata"
 export const metadata = buildPageMetadata({
   title: EMPRENOR_SITE.defaultTitle,
   description:
-    `${EMPRENOR_BRAND.nombreExtendido}. Marca de RM International Group S.A.S. Obra en Salta, Jujuy, Tucumán y Formosa desde 2018.`,
+    `${EMPRENOR_BRAND.siglas}. Obra en Salta, Jujuy, Tucumán y Formosa desde 2018.`,
   path: "/",
 })
 
@@ -198,7 +198,7 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                ¿Por qué elegir <span className="text-green-600">EMPRENOR</span>?
+                ¿Por qué elegir <span className="text-green-600">{EMPRENOR_BRAND.siglas}</span>?
               </h2>
               <p className="text-lg text-slate-600 mb-8">
                 Desde 2018 acompañamos proyectos residenciales, comerciales, industriales y de sector público en el NOA,
@@ -222,7 +222,7 @@ export default function HomePage() {
               <div className="rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-slate-800 via-emerald-900 to-slate-900 flex items-center justify-center">
                 <Image
                   src="/images/logo-emprenor-white.png"
-                  alt={`${EMPRENOR_BRAND.siglas} — ${EMPRENOR_BRAND.significadoSiglas} en el NOA`}
+                  alt={`${EMPRENOR_BRAND.siglas} en el NOA`}
                   width={320}
                   height={120}
                   className="opacity-90"

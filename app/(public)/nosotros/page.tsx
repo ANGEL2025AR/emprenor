@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Users, Target, Award, Heart, CheckCircle, ArrowRight, MapPin } from "lucide-react"
 import Link from "next/link"
 import { PublicHeroSection } from "@/components/home/public-hero-section"
-import { EMPRENOR_BRAND, RM_LEGAL } from "@/lib/company/constants"
+import { EMPRENOR_BRAND } from "@/lib/company/constants"
 
 export default function NosotrosPage() {
   return (
@@ -17,9 +17,8 @@ export default function NosotrosPage() {
             <div className="space-y-4">
               <h2 className="text-3xl font-bold text-foreground text-center">Nuestra Historia</h2>
               <p className="text-muted-foreground leading-relaxed text-center">
-                {EMPRENOR_BRAND.siglas} ({EMPRENOR_BRAND.significadoSiglas}) es marca comercial de{" "}
-                <strong>{RM_LEGAL.razonSocial}</strong>, constituida en mayo de 2018, con operaciones de construcción y
-                servicios en el NOA desde oficinas en Salta Capital, Tartagal y Campamento Vespucio.
+                Desde 2018, {EMPRENOR_BRAND.siglas} opera en el NOA con oficinas en Salta Capital, Tartagal y Campamento
+                Vespucio. Nueve especialidades integradas con presupuesto y alcance por escrito.
               </p>
             </div>
 
@@ -314,7 +313,7 @@ export default function NosotrosPage() {
               <CardContent className="p-6 text-center">
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Con presencia en <span className="font-semibold text-foreground">4 provincias</span> y{" "}
-                  <span className="font-semibold text-foreground">3 oficinas</span>, EMPRENOR está cerca de usted para
+                  <span className="font-semibold text-foreground">3 oficinas</span>, {EMPRENOR_BRAND.siglas} está cerca de usted para
                   brindarle el mejor servicio de construcción del norte argentino.
                 </p>
               </CardContent>

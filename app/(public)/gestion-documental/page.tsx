@@ -7,7 +7,7 @@ import { buildPageMetadata } from "@/lib/site/page-metadata"
 export const metadata: Metadata = buildPageMetadata({
   title: `Gestión documental | ${EMPRENOR_BRAND.siglas}`,
   description:
-    `Documentación de obra y trazabilidad — ${EMPRENOR_BRAND.nombreExtendido}. RM International Group S.A.S.`,
+    `Documentación de obra y trazabilidad — ${EMPRENOR_BRAND.siglas}.`,
   path: "/gestion-documental",
 })
 
@@ -23,7 +23,7 @@ export default function GestionDocumentalPage() {
           content: (
             <ul className="list-disc pl-5 space-y-2">
               <li>
-                {EMPRENOR_BRAND.siglas} ({EMPRENOR_BRAND.nombreExtendido}) — titular {RM_LEGAL.razonSocial}
+                {EMPRENOR_BRAND.siglas} · Titular {RM_LEGAL.razonSocial}
               </li>
               <li>CUIT {EMPRENOR_LEGAL.cuit}</li>
               <li>Constancias AFIP (F960 / inscripción) e IIBB Convenio Multilateral bajo solicitud</li>

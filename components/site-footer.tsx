@@ -1,7 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
-import { FOOTER_LEGAL_LINKS, EMPRENOR_LEGAL, EMPRENOR_SOCIAL, EMPRENOR_BRAND, getMarcaLegalNotice } from "@/lib/company/constants"
+import {
+  FOOTER_LEGAL_LINKS,
+  EMPRENOR_LEGAL,
+  EMPRENOR_SOCIAL,
+  EMPRENOR_BRAND,
+  EMPRENOR_SLOGAN,
+  EMPRENOR_FOOTER_TAGLINE,
+} from "@/lib/company/constants"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export function SiteFooter() {
@@ -21,10 +28,8 @@ export function SiteFooter() {
                 className="h-9 w-auto"
               />
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {getMarcaLegalNotice()} Construcción en el NOA con oficinas en Salta Capital, Tartagal y Campamento
-              Vespucio.
-            </p>
+            <p className="text-sm font-medium text-foreground">{EMPRENOR_SLOGAN}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{EMPRENOR_FOOTER_TAGLINE}</p>
             <div className="flex gap-3">
               <Link
                 href={EMPRENOR_SOCIAL.facebook}
@@ -234,7 +239,7 @@ export function SiteFooter() {
 
         <div className="mt-12 border-t border-border pt-8 space-y-2">
           <p className="text-center text-sm text-muted-foreground" suppressHydrationWarning>
-            © {new Date().getFullYear()} {EMPRENOR_LEGAL.razonSocial} · {EMPRENOR_LEGAL.marcaComercial}
+            © {new Date().getFullYear()} {EMPRENOR_LEGAL.razonSocial}
           </p>
           <p className="text-center text-xs text-muted-foreground">
             CUIT {EMPRENOR_LEGAL.cuit} · {EMPRENOR_LEGAL.domicilioFiscal}

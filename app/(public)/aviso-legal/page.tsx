@@ -4,13 +4,12 @@ import {
   EMPRENOR_LEGAL,
   RM_LEGAL,
   EMPRENOR_BRAND,
-  getMarcaLegalNotice,
 } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Aviso legal | EMPRENOR",
-  description: `Titular legal ${RM_LEGAL.razonSocial}, CUIT ${RM_LEGAL.cuit}. ${EMPRENOR_BRAND.siglas} — ${EMPRENOR_BRAND.significadoSiglas}.`,
+  description: `Titular legal ${RM_LEGAL.razonSocial}, CUIT ${RM_LEGAL.cuit}. Marca ${EMPRENOR_BRAND.siglas}.`,
   path: "/aviso-legal",
 })
 
@@ -19,7 +18,7 @@ export default function AvisoLegalPage() {
     <InstitutionalPage
       slug="aviso-legal"
       title="Aviso legal"
-      subtitle={getMarcaLegalNotice()}
+      subtitle="Datos del titular legal y condiciones de uso del sitio."
       sections={[
         {
           title: "Titular legal",
@@ -56,11 +55,10 @@ export default function AvisoLegalPage() {
           ),
         },
         {
-          title: "Marca comercial EMPRENOR",
+          title: `Marca ${EMPRENOR_BRAND.siglas}`,
           content: (
             <p>
-              <strong>{EMPRENOR_BRAND.siglas}</strong> ({EMPRENOR_BRAND.nombreExtendido}) es la marca bajo la cual{" "}
-              {RM_LEGAL.razonSocial} comercializa
+              <strong>{EMPRENOR_BRAND.siglas}</strong> es la marca bajo la cual {RM_LEGAL.razonSocial} comercializa
               servicios de construcción, remodelación e instalaciones en el NOA. Las oficinas operativas en Salta, Tartagal
               y Campamento Vespucio no modifican el domicilio fiscal indicado arriba.
             </p>

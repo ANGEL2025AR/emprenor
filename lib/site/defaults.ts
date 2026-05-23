@@ -11,7 +11,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       title: "Construimos con planificación, calidad y cumplimiento",
       titleAccent: "calidad",
       subtitle:
-        "EMPRENOR C&S (Construcciones y Servicios). Presencia en Salta, Jujuy, Tucumán y Formosa. Nueve especialidades integradas con presupuesto y alcance por escrito.",
+        "EMPRENOR C&S. Presencia en Salta, Jujuy, Tucumán y Formosa. Nueve especialidades integradas con presupuesto y alcance por escrito.",
       primaryCtaLabel: "Solicitar Cotización",
       primaryCtaHref: "/contacto",
       secondaryCtaLabel: "Ver Proyectos",
@@ -39,7 +39,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       alt: "",
       title: "Sobre Nosotros",
       subtitle:
-        "EMPRENOR C&S — Construcciones y Servicios. Marca de RM International Group S.A.S. en el NOA.",
+        "EMPRENOR C&S — construcción y servicios en el NOA.",
     },
   ],
   contacto: [

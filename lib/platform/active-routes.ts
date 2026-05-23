@@ -8,6 +8,7 @@ export const ADMIN_DASHBOARD_PREFIXES = [
   "/dashboard/proyectos",
   "/dashboard/clientes",
   "/dashboard/contactos",
+  "/dashboard/accesos",
   "/dashboard/sitio-web",
   "/dashboard/perfil",
 ] as const

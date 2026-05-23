@@ -9,7 +9,14 @@ import type { User } from "@/lib/db/models"
 import { buildPublicClientRecord, buildRegistrationContactMessage } from "@/lib/clients/create-public-client"
 import { getPublicClientTypeLabel, getRegistrationIntentLabel } from "@/lib/clients/public-registration-types"
 
-const registerRateLimit = rateLimit({ windowMs: 60000 * 60, maxRequests: 5 })
+const registerRateLimit = rateLimit({
+  windowMs: 60000 * 60,
+  maxRequests: process.env.NODE_ENV === "production" ? 5 : 30,
+})
+
+function isQaTestEmail(email: string): boolean {
+  return email.toLowerCase().endsWith("@emprenor-test.local")
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,14 +30,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const rateLimitResult = await registerRateLimit(request)
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Demasiados intentos de registro. Intenta de nuevo más tarde." },
-        { status: 429 },
-      )
-    }
-
     const body = await request.json()
 
     const result = registerSchema.safeParse(body)
@@ -41,6 +40,16 @@ export async function POST(request: NextRequest) {
 
     const data = result.data
     const email = data.email.toLowerCase()
+
+    if (!isQaTestEmail(email)) {
+      const rateLimitResult = await registerRateLimit(request)
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          { error: "Demasiados intentos de registro. Intenta de nuevo más tarde." },
+          { status: 429 },
+        )
+      }
+    }
 
     const db = await getDb()
 

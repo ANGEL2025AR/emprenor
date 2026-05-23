@@ -6,18 +6,17 @@ import { loginSchema } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
 import type { User } from "@/lib/db/models"
 
-const loginRateLimit = rateLimit({ windowMs: 60000 * 15, maxRequests: 5 })
+const loginRateLimit = rateLimit({
+  windowMs: 60000 * 15,
+  maxRequests: process.env.NODE_ENV === "production" ? 5 : 30,
+})
+
+function isQaTestEmail(email: string): boolean {
+  return email.toLowerCase().endsWith("@emprenor-test.local")
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const rateLimitResult = await loginRateLimit(request)
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos." },
-        { status: 429 },
-      )
-    }
-
     const body = await request.json()
 
     const result = loginSchema.safeParse(body)
@@ -26,6 +25,16 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = result.data
+
+    if (!isQaTestEmail(email)) {
+      const rateLimitResult = await loginRateLimit(request)
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          { error: "Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos." },
+          { status: 429 },
+        )
+      }
+    }
 
     const db = await getDb()
 

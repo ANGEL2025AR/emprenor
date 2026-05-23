@@ -127,6 +127,8 @@ async function main() {
   else fail("Formulario contacto", (contact.json?.error as string) || `HTTP ${contact.status}`)
 
   const regEmail = `qa.registro.${ts}@emprenor-test.local`
+  const regPass = "EmprenorQA1"
+  let registrationCreated = false
   const register = await api("/api/auth/register", {
     method: "POST",
     body: JSON.stringify({
@@ -141,15 +143,16 @@ async function main() {
       city: "Salta",
       province: "Salta",
       message: "Registro de prueba E2E",
-      password: "EmprenorQA1",
-      confirmPassword: "EmprenorQA1",
+      password: regPass,
+      confirmPassword: regPass,
     }),
   })
   if (register.status === 200 || register.status === 201) {
+    registrationCreated = true
     pass("Registro público", regEmail)
     const pendingLogin = await api("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify({ email: regEmail, password: "EmprenorQA1" }),
+      body: JSON.stringify({ email: regEmail, password: regPass }),
     })
     if (pendingLogin.status === 403) pass("Registro pendiente activación", "403 esperado")
     else fail("Registro pendiente activación", `HTTP ${pendingLogin.status}`)
@@ -172,6 +175,45 @@ async function main() {
     printSummary()
     process.exit(1)
   }
+
+  if (registrationCreated && adminCookie) {
+    const pending = await api("/api/users/pending-registrations", {}, adminCookie)
+    const rows = (pending.json?.pending as { _id?: string; email?: string }[]) || []
+    const pendingUser = rows.find((r) => r.email === regEmail)
+    if (pending.status === 200 && pendingUser?._id) {
+      pass("Bandeja accesos pendientes", pendingUser._id)
+      const activate = await api(`/api/users/${pendingUser._id}/activate`, { method: "POST" }, adminCookie)
+      if (activate.status === 200 && activate.json?.success) {
+        pass("Activar registro público", regEmail)
+        const regLogin = await api("/api/auth/login", {
+          method: "POST",
+          body: JSON.stringify({ email: regEmail, password: regPass }),
+        })
+        if (regLogin.status === 200 && regLogin.json?.success) {
+          pass("Login tras activación", regEmail)
+          const regMe = await api("/api/auth/me", {}, regLogin.cookies)
+          if (regMe.status === 200 && (regMe.json?.user as { role?: string })?.role === "cliente") {
+            pass("Sesión cliente activado", "rol cliente")
+          } else {
+            fail("Sesión cliente activado", `HTTP ${regMe.status}`)
+          }
+        } else {
+          fail("Login tras activación", (regLogin.json?.error as string) || `HTTP ${regLogin.status}`)
+        }
+      } else {
+        fail("Activar registro público", (activate.json?.error as string) || `HTTP ${activate.status}`)
+      }
+    } else {
+      fail("Bandeja accesos pendientes", `HTTP ${pending.status}`)
+    }
+  }
+
+  const accesosPage = await fetch(`${BASE}/dashboard/accesos`, {
+    headers: { Cookie: adminCookie },
+    redirect: "manual",
+  }).then((r) => r.status)
+  if (accesosPage === 200) pass("Página admin accesos", "200")
+  else fail("Página admin accesos", `HTTP ${accesosPage}`)
 
   const clientEmail = `qa.portal.${ts}@emprenor-test.local`
   const clientPass = "EmprenorQA2!"

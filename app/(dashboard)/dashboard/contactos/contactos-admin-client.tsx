@@ -25,6 +25,8 @@ import {
   Filter,
   MailOpen,
   AlertCircle,
+  UserCheck,
+  ShieldCheck,
 } from "lucide-react"
 import {
   AlertDialog,
@@ -65,6 +67,8 @@ interface Contacto {
   notes?: string
   priority?: string
   source: string
+  userId?: string
+  clientId?: string
   createdAt: string
   resolvedAt?: string
   resolvedBy?: { name: string }
@@ -93,6 +97,7 @@ export function ContactosAdminClient({ currentUser }: { currentUser: Serializabl
   const [selectedContacto, setSelectedContacto] = useState<Contacto | null>(null)
   const [notes, setNotes] = useState("")
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [activatingUserId, setActivatingUserId] = useState<string | null>(null)
   const { toast } = useToast()
   const { can } = usePermissions()
 
@@ -153,6 +158,37 @@ export function ContactosAdminClient({ currentUser }: { currentUser: Serializabl
     } finally {
       setUpdatingId(null)
     }
+  }
+
+  const activateRegistration = async (userId: string, contactoId: string) => {
+    setActivatingUserId(userId)
+    try {
+      const res = await fetch(`/api/users/${userId}/activate`, { method: "POST" })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Error al activar")
+      toast({
+        title: "Cuenta activada",
+        description: "El cliente ya puede ingresar al portal con su email y contraseña.",
+      })
+      await updateContacto(contactoId, { status: "resuelto", notes: "Cuenta activada desde consultas" })
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "No se pudo activar la cuenta",
+        variant: "destructive",
+      })
+    } finally {
+      setActivatingUserId(null)
+    }
+  }
+
+  const registrationUserId = (contacto: Contacto): string | null => {
+    if (!contacto.userId) return null
+    if (typeof contacto.userId === "string") return contacto.userId
+    if (typeof contacto.userId === "object" && contacto.userId !== null && "$oid" in contacto.userId) {
+      return String((contacto.userId as { $oid: string }).$oid)
+    }
+    return String(contacto.userId)
   }
 
   const filteredContactos = contactos.filter((c) => {
@@ -323,6 +359,12 @@ export function ContactosAdminClient({ currentUser }: { currentUser: Serializabl
                           {contacto.service}
                         </Badge>
                       )}
+                      {contacto.source === "registro_publico" && contacto.status !== "resuelto" && (
+                        <Badge variant="secondary" className="mt-2 ml-2 text-xs">
+                          <ShieldCheck className="w-3 h-3 mr-1" />
+                          Registro portal
+                        </Badge>
+                      )}
                     </div>
 
                     {/* Fecha y acciones rapidas */}
@@ -341,6 +383,31 @@ export function ContactosAdminClient({ currentUser }: { currentUser: Serializabl
                           {contacto.resolvedBy.name}
                         </span>
                       )}
+
+                      {can("users.edit") &&
+                        contacto.source === "registro_publico" &&
+                        contacto.status !== "resuelto" &&
+                        registrationUserId(contacto) && (
+                          <Button
+                            size="sm"
+                            className="text-xs h-7 bg-emerald-600 hover:bg-emerald-700"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              const uid = registrationUserId(contacto)
+                              if (uid) activateRegistration(uid, contacto._id)
+                            }}
+                            disabled={activatingUserId === registrationUserId(contacto)}
+                          >
+                            {activatingUserId === registrationUserId(contacto) ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <>
+                                <UserCheck className="w-3 h-3 mr-1" />
+                                Activar
+                              </>
+                            )}
+                          </Button>
+                        )}
 
                       {can("contacts.manage") && contacto.status === "nuevo" && (
                         <Button
@@ -506,6 +573,26 @@ export function ContactosAdminClient({ currentUser }: { currentUser: Serializabl
               </div>
 
               <DialogFooter className="flex flex-col sm:flex-row gap-2">
+                {can("users.edit") &&
+                  selectedContacto.source === "registro_publico" &&
+                  selectedContacto.status !== "resuelto" &&
+                  registrationUserId(selectedContacto) && (
+                    <Button
+                      onClick={() => {
+                        const uid = registrationUserId(selectedContacto)
+                        if (uid) activateRegistration(uid, selectedContacto._id)
+                      }}
+                      disabled={activatingUserId === registrationUserId(selectedContacto)}
+                      className="bg-emerald-600 hover:bg-emerald-700"
+                    >
+                      {activatingUserId === registrationUserId(selectedContacto) ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <UserCheck className="w-4 h-4 mr-2" />
+                      )}
+                      Activar cuenta del cliente
+                    </Button>
+                  )}
                 {can("contacts.manage") && (
                   <>
                     {selectedContacto.status !== "resuelto" && (

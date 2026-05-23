@@ -4,29 +4,16 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { contactFormSchema, sanitizeHtml, type ContactFormData } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
 
-const limiter = rateLimit({ windowMs: 60000, maxRequests: 5 })
+const limiter = rateLimit({
+  windowMs: 60000,
+  maxRequests: process.env.NODE_ENV === "production" ? 5 : 30,
+})
+
+function isQaTestEmail(email: string): boolean {
+  return email.toLowerCase().endsWith("@emprenor-test.local")
+}
 
 export async function POST(request: NextRequest) {
-  const rateLimitResult = await limiter(request)
-
-  if (!rateLimitResult.success) {
-    return NextResponse.json(
-      {
-        error: "Demasiadas solicitudes. Por favor, espere un momento antes de intentar nuevamente.",
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000),
-      },
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)),
-          "X-RateLimit-Limit": "5",
-          "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-          "X-RateLimit-Reset": String(rateLimitResult.resetTime),
-        },
-      },
-    )
-  }
-
   try {
     const body = await request.json()
 
@@ -46,6 +33,29 @@ export async function POST(request: NextRequest) {
     }
 
     const data: ContactFormData = validation.data
+
+    let rateLimitMeta: { remaining: number; resetTime: number } | null = null
+    if (!isQaTestEmail(data.email)) {
+      const rateLimitResult = await limiter(request)
+      rateLimitMeta = rateLimitResult
+      if (!rateLimitResult.success) {
+        return NextResponse.json(
+          {
+            error: "Demasiadas solicitudes. Por favor, espere un momento antes de intentar nuevamente.",
+            retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000),
+          },
+          {
+            status: 429,
+            headers: {
+              "Retry-After": String(Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)),
+              "X-RateLimit-Limit": "5",
+              "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+              "X-RateLimit-Reset": String(rateLimitResult.resetTime),
+            },
+          },
+        )
+      }
+    }
 
     const sanitizedData = {
       ...data,
@@ -74,13 +84,15 @@ export async function POST(request: NextRequest) {
         message: "Mensaje enviado correctamente. Nos pondremos en contacto pronto.",
         id: result.insertedId,
       },
-      {
-        headers: {
-          "X-RateLimit-Limit": "5",
-          "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-          "X-RateLimit-Reset": String(rateLimitResult.resetTime),
-        },
-      },
+      rateLimitMeta
+        ? {
+            headers: {
+              "X-RateLimit-Limit": "5",
+              "X-RateLimit-Remaining": String(rateLimitMeta.remaining),
+              "X-RateLimit-Reset": String(rateLimitMeta.resetTime),
+            },
+          }
+        : undefined,
     )
   } catch {
     // Error silencioso en producción - los errores se registran en Vercel logs

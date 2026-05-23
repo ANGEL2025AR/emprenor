@@ -4,8 +4,9 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { ObjectId } from "mongodb"
 import type { Project } from "@/lib/db/models"
-import { findProjectForUser } from "@/lib/auth/project-access"
+import { findProjectForUser, isClientRole } from "@/lib/auth/project-access"
 import { applyClientToProjectUpdate } from "@/lib/clients/project-link"
+import { getProjectTeamDisplay, sanitizeProjectForClient } from "@/lib/projects/project-team-display"
 
 // GET - Obtener proyecto por ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -31,7 +32,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
     }
 
-    return NextResponse.json({ project })
+    const teamDisplay = await getProjectTeamDisplay(project)
+    const payload = isClientRole(user.role)
+      ? sanitizeProjectForClient(project, teamDisplay)
+      : { ...project, teamDisplay }
+
+    return NextResponse.json({ project: payload })
   } catch {
     return NextResponse.json({ error: "Error al obtener proyecto" }, { status: 500 })
   }

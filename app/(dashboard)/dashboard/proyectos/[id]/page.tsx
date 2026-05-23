@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { ArrowLeft, Edit, MapPin, Calendar, Users, DollarSign, ListTodo, Loader2, Phone, Mail, ClipboardList } from "lucide-react"
 import type { Project } from "@/lib/db/models"
+import type { ProjectTeamMember } from "@/lib/projects/project-team-display"
 import { ProjectDocumentsClient } from "@/components/projects/project-documents-client"
 import { ProjectFinancesClient } from "@/components/projects/project-finances-client"
 import { ProjectTasksClient } from "@/components/projects/project-tasks-client"
@@ -37,7 +38,7 @@ const STATUS_LABELS: Record<string, string> = {
 export default function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const [project, setProject] = useState<Project | null>(null)
+  const [project, setProject] = useState<(Project & { teamDisplay?: ProjectTeamMember[] }) | null>(null)
   const [loading, setLoading] = useState(true)
   const [isClient, setIsClient] = useState(false)
 
@@ -56,17 +57,17 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           const data = await response.json()
           setProject(data.project)
         } else {
-          router.push("/dashboard/proyectos")
+          router.push(isClient ? "/dashboard" : "/dashboard/proyectos")
         }
       } catch {
-        router.push("/dashboard/proyectos")
+        router.push(isClient ? "/dashboard" : "/dashboard/proyectos")
       } finally {
         setLoading(false)
       }
     }
 
     fetchProject()
-  }, [id, router])
+  }, [id, router, isClient])
 
   if (loading) {
     return (
@@ -97,7 +98,9 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const budgetSpent = project.budget?.spent || 0
   const budgetDisplay = budgetTotal > 0 ? `$${(budgetTotal / 1000000).toFixed(1)}M` : "Sin definir"
 
-  const teamSize = project.team?.workers?.length || 0
+  const teamDisplay = project.teamDisplay ?? []
+  const teamSize = teamDisplay.length > 0 ? teamDisplay.length : project.team?.workers?.length || 0
+  const dashboardBack = isClient ? "/dashboard" : "/dashboard/proyectos"
   const linkedClientId =
     typeof project.clientId === "string"
       ? project.clientId
@@ -112,7 +115,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link href="/dashboard/proyectos">
+            <Link href={dashboardBack}>
               <ArrowLeft className="w-5 h-5" />
             </Link>
           </Button>
@@ -293,6 +296,47 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                   <Mail className="w-4 h-4" />
                   {project.client?.email || "No disponible"}
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Equipo EMPRENOR */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  Equipo EMPRENOR
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {teamDisplay.length > 0 ? (
+                  <ul className="space-y-3">
+                    {teamDisplay.map((member) => (
+                      <li key={member.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <div>
+                          <p className="font-medium text-slate-900">{member.name}</p>
+                          <p className="text-sm text-slate-500">{member.roleLabel}</p>
+                        </div>
+                        {member.phone && !isClient ? (
+                          <a href={`tel:${member.phone}`} className="text-sm text-emerald-600 hover:underline flex items-center gap-1">
+                            <Phone className="w-3.5 h-3.5" />
+                            {member.phone}
+                          </a>
+                        ) : member.phone && isClient ? (
+                          <span className="text-sm text-slate-600 flex items-center gap-1">
+                            <Phone className="w-3.5 h-3.5" />
+                            {member.phone}
+                          </span>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-slate-500">
+                    {isClient
+                      ? "EMPRENOR asignará el equipo de obra y lo verás aquí cuando esté disponible."
+                      : "Asigná gerente, supervisor o personal desde la edición del proyecto."}
+                  </p>
+                )}
               </CardContent>
             </Card>
 

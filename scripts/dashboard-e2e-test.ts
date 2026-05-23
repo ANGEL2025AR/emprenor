@@ -279,6 +279,7 @@ async function main() {
     "/dashboard/clientes",
     "/dashboard/proyectos/nuevo",
     "/dashboard/contactos",
+    "/dashboard/accesos",
     "/dashboard/sitio-web/servicios",
   ]
   for (const path of dashPages) {

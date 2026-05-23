@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getDb } from "@/lib/db/connection"
+import { countPendingRegistrations } from "@/lib/users/activate-portal-user"
 import { CardContent, CardHeader } from "@/components/ui/card"
 import {
   DashboardPageHeader,
@@ -8,20 +9,21 @@ import {
   DashboardSectionTitle,
   DashboardPrimaryButton,
 } from "@/components/dashboard/dashboard-ui"
-import { FolderKanban, Users, Inbox, Globe, Plus, ArrowRight } from "lucide-react"
+import { FolderKanban, Users, Inbox, Globe, Plus, ArrowRight, ShieldCheck } from "lucide-react"
 
 async function getAdminOverview() {
   try {
     const db = await getDb()
-    const [projects, activeProjects, clients, pendingContacts] = await Promise.all([
+    const [projects, activeProjects, clients, pendingContacts, pendingAccess] = await Promise.all([
       db.collection("projects").countDocuments(),
       db.collection("projects").countDocuments({ status: "en_progreso" }),
       db.collection("clients").countDocuments(),
       db.collection("contactos").countDocuments({ status: { $in: ["nuevo", "pendiente", "en_proceso"] } }),
+      countPendingRegistrations(),
     ])
-    return { projects, activeProjects, clients, pendingContacts }
+    return { projects, activeProjects, clients, pendingContacts, pendingAccess }
   } catch {
-    return { projects: 0, activeProjects: 0, clients: 0, pendingContacts: 0 }
+    return { projects: 0, activeProjects: 0, clients: 0, pendingContacts: 0, pendingAccess: 0 }
   }
 }
 
@@ -44,7 +46,7 @@ export async function AdminDashboard({ userName }: { userName: string }) {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
         <DashboardStatCard
           title="Proyectos"
           value={stats.projects}
@@ -60,6 +62,14 @@ export async function AdminDashboard({ userName }: { userName: string }) {
           icon={Users}
           accent="emerald"
           href="/dashboard/clientes"
+        />
+        <DashboardStatCard
+          title="Accesos pendientes"
+          value={stats.pendingAccess}
+          subtitle="Registros por activar"
+          icon={ShieldCheck}
+          accent={stats.pendingAccess > 0 ? "amber" : "violet"}
+          href="/dashboard/accesos"
         />
         <DashboardStatCard
           title="Consultas pendientes"
@@ -107,6 +117,16 @@ export async function AdminDashboard({ userName }: { userName: string }) {
             <DashboardSectionTitle title="Web y atención" icon={Inbox} />
           </CardHeader>
           <CardContent className="space-y-3">
+            <Link
+              href="/dashboard/accesos"
+              className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"
+            >
+              <span className="font-medium">
+                Activar solicitudes de acceso
+                {stats.pendingAccess > 0 ? ` (${stats.pendingAccess} pendientes)` : ""}
+              </span>
+              <ArrowRight className="w-4 h-4 text-muted-foreground" />
+            </Link>
             <Link
               href="/dashboard/contactos"
               className="flex items-center justify-between rounded-lg border p-4 hover:bg-slate-50 transition-colors"

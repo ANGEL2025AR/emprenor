@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { hashPassword } from "@/lib/auth/password"
 import type { User, UserRole } from "@/lib/db/models"
+import { activatePortalUser } from "@/lib/users/activate-portal-user"
 
 const USER_ROLES: UserRole[] = ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"]
 
@@ -63,6 +64,20 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.phone !== undefined) update.phone = String(body.phone).trim()
     if (body.isActive !== undefined) update.isActive = Boolean(body.isActive)
     if (body.emailVerified !== undefined) update.emailVerified = Boolean(body.emailVerified)
+
+    const activating =
+      (body.isActive === true || body.emailVerified === true) &&
+      target.isActive === false &&
+      target.role === "cliente"
+
+    if (activating && body.isActive === true && body.emailVerified === true) {
+      const result = await activatePortalUser(id)
+      if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 })
+      const updated = await getTargetUser(id)
+      if (!updated) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 })
+      const { password: _, ...safe } = updated
+      return NextResponse.json({ success: true, user: safe })
+    }
 
     if (body.role !== undefined) {
       if (!USER_ROLES.includes(body.role)) {

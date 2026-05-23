@@ -11,6 +11,7 @@ import {
   ClipboardList,
   HardHat,
   Construction,
+  ShieldCheck,
 } from "lucide-react"
 
 export type DashboardNavItem = {
@@ -58,6 +59,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     icon: Inbox,
     items: [
       { name: "Consultas y mensajes", href: "/dashboard/contactos", icon: Inbox, permission: "contacts.view" },
+      { name: "Solicitudes de acceso", href: "/dashboard/accesos", icon: ShieldCheck, permission: "users.view" },
     ],
   },
   {

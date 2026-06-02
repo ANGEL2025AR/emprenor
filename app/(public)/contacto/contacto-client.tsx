@@ -30,12 +30,21 @@ export default function ContactoClient() {
     setErrorMessage("")
 
     try {
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        service: formData.service,
+        message: formData.message.trim(),
+        ...(formData.clientType ? { clientType: formData.clientType } : {}),
+      }
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       })
 
       const data = await response.json()
@@ -52,8 +61,14 @@ export default function ContactoClient() {
         })
       } else {
         setSubmitStatus("error")
+        const fieldErrors = Array.isArray(data.details)
+          ? (data.details as { field?: string; message?: string }[])
+              .map((d) => d.message)
+              .filter(Boolean)
+          : []
         setErrorMessage(
-          data.error ||
+          fieldErrors[0] ||
+            data.error ||
             "Hubo un problema al enviar su mensaje. Por favor, intente nuevamente o contáctenos por teléfono.",
         )
       }

@@ -284,11 +284,15 @@ export const contactFormSchema = z.object({
     .string()
     .min(2, "El nombre debe tener al menos 2 caracteres")
     .max(100, "El nombre no puede exceder 100 caracteres")
-    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, "El nombre solo puede contener letras"),
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'.-]+$/, "El nombre solo puede contener letras"),
 
   email: z.string().email("Email inválido").max(255, "El email es demasiado largo").toLowerCase().trim(),
 
-  phone: z.string().regex(/^\+?[0-9\s\-()]{8,20}$/, "Teléfono inválido"),
+  phone: z
+    .string()
+    .min(8, "El teléfono debe tener al menos 8 dígitos")
+    .max(25, "El teléfono es demasiado largo")
+    .regex(/^\+?[0-9\s\-().]{8,25}$/, "Teléfono inválido"),
 
   service: z.enum(
     [
@@ -306,11 +310,14 @@ export const contactFormSchema = z.object({
     { errorMap: () => ({ message: "Servicio inválido" }) },
   ),
 
-  clientType: z
-    .enum(["particular", "empresa", "sector_publico", "otro"], {
-      errorMap: () => ({ message: "Tipo de cliente inválido" }),
-    })
-    .optional(),
+  clientType: z.preprocess(
+    (val) => (val === "" || val === null || val === undefined ? undefined : val),
+    z
+      .enum(["particular", "empresa", "sector_publico", "otro"], {
+        errorMap: () => ({ message: "Tipo de cliente inválido" }),
+      })
+      .optional(),
+  ),
 
   message: z
     .string()

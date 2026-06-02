@@ -46,15 +46,22 @@ const STATUS_LABELS: Record<string, string> = {
   cancelado: "Cancelado",
 }
 
-export async function AdminDashboard({ userName }: { userName: string }) {
+export async function AdminDashboard({
+  userName,
+  userRole = "admin",
+}: {
+  userName: string
+  userRole?: string
+}) {
   const stats = await getProjectManagerOverview()
+  const isGerente = userRole === "gerente"
 
   return (
     <div className="space-y-8">
       <DashboardPageHeader
-        badge="Gestor de obras EMPRENOR"
-        title="Project Manager"
-        description={`Hola ${userName}. Panel exclusivo para gestionar el ciclo de vida de cada obra: cronograma, hitos, cuenta corriente y documentación.`}
+        badge={isGerente ? "Gerencia de obra" : "Administración EMPRENOR C&S"}
+        title={isGerente ? "Panel de gestión" : "Panel de administración"}
+        description={`Hola ${userName}. Resumen de obras, alertas de cronograma y acceso rápido a proyectos, clientes y sitio web.`}
         actions={
           <DashboardPrimaryButton asChild>
             <Link href="/dashboard/proyectos/nuevo">
@@ -87,7 +94,7 @@ export async function AdminDashboard({ userName }: { userName: string }) {
           value={stats.overdueInstallments}
           subtitle="En alguna obra activa"
           icon={Calendar}
-          accent={stats.overdueInstallments > 0 ? "red" : "violet"}
+          accent={stats.overdueInstallments > 0 ? "rose" : "violet"}
           href="/dashboard/proyectos"
         />
         <DashboardStatCard

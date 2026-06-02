@@ -34,11 +34,12 @@ import {
   Check,
   Globe,
   Users,
+  ClipboardList,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { ROLE_LABELS } from "@/lib/auth/permissions"
 import type { UserRole } from "@/lib/db/models"
-import { isStaffZoneRole } from "@/lib/auth/employee-routes"
+import { isFieldStaffRole, isManagementRole } from "@/lib/auth/employee-routes"
 import { useMounted } from "@/lib/hooks/use-mounted"
 
 interface DashboardHeaderProps {
@@ -128,19 +129,25 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
     userRole === "cliente"
       ? [
           { name: "Mis proyectos", href: "/dashboard", icon: Home },
-          { name: "Todas mis obras", href: "/dashboard/mi-obra", icon: FolderKanban },
+          { name: "Cumplimiento de obra", href: "/dashboard/mi-obra", icon: ClipboardList },
           { name: "Documentos", href: "/dashboard/documentos", icon: FileText },
         ]
-      : isStaffZoneRole(userRole)
-        ? [{ name: "Zona empleados", href: "/dashboard/zona-empleados", icon: Home }]
-        : [
-            { name: "Inicio", href: "/dashboard", icon: Home },
-            { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban },
-            { name: "Nuevo proyecto", href: "/dashboard/proyectos/nuevo", icon: FolderKanban },
-            { name: "Clientes", href: "/dashboard/clientes", icon: Users },
-            { name: "Consultas web", href: "/dashboard/contactos", icon: FileText },
-            { name: "Sitio web", href: "/dashboard/sitio-web/servicios", icon: Globe },
+      : isFieldStaffRole(userRole)
+        ? [
+            { name: "Proyectos asignados", href: "/dashboard/proyectos", icon: FolderKanban },
+            { name: "Mi Portal", href: "/dashboard/portal", icon: Home },
+            { name: "Bitácora diaria", href: "/dashboard/bitacora-diaria", icon: FileText },
           ]
+        : isManagementRole(userRole)
+          ? [
+              { name: "Inicio", href: "/dashboard", icon: Home },
+              { name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban },
+              { name: "Clientes", href: "/dashboard/clientes", icon: Users },
+              { name: "Consultas web", href: "/dashboard/contactos", icon: FileText },
+              { name: "Sitio web", href: "/dashboard/sitio-web/servicios", icon: Globe },
+              { name: "Cumplimiento", href: "/dashboard/cumplimiento-obra", icon: ClipboardList },
+            ]
+          : [{ name: "Proyectos", href: "/dashboard/proyectos", icon: FolderKanban }]
 
   return (
     <>
@@ -159,9 +166,11 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                   placeholder={
                     userRole === "cliente"
                       ? "Buscar en mis proyectos..."
-                      : isStaffZoneRole(userRole)
-                        ? "Zona empleados..."
-                        : "Buscar proyectos, clientes, consultas..."
+                      : isFieldStaffRole(userRole)
+                        ? "Buscar proyectos, portal..."
+                        : isManagementRole(userRole)
+                          ? "Buscar proyectos, clientes, sitio web..."
+                          : "Buscar en el panel..."
                   }
                   className="pl-10 h-10 border-0 bg-transparent shadow-none cursor-pointer focus-visible:ring-0"
                   readOnly
@@ -271,7 +280,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
                     Perfil
                   </Link>
                 </DropdownMenuItem>
-                {userRole !== "cliente" && !isStaffZoneRole(userRole) && (
+                {isManagementRole(userRole) && (
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/perfil" className="flex items-center gap-2 cursor-pointer">
                       <Settings className="w-4 h-4" />

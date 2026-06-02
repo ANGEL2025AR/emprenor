@@ -1,21 +1,33 @@
-/** Rutas por defecto del personal operativo (gestor de obras). */
+/** Rutas y roles del personal operativo vs gestión. */
 
-import { isStaffProjectPath } from "@/lib/platform/active-routes"
+import { isFieldStaffDashboardPath, isManagementDashboardPath } from "@/lib/platform/active-routes"
 
-const STAFF_ZONE_ROLES = new Set(["gerente", "supervisor", "trabajador"])
+const FIELD_STAFF_ROLES = new Set(["supervisor", "trabajador"])
+const MANAGEMENT_ROLES = new Set(["super_admin", "admin", "gerente"])
 
-export function isStaffZoneRole(role: string): boolean {
-  return STAFF_ZONE_ROLES.has(role)
+/** Personal de campo (supervisor / trabajador). */
+export function isFieldStaffRole(role: string): boolean {
+  return FIELD_STAFF_ROLES.has(role)
 }
 
-/** @deprecated Usar isStaffZoneRole */
+/** Gestión: administración y gerente de obra. */
+export function isManagementRole(role: string): boolean {
+  return MANAGEMENT_ROLES.has(role)
+}
+
+/** @deprecated Usar isFieldStaffRole */
+export function isStaffZoneRole(role: string): boolean {
+  return isFieldStaffRole(role)
+}
+
+/** @deprecated Usar isFieldStaffRole */
 export function isEmployeeRole(role: string): boolean {
-  return isStaffZoneRole(role)
+  return isFieldStaffRole(role)
 }
 
 export function isStaffZonePathAllowed(pathname: string, role: string): boolean {
-  if (!isStaffZoneRole(role)) return true
-  return isStaffProjectPath(pathname)
+  if (!isFieldStaffRole(role)) return true
+  return isFieldStaffDashboardPath(pathname)
 }
 
 /** @deprecated */
@@ -23,9 +35,14 @@ export function isEmployeePathAllowed(pathname: string, role?: string): boolean 
   return isStaffZonePathAllowed(pathname, role ?? "")
 }
 
+export function isManagementPathAllowed(pathname: string, role: string): boolean {
+  if (!isManagementRole(role)) return true
+  return isManagementDashboardPath(pathname)
+}
+
 export function getDefaultDashboardPath(role: string): string {
   if (role === "cliente") return "/dashboard"
-  if (isStaffZoneRole(role)) return "/dashboard/proyectos"
-  if (role === "super_admin" || role === "admin") return "/dashboard/proyectos"
+  if (isFieldStaffRole(role)) return "/dashboard/proyectos"
+  if (isManagementRole(role)) return "/dashboard"
   return "/dashboard/proyectos"
 }

@@ -1,19 +1,21 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
-import { getDefaultDashboardPath, isStaffZoneRole } from "@/lib/auth/employee-routes"
+import {
+  getDefaultDashboardPath,
+  isFieldStaffRole,
+  isManagementRole,
+} from "@/lib/auth/employee-routes"
 import {
   isClientDashboardPath,
-  isProjectManagerPath,
-  isStaffProjectPath,
+  isFieldStaffDashboardPath,
+  isManagementDashboardPath,
 } from "@/lib/platform/active-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
 
 const protectedRoutes = ["/dashboard"]
 const authRoutes = ["/login", "/registro", "/setup"]
-
-const ADMIN_ROLES = new Set(["super_admin", "admin"])
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -50,27 +52,21 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    if (isStaffZoneRole(userRole)) {
-      if (pathname === "/dashboard" || pathname === "/dashboard/") {
-        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
-      }
-      if (!isStaffProjectPath(pathname)) {
-        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
+    if (isFieldStaffRole(userRole)) {
+      if (!isFieldStaffDashboardPath(pathname)) {
+        return NextResponse.redirect(new URL(getDefaultDashboardPath(userRole), request.url))
       }
       return NextResponse.next()
     }
 
-    if (ADMIN_ROLES.has(userRole)) {
-      if (pathname === "/dashboard" || pathname === "/dashboard/") {
-        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
-      }
-      if (!isProjectManagerPath(pathname)) {
-        return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
+    if (isManagementRole(userRole)) {
+      if (!isManagementDashboardPath(pathname)) {
+        return NextResponse.redirect(new URL("/dashboard", request.url))
       }
       return NextResponse.next()
     }
 
-    return NextResponse.redirect(new URL("/dashboard/proyectos", request.url))
+    return NextResponse.redirect(new URL(getDefaultDashboardPath(userRole), request.url))
   }
 
   return NextResponse.next()

@@ -1,41 +1,69 @@
-import { Construction } from "lucide-react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DashboardPageHeader } from "@/components/dashboard/dashboard-ui"
-import { STAFF_ZONE_FUTURE_MODULES } from "@/lib/platform/active-routes"
-
-const MODULE_LABELS: Record<(typeof STAFF_ZONE_FUTURE_MODULES)[number], string> = {
-  obra_asignada: "Obras asignadas en campo",
-  parte_diario_campo: "Parte diario de obra",
-  art_basico: "ART y seguridad básica",
-  documentos_obra_lectura: "Documentos de obra (solo lectura)",
-}
+import { DashboardPageHeader, DashboardPrimaryButton } from "@/components/dashboard/dashboard-ui"
+import { FolderKanban, Wallet, HardHat, ArrowRight } from "lucide-react"
 
 export default function ZonaEmpleadosPage() {
   return (
-    <div className="space-y-8 max-w-2xl">
+    <div className="space-y-8 max-w-3xl">
       <DashboardPageHeader
-        badge="Próximamente"
+        badge="Personal de obra"
         title="Zona empleados"
-        description="Espacio separado del panel de administración. Misma base de datos, carpeta dedicada en el proyecto, sin mezclar con la web pública ni la gestión de clientes."
+        description="Acceso rápido a tus proyectos asignados, portal de nómina y herramientas de campo."
       />
 
-      <Card>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card className="dashboard-panel border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <HardHat className="h-5 w-5 text-emerald-600" />
+              Proyectos asignados
+            </CardTitle>
+            <CardDescription>Obras donde participás: avance, documentos y cumplimiento.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full">
+              <Link href="/dashboard/proyectos">
+                Ver mis proyectos
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="dashboard-panel border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Wallet className="h-5 w-5 text-emerald-600" />
+              Mi Portal
+            </CardTitle>
+            <CardDescription>Recibos, legajo, ART, solicitudes y comunicaciones internas.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DashboardPrimaryButton asChild className="w-full">
+              <Link href="/dashboard/portal">
+                Abrir Mi Portal
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </DashboardPrimaryButton>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="dashboard-panel border-0">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Construction className="h-6 w-6 text-amber-600" />
-            En desarrollo
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <FolderKanban className="h-5 w-5 text-slate-600" />
+            Próximas funciones
           </CardTitle>
-          <CardDescription>
-            Mientras tanto, la operación diaria (proyectos, clientes, consultas y sitio web) está en el panel de
-            administración. Los clientes acceden por su portal de obras.
-          </CardDescription>
+          <CardDescription>Módulos de campo en evolución, integrados al mismo panel.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 text-sm text-muted-foreground">
-          <p>Módulos planificados para empleados (sin sobrecargar el menú admin):</p>
-          <ul className="list-disc pl-5 space-y-1">
-            {STAFF_ZONE_FUTURE_MODULES.map((key) => (
-              <li key={key}>{MODULE_LABELS[key]}</li>
-            ))}
+        <CardContent>
+          <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+            <li>Parte diario de obra desde mobile</li>
+            <li>Consulta de documentos de obra en sitio</li>
+            <li>Indicadores de ART y seguridad en tiempo real</li>
           </ul>
         </CardContent>
       </Card>

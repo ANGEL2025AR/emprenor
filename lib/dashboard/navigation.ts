@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { LayoutDashboard, FolderKanban, FileText, HardHat, ClipboardList, UserCircle } from "lucide-react"
+import { LayoutDashboard, FolderKanban, FileText, HardHat } from "lucide-react"
 
 export type DashboardNavItem = {
   name: string
@@ -17,16 +17,26 @@ export type DashboardNavGroup = {
   items: DashboardNavItem[]
 }
 
-/** Inicio del panel de gestión. */
+/** Inicio del gestor de obras — redirige al listado de proyectos. */
 export const DASHBOARD_HOME: DashboardNavItem = {
   name: "Inicio",
-  href: "/dashboard",
+  href: "/dashboard/proyectos",
   icon: LayoutDashboard,
   permission: null,
 }
 
-/** @deprecated Usar MANAGEMENT_NAV_GROUPS */
-export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = []
+/** Panel administración: solo gestión de proyectos/obras. */
+export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
+  {
+    id: "obras",
+    label: "Gestión de obras",
+    icon: HardHat,
+    items: [
+      { name: "Todos los proyectos", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" },
+      { name: "Nuevo proyecto", href: "/dashboard/proyectos/nuevo", icon: FolderKanban, permission: "projects.create" },
+    ],
+  },
+]
 
 /** Portal cliente: obras asignadas y documentación. */
 export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
@@ -36,7 +46,7 @@ export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
     icon: FolderKanban,
     items: [
       { name: "Resumen", href: "/dashboard", icon: LayoutDashboard, permission: null },
-      { name: "Cumplimiento", href: "/dashboard/mi-obra", icon: ClipboardList, permission: null },
+      { name: "Mis proyectos", href: "/dashboard", icon: HardHat, permission: null },
     ],
   },
   {
@@ -47,23 +57,20 @@ export const CLIENT_PORTAL_NAV_GROUPS: DashboardNavGroup[] = [
   },
 ]
 
-/** Personal de obra en campo: proyectos asignados. */
+/** Personal de obra: acceso a proyectos asignados. */
 export const STAFF_ZONE_NAV_GROUPS: DashboardNavGroup[] = [
   {
     id: "staff-projects",
     label: "Mis obras",
     icon: HardHat,
-    items: [
-      { name: "Proyectos asignados", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" },
-      { name: "Zona empleados", href: "/dashboard/zona-empleados", icon: UserCircle, permission: null },
-    ],
+    items: [{ name: "Proyectos asignados", href: "/dashboard/proyectos", icon: FolderKanban, permission: "projects.view" }],
   },
 ]
 
 export function isNavPathActive(pathname: string, href: string): boolean {
-  if (href === "/dashboard") return pathname === "/dashboard"
   if (href === "/dashboard/proyectos") {
     return pathname === "/dashboard/proyectos" || pathname.startsWith("/dashboard/proyectos/")
   }
+  if (href === "/dashboard") return pathname === "/dashboard"
   return pathname === href || pathname.startsWith(`${href}/`)
 }

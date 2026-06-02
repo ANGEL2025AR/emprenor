@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import type { SerializableUser } from "@/lib/auth/session"
 import type { UserRole } from "@/lib/db/models"
 import Image from "next/image"
+import { isStaffZoneRole } from "@/lib/auth/employee-routes"
 import { isNavPathActive } from "@/lib/dashboard/navigation"
 import { getDashboardHome, filterNavGroups, isHomeVisible } from "@/lib/dashboard/filter-navigation"
 import type { DashboardNavGroup, DashboardNavItem } from "@/lib/dashboard/navigation"
@@ -149,13 +150,15 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
 
   const navGroups = useMemo(() => filterNavGroups(userRole), [userRole])
 
+  const isStaffNav = isStaffZoneRole(userRole)
+
   const [openGroups, setOpenGroups] = useState<Set<string>>(() =>
     getOpenGroupsForPath(pathname, filterNavGroups(userRole)),
   )
 
   const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
   const homeItem = useMemo(() => getDashboardHome(userRole), [userRole])
-  const homeHref = homeItem?.href ?? "/dashboard"
+  const homeHref = isStaffNav ? "/dashboard/zona-empleados" : (homeItem?.href ?? "/dashboard")
 
   useEffect(() => {
     setIsOpen(false)

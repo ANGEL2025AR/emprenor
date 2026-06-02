@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { ClientDashboard } from "@/components/dashboard/client-dashboard"
 import { AdminDashboard } from "@/components/dashboard/admin-dashboard"
 import { isClientRole } from "@/lib/auth/project-access"
-import { isFieldStaffRole, isManagementRole } from "@/lib/auth/employee-routes"
+import { isStaffZoneRole } from "@/lib/auth/employee-routes"
 
 export default async function DashboardPage() {
   const user = await getCurrentUser()
@@ -16,13 +16,13 @@ export default async function DashboardPage() {
     return <ClientDashboard user={user} />
   }
 
-  if (isFieldStaffRole(user.role)) {
-    redirect("/dashboard/proyectos")
+  if (isStaffZoneRole(user.role)) {
+    redirect("/dashboard/zona-empleados")
   }
 
-  if (isManagementRole(user.role)) {
-    return <AdminDashboard userName={user.name || "Administrador"} userRole={user.role} />
+  if (user.role === "super_admin" || user.role === "admin") {
+    return <AdminDashboard userName={user.name || "Administrador"} />
   }
 
-  redirect("/dashboard/proyectos")
+  redirect("/dashboard/zona-empleados")
 }

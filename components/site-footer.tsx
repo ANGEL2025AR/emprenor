@@ -13,7 +13,7 @@ import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react
 
 export function SiteFooter() {
   return (
-    <footer className="public-footer border-t border-border bg-gradient-to-b from-muted/20 to-muted/40">
+    <footer className="border-t border-border bg-muted/30">
       <div className="container px-4 py-12 md:px-6 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Company Info */}

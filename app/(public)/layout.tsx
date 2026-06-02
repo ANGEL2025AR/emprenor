@@ -13,12 +13,12 @@ export default async function PublicLayout({
   const services = (await getPublishedServices()).map(toServiceNavItem)
 
   return (
-    <div className="public-site flex min-h-screen flex-col">
+    <>
       <SiteHeader services={services} />
-      <main className="flex-1">{children}</main>
+      {children}
       <SiteFooter />
       <WhatsAppFloat />
       <CookieConsentBanner />
-    </div>
+    </>
   )
 }

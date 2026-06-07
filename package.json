@@ -2,6 +2,7 @@
   "name": "emprenor-construcciones",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.4",
   "scripts": {
     "build": "next build",
     "dev": "node --require ./scripts/dns-windows-atlas.cjs ./node_modules/next/dist/bin/next dev --port 3001",

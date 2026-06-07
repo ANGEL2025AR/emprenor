@@ -1,7 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
-import { FOOTER_LEGAL_LINKS } from "@/lib/company/constants"
+import {
+  EMPRENOR_BRAND,
+  EMPRENOR_CONTACTOS,
+  EMPRENOR_FOOTER_TAGLINE,
+  EMPRENOR_LEGAL,
+  EMPRENOR_SOCIAL,
+  FOOTER_LEGAL_LINKS,
+} from "@/lib/company/constants"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export function SiteFooter() {
@@ -9,7 +16,6 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-muted/30">
       <div className="container px-4 py-12 md:px-6 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Company Info */}
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <Image
@@ -25,9 +31,10 @@ export function SiteFooter() {
               Construyendo el futuro con excelencia, calidad y compromiso. Más de 15 años de experiencia en proyectos
               residenciales, comerciales e industriales.
             </p>
+            <p className="text-xs text-muted-foreground">{EMPRENOR_FOOTER_TAGLINE}</p>
             <div className="flex gap-3">
               <Link
-                href="https://facebook.com"
+                href={EMPRENOR_SOCIAL.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
@@ -36,7 +43,7 @@ export function SiteFooter() {
                 <Facebook className="h-4 w-4" />
               </Link>
               <Link
-                href="https://instagram.com"
+                href={EMPRENOR_SOCIAL.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
@@ -45,7 +52,7 @@ export function SiteFooter() {
                 <Instagram className="h-4 w-4" />
               </Link>
               <Link
-                href="https://linkedin.com"
+                href={EMPRENOR_SOCIAL.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
@@ -56,7 +63,6 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Services */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Servicios</h3>
             <ul className="space-y-2 text-sm">
@@ -132,7 +138,6 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Enlaces Rápidos</h3>
             <ul className="space-y-2 text-sm">
@@ -190,42 +195,40 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Contacto</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
                 <div className="space-y-1">
-                  <span className="text-muted-foreground block">Ituzaingó 920, Salta Capital</span>
-                  <span className="text-muted-foreground block">Ituzaingó 1279, Tartagal, Salta</span>
-                  <span className="text-muted-foreground block">Av. Casiano Casas S/N, Campamento Vespucio, Salta</span>
+                  {EMPRENOR_LEGAL.oficinasOperativas.map((oficina) => (
+                    <span key={oficina.nombre} className="text-muted-foreground block">
+                      {oficina.direccion.split(",")[0]}
+                    </span>
+                  ))}
                 </div>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
                 <div className="space-y-1">
-                  <a
-                    href="tel:+5491127586521"
-                    className="text-muted-foreground hover:text-foreground transition-colors block"
-                  >
-                    +54 9 11 2758-6521 (Sebastian Romero)
-                  </a>
-                  <a
-                    href="tel:+543873522920"
-                    className="text-muted-foreground hover:text-foreground transition-colors block"
-                  >
-                    +54 9 387 352-2920 (Carlos Guerrero)
-                  </a>
+                  {EMPRENOR_CONTACTOS.map((contacto) => (
+                    <a
+                      key={contacto.telHref}
+                      href={`tel:${contacto.telHref}`}
+                      className="text-muted-foreground hover:text-foreground transition-colors block"
+                    >
+                      {contacto.telefono} ({contacto.nombre})
+                    </a>
+                  ))}
                 </div>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-accent flex-shrink-0" />
                 <a
-                  href="mailto:info@emprenor.com.ar"
+                  href={`mailto:${EMPRENOR_LEGAL.emailGeneral}`}
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  info@emprenor.com.ar
+                  {EMPRENOR_LEGAL.emailGeneral}
                 </a>
               </li>
             </ul>
@@ -234,7 +237,7 @@ export function SiteFooter() {
 
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} EMPRENOR CONSTRUCCIONES. Todos los derechos reservados.
+            © {new Date().getFullYear()} {EMPRENOR_BRAND.nombreExtendido}. Todos los derechos reservados.
           </p>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { contactFormSchema, sanitizeHtml, type ContactFormData } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
+import { notifyLeadReceived } from "@/lib/email/notify-lead"
 
 const limiter = rateLimit({ windowMs: 60000, maxRequests: 5 })
 
@@ -67,6 +68,15 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await collection.insertOne(contacto)
+
+    void notifyLeadReceived({
+      name: sanitizedData.name,
+      email: sanitizedData.email,
+      phone: sanitizedData.phone,
+      service: sanitizedData.service,
+      message: sanitizedData.message,
+      source: "formulario_web",
+    })
 
     return NextResponse.json(
       {

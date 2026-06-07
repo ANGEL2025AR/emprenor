@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -5,12 +6,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Wrench } from "lucide-react"
 import { getPublishedServices } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata = {
-  title: "Servicios - EMPRENOR Construcciones",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Servicios",
   description:
     "Servicios integrales de construcción, remodelación, albañilería, electricidad, plomería, pintura, instalaciones de gas, viviendas prefabricadas y obras industriales en el NOA.",
-}
+  path: "/servicios",
+})
 
 export default async function ServiciosPage() {
   const services = await getPublishedServices()

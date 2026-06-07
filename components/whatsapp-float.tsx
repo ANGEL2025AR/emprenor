@@ -4,30 +4,14 @@ import { MessageCircle, X, Phone } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { EMPRENOR_WHATSAPP } from "@/lib/company/constants"
 
 export function WhatsAppFloat() {
   const [isOpen, setIsOpen] = useState(false)
 
-  const contacts = [
-    {
-      name: "Sebastian Romero",
-      role: "Gerente General",
-      number: "5491127586521",
-      message: "Hola Sebastian! Me gustaría obtener más información sobre sus servicios de construcción.",
-    },
-    {
-      name: "Carlos Guerrero",
-      role: "Coordinador de Proyectos",
-      number: "543873522920",
-      message: "Hola Carlos! Necesito información sobre servicios de construcción.",
-    },
-  ]
-
   return (
     <>
-      {/* Botón flotante principal */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
-        {/* Mensaje de bienvenida con ambos contactos */}
         {isOpen && (
           <Card className="bg-background border border-border rounded-lg shadow-2xl max-w-xs animate-in slide-in-from-bottom-2">
             <CardContent className="p-4">
@@ -50,7 +34,7 @@ export function WhatsAppFloat() {
               </p>
 
               <div className="space-y-2">
-                {contacts.map((contact) => (
+                {EMPRENOR_WHATSAPP.map((contact) => (
                   <a
                     key={contact.number}
                     href={`https://wa.me/${contact.number}?text=${encodeURIComponent(contact.message)}`}
@@ -75,7 +59,6 @@ export function WhatsAppFloat() {
           </Card>
         )}
 
-        {/* Botón principal */}
         <Button
           size="lg"
           className="h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#20BA5A] text-white shadow-2xl transition-transform hover:scale-110"
@@ -85,7 +68,6 @@ export function WhatsAppFloat() {
         </Button>
       </div>
 
-      {/* Indicador de pulsación */}
       {!isOpen && (
         <div className="fixed bottom-6 right-6 z-40">
           <div className="h-14 w-14 rounded-full bg-[#25D366] animate-ping opacity-75"></div>

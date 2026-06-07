@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle2, AlertCircle } from "lucide-react"
+import { EMPRENOR_CONTACTOS, EMPRENOR_LEGAL, EMPRENOR_OFICINAS } from "@/lib/company/constants"
 
 export default function ContactoClient() {
   const [formData, setFormData] = useState({
@@ -228,18 +229,16 @@ export default function ContactoClient() {
                     </div>
                     <div className="space-y-1">
                       <h3 className="font-semibold text-foreground">Teléfonos</h3>
-                      <p className="text-sm text-muted-foreground">
-                        <a href="tel:+5491127586521" className="hover:text-foreground transition-colors">
-                          +54 9 11 2758-6521
-                        </a>
-                        <span className="block text-xs">Sebastian Romero - Gerente General</span>
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        <a href="tel:+543873522920" className="hover:text-foreground transition-colors">
-                          +54 9 387 352-2920
-                        </a>
-                        <span className="block text-xs">Carlos Guerrero - Coordinador</span>
-                      </p>
+                      {EMPRENOR_CONTACTOS.map((contacto) => (
+                        <p key={contacto.telHref} className="text-sm text-muted-foreground">
+                          <a href={`tel:${contacto.telHref}`} className="hover:text-foreground transition-colors">
+                            {contacto.telefono}
+                          </a>
+                          <span className="block text-xs">
+                            {contacto.nombre} - {contacto.rol}
+                          </span>
+                        </p>
+                      ))}
                     </div>
                   </div>
                 </CardContent>
@@ -254,79 +253,33 @@ export default function ContactoClient() {
                     <div className="space-y-1">
                       <h3 className="font-semibold text-foreground">Correo Electrónico</h3>
                       <p className="text-sm text-muted-foreground">
-                        <a href="mailto:info@emprenor.com.ar" className="hover:text-foreground transition-colors">
-                          info@emprenor.com.ar
+                        <a
+                          href={`mailto:${EMPRENOR_LEGAL.emailGeneral}`}
+                          className="hover:text-foreground transition-colors"
+                        >
+                          {EMPRENOR_LEGAL.emailGeneral}
                         </a>
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        <a href="mailto:ventas@emprenor.com.ar" className="hover:text-foreground transition-colors">
-                          ventas@emprenor.com.ar
-                        </a>
-                      </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-border">
-                <CardContent className="p-6">
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                      <MapPin className="h-6 w-6 text-accent" />
+              {EMPRENOR_OFICINAS.map((oficina) => (
+                <Card key={oficina.nombre} className="border-border">
+                  <CardContent className="p-6">
+                    <div className="flex gap-4">
+                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
+                        <MapPin className="h-6 w-6 text-accent" />
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className="font-semibold text-foreground">Oficina {oficina.nombre}</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{oficina.direccion}</p>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-foreground">Oficina Salta Capital</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Ituzaingó 920
-                        <br />
-                        Salta Capital, Salta
-                        <br />
-                        Argentina
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border">
-                <CardContent className="p-6">
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                      <MapPin className="h-6 w-6 text-accent" />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-foreground">Oficina Tartagal</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Ituzaingó 1279
-                        <br />
-                        Tartagal, Salta
-                        <br />
-                        Argentina
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border">
-                <CardContent className="p-6">
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                      <MapPin className="h-6 w-6 text-accent" />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-foreground">Oficina Campamento Vespucio</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Av. Casiano Casas S/N
-                        <br />
-                        Barrio Policial, Campamento Vespucio
-                        <br />
-                        Salta, Argentina
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ))}
 
               <Card className="border-border">
                 <CardContent className="p-6">
@@ -346,14 +299,11 @@ export default function ContactoClient() {
             </div>
 
             <Card className="border-border overflow-hidden">
-              <div className="aspect-[16/10] bg-muted relative">
-                <img src="/map-location-pin.png" alt="Ubicación en el mapa" className="object-cover w-full h-full" />
-                <div className="absolute inset-0 flex items-center justify-center bg-primary/10 backdrop-blur-sm">
-                  <div className="text-center space-y-2">
-                    <MapPin className="h-12 w-12 text-accent mx-auto" />
-                    <p className="text-sm font-medium text-foreground">3 Oficinas en Salta</p>
-                    <p className="text-xs text-muted-foreground">Capital, Tartagal y Campamento Vespucio</p>
-                  </div>
+              <div className="aspect-[16/10] bg-gradient-to-br from-slate-800 via-slate-700 to-emerald-900 relative flex items-center justify-center">
+                <div className="text-center space-y-2 px-6">
+                  <MapPin className="h-12 w-12 text-emerald-400 mx-auto" />
+                  <p className="text-sm font-medium text-white">3 Oficinas en Salta</p>
+                  <p className="text-xs text-slate-300">Capital, Tartagal y Campamento Vespucio</p>
                 </div>
               </div>
             </Card>

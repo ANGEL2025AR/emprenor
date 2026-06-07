@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/structured-data"
 import { SITE_URL } from "@/lib/site-url"
+import { EMPRENOR_BRAND, EMPRENOR_SITE } from "@/lib/company/constants"
 
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION
 
@@ -23,8 +24,8 @@ const _geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "EMPRENOR - Construcción y Servicios en Salta, Jujuy, Tucumán y Formosa",
-    template: "%s | EMPRENOR Construcciones",
+    default: EMPRENOR_SITE.defaultTitle,
+    template: EMPRENOR_SITE.titleTemplate,
   },
   description:
     "Empresa líder en construcción, remodelación, albañilería, electricidad, plomería y pintura. Más de 15 años de experiencia. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Servicios en Salta, Jujuy, Tucumán y Formosa. Cotización gratuita.",
@@ -48,9 +49,9 @@ export const metadata: Metadata = {
     "obras industriales NOA",
     "instalaciones gas Salta",
   ],
-  authors: [{ name: "EMPRENOR Construcciones", url: SITE_URL }],
-  creator: "EMPRENOR Construcciones",
-  publisher: "EMPRENOR Construcciones",
+  authors: [{ name: EMPRENOR_BRAND.nombreExtendido, url: SITE_URL }],
+  creator: EMPRENOR_BRAND.nombreExtendido,
+  publisher: EMPRENOR_BRAND.nombreExtendido,
   formatDetection: {
     email: false,
     address: true,
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_AR",
     url: SITE_URL,
-    siteName: "EMPRENOR Construcciones",
+    siteName: EMPRENOR_SITE.siteName,
     title: "EMPRENOR - Construcción y Servicios Profesionales en el NOA",
     description:
       "Empresa líder en construcción y servicios en el NOA. Más de 15 años transformando espacios. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Cobertura en Salta, Jujuy, Tucumán y Formosa.",

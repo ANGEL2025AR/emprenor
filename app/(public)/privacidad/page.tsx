@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Política de privacidad | EMPRENOR",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Política de privacidad",
   description: "Tratamiento de datos personales conforme a la Ley 25.326 de Protección de Datos Personales de Argentina.",
-}
+  path: "/privacidad",
+})
 
 export default function PrivacidadPage() {
   return (

@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { EMPRENOR_MARKETING } from "@/lib/company/constants"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Building2,
@@ -213,8 +214,8 @@ export default function HomePage() {
                 ¿Por qué elegir <span className="text-green-600">EMPRENOR</span>?
               </h2>
               <p className="text-lg text-slate-600 mb-8">
-                Con más de 15 años de experiencia en el mercado de la construcción del NOA, nos hemos consolidado como
-                una empresa líder gracias a nuestro compromiso con la calidad y la satisfacción del cliente.
+                {EMPRENOR_MARKETING.operacionDesdeLabel} acompañamos proyectos en el NOA con planificación, calidad y
+                cumplimiento. Nuestro compromiso es entregar obra clara, segura y dentro del alcance acordado.
               </p>
               <div className="grid sm:grid-cols-2 gap-6">
                 {features.map((feature, index) => (
@@ -231,12 +232,13 @@ export default function HomePage() {
               </div>
             </div>
             <div className="relative">
-              <div className="rounded-2xl shadow-2xl overflow-hidden aspect-[4/3]">
+              <div className="rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] relative">
                 <Image
-                  src="/professional-construction-team-working.jpg"
-                  alt="Equipo profesional de EMPRENOR"
+                  src={EMPRENOR_MARKETING.homeTrustImage}
+                  alt={EMPRENOR_MARKETING.homeTrustImageAlt}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl">
@@ -245,8 +247,8 @@ export default function HomePage() {
                     <Award className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-slate-900">15+ años</div>
-                    <div className="text-slate-600">de experiencia</div>
+                    <div className="text-2xl font-bold text-slate-900">{EMPRENOR_MARKETING.operacionDesdeLabel}</div>
+                    <div className="text-slate-600">en el NOA</div>
                   </div>
                 </div>
               </div>
@@ -263,6 +265,9 @@ export default function HomePage() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Lo que dicen nuestros clientes</h2>
             <p className="text-lg text-slate-600">La satisfacción de nuestros clientes es nuestra mayor recompensa.</p>
+            <p className="text-sm text-slate-500 mt-2">
+              Referencias ilustrativas de experiencias habituales en obra privada e industrial del NOA.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">

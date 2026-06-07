@@ -13,26 +13,28 @@ function HeroTitle({
   accent,
   className,
   accentClassName,
+  as: Tag = "h1",
 }: {
   title: string
   accent?: string
   className?: string
   accentClassName?: string
+  as?: "h1" | "h2"
 }) {
   const gradient = accentClassName ?? "text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500"
   if (!accent) {
-    return <h1 className={className}>{title}</h1>
+    return <Tag className={className}>{title}</Tag>
   }
   const i = title.indexOf(accent)
   if (i < 0) {
-    return <h1 className={className}>{title}</h1>
+    return <Tag className={className}>{title}</Tag>
   }
   return (
-    <h1 className={className}>
+    <Tag className={className}>
       {title.slice(0, i)}
       <span className={gradient}>{accent}</span>
       {title.slice(i + accent.length)}
-    </h1>
+    </Tag>
   )
 }
 
@@ -179,7 +181,7 @@ export function HeroSlider({
     <section className="relative min-h-[90vh] overflow-hidden">
       <div className="min-h-[90vh] overflow-hidden" ref={emblaRef}>
         <div className="flex h-full min-h-[90vh]">
-          {slides.map((slide) => (
+          {slides.map((slide, index) => (
             <div key={slide.id} className="relative min-h-[90vh] flex-[0_0_100%] shrink-0 grow-0">
               {slide.image?.trim() ? (
                 <Image
@@ -204,6 +206,7 @@ export function HeroSlider({
                   <HeroTitle
                     title={slide.title}
                     accent={slide.titleAccent}
+                    as={index === 0 ? "h1" : "h2"}
                     className="mb-6 text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl"
                   />
                   {slide.subtitle ? (

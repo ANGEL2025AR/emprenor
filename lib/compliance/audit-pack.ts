@@ -49,7 +49,7 @@ export async function buildComplianceAuditPack(projectId: string, period?: strin
 
   return {
     generatedAt: new Date().toISOString(),
-    emprenor: "EMPRENOR CONSTRUCCIONES",
+    emprenor: "EMPRENOR C&S",
     period: p,
     project: {
       id: projectId,

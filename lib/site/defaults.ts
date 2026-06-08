@@ -7,7 +7,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       id: "home-default-1",
       image: "/construction-site-workers-blueprint.jpg",
       alt: "Equipo de construcción EMPRENOR trabajando",
-      badgeText: "Más de 15 años construyendo confianza",
+      badgeText: "Desde 2018 en el NOA",
       title: "Construimos tus sueños con excelencia y profesionalismo",
       titleAccent: "sueños",
       subtitle:
@@ -39,7 +39,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       alt: "",
       title: "Sobre Nosotros",
       subtitle:
-        "Más de 15 años construyendo sueños y superando expectativas con compromiso, calidad y profesionalismo.",
+        "Desde 2018 acompañamos proyectos en el NOA con planificación, calidad y cumplimiento.",
     },
   ],
   contacto: [

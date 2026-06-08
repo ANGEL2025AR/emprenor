@@ -1,78 +1,82 @@
 import { SITE_URL } from "@/lib/site-url"
+import {
+  EMPRENOR_BRAND,
+  EMPRENOR_LEGAL,
+  EMPRENOR_PROVINCIAS,
+  EMPRENOR_TITULAR,
+} from "@/lib/company/constants"
 
 const LOGO_PATH = "/images/logo-emprenor-large.png"
 
 export function generateOrganizationSchema() {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'EMPRENOR CONSTRUCCIONES',
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: EMPRENOR_BRAND.siglas,
+    legalName: EMPRENOR_TITULAR.apellidoNombre,
+    alternateName: [EMPRENOR_BRAND.nombreExtendido, "EMPRENOR"],
+    taxID: EMPRENOR_LEGAL.cuit,
     url: SITE_URL,
     logo: `${SITE_URL}${LOGO_PATH}`,
-    description: 'Empresa de construcción con más de 15 años de experiencia en Salta, Jujuy, Tucumán y Formosa',
+    description: `${EMPRENOR_BRAND.descripcion}. Marca comercial de ${EMPRENOR_TITULAR.nombreCompleto}.`,
     address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Ituzaingó 920',
-      addressLocality: 'Salta Capital',
-      addressRegion: 'Salta',
-      addressCountry: 'AR'
+      "@type": "PostalAddress",
+      streetAddress: "Av. Casiano Casas 3080, Barrio Policial",
+      addressLocality: "Campamento Vespucio",
+      addressRegion: "Salta",
+      postalCode: "4563",
+      addressCountry: "AR",
     },
     contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: '+54-9-11-2758-6521',
-      contactType: 'customer service',
-      availableLanguage: 'Spanish'
+      "@type": "ContactPoint",
+      telephone: EMPRENOR_TITULAR.telHref.replace("+", "+"),
+      contactType: "customer service",
+      availableLanguage: "Spanish",
+      email: EMPRENOR_LEGAL.emailGeneral,
     },
+    areaServed: EMPRENOR_PROVINCIAS.map((p) => ({ "@type": "State", name: p })),
     sameAs: [
-      'https://www.facebook.com/emprenor',
-      'https://www.instagram.com/emprenor'
-    ]
+      "https://www.facebook.com/emprenor",
+      "https://www.instagram.com/emprenor",
+    ],
   }
 }
 
 export function generateLocalBusinessSchema() {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}/#business`,
-    name: 'EMPRENOR CONSTRUCCIONES',
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${SITE_URL}/#business`,
+    name: EMPRENOR_BRAND.siglas,
+    legalName: EMPRENOR_TITULAR.apellidoNombre,
     image: `${SITE_URL}${LOGO_PATH}`,
     url: SITE_URL,
-    telephone: '+54-9-11-2758-6521',
-    email: 'info@emprenor.com.ar',
+    telephone: EMPRENOR_TITULAR.telefono,
+    email: EMPRENOR_LEGAL.emailGeneral,
+    taxID: EMPRENOR_LEGAL.cuit,
     address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Ituzaingó 920',
-      addressLocality: 'Salta Capital',
-      addressRegion: 'Salta',
-      postalCode: '4400',
-      addressCountry: 'AR'
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: -24.7859,
-      longitude: -65.4117
+      "@type": "PostalAddress",
+      streetAddress: "Av. Casiano Casas 3080, Barrio Policial",
+      addressLocality: "Campamento Vespucio",
+      addressRegion: "Salta",
+      postalCode: "4563",
+      addressCountry: "AR",
     },
     openingHoursSpecification: [
       {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '08:00',
-        closes: '18:00'
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:00",
+        closes: "18:00",
       },
       {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Saturday',
-        opens: '09:00',
-        closes: '14:00'
-      }
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "Saturday",
+        opens: "09:00",
+        closes: "14:00",
+      },
     ],
-    priceRange: '$$',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '156'
-    }
+    priceRange: "$$",
   }
 }
 
@@ -82,32 +86,33 @@ export function generateServiceSchema(service: {
   url: string
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
+    "@context": "https://schema.org",
+    "@type": "Service",
     name: service.name,
     description: service.description,
     provider: {
-      '@type': 'Organization',
-      name: 'EMPRENOR CONSTRUCCIONES',
-      url: SITE_URL
+      "@type": "Organization",
+      name: EMPRENOR_BRAND.siglas,
+      legalName: EMPRENOR_TITULAR.apellidoNombre,
+      url: SITE_URL,
     },
     areaServed: {
-      '@type': 'State',
-      name: ['Salta', 'Jujuy', 'Tucumán', 'Formosa']
+      "@type": "State",
+      name: [...EMPRENOR_PROVINCIAS],
     },
-    url: service.url
+    url: service.url,
   }
 }
 
 export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: item.url
-    }))
+      item: item.url,
+    })),
   }
 }

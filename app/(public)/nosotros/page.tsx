@@ -1,8 +1,16 @@
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Target, Award, Heart, CheckCircle, ArrowRight, MapPin } from "lucide-react"
-import Link from "next/link"
 import { PublicHeroSection } from "@/components/home/public-hero-section"
+import {
+  EMPRENOR_BRAND,
+  EMPRENOR_LEGAL,
+  EMPRENOR_OFICINAS,
+  EMPRENOR_PROVINCIAS,
+  EMPRENOR_TITULAR,
+  EMPRENOR_TIPOS_OBRA,
+} from "@/lib/company/constants"
 
 export default function NosotrosPage() {
   return (
@@ -16,8 +24,9 @@ export default function NosotrosPage() {
             <div className="space-y-4">
               <h2 className="text-3xl font-bold text-foreground text-center">Nuestra Historia</h2>
               <p className="text-muted-foreground leading-relaxed text-center">
-                EMPRENOR CONSTRUCCIONES nació en 2009 con una visión clara: ofrecer servicios de construcción de la más
-                alta calidad con un enfoque en la satisfacción del cliente y la excelencia operativa.
+                {EMPRENOR_BRAND.nombreExtendido} es la marca comercial de {EMPRENOR_TITULAR.nombreCompleto}. Desde{" "}
+                {EMPRENOR_LEGAL.operacionDesde} desarrollamos proyectos de construcción, remodelación e instalaciones
+                en el NOA con planificación, calidad y cumplimiento documentado.
               </p>
             </div>
 
@@ -43,9 +52,8 @@ export default function NosotrosPage() {
                   </div>
                   <h3 className="text-xl font-semibold text-foreground">Visión</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Ser la empresa de construcción líder reconocida por nuestra innovación, calidad y compromiso con la
-                    satisfacción del cliente, expandiendo nuestros servicios y manteniéndonos a la vanguardia de las
-                    mejores prácticas de la industria.
+                    Ser un referente en construcción y servicios en el NOA, reconocidos por la calidad de ejecución,
+                    transparencia comercial y cumplimiento de lo acordado con cada cliente.
                   </p>
                 </CardContent>
               </Card>
@@ -179,7 +187,7 @@ export default function NosotrosPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">Maestros de Obra</h3>
-                    <p className="text-sm text-muted-foreground">Expertos con 15+ años</p>
+                    <p className="text-sm text-muted-foreground">Desde {EMPRENOR_LEGAL.operacionDesde} en el NOA</p>
                   </div>
                 </CardContent>
               </Card>
@@ -222,58 +230,24 @@ export default function NosotrosPage() {
               </div>
               <h2 className="text-3xl font-bold text-foreground">Cobertura de Servicios</h2>
               <p className="text-muted-foreground leading-relaxed text-pretty">
-                Atendemos a toda la región del norte argentino con tres oficinas estratégicamente ubicadas.
+                Sede en Campamento Vespucio (Salta) y cobertura operativa en {EMPRENOR_PROVINCIAS.join(", ")}.
               </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
-              <Card className="border-accent border-2">
-                <CardContent className="p-6 space-y-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-accent">
-                    <MapPin className="h-7 w-7 text-accent-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">Salta Capital</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Ituzaingó 920
-                      <br />
-                      Salta Capital, Salta
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-accent border-2">
-                <CardContent className="p-6 space-y-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-accent">
-                    <MapPin className="h-7 w-7 text-accent-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">Tartagal</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Ituzaingó 1279
-                      <br />
-                      Tartagal, Salta
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-accent border-2">
-                <CardContent className="p-6 space-y-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-accent">
-                    <MapPin className="h-7 w-7 text-accent-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">Campamento Vespucio</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Av. Casiano Casas S/N
-                      <br />
-                      Barrio Policial, Salta
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="grid gap-6 md:grid-cols-1 max-w-xl mx-auto">
+              {EMPRENOR_OFICINAS.map((oficina) => (
+                <Card key={oficina.nombre} className="border-accent border-2">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-accent">
+                      <MapPin className="h-7 w-7 text-accent-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">{oficina.nombre}</h3>
+                      <p className="text-sm text-muted-foreground">{oficina.direccion}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
 
             <Card className="border-accent border-2 bg-accent/5">
@@ -282,24 +256,14 @@ export default function NosotrosPage() {
                   <MapPin className="h-7 w-7 text-accent-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Provincias que Atendemos</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-2 text-center">Provincias que atendemos</h3>
                   <ul className="grid grid-cols-2 gap-3 text-sm text-muted-foreground max-w-md mx-auto">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Salta - Cobertura completa</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Jujuy - Todas las localidades</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Tucumán - Servicio completo</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
-                      <span>Formosa - Toda la provincia</span>
-                    </li>
+                    {EMPRENOR_PROVINCIAS.map((provincia) => (
+                      <li key={provincia} className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
+                        <span>{provincia}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </CardContent>
@@ -308,9 +272,7 @@ export default function NosotrosPage() {
             <Card className="border-border bg-muted/30">
               <CardContent className="p-6 text-center">
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Con presencia en <span className="font-semibold text-foreground">4 provincias</span> y{" "}
-                  <span className="font-semibold text-foreground">3 oficinas</span>, EMPRENOR está cerca de usted para
-                  brindarle el mejor servicio de construcción del norte argentino.
+                  Segmentos: {EMPRENOR_TIPOS_OBRA.join(" · ")}.
                 </p>
               </CardContent>
             </Card>
@@ -328,8 +290,7 @@ export default function NosotrosPage() {
                   ¿Listo para trabajar con nosotros?
                 </h2>
                 <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
-                  Únase a cientos de clientes satisfechos que han confiado en EMPRENOR para sus proyectos de
-                  construcción en Salta, Jujuy, Tucumán y Formosa.
+                  Contacte a {EMPRENOR_BRAND.siglas} para su próximo proyecto en {EMPRENOR_PROVINCIAS.join(", ")}.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">

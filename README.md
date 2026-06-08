@@ -1,6 +1,6 @@
 # EMPRENOR Construcciones - Sitio Web Corporativo
 
-> Sitio web profesional para empresa líder en construcción y servicios en el NOA (Salta, Jujuy, Tucumán y Formosa)
+> Sitio web de **EMPRENOR C&S** — marca comercial de Silvio Carlos Fabian Guerrero (CUIT 20-40154622-8). Construcción y servicios en el NOA.
 
 ## 🏗️ Tecnologías
 
@@ -224,7 +224,7 @@ El proyecto es compatible con cualquier plataforma que soporte Next.js:
 
 ## 📄 Licencia
 
-Este proyecto es propiedad de EMPRENOR Construcciones. Todos los derechos reservados.
+Este proyecto es propiedad de Silvio Carlos Fabian Guerrero, titular de la marca EMPRENOR Construcciones y Servicios.
 
 ## 📞 Contacto
 

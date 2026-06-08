@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, HelpCircle } from "lucide-react"
+import { EMPRENOR_LEGAL, EMPRENOR_OFICINAS, EMPRENOR_PROVINCIAS, EMPRENOR_TIPOS_OBRA } from "@/lib/company/constants"
 
 export const metadata = {
   title: "Preguntas Frecuentes",
@@ -16,13 +17,11 @@ export default function PreguntasFrecuentesPage() {
       preguntas: [
         {
           pregunta: "¿En qué zonas ofrecen sus servicios?",
-          respuesta:
-            "Ofrecemos servicios en toda la provincia de Salta (incluyendo Salta Capital y Tartagal), Jujuy, Tucumán y Formosa. Contamos con oficinas en Ituzaingó 920, Salta Capital e Ituzaingó 1279, Tartagal.",
+          respuesta: `Operamos en ${EMPRENOR_PROVINCIAS.join(", ")}. Sede fiscal y comercial: ${EMPRENOR_OFICINAS[0].direccion}.`,
         },
         {
           pregunta: "¿Qué tipos de proyectos realizan?",
-          respuesta:
-            "Realizamos proyectos residenciales, comerciales e industriales. Desde construcción de viviendas nuevas hasta remodelaciones completas, ampliaciones, trabajos de albañilería, instalaciones eléctricas, plomería y pintura.",
+          respuesta: `${EMPRENOR_TIPOS_OBRA.join(", ")}. Incluye construcción, remodelación, albañilería, instalaciones eléctricas, plomería, pintura y gas.`,
         },
         {
           pregunta: "¿Trabajan con proyectos pequeños o solo grandes obras?",

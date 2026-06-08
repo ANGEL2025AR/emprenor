@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
-import { EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { EMPRENOR_BRAND, EMPRENOR_LEGAL, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 
 export const metadata: Metadata = buildPageMetadata({
@@ -14,15 +14,15 @@ export default function PrivacidadPage() {
     <InstitutionalPage
       slug="privacidad"
       title="Política de privacidad"
-      subtitle={`${EMPRENOR_LEGAL.razonSocial} respeta su privacidad y protege los datos personales que nos confía.`}
+      subtitle={`${EMPRENOR_BRAND.nombreExtendido}, marca comercial de ${EMPRENOR_TITULAR.nombreCompleto}, respeta su privacidad y protege los datos personales que nos confía.`}
       sections={[
         {
           title: "Responsable del tratamiento",
           content: (
             <>
               <p>
-                El responsable es <strong>{EMPRENOR_LEGAL.razonSocial}</strong>, con domicilio en{" "}
-                {EMPRENOR_LEGAL.domicilioLegal}. Contacto:{" "}
+                El responsable es <strong>{EMPRENOR_TITULAR.nombreCompleto}</strong> (CUIT {EMPRENOR_LEGAL.cuit}), titular
+                de la marca {EMPRENOR_BRAND.siglas}, con domicilio en {EMPRENOR_LEGAL.domicilioLegal}. Contacto:{" "}
                 <a href={`mailto:${EMPRENOR_LEGAL.emailGeneral}`} className="text-emerald-700 underline">
                   {EMPRENOR_LEGAL.emailGeneral}
                 </a>

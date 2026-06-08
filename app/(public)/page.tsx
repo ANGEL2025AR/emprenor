@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { EMPRENOR_MARKETING } from "@/lib/company/constants"
+import { EMPRENOR_BRAND, EMPRENOR_HOME_STATS, EMPRENOR_LEGAL, EMPRENOR_MARKETING, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Building2,
@@ -92,12 +92,12 @@ const services = [
   },
 ]
 
-const stats = [
-  { number: "500+", label: "Proyectos Completados", icon: CheckCircle },
-  { number: "15+", label: "Años de Experiencia", icon: Clock },
-  { number: "50+", label: "Profesionales", icon: Users },
-  { number: "98%", label: "Clientes Satisfechos", icon: Award },
-]
+const statIcons = { CheckCircle, Clock, Users, Award } as const
+
+const stats = EMPRENOR_HOME_STATS.map((stat) => ({
+  ...stat,
+  icon: statIcons[stat.icon],
+}))
 
 const features = [
   {
@@ -318,7 +318,7 @@ export default function HomePage() {
                 className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg bg-transparent"
                 asChild
               >
-                <Link href="tel:+5491127586521">
+                <Link href={`tel:${EMPRENOR_TITULAR.telHref}`}>
                   <Phone className="mr-2 w-5 h-5" />
                   Llamar Ahora
                 </Link>
@@ -339,10 +339,10 @@ export default function HomePage() {
               <div>
                 <div className="text-sm text-slate-400 mb-1">Llámanos</div>
                 <a
-                  href="tel:+5491127586521"
+                  href={`tel:${EMPRENOR_TITULAR.telHref}`}
                   className="text-lg font-semibold text-white hover:text-green-400 transition-colors"
                 >
-                  +54 9 11 2758-6521
+                  {EMPRENOR_TITULAR.telefono}
                 </a>
               </div>
             </div>
@@ -353,10 +353,10 @@ export default function HomePage() {
               <div>
                 <div className="text-sm text-slate-400 mb-1">Escríbenos</div>
                 <a
-                  href="mailto:info@emprenor.com.ar"
+                  href={`mailto:${EMPRENOR_LEGAL.emailGeneral}`}
                   className="text-lg font-semibold text-white hover:text-green-400 transition-colors"
                 >
-                  info@emprenor.com.ar
+                  {EMPRENOR_LEGAL.emailGeneral}
                 </a>
               </div>
             </div>
@@ -366,7 +366,7 @@ export default function HomePage() {
               </div>
               <div>
                 <div className="text-sm text-slate-400 mb-1">Ubicación</div>
-                <span className="text-lg font-semibold text-white">Salta, Argentina</span>
+                <span className="text-lg font-semibold text-white">{EMPRENOR_LEGAL.domicilioComercial.split(",")[0]}</span>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/structured-data"
 import { SITE_URL } from "@/lib/site-url"
-import { EMPRENOR_BRAND, EMPRENOR_SITE } from "@/lib/company/constants"
+import { EMPRENOR_BRAND, EMPRENOR_SITE, EMPRENOR_SLOGAN, EMPRENOR_TITULAR } from "@/lib/company/constants"
 
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION
 
@@ -27,8 +27,7 @@ export const metadata: Metadata = {
     default: EMPRENOR_SITE.defaultTitle,
     template: EMPRENOR_SITE.titleTemplate,
   },
-  description:
-    "Empresa líder en construcción, remodelación, albañilería, electricidad, plomería y pintura. Más de 15 años de experiencia. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Servicios en Salta, Jujuy, Tucumán y Formosa. Cotización gratuita.",
+  description: EMPRENOR_SITE.defaultDescription,
   keywords: [
     "construcción Salta",
     "construcción Jujuy",
@@ -49,9 +48,9 @@ export const metadata: Metadata = {
     "obras industriales NOA",
     "instalaciones gas Salta",
   ],
-  authors: [{ name: EMPRENOR_BRAND.nombreExtendido, url: SITE_URL }],
+  authors: [{ name: EMPRENOR_TITULAR.nombreCompleto, url: SITE_URL }],
   creator: EMPRENOR_BRAND.nombreExtendido,
-  publisher: EMPRENOR_BRAND.nombreExtendido,
+  publisher: EMPRENOR_TITULAR.nombreCompleto,
   formatDetection: {
     email: false,
     address: true,
@@ -62,22 +61,21 @@ export const metadata: Metadata = {
     locale: "es_AR",
     url: SITE_URL,
     siteName: EMPRENOR_SITE.siteName,
-    title: "EMPRENOR - Construcción y Servicios Profesionales en el NOA",
-    description:
-      "Empresa líder en construcción y servicios en el NOA. Más de 15 años transformando espacios. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Cobertura en Salta, Jujuy, Tucumán y Formosa.",
+    title: EMPRENOR_SITE.defaultTitle,
+    description: EMPRENOR_SITE.defaultDescription,
     images: [
       {
         url: "/images/logo-emprenor-large.png",
         width: 1024,
         height: 168,
-        alt: "EMPRENOR Construcciones - Servicios profesionales en el NOA",
+        alt: `${EMPRENOR_BRAND.siglas} — ${EMPRENOR_SLOGAN}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "EMPRENOR - Construcción y Servicios Profesionales",
-    description: "Empresa líder en construcción en el NOA. Servicios en Salta, Jujuy, Tucumán y Formosa.",
+    title: EMPRENOR_SITE.defaultTitle,
+    description: EMPRENOR_SITE.defaultDescription,
     images: ["/images/logo-emprenor-large.png"],
   },
   robots: {

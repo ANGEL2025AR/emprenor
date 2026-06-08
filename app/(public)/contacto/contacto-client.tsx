@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle2, AlertCircle } from "lucide-react"
-import { EMPRENOR_CONTACTOS, EMPRENOR_LEGAL, EMPRENOR_OFICINAS } from "@/lib/company/constants"
+import { EMPRENOR_CONTACTOS, EMPRENOR_LEGAL, EMPRENOR_OFICINAS, EMPRENOR_PROVINCIAS } from "@/lib/company/constants"
 
 export default function ContactoClient() {
   const [formData, setFormData] = useState({
@@ -302,8 +302,8 @@ export default function ContactoClient() {
               <div className="aspect-[16/10] bg-gradient-to-br from-slate-800 via-slate-700 to-emerald-900 relative flex items-center justify-center">
                 <div className="text-center space-y-2 px-6">
                   <MapPin className="h-12 w-12 text-emerald-400 mx-auto" />
-                  <p className="text-sm font-medium text-white">3 Oficinas en Salta</p>
-                  <p className="text-xs text-slate-300">Capital, Tartagal y Campamento Vespucio</p>
+                  <p className="text-sm font-medium text-white">Sede · Campamento Vespucio</p>
+                  <p className="text-xs text-slate-300">{EMPRENOR_PROVINCIAS.join(" · ")}</p>
                 </div>
               </div>
             </Card>

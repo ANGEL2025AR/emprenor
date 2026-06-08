@@ -3,11 +3,12 @@ import Image from "next/image"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
 import {
   EMPRENOR_BRAND,
-  EMPRENOR_CONTACTOS,
   EMPRENOR_FOOTER_TAGLINE,
+  EMPRENOR_CONTACTOS,
   EMPRENOR_LEGAL,
   EMPRENOR_SOCIAL,
   FOOTER_LEGAL_LINKS,
+  getCopyrightNotice,
 } from "@/lib/company/constants"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
@@ -28,8 +29,7 @@ export function SiteFooter() {
               />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Construyendo el futuro con excelencia, calidad y compromiso. Más de 15 años de experiencia en proyectos
-              residenciales, comerciales e industriales.
+              {EMPRENOR_BRAND.descripcion}. Marca comercial de {EMPRENOR_LEGAL.titular}. {EMPRENOR_LEGAL.condicionIva}.
             </p>
             <p className="text-xs text-muted-foreground">{EMPRENOR_FOOTER_TAGLINE}</p>
             <div className="flex gap-3">
@@ -236,9 +236,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 border-t border-border pt-8">
-          <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} {EMPRENOR_BRAND.nombreExtendido}. Todos los derechos reservados.
-          </p>
+          <p className="text-center text-sm text-muted-foreground">{getCopyrightNotice()}</p>
         </div>
       </div>
     </footer>

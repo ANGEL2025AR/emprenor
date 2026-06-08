@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { InstitutionalPage } from "@/components/public/institutional-page"
-import { EMPRENOR_BRAND } from "@/lib/company/constants"
+import { EMPRENOR_BRAND, EMPRENOR_PROVINCIAS, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 
 export const metadata: Metadata = buildPageMetadata({
@@ -21,8 +21,8 @@ export default function PoliticaCalidadPage() {
           title: "Alcance",
           content: (
             <p>
-              Esta política aplica a los servicios de construcción, remodelación e instalaciones que{" "}
-              {EMPRENOR_BRAND.siglas} presta servicios en Salta, Jujuy, Tucumán y Formosa.
+              Esta política aplica a los servicios de {EMPRENOR_BRAND.siglas}, marca comercial de{" "}
+              {EMPRENOR_TITULAR.nombreCompleto}, en {EMPRENOR_PROVINCIAS.join(", ")}.
               Los requisitos específicos de cada contrato — pliegos, normas técnicas, ensayos — prevalecen sobre este
               documento general.
             </p>

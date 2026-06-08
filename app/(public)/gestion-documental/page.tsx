@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { InstitutionalPage } from "@/components/public/institutional-page"
-import { EMPRENOR_BRAND, EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { EMPRENOR_BRAND, EMPRENOR_LEGAL, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 
 export const metadata: Metadata = buildPageMetadata({
@@ -21,7 +21,10 @@ export default function GestionDocumentalPage() {
           content: (
             <ul className="list-disc pl-5 space-y-2">
               <li>
-                <strong>Marca:</strong> {EMPRENOR_BRAND.nombreExtendido}
+                <strong>Marca:</strong> {EMPRENOR_BRAND.nombreExtendido} ({EMPRENOR_BRAND.siglas})
+              </li>
+              <li>
+                <strong>Titular:</strong> {EMPRENOR_TITULAR.nombreCompleto} — CUIT {EMPRENOR_LEGAL.cuit}
               </li>
               <li>
                 <strong>Contacto comercial:</strong>{" "}

@@ -1,0 +1,158 @@
+{
+  "pageKey": "ServicioConstuccion",
+  "hero": {
+    "type": "page-header",
+    "title": "Construcción",
+    "highlight": "General",
+    "subtitle": "Proyectos llave en mano para todos los sectores — residencial, comercial, industrial y agropecuario"
+  },
+  "sections": [
+    {
+      "type": "intro",
+      "eyebrow": "Construcción General",
+      "title": "Obra llave en mano para todos los sectores",
+      "paragraphs": [
+        "En EMPRENOR C&S ejecutamos obras de construcción general con enfoque integral: proyecto, obra, instalaciones y entrega documentada conforme a normativa CIRSOC, municipal y estándares AEA 90364.",
+        "Equipo de ingeniería civil, arquitectura y dirección de obra con trayectoria en el NOA desde 2018 — sector público, educativo, sanitario, industrial y agropecuario."
+      ],
+      "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85",
+      "imageAlt": "Construcción",
+      "imageHeight": "h-[480px]",
+      "stats": [
+        {
+          "v": "7+",
+          "l": "Referencias NOA"
+        },
+        {
+          "v": "CIRSOC",
+          "l": "Normativa estructural"
+        },
+        {
+          "v": "AEA 90364",
+          "l": "Instalaciones eléctricas"
+        },
+        {
+          "v": "2018",
+          "l": "Operación documentada"
+        }
+      ]
+    },
+    {
+      "type": "subtypes",
+      "eyebrow": "Áreas de Intervención",
+      "title": "Construimos en todos los sectores",
+      "subtypes": [
+        {
+          "icon": "Home",
+          "title": "Viviendas Residenciales",
+          "color": "from-blue-500 to-blue-600",
+          "items": [
+            "Casas unifamiliares desde planos",
+            "Dúplex y viviendas en serie",
+            "Ampliaciones estructurales y nuevas plantas",
+            "Refacciones estructurales",
+            "Construcción en seco (Steel Frame / Dry Wall)",
+            "Losas, fundaciones y estructura de hormigón"
+          ]
+        },
+        {
+          "icon": "Building2",
+          "title": "Obras Comerciales",
+          "color": "from-amber-500 to-amber-600",
+          "items": [
+            "Locales comerciales llave en mano",
+            "Oficinas y espacios de coworking",
+            "Restaurantes y gastronomía",
+            "Centros de salud y consultorios",
+            "Hoteles y aparthoteles",
+            "Reformas y cambios de rubros"
+          ]
+        },
+        {
+          "icon": "Factory",
+          "title": "Obras Industriales",
+          "color": "from-slate-600 to-slate-700",
+          "items": [
+            "Naves industriales y depósitos",
+            "Plantas de producción y manufactura",
+            "Cámaras frigoríficas",
+            "Pisos industriales de alta resistencia",
+            "Playa de maniobras y vías de acceso",
+            "Sistemas contra incendio integrados (NFPA 13)"
+          ]
+        },
+        {
+          "icon": "Tractor",
+          "title": "Construcción Agropecuaria",
+          "color": "from-emerald-500 to-emerald-600",
+          "items": [
+            "Galpones de almacenamiento y silos",
+            "Establos, criaderos y corrales",
+            "Plantas de acopio y procesamiento",
+            "Oficinas y viviendas rurales",
+            "Caminería interna y accesos",
+            "Cisternas y reservorios de agua"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "process",
+      "eyebrow": "Metodología",
+      "title": "Proceso de trabajo",
+      "steps": [
+        {
+          "step": "01",
+          "title": "Relevamiento y Diagnóstico",
+          "desc": "Visita al sitio para evaluar el terreno, condiciones existentes y necesidades específicas del cliente."
+        },
+        {
+          "step": "02",
+          "title": "Anteproyecto y Cotización",
+          "desc": "Elaboración de planos preliminares, memoria descriptiva y presupuesto detallado sin cargo."
+        },
+        {
+          "step": "03",
+          "title": "Proyecto Ejecutivo",
+          "desc": "Confección de planos definitivos, cómputos métricos, especificaciones técnicas y cronograma de obra."
+        },
+        {
+          "step": "04",
+          "title": "Gestión de Permisos",
+          "desc": "Tramitación de permisos de construcción, visados municipales y habilitaciones necesarias."
+        },
+        {
+          "step": "05",
+          "title": "Ejecución de Obra",
+          "desc": "Dirección técnica permanente, control de calidad continuo y reportes periódicos al cliente."
+        },
+        {
+          "step": "06",
+          "title": "Entrega y Garantía",
+          "desc": "Inspección final, documentación conforme a obra ejecutada y garantía de hasta 5 años en estructura y terminaciones."
+        }
+      ]
+    },
+    {
+      "type": "extras-dark",
+      "title": "Incluido en todos nuestros proyectos",
+      "items": [
+        "Planos aprobados por colegios profesionales",
+        "Dirección de obra permanente por ingenieros matriculados",
+        "Materiales de primera calidad con certificación",
+        "Personal propio y subcontratistas seleccionados",
+        "Cobertura de seguros de obra y ART",
+        "Informes de avance quincenales",
+        "Libro de obra actualizado",
+        "Certificaciones de calidad de materiales"
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Tenés un proyecto de construcción?",
+      "subtitle": "Solicitá tu cotización gratuita hoy. Respuesta en menos de 24 horas.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

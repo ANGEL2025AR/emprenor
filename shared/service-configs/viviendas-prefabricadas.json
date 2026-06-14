@@ -1,0 +1,149 @@
+{
+  "pageKey": "ServicioPrefabricadas",
+  "hero": {
+    "type": "page-header",
+    "title": "Viviendas",
+    "highlight": "Llave en Mano",
+    "subtitle": "Steel Frame, madera, hormigón armado u obra tradicional — mismo equipo EMPRENOR, proyecto ejecutivo y entrega habilitada en el NOA."
+  },
+  "sections": [
+    {
+      "type": "intro",
+      "eyebrow": "División Habitacional · EMPRENOR C&S",
+      "title": "Elegí el sistema constructivo — nosotros ejecutamos la obra completa",
+      "paragraphs": [
+        "EMPRENOR C&S es constructora integral: no nos limitamos a un solo material. Proyectamos y ejecutamos viviendas en Steel Frame, Wood Frame, hormigón armado y obra tradicional, con ingenieros, arquitectos y cuadrillas propias en Salta y el NOA.",
+        "Partís de siete modelos de distribución (36 a 120 m²) y elegís cómo construirlos según tu presupuesto, plazo y terreno. Todos los caminos llevan a la misma entrega: llave en mano, instalaciones habilitadas y acta de obra."
+      ],
+      "image": "/assets/prefab/living.jpg",
+      "imageAlt": "Vivienda llave en mano EMPRENOR",
+      "imageHeight": "h-[480px]",
+      "stats": [
+        {
+          "v": "4",
+          "l": "Sistemas constructivos"
+        },
+        {
+          "v": "7",
+          "l": "Modelos de diseño"
+        },
+        {
+          "v": "5 años",
+          "l": "Garantía estructural"
+        }
+      ],
+      "badges": [
+        "Steel Frame",
+        "Wood Frame",
+        "Hormigón armado",
+        "Obra tradicional"
+      ],
+      "tagBox": {
+        "title": "Normativa y estándares en todos los sistemas",
+        "tags": [
+          "AEA 90364",
+          "ENARGAS",
+          "CIRSOC",
+          "IRAM",
+          "Gestión municipal",
+          "Control documentado en obra"
+        ]
+      },
+      "note": "Un arquitecto EMPRENOR te recomienda el sistema ideal según suelo, clima, plazo y presupuesto — sin cargo en la visita técnica."
+    },
+    {
+      "type": "group",
+      "className": "py-16 border-b border-slate-100",
+      "children": [
+        {
+          "type": "feature-icons",
+          "items": [
+            {
+              "icon": "Clock",
+              "title": "Plazo según sistema",
+              "desc": "Desde 45 días (Steel Frame) hasta obra tradicional a medida. Definimos cronograma en contrato."
+            },
+            {
+              "icon": "HardHat",
+              "title": "Un solo contratista",
+              "desc": "Proyecto, estructura, instalaciones y terminaciones con el mismo responsable de obra EMPRENOR."
+            },
+            {
+              "icon": "FileCheck",
+              "title": "Obra habilitada",
+              "desc": "Planos municipales, memoria descriptiva, BT AEA 90364 y gas ENARGAS en el mismo expediente."
+            },
+            {
+              "icon": "Shield",
+              "title": "Garantía de constructora",
+              "desc": "Respaldo corporativo del titular con operación documentada desde 2018."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "prefab-systems"
+    },
+    {
+      "type": "prefab-authority"
+    },
+    {
+      "type": "prefab-catalog",
+      "eyebrow": "Catálogo habitacional",
+      "title": "Siete diseños — cuatro formas de construirlos",
+      "subtitle": "Seleccioná primero el sistema constructivo; luego filtrá por línea Esencial, Familiar o Signature. El precio se actualiza según material y plazo de obra."
+    },
+    {
+      "type": "prefab-financing"
+    },
+    {
+      "type": "prefab-process"
+    },
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "advantages-dark",
+          "title": "Alcance llave en mano — incluido en todos los sistemas",
+          "items": [
+            "Visita técnica y relevamiento del lote",
+            "Proyecto arquitectónico y planos para municipal",
+            "Cálculo estructural según sistema elegido",
+            "Fundaciones según informe de suelo",
+            "Estructura portante y cerramientos",
+            "Aislación térmica y acústica",
+            "Carpintería de aberturas en aluminio",
+            "Instalación eléctrica BT — AEA 90364",
+            "Instalación sanitaria y desagües pluviales",
+            "Instalación de gas matriculada (si hay red)",
+            "Cubierta, terminaciones interiores y exteriores",
+            "Conexión a servicios en lote",
+            "Acta de entrega y garantía escrita"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "prefab-specs"
+    },
+    {
+      "type": "prefab-faq"
+    },
+    {
+      "type": "banner-dark",
+      "icon": "Home",
+      "title": "¿No sabés qué sistema te conviene?",
+      "subtitle": "Coordinamos visita técnica al lote. Un arquitecto e ingeniero EMPRENOR evalúan suelo, accesos, plazo y presupuesto y te recomiendan Steel Frame, madera, hormigón o tradicional.",
+      "ctaText": "Coordinar visita técnica"
+    },
+    {
+      "type": "cta",
+      "title": "Iniciá tu vivienda con EMPRENOR",
+      "subtitle": "Cotización sin cargo: diseño, sistema constructivo, terminaciones y financiación según tu lote en el NOA.",
+      "buttonText": "Solicitar presupuesto de obra",
+      "showPhone": true
+    }
+  ]
+}

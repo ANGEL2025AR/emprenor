@@ -10,6 +10,7 @@ import {
   FOOTER_LEGAL_LINKS,
   getCopyrightNotice,
 } from "@/lib/company/constants"
+import { FOOTER_SERVICE_LINKS } from "@/lib/site/services-catalog"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export function SiteFooter() {
@@ -66,75 +67,13 @@ export function SiteFooter() {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Servicios</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/servicios/construccion"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Construcción
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/remodelacion"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Remodelación
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/viviendas-prefabricadas"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Viviendas Prefabricadas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/obras-industriales"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Obras Industriales
-                </Link>
-              </li>
-              <li>
-                <Link href="/servicios/gas" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Instalaciones de Gas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/albanileria"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Albañilería
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/electricidad"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Electricidad
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/plomeria"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Plomería
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/servicios/pintura"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Pintura
-                </Link>
-              </li>
+              {FOOTER_SERVICE_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -162,6 +101,11 @@ export function SiteFooter() {
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Preguntas Frecuentes
+                </Link>
+              </li>
+              <li>
+                <Link href="/brochure" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Folleto corporativo
                 </Link>
               </li>
               <li>

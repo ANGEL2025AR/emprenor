@@ -1,18 +1,36 @@
 import type { SiteService } from "@/lib/db/models"
 import { getDb } from "@/lib/db/connection"
-import { SITE_SERVICE_DEFAULTS } from "./service-defaults"
+import { getDefaultServicesFromCatalog, resolveServiceSlug } from "./services-catalog"
 
 function isMissingMongoUriError(error: unknown): boolean {
   return error instanceof Error && error.message.includes("MONGODB_URI")
 }
 
-function withTimestamps(seed: Omit<SiteService, "_id" | "createdAt" | "updatedAt">): SiteService {
-  const now = new Date()
-  return { ...seed, createdAt: now, updatedAt: now }
+export function getDefaultServices(): SiteService[] {
+  return getDefaultServicesFromCatalog()
 }
 
-export function getDefaultServices(): SiteService[] {
-  return SITE_SERVICE_DEFAULTS.map(withTimestamps)
+function mergePublishedWithCatalog(docs: SiteService[], defaults: SiteService[]): SiteService[] {
+  const bySlug = new Map<string, SiteService>()
+  for (const doc of docs) {
+    const resolved = resolveServiceSlug(doc.slug)
+    bySlug.set(resolved, { ...doc, slug: resolved })
+  }
+
+  return defaults
+    .filter((entry) => entry.published)
+    .map((entry) => {
+      const fromDb = bySlug.get(entry.slug)
+      if (!fromDb) return entry
+      return {
+        ...entry,
+        heroImage: fromDb.heroImage || entry.heroImage,
+        heroImageAlt: fromDb.heroImageAlt || entry.heroImageAlt,
+        gallery: fromDb.gallery?.length ? fromDb.gallery : entry.gallery,
+        features: fromDb.features?.length ? fromDb.features : entry.features,
+      }
+    })
+    .sort((a, b) => a.order - b.order)
 }
 
 export async function getPublishedServices(): Promise<SiteService[]> {
@@ -34,7 +52,7 @@ export async function getPublishedServices(): Promise<SiteService[]> {
       return defaults.filter((s) => s.published).sort((a, b) => a.order - b.order)
     }
 
-    return docs
+    return mergePublishedWithCatalog(docs, defaults)
   } catch (error) {
     if (!isMissingMongoUriError(error)) {
       console.error("[site_services] Error al leer servicios:", error)
@@ -64,7 +82,8 @@ export async function getAllServicesAdmin(): Promise<SiteService[]> {
 }
 
 export async function getServiceBySlug(slug: string): Promise<SiteService | null> {
-  const fallback = getDefaultServices().find((s) => s.slug === slug) ?? null
+  const resolved = resolveServiceSlug(slug)
+  const fallback = getDefaultServices().find((s) => s.slug === resolved) ?? null
 
   if (!process.env.MONGODB_URI?.trim()) {
     return fallback?.published ? fallback : null
@@ -72,7 +91,7 @@ export async function getServiceBySlug(slug: string): Promise<SiteService | null
 
   try {
     const db = await getDb()
-    const doc = await db.collection<SiteService>("site_services").findOne({ slug, published: true })
+    const doc = await db.collection<SiteService>("site_services").findOne({ slug: resolved, published: true })
     if (doc) return doc
     return fallback?.published ? fallback : null
   } catch (error) {

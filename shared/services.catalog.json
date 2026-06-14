@@ -1,0 +1,144 @@
+{
+  "$comment": "Catálogo único de 12 servicios — páginas independientes en emprenor.com/servicios/[slug].",
+  "services": [
+    {
+      "pageKey": "ServicioConstuccion",
+      "slug": "construccion",
+      "legacySlugs": [],
+      "title": "Construcción General",
+      "footerName": "Construcción General",
+      "shortDescription": "Proyectos llave en mano para todos los sectores",
+      "icon": "Building2",
+      "colorGradient": "from-blue-500 to-blue-600",
+      "order": 1
+    },
+    {
+      "pageKey": "ServicioRemodelacion",
+      "slug": "remodelacion",
+      "legacySlugs": ["refacciones", "refaccion"],
+      "title": "Remodelación y Refacciones",
+      "footerName": "Remodelación y Refacciones",
+      "shortDescription": "Reformas integrales, ampliaciones y refacciones con un solo interlocutor",
+      "icon": "Home",
+      "colorGradient": "from-violet-500 to-violet-600",
+      "order": 2
+    },
+    {
+      "pageKey": "ServicioAlbanileria",
+      "slug": "albanileria",
+      "legacySlugs": [],
+      "title": "Albañilería",
+      "footerName": "Albañilería",
+      "shortDescription": "Mampostería, hormigón, revoques y estructuras con maestros certificados",
+      "icon": "Hammer",
+      "colorGradient": "from-orange-500 to-orange-600",
+      "order": 3
+    },
+    {
+      "pageKey": "ServicioPintura",
+      "slug": "pintura",
+      "legacySlugs": [],
+      "title": "Pintura y Revestimientos",
+      "footerName": "Pintura y Revestimientos",
+      "shortDescription": "Acabados premium interior, exterior e industrial con preparación profesional",
+      "icon": "Paintbrush",
+      "colorGradient": "from-pink-500 to-pink-600",
+      "order": 4
+    },
+    {
+      "pageKey": "ServicioElectrico",
+      "slug": "instalaciones-electricas",
+      "legacySlugs": ["electricidad"],
+      "title": "Instalaciones Eléctricas",
+      "footerName": "Instalaciones Eléctricas",
+      "shortDescription": "Media y baja tensión, subestaciones y automatización",
+      "icon": "Zap",
+      "colorGradient": "from-amber-500 to-amber-600",
+      "order": 5
+    },
+    {
+      "pageKey": "ServicioSanitario",
+      "slug": "instalaciones-sanitarias",
+      "legacySlugs": ["plomeria"],
+      "title": "Instalaciones Sanitarias",
+      "footerName": "Instalaciones Sanitarias",
+      "shortDescription": "Agua potable, cloacales, pluviales y tratamiento de efluentes",
+      "icon": "Droplets",
+      "colorGradient": "from-cyan-500 to-cyan-600",
+      "order": 6
+    },
+    {
+      "pageKey": "ServicioGas",
+      "slug": "gas",
+      "legacySlugs": [],
+      "title": "Instalaciones de Gas",
+      "footerName": "Instalaciones de Gas",
+      "shortDescription": "Gas natural y envasado con matrícula habilitada",
+      "icon": "Flame",
+      "colorGradient": "from-orange-500 to-orange-600",
+      "order": 7
+    },
+    {
+      "pageKey": "ServicioIndustrial",
+      "slug": "obras-industriales",
+      "legacySlugs": [],
+      "title": "Obras Industriales",
+      "footerName": "Obras Industriales",
+      "shortDescription": "Naves industriales, plantas productivas y sistemas contra incendio",
+      "icon": "Factory",
+      "colorGradient": "from-slate-600 to-slate-700",
+      "order": 8
+    },
+    {
+      "pageKey": "ServicioAgropecuario",
+      "slug": "agropecuario",
+      "legacySlugs": [],
+      "title": "Proyectos Agropecuarios",
+      "footerName": "Proyectos Agropecuarios",
+      "shortDescription": "Infraestructura rural, riego tecnificado y electrificación",
+      "icon": "Tractor",
+      "colorGradient": "from-emerald-500 to-emerald-600",
+      "order": 9
+    },
+    {
+      "pageKey": "ServicioClimatizacion",
+      "slug": "climatizacion",
+      "legacySlugs": [],
+      "title": "Climatización",
+      "footerName": "Climatización",
+      "shortDescription": "Aire acondicionado, calefacción y ventilación industrial",
+      "icon": "Wind",
+      "colorGradient": "from-violet-500 to-violet-600",
+      "order": 10
+    },
+    {
+      "pageKey": "ServicioMantenimiento",
+      "slug": "mantenimiento",
+      "legacySlugs": [],
+      "title": "Mantenimiento Integral",
+      "footerName": "Mantenimiento Integral",
+      "shortDescription": "Servicios preventivos y correctivos",
+      "icon": "Wrench",
+      "colorGradient": "from-rose-500 to-rose-600",
+      "order": 11
+    },
+    {
+      "pageKey": "ServicioPrefabricadas",
+      "slug": "viviendas-prefabricadas",
+      "legacySlugs": ["prefabricadas"],
+      "title": "Viviendas Llave en Mano",
+      "footerName": "Viviendas Llave en Mano",
+      "shortDescription": "Steel Frame, madera, hormigón o tradicional — obra completa en el NOA",
+      "icon": "Home",
+      "colorGradient": "from-teal-500 to-teal-600",
+      "order": 12
+    }
+  ],
+  "legacySlugRedirects": {
+    "refacciones": "remodelacion",
+    "refaccion": "remodelacion",
+    "electricidad": "instalaciones-electricas",
+    "plomeria": "instalaciones-sanitarias",
+    "prefabricadas": "viviendas-prefabricadas"
+  }
+}

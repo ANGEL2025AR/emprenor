@@ -1,0 +1,133 @@
+{
+  "pageKey": "ServicioAlbanileria",
+  "hero": {
+    "type": "page-header",
+    "title": "Albañilería",
+    "highlight": "Profesional",
+    "subtitle": "Mampostería, hormigón, revoques y estructuras con maestros mayores de obra en el NOA"
+  },
+  "sections": [
+    {
+      "type": "intro",
+      "eyebrow": "Albañilería de precisión",
+      "title": "Obra gruesa con control dimensional",
+      "paragraphs": [
+        "Realizamos mampostería, revoques, contrapisos y estructuras de hormigón con oficiales especializados y maestros mayores de obra. Trabajamos en obra nueva, ampliaciones y reparaciones estructurales.",
+        "Cada intervención incluye replanteo, control de plomos y niveles, registro fotográfico de avance y entrega conforme a planos y especificaciones técnicas."
+      ],
+      "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=85",
+      "imageAlt": "Albañilería en obra — EMPRENOR C&S",
+      "imageHeight": "h-[480px]",
+      "stats": [
+        { "v": "CIRSOC", "l": "Normativa estructural" },
+        { "v": "100%", "l": "Control de niveles" },
+        { "v": "NOA", "l": "Equipo propio" }
+      ]
+    },
+    {
+      "type": "cards",
+      "icon": "Hammer",
+      "iconColor": "from-orange-500 to-orange-600",
+      "columns": 2,
+      "showDesc": false,
+      "className": "mb-16",
+      "items": [
+        {
+          "title": "Mampostería y tabiques",
+          "color": "from-orange-500 to-orange-600",
+          "items": [
+            "Muros portantes y divisorios en ladrillo cerámico",
+            "Bloques de hormigón celular y ladrillo visto",
+            "Tabiques de Dry Wall con aislación acústica",
+            "Muros de contención y muretes",
+            "Apertura y cierre de vanos",
+            "Refuerzos estructurales puntuales"
+          ]
+        },
+        {
+          "title": "Hormigón armado",
+          "color": "from-slate-600 to-slate-700",
+          "items": [
+            "Bases, zapatas y plateas de fundación",
+            "Vigas, columnas y pilares",
+            "Losas macizas, alivianadas y pretensadas menores",
+            "Escaleras de hormigón visto o revocadas",
+            "Encofrados y armaduras según proyecto",
+            "Hormigón proyectado y reparaciones"
+          ]
+        },
+        {
+          "title": "Revoques y terminaciones gruesas",
+          "color": "from-amber-500 to-amber-600",
+          "items": [
+            "Revoque grueso interior y exterior",
+            "Revoque fino lista para pintura",
+            "Revoque hidrófugo y antihumedad",
+            "Texturas rústicas y ladrillo a la vista",
+            "Enlucidos especiales y estucos",
+            "Regularización de muros irregulares"
+          ]
+        },
+        {
+          "title": "Contrapisos y pisos",
+          "color": "from-stone-500 to-stone-600",
+          "items": [
+            "Contrapiso de hormigón armado o mortero",
+            "Nivelación con reglas láser",
+            "Aislación térmica y acústica bajo piso",
+            "Pisos industriales de alta resistencia",
+            "Canaletas, sumideros y pendientes",
+            "Preparación para cerámicos y revestimientos"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "two-cols-lists",
+      "eyebrow": "Reparaciones",
+      "title": "Intervenciones correctivas",
+      "columns": [
+        {
+          "title": "Patologías frecuentes",
+          "items": [
+            "Grietas estructurales y fisuras activas",
+            "Humedades por capilaridad o filtración",
+            "Desprendimiento de revoques",
+            "Asentamientos diferenciales",
+            "Corrosión de armaduras expuestas",
+            "Refuerzo de losas y vigas"
+          ]
+        },
+        {
+          "title": "Sectores atendidos",
+          "items": [
+            "Viviendas unifamiliares y edificios",
+            "Locales comerciales e industrias",
+            "Obras públicas e institucionales",
+            "Establecimientos rurales",
+            "Ampliaciones en obra existente",
+            "Urgencias con contención provisional"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "process-inline",
+      "eyebrow": "Control de calidad",
+      "title": "Etapas de ejecución",
+      "steps": [
+        { "title": "Replanteo", "desc": "Trazado, niveles y control dimensional." },
+        { "title": "Ejecución", "desc": "Mampostería u hormigón según plano." },
+        { "title": "Revoque", "desc": "Grueso, fino y terminación." },
+        { "title": "Control final", "desc": "Plomos, escuadras y acta de entrega." }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás albañilería especializada?",
+      "subtitle": "Presupuesto por m² o por proyecto. Visitamos el sitio sin cargo.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

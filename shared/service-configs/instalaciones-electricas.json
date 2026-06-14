@@ -1,0 +1,120 @@
+{
+  "pageKey": "ServicioElectrico",
+  "hero": {
+    "type": "hero-slider",
+    "minHeight": "70vh",
+    "slides": [
+      {
+        "page": "ServicioElectrico",
+        "eyebrow": "INSTALACIONES ELÉCTRICAS — AEA 90364 CERTIFICADAS",
+        "title": "Instalaciones",
+        "title_highlight": "Eléctricas",
+        "subtitle": "Media y baja tensión — soluciones para industrias, comercios y viviendas. Electricistas matriculados.",
+        "image_url": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1920&q=85",
+        "cta_text": "Solicitar servicio",
+        "cta_url": "/Contacto"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "type": "intro",
+      "eyebrow": "Instalaciones Eléctricas",
+      "title": "Expertos matriculados en alta, media y baja tensión",
+      "paragraphs": [
+        "Nuestro equipo de electricistas matriculados y técnicos especializados diseña, instala y certifica instalaciones eléctricas para cualquier tipo de proyecto, desde una vivienda hasta una planta industrial.",
+        "Operamos bajo las normativas del Reglamento de la Asociación Electrotécnica Argentina (AEA 90364), las disposiciones del ENRE y los estándares IRAM aplicables a cada instalación."
+      ],
+      "image": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=85",
+      "imageAlt": "Instalaciones Eléctricas",
+      "imageHeight": "h-[460px]",
+      "badges": [
+        "AEA 90364",
+        "ENRE",
+        "IRAM",
+        "INTI",
+        "Inspección Eléctrica (IE)"
+      ]
+    },
+    {
+      "type": "two-cols-lists",
+      "columns": [
+        {
+          "icon": "Zap",
+          "iconColor": "from-amber-500 to-amber-600",
+          "title": "Media Tensión",
+          "badge": "1 kV – 33 kV",
+          "badgeClass": "text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full",
+          "desc": "Diseño, ejecución y puesta en servicio de instalaciones de media tensión. Trabajos con habilitación de la empresa distribuidora y certificación ante el ENRE.",
+          "checkColor": "text-amber-500",
+          "items": [
+            "Subestaciones eléctricas de distribución (MT/BT)",
+            "Transformadores de potencia hasta 1000 kVA",
+            "Celdas de media tensión (SF6 y aire)",
+            "Líneas aéreas y subterráneas de 13,2 kV",
+            "Sistemas de protección y seccionamiento",
+            "Bancos de capacitores para corrección de factor de potencia",
+            "Puesta a tierra de instalaciones de MT",
+            "Mediciones y certificaciones según normativa ENRE",
+            "Interconexiones con empresas distribuidoras",
+            "Salas de baterías y UPS industriales"
+          ]
+        },
+        {
+          "icon": "BatteryCharging",
+          "iconColor": "from-blue-500 to-blue-600",
+          "title": "Baja Tensión",
+          "badge": "Hasta 1 kV",
+          "badgeClass": "text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full",
+          "desc": "Instalaciones conformes a la norma AEA 90364, certificadas por electricistas matriculados. Planos aprobados por el colegio profesional y municipios.",
+          "checkColor": "text-blue-500",
+          "items": [
+            "Instalaciones eléctricas domiciliarias monofásicas y trifásicas",
+            "Tableros eléctricos residenciales e industriales",
+            "Circuitos trifásicos para maquinaria industrial",
+            "Iluminación interior y exterior LED",
+            "Instalaciones en zonas EX (atmósferas explosivas)",
+            "Sistemas de alimentación ininterrumpida (UPS)",
+            "Automatización y domótica básica",
+            "Sistemas de video vigilancia (CCTV)",
+            "Control de accesos y alarmas",
+            "Pararrayos y sistemas de protección contra rayos",
+            "Canalizaciones eléctricas: bandejas, cañerías, ductos",
+            "Puesta a tierra de instalaciones de BT"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "split-emergency",
+      "eyebrow": "Ingeniería Eléctrica",
+      "title": "Proyectos y documentación técnica",
+      "desc": "Elaboramos toda la documentación técnica necesaria para la aprobación de instalaciones ante entes reguladores, municipios y colegios de ingenieros.",
+      "items": [
+        "Planos de instalaciones eléctricas aprobados",
+        "Memorias descriptivas y cálculos técnicos",
+        "Planillas de cargas y estudios de cortocircuito",
+        "Coordinación de protecciones",
+        "Eficiencia energética y auditorías eléctricas",
+        "Certificaciones IRAM e IE"
+      ],
+      "emergencyTitle": "Servicio de Emergencias 24/7",
+      "emergencyDesc": "Atendemos emergencias eléctricas con respuesta en menos de 2 horas en zonas urbanas.",
+      "emergencyItems": [
+        "Cortes de luz sin causa aparente",
+        "Tablero eléctrico disparado reiteradamente",
+        "Cables pelados o instalación en mal estado",
+        "Arcos eléctricos o chisporroteo",
+        "Electrocución o riesgo de choque eléctrico",
+        "Fallo en media tensión o transformador"
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás una instalación eléctrica?",
+      "subtitle": "Solicitá tu cotización gratuita hoy.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": false
+    }
+  ]
+}

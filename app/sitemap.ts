@@ -1,6 +1,14 @@
 import type { MetadataRoute } from "next"
+import { FOOTER_LEGAL_LINKS } from "@/lib/company/constants"
+import { getAllServiceSlugs } from "@/lib/site/services-catalog"
 import { getDb } from "@/lib/db/connection"
 import { SITE_URL } from "@/lib/site-url"
+
+const LEGAL_SITEMAP = FOOTER_LEGAL_LINKS.map((link) => ({
+  url: `${SITE_URL}${link.href}`,
+  changeFrequency: "yearly" as const,
+  priority: link.href === "/aviso-legal" || link.href === "/privacidad" ? 0.5 : 0.4,
+}))
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_URL
@@ -39,73 +47,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/brochure`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/servicios`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.9,
     },
-    {
-      url: `${baseUrl}/servicios/construccion`,
+    ...getAllServiceSlugs().map((slug) => ({
+      url: `${baseUrl}/servicios/${slug}`,
       lastModified: currentDate,
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as const,
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/remodelacion`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/albanileria`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/electricidad`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/plomeria`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/pintura`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/gas`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/viviendas-prefabricadas`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/servicios/obras-industriales`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    { url: `${baseUrl}/privacidad`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${baseUrl}/cookies`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${baseUrl}/codigo-etica`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.5 },
-    { url: `${baseUrl}/seguridad-y-salud`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.6 },
-    { url: `${baseUrl}/sostenibilidad`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.6 },
-    { url: `${baseUrl}/linea-etica`, lastModified: currentDate, changeFrequency: "yearly", priority: 0.5 },
-    { url: `${baseUrl}/licitaciones`, lastModified: currentDate, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/trabaja-con-nosotros`, lastModified: currentDate, changeFrequency: "monthly", priority: 0.6 },
+    })),
+    ...LEGAL_SITEMAP.map((entry) => ({ ...entry, lastModified: currentDate })),
   ]
 
   // Obtener proyectos públicos dinámicamente desde MongoDB

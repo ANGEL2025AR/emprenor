@@ -119,7 +119,7 @@ export function HeroSlider({
               >
                 {slide.image?.trim() ? (
                   <>
-                    <Image src={slide.image} alt={slide.alt || slide.title} fill className="object-cover opacity-40" />
+                    <Image src={slide.image} alt={slide.alt || slide.title} fill className="object-cover opacity-40" unoptimized={Boolean(slide.image?.trim() && (slide.image.startsWith("http") || slide.image.startsWith("/assets")))} />
                     <div className="absolute inset-0 bg-primary/85" />
                   </>
                 ) : (
@@ -190,6 +190,7 @@ export function HeroSlider({
                   fill
                   className="object-cover"
                   priority={slide.id === slides[0]?.id}
+                  unoptimized={Boolean(slide.image?.trim() && (slide.image.startsWith("http") || slide.image.startsWith("/assets")))}
                 />
               ) : (
                 <div className="absolute inset-0 bg-slate-900" />

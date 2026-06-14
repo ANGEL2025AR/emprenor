@@ -79,9 +79,9 @@ export default function ContactoClient() {
         <div className="grid gap-12 lg:grid-cols-2">
           <div className="space-y-6">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-foreground">Solicite una Cotización</h2>
+              <h2 className="text-3xl font-bold text-foreground">Solicitá una cotización</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Complete el formulario y nos pondremos en contacto con usted en menos de 24 horas.
+                Completá el formulario y nos comunicaremos con vos en menos de 24 horas.
               </p>
             </div>
 
@@ -89,7 +89,7 @@ export default function ContactoClient() {
               <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
                 <p className="text-sm text-green-800">
-                  ¡Mensaje enviado exitosamente! Nos pondremos en contacto con usted pronto.
+                  ¡Mensaje enviado exitosamente! Nos comunicaremos con vos pronto.
                 </p>
               </div>
             )}
@@ -101,7 +101,7 @@ export default function ContactoClient() {
                   <p className="text-sm text-red-800 font-medium mb-1">Error al enviar mensaje</p>
                   <p className="text-sm text-red-700">{errorMessage}</p>
                   <p className="text-xs text-red-600 mt-2">
-                    Si el problema persiste, contáctenos directamente por WhatsApp o teléfono.
+                    Si el problema persiste, contactanos directamente por WhatsApp o teléfono.
                   </p>
                 </div>
               </div>
@@ -171,16 +171,19 @@ export default function ContactoClient() {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
                 >
                   <option value="">Seleccione un servicio</option>
-                  <option value="construccion">Construcción</option>
-                  <option value="remodelacion">Remodelación</option>
+                  <option value="construccion">Construcción General</option>
+                  <option value="remodelacion">Remodelación y Refacciones</option>
                   <option value="albanileria">Albañilería</option>
-                  <option value="electricidad">Electricidad</option>
-                  <option value="plomeria">Plomería</option>
-                  <option value="pintura">Pintura</option>
+                  <option value="pintura">Pintura y Revestimientos</option>
+                  <option value="instalaciones-electricas">Instalaciones Eléctricas</option>
+                  <option value="instalaciones-sanitarias">Instalaciones Sanitarias</option>
                   <option value="gas">Instalaciones de Gas</option>
-                  <option value="prefabricadas">Viviendas Prefabricadas</option>
-                  <option value="industriales">Obras Industriales</option>
-                  <option value="otro">Otro</option>
+                  <option value="obras-industriales">Obras Industriales</option>
+                  <option value="agropecuario">Proyectos Agropecuarios</option>
+                  <option value="climatizacion">Climatización</option>
+                  <option value="mantenimiento">Mantenimiento Integral</option>
+                  <option value="viviendas-prefabricadas">Viviendas Llave en Mano</option>
+                  <option value="otro">Otro / Consulta general</option>
                 </select>
               </div>
 
@@ -191,7 +194,7 @@ export default function ContactoClient() {
                 <Textarea
                   id="message"
                   name="message"
-                  placeholder="Cuéntenos sobre su proyecto..."
+                  placeholder="Contanos sobre tu proyecto..."
                   rows={6}
                   value={formData.message}
                   onChange={handleChange}
@@ -289,8 +292,8 @@ export default function ContactoClient() {
                     </div>
                     <div className="space-y-1">
                       <h3 className="font-semibold text-foreground">Horario de Atención</h3>
-                      <p className="text-sm text-muted-foreground">Lunes a Viernes: 8:00 AM - 6:00 PM</p>
-                      <p className="text-sm text-muted-foreground">Sábados: 9:00 AM - 2:00 PM</p>
+                      <p className="text-sm text-muted-foreground">Lunes a viernes: 8:00 - 18:00</p>
+                      <p className="text-sm text-muted-foreground">Sábados: 9:00 - 13:00</p>
                       <p className="text-sm text-muted-foreground">Domingos: Cerrado</p>
                     </div>
                   </div>

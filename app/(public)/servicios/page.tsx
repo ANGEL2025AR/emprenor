@@ -11,7 +11,7 @@ import { buildPageMetadata } from "@/lib/site/page-metadata"
 export const metadata: Metadata = buildPageMetadata({
   title: "Servicios",
   description:
-    "Servicios integrales de construcción, remodelación, albañilería, electricidad, plomería, pintura, instalaciones de gas, viviendas prefabricadas y obras industriales en el NOA.",
+    "Doce especialidades integradas en el NOA: construcción, remodelación, albañilería, pintura, instalaciones eléctricas, sanitarias, de gas, obras industriales, agropecuarias, climatización, mantenimiento y viviendas llave en mano.",
   path: "/servicios",
 })
 

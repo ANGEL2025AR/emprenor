@@ -4,11 +4,13 @@ import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileCheck, Shield, Users, ClipboardList } from "lucide-react"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Licitaciones y sector público | EMPRENOR",
-  description: "Documentación para licitadores: cumplimiento, SST, referencias y portales de obra en el NOA.",
-}
+export const metadata: Metadata = buildPageMetadata({
+  title: "Licitaciones y sector público",
+  description: "Documentación técnica para licitadores: cumplimiento normativo, SST, referencias de obra y portales de gestión en el NOA.",
+  path: "/licitaciones",
+})
 
 export default function LicitacionesPage() {
   return (
@@ -24,7 +26,7 @@ export default function LicitacionesPage() {
               <ul className="list-disc pl-5 space-y-2">
                 <li>Obras educativas, sanitarias, administrativas e industriales en Salta, Jujuy, Tucumán y Formosa.</li>
                 <li>Portal de cumplimiento por obra: nómina, ART, documentos, quejas e incidentes.</li>
-                <li>Exportación de paquetes de auditoría para perióodos mensuales.</li>
+                <li>Exportación de paquetes de auditoría para períodos mensuales.</li>
               </ul>
             ),
           },
@@ -60,7 +62,7 @@ export default function LicitacionesPage() {
         <div className="container px-4 md:px-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
             {[
-              { icon: FileCheck, title: "Cumplimiento FAO/Estado", text: "Checklists y puntaje por obra" },
+              { icon: FileCheck, title: "Cumplimiento FAO/Estado", text: "Listas de verificación y puntaje por obra" },
               { icon: Shield, title: "SST y ART", text: "Política pública y registro en obra" },
               { icon: Users, title: "Empleo local", text: "Nómina y compras regionales" },
               { icon: ClipboardList, title: "Referencias", text: "Portafolio de obra pública" },

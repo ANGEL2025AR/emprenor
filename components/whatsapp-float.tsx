@@ -30,7 +30,7 @@ export function WhatsAppFloat() {
                 </Button>
               </div>
               <p className="text-sm text-foreground mb-4">
-                ¿Necesitas ayuda con tu proyecto de construcción? Contáctanos por WhatsApp!
+                ¿Necesitás ayuda con tu proyecto de construcción? Contactanos por WhatsApp.
               </p>
 
               <div className="space-y-2">

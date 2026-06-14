@@ -1,0 +1,108 @@
+{
+  "pageKey": "ServicioGas",
+  "hero": {
+    "type": "page-header",
+    "title": "Instalaciones",
+    "highlight": "de Gas",
+    "subtitle": "Gas natural y envasado (GLP) para uso doméstico, comercial e industrial — instaladores matriculados"
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Instalaciones de Gas",
+          "title": "Instaladores matriculados y habilitados por ENARGAS",
+          "paragraphs": [
+            "Todas nuestras instalaciones de gas son realizadas por técnicos matriculados ante ENARGAS y las distribuidoras locales. Cumplimos estrictamente con las Normas Argentinas de Gas (NAG) y los reglamentos de cada distribuidora."
+          ],
+          "image": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1200&q=85",
+          "imageAlt": "Instalaciones de Gas",
+          "alert": "Las instalaciones de gas son trabajos de alto riesgo. Solo deben ser realizados por instaladores habilitados. Ante cualquier olor a gas, evacuar y llamar a la empresa distribuidora."
+        },
+        {
+          "type": "cards",
+          "icon": "Flame",
+          "iconColor": "from-orange-500 to-orange-600",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-16",
+          "items": [
+            {
+              "title": "Gas Natural de Red",
+              "items": [
+                "Instalaciones domiciliarias de gas natural (cañería de acero negro y cobre)",
+                "Montantes y ramales internos en edificios de departamentos",
+                "Instalaciones para industrias y locales comerciales",
+                "Conexión a la red distribuidora habilitada en la zona (Gasnor y otras)",
+                "Cambio y extensión de instalaciones existentes",
+                "Instalación de medidores y reguladores de presión",
+                "Tableros de corte general y válvulas de seguridad",
+                "Instalaciones a media y alta presión para industrias"
+              ]
+            },
+            {
+              "title": "Gas Envasado (GLP)",
+              "items": [
+                "Instalaciones para GLP (propano y butano) domiciliario",
+                "Baterías de cilindros y plantas a granel",
+                "Tanques fijos para uso industrial y agropecuario",
+                "Vaporización de GLP para instalaciones de alta demanda",
+                "Reguladores de primera y segunda etapa",
+                "Instalaciones de gas para secado de granos",
+                "GLP para cabañas, countries y zonas sin red natural"
+              ]
+            },
+            {
+              "title": "Artefactos y Equipos",
+              "items": [
+                "Instalación de calderas murales y de pie (hasta 200.000 kcal/h)",
+                "Calefones, termotanques y sistemas de agua caliente solar",
+                "Estufas y calefactores de tiro balanceado",
+                "Cocinas industriales y equipamiento gastronómico",
+                "Hornos industriales y calentadores de fluidos",
+                "Generadores de vapor para industrias",
+                "Quemadores industriales"
+              ]
+            },
+            {
+              "title": "Proyectos y Documentación",
+              "items": [
+                "Memorias técnicas y planos de instalaciones de gas",
+                "Inspecciones y aprobaciones ante ENARGAS y distribuidoras locales",
+                "Habilitaciones ante distribuidoras locales",
+                "Pruebas de hermeticidad certificadas",
+                "Declaraciones juradas de instalaciones",
+                "Certificados de instalación de gas (CIG)",
+                "Habilitaciones municipales de locales"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "advantages-dark",
+          "title": "Nuestras garantías de seguridad",
+          "items": [
+            "Técnicos matriculados ante ENARGAS",
+            "Materiales certificados IRAM-IAPG",
+            "Pruebas de presión y hermeticidad obligatorias",
+            "Certificación del instalador ante el organismo regulador",
+            "Uso exclusivo de caños y accesorios aprobados",
+            "Sellado con materiales ignífugos aprobados",
+            "Señalética de seguridad incluida",
+            "Manual de usuario y recomendaciones de seguridad"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás una instalación de gas?",
+      "subtitle": "Técnicos matriculados — Habilitación ENARGAS — Trabajo garantizado.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

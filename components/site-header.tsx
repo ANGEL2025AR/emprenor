@@ -37,11 +37,15 @@ import {
 import { cn } from "@/lib/utils"
 import type { ServiceNavItem } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
+import { FOOTER_SERVICE_LINKS } from "@/lib/site/services-catalog"
 
-const FALLBACK_SERVICES: ServiceNavItem[] = [
-  { slug: "construccion", title: "Construcción", shortDescription: "", href: "/servicios/construccion", icon: "Building2" },
-  { slug: "remodelacion", title: "Remodelación", shortDescription: "", href: "/servicios/remodelacion", icon: "Hammer" },
-]
+const FALLBACK_SERVICES: ServiceNavItem[] = FOOTER_SERVICE_LINKS.map((link, i) => ({
+  slug: link.href.replace("/servicios/", ""),
+  title: link.label,
+  shortDescription: "",
+  href: link.href,
+  icon: "Building2" as const,
+}))
 
 export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: ServiceNavItem[] }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -194,68 +198,22 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
                 <Wrench className="h-4 w-4" />
                 Servicios
               </p>
+              {services.map((service) => (
+                <Link
+                  key={service.slug}
+                  href={service.href}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {service.title}
+                </Link>
+              ))}
               <Link
-                href="/servicios/construccion"
+                href="/brochure"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Construcción
-              </Link>
-              <Link
-                href="/servicios/remodelacion"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Remodelación
-              </Link>
-              <Link
-                href="/servicios/viviendas-prefabricadas"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Viviendas Prefabricadas
-              </Link>
-              <Link
-                href="/servicios/obras-industriales"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Obras Industriales
-              </Link>
-              <Link
-                href="/servicios/gas"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Instalaciones de Gas
-              </Link>
-              <Link
-                href="/servicios/albanileria"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Albañilería
-              </Link>
-              <Link
-                href="/servicios/electricidad"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Electricidad
-              </Link>
-              <Link
-                href="/servicios/plomeria"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Plomería
-              </Link>
-              <Link
-                href="/servicios/pintura"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Pintura
+                Brochure
               </Link>
             </div>
 

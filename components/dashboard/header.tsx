@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import type { SerializableUser } from "@/lib/auth/session"
+import { getUserDisplayName } from "@/lib/auth/display-name"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -120,7 +121,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
   // Safe user display
   const userInitials = `${user?.name?.charAt(0) || "U"}${user?.lastName?.charAt(0) || ""}`
-  const userName = user?.name || "Usuario"
+  const userName = getUserDisplayName(user)
   const userLastName = user?.lastName || ""
   const userRole: UserRole = user?.role || "cliente"
   const roleLabel = ROLE_LABELS[userRole] || "Usuario"

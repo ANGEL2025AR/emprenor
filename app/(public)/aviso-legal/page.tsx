@@ -84,8 +84,8 @@ export default function AvisoLegalPage() {
             <ul className="list-none space-y-1">
               <li>
                 <strong>Teléfono:</strong>{" "}
-                <a href={`tel:${EMPRENOR_TITULAR.telHref}`} className="text-emerald-700 underline">
-                  {EMPRENOR_TITULAR.telefono}
+                <a href={`tel:${EMPRENOR_LEGAL.telefonoPrincipalHref}`} className="text-emerald-700 underline">
+                  {EMPRENOR_LEGAL.telefonoPrincipal}
                 </a>
               </li>
               <li>

@@ -130,9 +130,9 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
         <div className="container px-4 md:px-6">
           <Card className="mx-auto max-w-2xl border-accent bg-accent/5">
             <CardContent className="p-8 text-center space-y-4">
-              <h2 className="text-xl font-bold sm:text-2xl text-balance">¿Quiere un proyecto como este?</h2>
+              <h2 className="text-xl font-bold sm:text-2xl text-balance">¿Querés un proyecto como este?</h2>
               <p className="text-muted-foreground text-pretty">
-                Contáctenos para cotizar su obra con el mismo nivel de calidad y profesionalismo.
+                Contactanos para cotizar tu obra con el mismo nivel de calidad y profesionalismo.
               </p>
               <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
                 <Link href="/contacto">

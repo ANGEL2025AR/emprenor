@@ -1,0 +1,319 @@
+﻿"use client"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogDescription } from "@/components/ui/dialog"
+import {
+  Images,
+  ArrowRight,
+  Building2,
+  Home,
+  Store,
+  Factory,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Clock,
+} from "lucide-react"
+import Link from "next/link"
+import { ProjectsMapPanel } from "@/components/projects/projects-map-panel"
+
+const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental"]
+
+interface Project {
+  _id: string
+  title: string
+  category: string
+  description: string
+  duration: string
+  location: string
+  image: string
+  gallery?: string[]
+}
+
+export default function ProyectosPage() {
+  const [selectedCategory, setSelectedCategory] = useState("Todos")
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedGalleryIndex, setSelectedGalleryIndex] = useState(0)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [detailsOpen, setDetailsOpen] = useState(false)
+
+  useEffect(() => {
+    loadProjects()
+  }, [])
+
+  const loadProjects = async () => {
+    try {
+      const res = await fetch("/api/public-projects?published=true")
+      const data = await res.json()
+      setProjects(data.projects || [])
+    } catch (error) {
+      console.error("Error al cargar proyectos:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredProjects =
+    selectedCategory === "Todos" ? projects : projects.filter((project) => project.category === selectedCategory)
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "Residencial":
+        return <Home className="h-4 w-4" />
+      case "Comercial":
+        return <Store className="h-4 w-4" />
+      case "Industrial":
+        return <Factory className="h-4 w-4" />
+      case "Remodelación":
+        return <Building2 className="h-4 w-4" />
+      default:
+        return <Images className="h-4 w-4" />
+    }
+  }
+
+  const openDetails = (project: Project) => {
+    setSelectedProject(project)
+    setSelectedGalleryIndex(0)
+    setDetailsOpen(true)
+  }
+
+  return (
+    <main className="flex flex-col">
+      {/* Hero Section */}
+      <section className="bg-primary text-primary-foreground py-16 md:py-24">
+        <div className="container px-4 md:px-6">
+          <div className="mx-auto max-w-3xl text-center space-y-6">
+            <div className="flex items-center justify-center gap-3">
+              <Images className="h-10 w-10" />
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-balance">Nuestros Proyectos</h1>
+            <p className="text-lg text-primary-foreground/90 leading-relaxed text-pretty">
+              Descubra la calidad y el profesionalismo de nuestro trabajo a través de proyectos completados con éxito
+              para clientes satisfechos.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="mapa" className="py-16 md:py-20 bg-muted/30 scroll-mt-24">
+        <div className="container px-4 md:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Mapa de obras en el NOA</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              Proyectos publicados con geolocalización. Estado operativo y avance sincronizados desde nuestro sistema de gestión.
+            </p>
+          </div>
+          <ProjectsMapPanel />
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section className="py-16 md:py-24">
+        <div className="container px-4 md:px-6">
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-3 justify-center mb-12">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category)}
+                className={selectedCategory === category ? "bg-accent text-accent-foreground hover:bg-accent/90" : ""}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Cargando proyectos...</p>
+            </div>
+          ) : filteredProjects.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No hay proyectos disponibles en esta categoría</p>
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {filteredProjects.map((project) => (
+                <Card
+                  key={project._id}
+                  className="border-border overflow-hidden group hover:border-accent transition-colors"
+                >
+                  <div
+                    className="relative aspect-[3/2] overflow-hidden bg-muted cursor-pointer"
+                    onClick={() => openDetails(project)}
+                  >
+                    <img
+                      src={project.image || "/placeholder.svg"}
+                      alt={project.title}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-3 right-3">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
+                        {getCategoryIcon(project.category)}
+                        {project.category}
+                      </span>
+                    </div>
+                    {project.gallery && project.gallery.length > 0 && (
+                      <div className="absolute bottom-3 right-3">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
+                          <Images className="h-3 w-3" />
+                          {project.gallery.length + 1}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <CardContent className="p-6 space-y-3">
+                    <h3 className="text-xl font-semibold text-foreground line-clamp-1">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{project.description}</p>
+
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {project.duration}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {project.location}
+                      </span>
+                    </div>
+
+                    <Button variant="outline" size="sm" className="w-full mt-3 bg-transparent" asChild>
+                      <Link href={`/proyectos/${project._id}`}>Ver Detalles Completos</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              {selectedProject && (
+                <>
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl">{selectedProject.title}</DialogTitle>
+                    <DialogDescription className="sr-only">
+                      Detalles completos del proyecto {selectedProject.title}
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-6">
+                    {/* Galería de imágenes */}
+                    <div className="relative">
+                      <img
+                        src={
+                          selectedGalleryIndex === 0
+                            ? selectedProject.image
+                            : selectedProject.gallery?.[selectedGalleryIndex - 1] || "/placeholder.svg"
+                        }
+                        alt={`${selectedProject.title} - Imagen ${selectedGalleryIndex + 1}`}
+                        className="w-full h-auto max-h-[400px] object-cover rounded-lg"
+                      />
+                      {selectedProject.gallery && selectedProject.gallery.length > 0 && (
+                        <>
+                          <div className="absolute inset-y-0 left-0 flex items-center">
+                            <Button
+                              variant="secondary"
+                              size="icon"
+                              className="ml-2"
+                              onClick={() =>
+                                setSelectedGalleryIndex((prev) =>
+                                  prev === 0 ? selectedProject.gallery!.length : prev - 1,
+                                )
+                              }
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="absolute inset-y-0 right-0 flex items-center">
+                            <Button
+                              variant="secondary"
+                              size="icon"
+                              className="mr-2"
+                              onClick={() =>
+                                setSelectedGalleryIndex((prev) =>
+                                  prev === selectedProject.gallery!.length ? 0 : prev + 1,
+                                )
+                              }
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm">
+                            {selectedGalleryIndex + 1} / {selectedProject.gallery.length + 1}
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Información del proyecto */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent-foreground">
+                          {getCategoryIcon(selectedProject.category)}
+                          {selectedProject.category}
+                        </span>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-foreground">Descripción del proyecto</h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                          {selectedProject.description}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                        <div className="space-y-1">
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            Duración
+                          </p>
+                          <p className="text-sm font-medium">{selectedProject.duration}</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            Ubicación
+                          </p>
+                          <p className="text-sm font-medium">{selectedProject.location}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
+
+          {/* CTA Section */}
+          <div className="mt-16">
+            <Card className="border-accent bg-accent/5">
+              <CardContent className="p-8 md:p-12">
+                <div className="mx-auto max-w-2xl text-center space-y-6">
+                  <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-balance">
+                    ¿Te gustaría que tu proyecto sea el siguiente?
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed text-pretty">
+                    Transformamos ideas en realidad. Contactanos hoy para conversar sobre tu proyecto y recibir una cotización
+                    personalizada.
+                  </p>
+                  <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Link href="/contacto">
+                      Iniciar Mi Proyecto
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}

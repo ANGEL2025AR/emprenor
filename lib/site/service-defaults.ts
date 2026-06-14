@@ -88,8 +88,8 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
     ],
     [
       { title: "Viviendas", items: ["Cocinas y baños", "Ampliaciones", "Refuncionalización de ambientes"] },
-      { title: "Comercios", items: ["Locales comerciales", "Restaurantes", "Showrooms"] },
-      { title: "Oficinas", items: ["Open space", "Salas de reunión", "Accesibilidad"] },
+      { title: "Comercios", items: ["Locales comerciales", "Restaurantes", "Salas de exposición"] },
+      { title: "Oficinas", items: ["Espacio abierto", "Salas de reunión", "Accesibilidad"] },
       { title: "Fachadas", items: ["Revitalización exterior", "Aislación térmica", "Señalética"] },
     ],
     ["Obra limpia y ordenada", "Mínima interrupción de actividades", "Materiales de primera línea", "Coordinación integral de gremios"],
@@ -142,7 +142,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Tableros y Protecciones", description: "Montaje de tableros, disyuntores, térmicas y diferenciales." },
       { title: "Iluminación", description: "Instalación de luminarias, sensores, automatismos y eficiencia energética." },
       { title: "Pruebas y Mediciones", description: "Continuidad, aislamiento, puesta a tierra y protocolo de ensayos." },
-      { title: "Certificación", description: "Entrega de plano as-built, certificado de instalación y habilitación." },
+      { title: "Certificación", description: "Entrega de plano conforme a obra, certificado de instalación y habilitación." },
     ],
     [
       { title: "Residencial", items: ["Instalación completa", "Ampliaciones", "Reparaciones"] },
@@ -258,7 +258,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Obra Civil", description: "Fundaciones, pisos industriales, muros y vías internas." },
       { title: "Montaje Estructural", description: "Armado de nave, grúas, anclajes y soldaduras certificadas." },
       { title: "Instalaciones", description: "Eléctrica, incendio, aire comprimido, agua y desagües industriales." },
-      { title: "Commissioning", description: "Pruebas, protocolos de entrega y capacitación operativa." },
+      { title: "Puesta en servicio", description: "Pruebas, protocolos de entrega y capacitación operativa." },
     ],
     [
       { title: "Naves y galpones", items: ["Logística", "Depósitos", "Talleres"] },

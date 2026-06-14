@@ -1,0 +1,171 @@
+{
+  "pageKey": "ServicioMantenimiento",
+  "hero": {
+    "type": "page-header",
+    "title": "Mantenimiento",
+    "highlight": "Integral 24/7",
+    "subtitle": "Servicios preventivos y correctivos para mantener tus instalaciones en perfecto estado"
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Mantenimiento Integral",
+          "title": "Cuidamos tus instalaciones mientras vos te enfocás en tu negocio",
+          "paragraphs": [
+            "Ofrecemos planes de mantenimiento preventivo y correctivo integrales para instalaciones eléctricas, sanitarias, de gas, climatización y obra civil. Un único proveedor para todas tus necesidades de mantenimiento."
+          ],
+          "image": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=85",
+          "imageAlt": "Mantenimiento",
+          "stats": [
+            {
+              "v": "2 hs",
+              "l": "Tiempo de respuesta"
+            },
+            {
+              "v": "100%",
+              "l": "Personal propio"
+            },
+            {
+              "v": "24/7",
+              "l": "Disponibilidad"
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "icon": "Wrench",
+          "iconColor": "from-amber-500 to-amber-600",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-20",
+          "items": [
+            {
+              "title": "Mantenimiento Eléctrico",
+              "color": "from-amber-500 to-amber-600",
+              "items": [
+                "Inspección periódica de tableros eléctricos",
+                "Termografía infrarroja para detección de puntos calientes",
+                "Revisión y ajuste de conexiones eléctricas",
+                "Reemplazo de protecciones deterioradas (disyuntores, fusibles)",
+                "Mantenimiento de subestaciones (aceite, contactos, relés)",
+                "Medición de puesta a tierra y corrección",
+                "Limpieza de aisladores y bancos de capacitores",
+                "Mantenimiento de UPS y baterías",
+                "Revisión de iluminación de emergencia",
+                "Prueba de sistemas de detección y alarma contra incendio"
+              ]
+            },
+            {
+              "title": "Mantenimiento Sanitario",
+              "color": "from-cyan-500 to-cyan-600",
+              "items": [
+                "Revisión de cañerías de agua y gas",
+                "Desobstrucción y limpieza de redes cloacales",
+                "Mantenimiento de bombas y sistemas de presurización",
+                "Revisión de termotanques, calefones y calderas",
+                "Cambio de válvulas, grifería y sanitarios",
+                "Impermeabilización de azoteas y terrazas",
+                "Limpieza de tanques de agua y cisternas",
+                "Mantenimiento de plantas de tratamiento de efluentes"
+              ]
+            },
+            {
+              "title": "Mantenimiento de Climatización",
+              "color": "from-sky-500 to-sky-600",
+              "items": [
+                "Limpieza y desinfección de filtros y evaporadores",
+                "Revisión y carga de gas refrigerante",
+                "Limpieza de condensadores y bandejas de condensado",
+                "Revisión de compresores y ventiladores",
+                "Verificación de temperaturas y presiones",
+                "Lubricación de partes móviles",
+                "Mantenimiento de sistemas VRF/VRV",
+                "Desinfección y certificación de sistemas de climatización (Legionella)"
+              ]
+            },
+            {
+              "title": "Mantenimiento Civil y Edilicio",
+              "color": "from-slate-600 to-slate-700",
+              "items": [
+                "Reparación de fisuras y grietas en mampostería",
+                "Mantenimiento de cubiertas y techos",
+                "Pintura y revestimientos interiores y exteriores",
+                "Reparación de pisos y revestimientos cerámicos",
+                "Mantenimiento de carpintería metálica y aluminio",
+                "Impermeabilización y zinguería",
+                "Limpieza e higienización de fachadas",
+                "Accesibilidad y barreras arquitectónicas"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "plans",
+          "eyebrow": "Planes de Mantenimiento",
+          "title": "Elegí el plan que mejor se adapta",
+          "plans": [
+            {
+              "name": "Plan Básico",
+              "price": "Consultar",
+              "period": "Contrato 12 meses",
+              "features": [
+                "1 visita preventiva mensual",
+                "Atención de emergencias (cobro adicional)",
+                "Informe de estado mensual",
+                "Prioridad en turnos"
+              ],
+              "color": "border-slate-200",
+              "badge": ""
+            },
+            {
+              "name": "Plan Integral",
+              "price": "Consultar",
+              "period": "Contrato 12 meses",
+              "features": [
+                "2 visitas preventivas mensuales",
+                "Emergencias sin cargo (2 al mes)",
+                "Informe técnico mensual",
+                "Reemplazos de insumos menores incluidos",
+                "Panel digital de estado",
+                "Prioridad máxima"
+              ],
+              "color": "border-amber-400",
+              "badge": "Más elegido"
+            },
+            {
+              "name": "Plan Premium 24/7",
+              "price": "Consultar",
+              "period": "Contrato anual",
+              "features": [
+                "Visitas ilimitadas",
+                "Emergencias sin cargo 24/7",
+                "Reemplazos incluidos",
+                "Técnico dedicado al cliente",
+                "Monitoreo remoto continuo",
+                "Informe de gestión ejecutivo"
+              ],
+              "color": "border-slate-700",
+              "badge": "Para industrias"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "emergency-bar",
+      "title": "Emergencias 24/7 — Respuesta en 2 horas",
+      "subtitle": "Somos el primer número que tenés que llamar ante una emergencia en instalaciones"
+    },
+    {
+      "type": "cta",
+      "title": "¿Querés contratar mantenimiento?",
+      "subtitle": "Te armamos un plan a medida para tu empresa.",
+      "buttonText": "Consultar Plan a Medida",
+      "showPhone": false
+    }
+  ]
+}

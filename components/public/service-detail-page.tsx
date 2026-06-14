@@ -143,7 +143,7 @@ export function ServiceDetailPage({
                   <CardContent className="p-6 space-y-4">
                     <h3 className="text-lg font-semibold text-foreground">¿Interesado en este servicio?</h3>
                     <p className="text-sm text-muted-foreground">
-                      Contáctenos para una consulta gratuita y cotización personalizada.
+                      Contactanos para una consulta gratuita y cotización personalizada.
                     </p>
                     <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                       <Link href="/contacto">

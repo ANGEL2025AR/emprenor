@@ -1,0 +1,138 @@
+{
+  "pageKey": "ServicioPintura",
+  "hero": {
+    "type": "page-header",
+    "title": "Pintura",
+    "highlight": "y Revestimientos",
+    "subtitle": "Acabados premium interior y exterior con preparación profesional de superficies"
+  },
+  "sections": [
+    {
+      "type": "intro",
+      "eyebrow": "Pintura profesional",
+      "title": "El acabado que define la obra",
+      "paragraphs": [
+        "Preparamos superficies y aplicamos sistemas de pintura látex, esmaltes, revestimientos plásticos, impermeabilizantes y texturas decorativas para interiores y exteriores en el NOA.",
+        "Utilizamos productos de marcas reconocidas con fichas técnicas, colores según carta NCS o RAL, y técnicas airless, rodillo o soplete según especificación del proyecto."
+      ],
+      "image": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1200&q=85",
+      "imageAlt": "Pintura profesional en obra — EMPRENOR C&S",
+      "imageHeight": "h-[480px]",
+      "stats": [
+        { "v": "NCS/RAL", "l": "Carta de colores" },
+        { "v": "Airless", "l": "Aplicación industrial" },
+        { "v": "6–24 m", "l": "Garantía según sistema" }
+      ]
+    },
+    {
+      "type": "subtypes",
+      "eyebrow": "Sistemas de aplicación",
+      "title": "Soluciones para cada superficie",
+      "subtypes": [
+        {
+          "icon": "Home",
+          "title": "Interiores",
+          "color": "from-pink-500 to-rose-600",
+          "items": [
+            "Látex acrílico mate, satinado y semibrillo",
+            "Esmaltes sintéticos y al agua para carpintería",
+            "Pintura antihumedad para baños y cocinas",
+            "Franjas decorativas y paneles de color",
+            "Pintura lavable para alto tránsito",
+            "Tratamiento de moho y salitre previo"
+          ]
+        },
+        {
+          "icon": "Building2",
+          "title": "Exteriores",
+          "color": "from-sky-500 to-blue-600",
+          "items": [
+            "Revestimiento plástico SIR de alta duración",
+            "Siloxano transpirable para mampostería",
+            "Impermeabilizantes elásticos para terrazas",
+            "Pintura para frentes y medianeras",
+            "Protección UV y resistencia a salitre NOA",
+            "Limpieza e higienización previa de fachadas"
+          ]
+        },
+        {
+          "icon": "Factory",
+          "title": "Industrial y señalización",
+          "color": "from-slate-600 to-slate-700",
+          "items": [
+            "Epoxi para pisos de alto tránsito",
+            "Anticorrosiva para estructuras metálicas",
+            "Demarcación vial y señalización en planta",
+            "Pintura intumescente contra incendio",
+            "Recubrimientos para tanques y depósitos",
+            "Mantenimiento programado de naves"
+          ]
+        },
+        {
+          "icon": "Paintbrush",
+          "title": "Decorativo y texturas",
+          "color": "from-violet-500 to-purple-600",
+          "items": [
+            "Estuco veneciano y travertino",
+            "Texturas rústicas y lisa proyectada",
+            "Paneles decorativos y muros de acento",
+            "Microcemento y cemento alisado",
+            "Efectos metálicos y perlas",
+            "Asesoramiento cromático para proyectos"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "process",
+      "eyebrow": "Metodología",
+      "title": "Preparación antes de pintar",
+      "steps": [
+        {
+          "step": "01",
+          "title": "Diagnóstico de superficie",
+          "desc": "Identificación de humedad, salitre, fisuras y estado del soporte."
+        },
+        {
+          "step": "02",
+          "title": "Preparación",
+          "desc": "Lijado, empastado, imprimación y tratamiento de patologías."
+        },
+        {
+          "step": "03",
+          "title": "Protección de obra",
+          "desc": "Enmascarado, film y protección de pisos, aberturas y mobiliario."
+        },
+        {
+          "step": "04",
+          "title": "Aplicación",
+          "desc": "Rodillo, soplete o airless según sistema y número de manos."
+        },
+        {
+          "step": "05",
+          "title": "Control de calidad",
+          "desc": "Uniformidad, espesor y terminación según ficha técnica."
+        },
+        {
+          "step": "06",
+          "title": "Entrega",
+          "desc": "Limpieza, retiro de protecciones y acta de conformidad."
+        }
+      ]
+    },
+    {
+      "type": "banner",
+      "title": "Garantía según sistema aplicado",
+      "subtitle": "Desde 6 meses en interiores hasta 24 meses en revestimientos exteriores SIR, con mantenimiento recomendado.",
+      "buttonText": "Consultar garantías",
+      "buttonHref": "/contacto"
+    },
+    {
+      "type": "cta",
+      "title": "¿Querés renovar colores y terminaciones?",
+      "subtitle": "Presupuesto por m² o por ambiente. Muestras de color en sitio.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

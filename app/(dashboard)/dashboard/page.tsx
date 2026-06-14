@@ -2,7 +2,6 @@ import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth/session"
 import { getDb } from "@/lib/db/connection"
 import { CardContent, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import {
   DashboardPageHeader,
   DashboardStatCard,
@@ -33,6 +32,7 @@ import { ProjectStatusOverview } from "@/components/dashboard/project-status-ove
 import { RevenueChart } from "@/components/dashboard/revenue-chart"
 import { ClientDashboard } from "@/components/dashboard/client-dashboard"
 import { isClientRole, isEmployeePortalRole } from "@/lib/auth/project-access"
+import { getUserDisplayName } from "@/lib/auth/display-name"
 
 async function getDashboardStats() {
   try {
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
 
   const stats = await getDashboardStats()
 
-  const userName = user?.name || "Usuario"
+  const userName = getUserDisplayName(user)
 
   const executiveKPIs = [
     {
@@ -195,7 +195,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       <DashboardPageHeader
-        badge="Command Center"
+        badge="Centro de Operaciones"
         title="Panel de Control Ejecutivo"
         description={`Bienvenido, ${userName}. Vista consolidada en tiempo real de operaciones, finanzas y cumplimiento.`}
         actions={
@@ -312,7 +312,7 @@ export default async function DashboardPage() {
             <DashboardSectionTitle title="Acciones Ejecutivas" icon={TrendingUp} />
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button variant="outline" className="w-full justify-start h-auto py-4 bg-transparent" asChild>
+            <DashboardOutlineButton className="w-full justify-start h-auto py-4" asChild>
               <Link href="/dashboard/reportes/financiero">
                 <div className="flex items-center gap-3 w-full">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
@@ -324,9 +324,9 @@ export default async function DashboardPage() {
                   </div>
                 </div>
               </Link>
-            </Button>
+            </DashboardOutlineButton>
 
-            <Button variant="outline" className="w-full justify-start h-auto py-4 bg-transparent" asChild>
+            <DashboardOutlineButton className="w-full justify-start h-auto py-4" asChild>
               <Link href="/dashboard/proyectos">
                 <div className="flex items-center gap-3 w-full">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
@@ -338,35 +338,35 @@ export default async function DashboardPage() {
                   </div>
                 </div>
               </Link>
-            </Button>
+            </DashboardOutlineButton>
 
-            <Button variant="outline" className="w-full justify-start h-auto py-4 bg-transparent" asChild>
+            <DashboardOutlineButton className="w-full justify-start h-auto py-4" asChild>
               <Link href="/dashboard/reportes/performance">
                 <div className="flex items-center gap-3 w-full">
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
                     <Activity className="w-5 h-5 text-purple-600" />
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold">Análisis de Performance</p>
+                    <p className="font-semibold">Análisis de Rendimiento</p>
                     <p className="text-xs text-slate-500">Eficiencia operativa y cumplimiento</p>
                   </div>
                 </div>
               </Link>
-            </Button>
+            </DashboardOutlineButton>
 
-            <Button variant="outline" className="w-full justify-start h-auto py-4 bg-transparent" asChild>
+            <DashboardOutlineButton className="w-full justify-start h-auto py-4" asChild>
               <Link href="/dashboard/usuarios">
                 <div className="flex items-center gap-3 w-full">
                   <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
                     <Users className="w-5 h-5 text-amber-600" />
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold">Gestión de Equipos</p>
+                    <p className="font-semibold">Gestión de Equipo</p>
                     <p className="text-xs text-slate-500">Personal y asignaciones</p>
                   </div>
                 </div>
               </Link>
-            </Button>
+            </DashboardOutlineButton>
           </CardContent>
         </DashboardPanel>
       </div>

@@ -15,6 +15,7 @@ import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { ImageUploadField } from "@/components/site/image-upload-field"
 import { GalleryUploadField } from "@/components/site/gallery-upload-field"
+import { PublicProjectMapFields } from "@/components/site/public-project-map-fields"
 
 const categorias = [
   "Edificio Municipal",
@@ -74,6 +75,10 @@ export default function EditarProyectoPage() {
     published: false,
     featured: false,
     order: 0,
+    status: "Finalizado",
+    progress: 100,
+    coordinates: null as { lat: number; lng: number } | null,
+    showOnMap: true,
   })
 
   useEffect(() => {
@@ -250,6 +255,16 @@ export default function EditarProyectoPage() {
               onChange={(gallery) => setFormData((prev) => ({ ...prev, gallery }))}
               folder="public-projects"
               onUploadingChange={setUploading}
+            />
+
+            <PublicProjectMapFields
+              value={{
+                status: formData.status,
+                progress: formData.progress,
+                coordinates: formData.coordinates,
+                showOnMap: formData.showOnMap,
+              }}
+              onChange={(patch) => setFormData((prev) => ({ ...prev, ...patch }))}
             />
 
             <div className="space-y-4">

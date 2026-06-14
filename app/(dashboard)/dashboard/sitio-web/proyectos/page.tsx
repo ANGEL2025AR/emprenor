@@ -45,7 +45,7 @@ export default function SitioWebProyectosPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Está seguro de eliminar este proyecto?")) return
+    if (!confirm("¿Estás seguro de eliminar este proyecto?")) return
 
     try {
       const res = await fetch(`/api/public-projects/${id}`, {
@@ -87,7 +87,7 @@ export default function SitioWebProyectosPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Proyectos del Sitio Web</h1>
-          <p className="text-muted-foreground mt-2">Gestiona los proyectos que se muestran en la página pública</p>
+          <p className="text-muted-foreground mt-2">Gestioná los proyectos que se muestran en la página pública</p>
         </div>
         <Button asChild>
           <Link href="/dashboard/sitio-web/proyectos/nuevo">
@@ -116,7 +116,7 @@ export default function SitioWebProyectosPage() {
           <CardContent className="py-12 text-center">
             <Globe className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No hay proyectos</h3>
-            <p className="text-muted-foreground mb-4">Comienza agregando tu primer proyecto público</p>
+            <p className="text-muted-foreground mb-4">Comenzá agregando tu primer proyecto público</p>
             <Button asChild>
               <Link href="/dashboard/sitio-web/proyectos/nuevo">
                 <Plus className="mr-2 h-4 w-4" />

@@ -1,0 +1,108 @@
+{
+  "pageKey": "ServicioSanitario",
+  "hero": {
+    "type": "page-header",
+    "title": "Instalaciones",
+    "highlight": "Sanitarias",
+    "subtitle": "Agua potable, cloacas, pluviales y tratamiento de efluentes — diseño y ejecución integral"
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Instalaciones Sanitarias",
+          "title": "Todo lo relacionado con el agua en tu obra",
+          "paragraphs": [
+            "Diseñamos y ejecutamos instalaciones sanitarias completas para obras residenciales, comerciales e industriales. Todos los trabajos son realizados por plomeros matriculados y aprobados por los entes reguladores locales."
+          ],
+          "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=85",
+          "imageAlt": "Instalaciones Sanitarias",
+          "badges": [
+            "Normas APA",
+            "Código de Edificación",
+            "IRAM",
+            "Obras Sanitarias"
+          ]
+        },
+        {
+          "type": "cards",
+          "icon": "Droplets",
+          "iconColor": "from-cyan-500 to-cyan-600",
+          "columns": 2,
+          "showDesc": true,
+          "className": "",
+          "items": [
+            {
+              "title": "Agua Potable",
+              "color": "from-cyan-500 to-cyan-600",
+              "desc": "Diseño e instalación de redes de agua fría y caliente para todo tipo de edificaciones.",
+              "items": [
+                "Redes de agua fría y caliente (cañerías de PPR, PVC, cobre y acero inoxidable)",
+                "Tanques de reserva elevados y subterráneos",
+                "Sistemas de bombeo y presurización",
+                "Válvulas de corte, reguladores de presión y filtros",
+                "Calefones, termotanques y calderas domiciliarias",
+                "Sistemas de ahorro de agua y reciclado de grises",
+                "Conexiones a red pública y medidores",
+                "Instalación de redes contra incendio (hidrantes, rociadores automáticos y BIE)"
+              ]
+            },
+            {
+              "title": "Instalaciones Cloacales",
+              "color": "from-teal-500 to-teal-600",
+              "desc": "Sistemas de desagüe sanitario conformes a reglamentos municipales y nacionales.",
+              "items": [
+                "Colectores internos y externos",
+                "Cámaras sépticas y pozos absorbentes",
+                "Plantas de tratamiento de efluentes domiciliarias",
+                "Conexiones a red cloacal municipal",
+                "Sistemas de bombeo de líquidos cloacales",
+                "Desobstrucción y limpieza de redes cloacales",
+                "Cámaras de inspección y rejillas de desagüe",
+                "Trampas de grasa para gastronomía e industria"
+              ]
+            },
+            {
+              "title": "Instalaciones Pluviales",
+              "color": "from-sky-500 to-sky-600",
+              "desc": "Captación y evacuación de aguas de lluvia para techos, patios y superficies exteriores.",
+              "items": [
+                "Canaletas y bajadas pluviales en PVC, zinc y aluminio",
+                "Sumideros y cámaras de retención",
+                "Sistemas de drenaje superficial y subterráneo",
+                "Zanjas de infiltración",
+                "Depósitos de recolección de agua de lluvia",
+                "Impermeabilización de azoteas y losas",
+                "Conexiones a red pluvial municipal"
+              ]
+            },
+            {
+              "title": "Tratamiento de Efluentes",
+              "color": "from-emerald-500 to-emerald-600",
+              "desc": "Soluciones para el tratamiento y disposición de aguas residuales industriales y domésticas.",
+              "items": [
+                "Plantas de tratamiento biológico aeróbico y anaeróbico",
+                "Filtros biológicos y lechos de infiltración",
+                "Cámaras de sedimentación y decantación",
+                "Sistemas de cloración y desinfección UV",
+                "Tratamiento de efluentes industriales (neutralización, filtración)",
+                "Biodigestores",
+                "Gestión y disposición final de barros"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás instalaciones sanitarias?",
+      "subtitle": "Contáctanos para una cotización sin cargo.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

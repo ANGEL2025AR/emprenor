@@ -29,7 +29,7 @@ export function generateOrganizationSchema() {
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: EMPRENOR_TITULAR.telHref.replace("+", "+"),
+      telephone: EMPRENOR_LEGAL.telefonoPrincipalHref,
       contactType: "customer service",
       availableLanguage: "Spanish",
       email: EMPRENOR_LEGAL.emailGeneral,
@@ -51,7 +51,7 @@ export function generateLocalBusinessSchema() {
     legalName: EMPRENOR_TITULAR.apellidoNombre,
     image: `${SITE_URL}${LOGO_PATH}`,
     url: SITE_URL,
-    telephone: EMPRENOR_TITULAR.telefono,
+    telephone: EMPRENOR_LEGAL.telefonoPrincipal,
     email: EMPRENOR_LEGAL.emailGeneral,
     taxID: EMPRENOR_LEGAL.cuit,
     address: {

@@ -15,6 +15,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ImageUploadField } from "@/components/site/image-upload-field"
 import { GalleryUploadField } from "@/components/site/gallery-upload-field"
+import { PublicProjectMapFields } from "@/components/site/public-project-map-fields"
 
 const categories = [
   "Institución Educativa",
@@ -69,6 +70,10 @@ export default function NuevoProyectoPage() {
     published: false,
     featured: false,
     order: 999,
+    status: "Finalizado",
+    progress: 100,
+    coordinates: null as { lat: number; lng: number } | null,
+    showOnMap: true,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -205,6 +210,16 @@ export default function NuevoProyectoPage() {
               onChange={(gallery) => setFormData((prev) => ({ ...prev, gallery }))}
               folder="public-projects"
               onUploadingChange={setUploading}
+            />
+
+            <PublicProjectMapFields
+              value={{
+                status: formData.status,
+                progress: formData.progress,
+                coordinates: formData.coordinates,
+                showOnMap: formData.showOnMap,
+              }}
+              onChange={(patch) => setFormData((prev) => ({ ...prev, ...patch }))}
             />
 
             <div className="space-y-4">

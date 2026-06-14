@@ -791,6 +791,11 @@ export interface PublicProject extends BaseDocument {
   featured: boolean // destacar en inicio
   order: number // orden de visualización
   published: boolean
+  /** Estado operativo para mapa y portafolio (compartido con emprenorsolutions). */
+  status?: string
+  progress?: number
+  coordinates?: { lat: number; lng: number } | null
+  showOnMap?: boolean
   publishDate?: Date
   metadata?: {
     client?: string
@@ -857,6 +862,10 @@ export type SiteServiceIconKey =
   | "Lightbulb"
   | "Droplets"
   | "Paintbrush"
+  | "Zap"
+  | "Wind"
+  | "Wrench"
+  | "Tractor"
 
 /** Servicio publicado en el sitio web (CMS). */
 export interface SiteService extends BaseDocument {

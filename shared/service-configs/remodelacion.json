@@ -1,0 +1,142 @@
+{
+  "pageKey": "ServicioRemodelacion",
+  "hero": {
+    "type": "page-header",
+    "title": "Remodelación",
+    "highlight": "y Refacciones",
+    "subtitle": "Transformamos espacios existentes con diseño, planificación y ejecución integral en el NOA"
+  },
+  "sections": [
+    {
+      "type": "intro",
+      "eyebrow": "Remodelación y Refacciones",
+      "title": "Renovamos sin perder lo construido",
+      "paragraphs": [
+        "En EMPRENOR C&S ejecutamos remodelaciones y refacciones integrales: cocinas, baños, ampliaciones, cambios de uso comercial y revitalización de fachadas con un solo interlocutor técnico.",
+        "Coordinamos albañilería, instalaciones eléctricas, sanitarias, gas y terminaciones bajo cronograma acordado, minimizando tiempos muertos y sorpresas en el presupuesto."
+      ],
+      "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
+      "imageAlt": "Remodelación de vivienda — EMPRENOR C&S",
+      "imageHeight": "h-[480px]",
+      "stats": [
+        { "v": "1", "l": "Interlocutor técnico" },
+        { "v": "24 h", "l": "Respuesta comercial" },
+        { "v": "NOA", "l": "Cobertura regional" }
+      ]
+    },
+    {
+      "type": "subtypes",
+      "eyebrow": "Tipos de intervención",
+      "title": "Refacciones puntuales o reforma integral",
+      "subtypes": [
+        {
+          "icon": "Home",
+          "title": "Viviendas",
+          "color": "from-violet-500 to-violet-600",
+          "items": [
+            "Refacción integral de cocinas y baños",
+            "Ampliaciones y unificación de ambientes",
+            "Cambio de distribución y funcionalidad",
+            "Actualización de instalaciones embebidas",
+            "Accesibilidad y eliminación de barreras",
+            "Terminaciones premium en toda la vivienda"
+          ]
+        },
+        {
+          "icon": "Building2",
+          "title": "Comercios y oficinas",
+          "color": "from-amber-500 to-amber-600",
+          "items": [
+            "Adecuación de local para nuevo rubro",
+            "Oficinas corporativas y espacios flexibles",
+            "Restaurantes, gastronomía y retail",
+            "Salas de atención y consultorios",
+            "Obra en horarios reducidos para no frenar operación",
+            "Señalética, iluminación y imagen de marca"
+          ]
+        },
+        {
+          "icon": "Hammer",
+          "title": "Obra gruesa en reforma",
+          "color": "from-orange-500 to-orange-600",
+          "items": [
+            "Demolición selectiva y protección de áreas",
+            "Apertura de vanos y refuerzos estructurales",
+            "Nuevos tabiques, losas y escaleras",
+            "Impermeabilización de cubiertas y terrazas",
+            "Regularización de muros y contrapisos",
+            "Integración con instalaciones existentes"
+          ]
+        },
+        {
+          "icon": "Paintbrush",
+          "title": "Terminaciones y estética",
+          "color": "from-pink-500 to-pink-600",
+          "items": [
+            "Revoques finos listos para pintura",
+            "Pisos cerámicos, porcelanatos y vinílicos",
+            "Carpintería de obra y revestimientos",
+            "Pintura interior y exterior coordinada",
+            "Detalles decorativos y paneles",
+            "Entrega con checklist de conformidad"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "process",
+      "eyebrow": "Metodología",
+      "title": "Proceso de remodelación",
+      "steps": [
+        {
+          "step": "01",
+          "title": "Relevamiento y diagnóstico",
+          "desc": "Visita técnica, mediciones, estado estructural y definición de alcance con el cliente."
+        },
+        {
+          "step": "02",
+          "title": "Anteproyecto y presupuesto",
+          "desc": "Propuesta de diseño, materiales, plazos y presupuesto detallado por partidas."
+        },
+        {
+          "step": "03",
+          "title": "Demolición selectiva",
+          "desc": "Retiro de terminaciones, protección de áreas no intervenidas y gestión de residuos."
+        },
+        {
+          "step": "04",
+          "title": "Obra gruesa e instalaciones",
+          "desc": "Mampostería, ampliaciones y redes eléctricas, sanitarias y de gas según proyecto."
+        },
+        {
+          "step": "05",
+          "title": "Terminaciones",
+          "desc": "Revoques, pisos, carpintería, pintura y detalles de acabado."
+        },
+        {
+          "step": "06",
+          "title": "Entrega y postventa",
+          "desc": "Limpieza final, acta de conformidad y soporte de garantía."
+        }
+      ]
+    },
+    {
+      "type": "feature-icons",
+      "eyebrow": "Ventajas",
+      "title": "Por qué remodelar con EMPRENOR",
+      "items": [
+        { "icon": "ShieldCheck", "title": "Obra ordenada", "desc": "Protección de mobiliario y áreas en uso durante la intervención." },
+        { "icon": "Clock", "title": "Plazos acordados", "desc": "Cronograma por etapas con hitos verificables." },
+        { "icon": "Users", "title": "Gremios coordinados", "desc": "Un solo responsable técnico para todas las especialidades." },
+        { "icon": "FileCheck", "title": "Presupuesto claro", "desc": "Partidas detalladas sin costos ocultos." }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Querés refaccionar o remodelar?",
+      "subtitle": "Solicitá una visita técnica sin cargo. Cotización en 24–48 horas.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

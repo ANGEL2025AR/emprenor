@@ -1,0 +1,88 @@
+{
+  "$comment": "Fuente única de datos corporativos EMPRENOR C&S. Consumida por lib/company/constants.ts (Next.js) y emprenorsolutions (Vite).",
+  "brand": {
+    "siglas": "EMPRENOR C&S",
+    "nombreExtendido": "EMPRENOR Construcciones y Servicios",
+    "significadoSiglas": "Construcciones y Servicios",
+    "nombre": "EMPRENOR C&S",
+    "nombreCompleto": "EMPRENOR Construcciones y Servicios",
+    "descripcion": "Construcción y servicios integrados en el NOA"
+  },
+  "titular": {
+    "apellidoNombre": "Guerrero, Silvio Carlos Fabian",
+    "nombreCompleto": "Silvio Carlos Fabian Guerrero",
+    "cuit": "20-40154622-8",
+    "formaJuridica": "Persona humana",
+    "condicionIva": "IVA Responsable Inscripto",
+    "domicilioFiscal": "Av. Casiano Casas 3080, Barrio Policial, Campamento Vespucio, Dpto. Gral. San Martín, CP 4563, Provincia de Salta, Argentina",
+    "domicilioComercial": "Av. Casiano Casas 3080, Barrio Policial, Campamento Vespucio, Dpto. Gral. San Martín, CP 4563, Provincia de Salta, Argentina",
+    "domicilioCalle": "Av. Casiano Casas 3080",
+    "domicilioCiudad": "Campamento Vespucio, Dpto. Gral. San Martín, Salta",
+    "domicilioMapsQuery": "Av. Casiano Casas 3080, Barrio Policial, Campamento Vespucio, Salta, Argentina",
+    "operacionDesde": 2018,
+    "operacionDesdeLabel": "Desde 2018",
+    "foundedLabel": "2018"
+  },
+  "telefonoPrincipal": {
+    "nombre": "Sebastián Romero",
+    "rol": "Atención comercial",
+    "telefono": "+54 9 11 2758-6521",
+    "telHref": "+5491127586521",
+    "whatsapp": "5491127586521",
+    "label": "Atención comercial"
+  },
+  "telefonoSecundario": {
+    "nombre": "Silvio Carlos Fabian Guerrero",
+    "rol": "Titular · EMPRENOR C&S",
+    "telefono": "+54 9 387 352-2920",
+    "telHref": "+543873522920",
+    "whatsapp": "543873522920",
+    "label": "Salta · NOA"
+  },
+  "slogan": "Construcción y servicios en el NOA",
+  "provincias": ["Salta", "Jujuy", "Tucumán", "Formosa"],
+  "tiposObra": [
+    "Obras privadas",
+    "Obras comerciales",
+    "Obras industriales",
+    "Obras corporativas",
+    "Obras públicas"
+  ],
+  "homeStats": [
+    { "number": "12", "label": "Especialidades integradas", "icon": "CheckCircle" },
+    { "number": "4", "label": "Provincias del NOA", "icon": "Users" },
+    { "number": "2018", "label": "Operación documentada", "icon": "Clock" },
+    { "number": "5", "label": "Tipos de obra", "icon": "Award" }
+  ],
+  "legal": {
+    "emailGeneral": "info@emprenor.com.ar",
+    "emailEtica": "etica@emprenor.com.ar",
+    "emailLicitaciones": "licitaciones@emprenor.com.ar",
+    "emailRrhh": "rrhh@emprenor.com.ar",
+    "emailProyectos": "proyectos@emprenor.com.ar",
+    "notaImpositiva": "Los datos fiscales publicados corresponden a la constancia vigente del titular ante ARCA (ex AFIP). Para contrataciones se entrega constancia de inscripción actualizada.",
+    "hoursWeekday": "8:00 - 18:00",
+    "hoursSaturday": "9:00 - 13:00"
+  },
+  "social": {
+    "facebook": "https://www.facebook.com/emprenor",
+    "instagram": "https://www.instagram.com/emprenor",
+    "linkedin": "https://www.linkedin.com/company/emprenor"
+  },
+  "site": {
+    "canonicalUrl": "https://www.emprenor.com",
+    "descriptionShort": "EMPRENOR C&S, marca comercial de Silvio Carlos Fabian Guerrero. Construcción, remodelación e instalaciones en Salta, Jujuy, Tucumán y Formosa.",
+    "tagline": "Construcción y servicios en el NOA"
+  },
+  "footerLegalLinks": [
+    { "href": "/aviso-legal", "label": "Aviso legal" },
+    { "href": "/politica-calidad", "label": "Política de calidad" },
+    { "href": "/gestion-documental", "label": "Gestión documental" },
+    { "href": "/privacidad", "label": "Política de privacidad" },
+    { "href": "/cookies", "label": "Política de cookies" },
+    { "href": "/codigo-etica", "label": "Código de ética" },
+    { "href": "/seguridad-y-salud", "label": "Seguridad y salud" },
+    { "href": "/sostenibilidad", "label": "Sostenibilidad" },
+    { "href": "/linea-etica", "label": "Línea de ética" }
+  ]
+}

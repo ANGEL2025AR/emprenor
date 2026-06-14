@@ -1,0 +1,115 @@
+{
+  "pageKey": "ServicioAgropecuario",
+  "hero": {
+    "type": "page-header",
+    "title": "Proyectos",
+    "highlight": "Agropecuarios",
+    "subtitle": "Infraestructura rural, electrificación, riego tecnificado y plantas agroindustriales"
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Sector Agropecuario",
+          "title": "Llevamos la tecnología al campo",
+          "paragraphs": [
+            "Nos especializamos en proyectos de infraestructura para el sector agroindustrial y agropecuario. Conocemos los desafíos del campo y diseñamos soluciones robustas, eficientes y adaptadas a las condiciones rurales más exigentes."
+          ],
+          "image": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=85",
+          "imageAlt": "Agropecuario",
+          "note": "Trabajamos en estrecha colaboración con ingenieros agrónomos, veterinarios y técnicos del INTA para asegurar el mejor resultado en cada proyecto rural."
+        },
+        {
+          "type": "cards",
+          "icon": "Tractor",
+          "iconColor": "from-emerald-500 to-emerald-600",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-16",
+          "items": [
+            {
+              "title": "Infraestructura Rural",
+              "color": "from-emerald-500 to-emerald-600",
+              "items": [
+                "Galpones de almacenamiento de granos y hacienda",
+                "Silos bolsa y silos metálicos con sellado hermético",
+                "Tinglados y cobertizos para maquinaria agrícola",
+                "Corrales y mangas para hacienda vacuna, ovina y porcina",
+                "Establos, criaderos y confinamiento ganadero",
+                "Casas para personal rural y puestos de campo",
+                "Oficinas administrativas rurales",
+                "Sanitarios y vestuarios para personal"
+              ]
+            },
+            {
+              "title": "Electrificación Rural",
+              "color": "from-amber-500 to-amber-600",
+              "items": [
+                "Líneas de media tensión en zonas sin acceso a red",
+                "Transformadores rurales y subestaciones de campo",
+                "Sistemas fotovoltaicos (solar) para zonas aisladas",
+                "Sistemas híbridos: solar + generador + baterías",
+                "Iluminación de corrales, instalaciones y caminos",
+                "Automatización de portones y accesos",
+                "Sistemas de monitoreo remoto de instalaciones",
+                "Conexión a red con generadores de respaldo"
+              ]
+            },
+            {
+              "title": "Riego Tecnificado",
+              "color": "from-blue-500 to-blue-600",
+              "items": [
+                "Sistemas de riego por goteo (vid, frutales, hortalizas)",
+                "Riego por aspersión y microaspersión",
+                "Pivotes centrales y lineales",
+                "Sistemas de fertirrigación",
+                "Pozos de agua y perforaciones",
+                "Estaciones de bombeo y sistemas de presurización",
+                "Filtros de arena, malla y disco",
+                "Automatización y telemetría de riego"
+              ]
+            },
+            {
+              "title": "Plantas Agroindustriales",
+              "color": "from-teal-500 to-teal-600",
+              "items": [
+                "Bodegas y plantas de procesamiento de vino",
+                "Almazaras (plantas de aceite de oliva)",
+                "Plantas de empaque de frutas y hortalizas",
+                "Secaderos de granos y tabaco",
+                "Frigoríficos y plantas de faena",
+                "Lecherías y salas de ordeño",
+                "Plantas de biogás y aprovechamiento de residuos",
+                "Depósitos fiscales y aduaneros rurales"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "advantages-dark",
+          "title": "Ventajas de trabajar con EMPRENOR en el campo",
+          "items": [
+            "Experiencia en zonas rurales remotas con difícil acceso",
+            "Equipos propios de topografía y movimiento de suelos",
+            "Materiales adaptados a condiciones climáticas extremas",
+            "Coordinación con autoridades hídricas, eléctricas y municipales",
+            "Proyectos financiados con instrumentos del agro (SGR, FONDAGRO)",
+            "Asistencia para habilitaciones SENASA y INTA",
+            "Técnicos con experiencia en campo y obras rurales",
+            "Atención en Salta, Jujuy, Tucumán y Formosa"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Tenés un proyecto agropecuario?",
+      "subtitle": "Visitamos el campo sin costo y elaboramos la propuesta técnica.",
+      "buttonText": "Solicitar Visita Técnica",
+      "showPhone": true
+    }
+  ]
+}

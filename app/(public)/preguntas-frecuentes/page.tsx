@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, HelpCircle } from "lucide-react"
 import { EMPRENOR_LEGAL, EMPRENOR_OFICINAS, EMPRENOR_PROVINCIAS, EMPRENOR_TIPOS_OBRA } from "@/lib/company/constants"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Preguntas Frecuentes",
   description:
-    "Respuestas a las preguntas más comunes sobre nuestros servicios de construcción, remodelación y renovación en Salta, Jujuy, Tucumán y Formosa.",
-}
+    "Respuestas a las preguntas más comunes sobre nuestros servicios de construcción, instalaciones eléctricas, sanitarias, de gas, obras industriales y viviendas en el NOA.",
+  path: "/preguntas-frecuentes",
+})
 
 export default function PreguntasFrecuentesPage() {
   const faqs = [
@@ -21,7 +23,7 @@ export default function PreguntasFrecuentesPage() {
         },
         {
           pregunta: "¿Qué tipos de proyectos realizan?",
-          respuesta: `${EMPRENOR_TIPOS_OBRA.join(", ")}. Incluye construcción, remodelación, albañilería, instalaciones eléctricas, plomería, pintura y gas.`,
+          respuesta: `${EMPRENOR_TIPOS_OBRA.join(", ")}. Incluye construcción general, instalaciones eléctricas, sanitarias, de gas, obras industriales y agropecuarias, climatización, mantenimiento y viviendas llave en mano.`,
         },
         {
           pregunta: "¿Trabajan con proyectos pequeños o solo grandes obras?",
@@ -106,7 +108,7 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Ofrecen financiación?",
           respuesta:
-            "Para proyectos grandes, podemos ofrecer planes de pago en cuotas. Consultenos sobre las opciones disponibles según su proyecto.",
+            "Para proyectos grandes, podemos ofrecer planes de pago en cuotas. Consúltenos sobre las opciones disponibles según su proyecto.",
         },
       ],
     },
@@ -167,7 +169,7 @@ export default function PreguntasFrecuentesPage() {
                   ¿No encontró la respuesta que buscaba?
                 </h2>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                  Contáctenos directamente y con gusto responderemos todas sus consultas
+                  Contactanos directamente y con gusto responderemos todas tus consultas
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">

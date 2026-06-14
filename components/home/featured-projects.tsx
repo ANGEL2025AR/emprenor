@@ -45,7 +45,7 @@ export default async function FeaturedProjects() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Proyectos Destacados</h2>
             <p className="text-lg text-slate-400">
-              Conoce algunos de nuestros proyectos más representativos en la región del NOA.
+              Conocé algunos de nuestros proyectos más representativos en la región del NOA.
             </p>
           </div>
 
@@ -77,7 +77,7 @@ export default async function FeaturedProjects() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Proyectos Destacados</h2>
           <p className="text-lg text-slate-400">
-            Conoce algunos de nuestros proyectos más representativos en la región del NOA.
+            Conocé algunos de nuestros proyectos más representativos en la región del NOA.
           </p>
         </div>
 
@@ -98,6 +98,11 @@ export default async function FeaturedProjects() {
                       alt={project.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      unoptimized={
+                        mainImage.startsWith("http") ||
+                        mainImage.startsWith("/uploads") ||
+                        mainImage.startsWith("/assets")
+                      }
                     />
                   ) : (
                     <div className="absolute inset-0 bg-slate-800 flex items-center justify-center">

@@ -206,7 +206,7 @@ function LoginForm() {
                   href="/contacto"
                   className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
                 >
-                  ¿Problemas de acceso? Contactanos
+                  ¿Problemas de acceso? Contáctanos
                 </Link>
               </div>
             </CardContent>

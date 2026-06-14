@@ -8,6 +8,10 @@ import {
   Home,
   Lightbulb,
   Paintbrush,
+  Tractor,
+  Wind,
+  Wrench,
+  Zap,
 } from "lucide-react"
 import type { SiteServiceIconKey } from "@/lib/db/models"
 
@@ -20,6 +24,10 @@ export const SERVICE_ICON_MAP: Record<SiteServiceIconKey, LucideIcon> = {
   Lightbulb,
   Droplets,
   Paintbrush,
+  Zap,
+  Wind,
+  Wrench,
+  Tractor,
 }
 
 export function getServiceIcon(key: SiteServiceIconKey): LucideIcon {

@@ -3,11 +3,13 @@ import Link from "next/link"
 import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
 import { Button } from "@/components/ui/button"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Trabajá con nosotros | EMPRENOR",
-  description: "Sumate al equipo EMPRENOR en el NOA. Obras, seguridad y desarrollo profesional.",
-}
+export const metadata: Metadata = buildPageMetadata({
+  title: "Trabajá con nosotros",
+  description: "Sumate al equipo EMPRENOR en el NOA. Obras, seguridad laboral, ART y desarrollo profesional en construcción y servicios.",
+  path: "/trabaja-con-nosotros",
+})
 
 export default function TrabajaConNosotrosPage() {
   return (

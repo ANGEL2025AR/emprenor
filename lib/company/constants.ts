@@ -1,62 +1,55 @@
 /**
  * Datos corporativos verificados — marca EMPRENOR C&S.
- * Titular: Guerrero, Silvio Carlos Fabian (CUIT 20-40154622-8, IVA Responsable Inscripto).
- * Fuente única para sitio público, legales, SEO y schema.org.
+ * Fuente única: shared/company.constants.json (también usada por emprenorsolutions).
  */
 
-export const EMPRENOR_BRAND = {
-  siglas: "EMPRENOR C&S",
-  nombreExtendido: "EMPRENOR Construcciones y Servicios",
-  significadoSiglas: "Construcciones y Servicios",
-  nombre: "EMPRENOR C&S",
-  nombreCompleto: "EMPRENOR Construcciones y Servicios",
-  descripcion: "Construcción y servicios integrados en el NOA",
-} as const
+import company from "../../shared/company.constants.json"
+
+export const EMPRENOR_BRAND = company.brand
 
 /** Titular legal de la marca comercial (persona humana). */
 export const EMPRENOR_TITULAR = {
-  apellidoNombre: "Guerrero, Silvio Carlos Fabian",
-  nombreCompleto: "Silvio Carlos Fabian Guerrero",
-  cuit: "20-40154622-8",
-  formaJuridica: "Persona humana",
-  condicionIva: "IVA Responsable Inscripto",
-  domicilioFiscal:
-    "Av. Casiano Casas 3080, Barrio Policial, Campamento Vespucio, Dpto. Gral. San Martín, CP 4563, Provincia de Salta, Argentina",
-  domicilioComercial:
-    "Av. Casiano Casas 3080, Barrio Policial, Campamento Vespucio, Dpto. Gral. San Martín, CP 4563, Provincia de Salta, Argentina",
-  telefono: "+54 9 387 352-2920",
-  telHref: "+543873522920",
-  operacionDesde: 2018,
+  apellidoNombre: company.titular.apellidoNombre,
+  nombreCompleto: company.titular.nombreCompleto,
+  cuit: company.titular.cuit,
+  formaJuridica: company.titular.formaJuridica,
+  condicionIva: company.titular.condicionIva,
+  domicilioFiscal: company.titular.domicilioFiscal,
+  domicilioComercial: company.titular.domicilioComercial,
+  operacionDesde: company.titular.operacionDesde,
 } as const
 
-export const EMPRENOR_SLOGAN = "Construcción y servicios en el NOA"
+/** Teléfono principal de atención comercial (sitio, CTAs, schema.org). */
+export const EMPRENOR_TELEFONO_PRINCIPAL = company.telefonoPrincipal
 
-export const EMPRENOR_PROVINCIAS = ["Salta", "Jujuy", "Tucumán", "Formosa"] as const
+/** Contacto secundario del titular (NOA). */
+export const EMPRENOR_TELEFONO_SECUNDARIO = {
+  ...company.telefonoSecundario,
+  nombre: EMPRENOR_TITULAR.nombreCompleto,
+  rol: `Titular · ${EMPRENOR_BRAND.siglas}`,
+} as const
 
-export const EMPRENOR_TIPOS_OBRA = [
-  "Obras privadas",
-  "Obras comerciales",
-  "Obras industriales",
-  "Obras corporativas",
-  "Obras públicas",
-] as const
+export const EMPRENOR_SLOGAN = company.slogan
+
+export const EMPRENOR_PROVINCIAS = company.provincias
+
+export const EMPRENOR_TIPOS_OBRA = company.tiposObra
 
 export const EMPRENOR_MARKETING = {
   homeTrustImage:
     "https://fvm8nkdmuld8gjsy.public.blob.vercel-storage.com/hero/1780546744964-IMG_20250820_232324.jpg",
   homeTrustImageAlt: "Equipo EMPRENOR en obra — Salta, NOA",
-  operacionDesdeLabel: "Desde 2018",
+  operacionDesdeLabel: company.titular.operacionDesdeLabel,
 } as const
 
 /** Indicadores publicados verificables (no métricas inventadas). */
-export const EMPRENOR_HOME_STATS = [
-  { number: "9", label: "Especialidades integradas", icon: "CheckCircle" as const },
-  { number: "4", label: "Provincias del NOA", icon: "Users" as const },
-  { number: "2018", label: "Operación documentada", icon: "Clock" as const },
-  { number: "5", label: "Tipos de obra", icon: "Award" as const },
-] as const
+export const EMPRENOR_HOME_STATS = company.homeStats as readonly {
+  number: string
+  label: string
+  icon: "CheckCircle" | "Users" | "Clock" | "Award"
+}[]
 
-export const EMPRENOR_FOOTER_TAGLINE = `${EMPRENOR_PROVINCIAS.join(", ")} · ${EMPRENOR_TITULAR.domicilioComercial.split(",").slice(0, 1).join("")}`
+export const EMPRENOR_FOOTER_TAGLINE = `${EMPRENOR_PROVINCIAS.join(", ")} · ${company.titular.domicilioCalle}`
 
 export const EMPRENOR_SITE = {
   siteName: EMPRENOR_BRAND.siglas,
@@ -71,37 +64,37 @@ export const EMPRENOR_OFICINAS = [
   {
     nombre: "Sede fiscal y comercial",
     direccion: EMPRENOR_TITULAR.domicilioComercial,
-    mapsQuery: "Av. Casiano Casas 3080, Barrio Policial, Campamento Vespucio, Salta, Argentina",
+    mapsQuery: company.titular.domicilioMapsQuery,
   },
 ] as const
 
 export const EMPRENOR_CONTACTOS = [
   {
-    nombre: EMPRENOR_TITULAR.nombreCompleto,
-    rol: `Titular · ${EMPRENOR_BRAND.siglas}`,
-    telefono: EMPRENOR_TITULAR.telefono,
-    telHref: EMPRENOR_TITULAR.telHref,
+    nombre: EMPRENOR_TELEFONO_PRINCIPAL.nombre,
+    rol: EMPRENOR_TELEFONO_PRINCIPAL.rol,
+    telefono: EMPRENOR_TELEFONO_PRINCIPAL.telefono,
+    telHref: EMPRENOR_TELEFONO_PRINCIPAL.telHref,
   },
   {
-    nombre: "Sebastian Romero",
-    rol: "Atención comercial",
-    telefono: "+54 9 11 2758-6521",
-    telHref: "+5491127586521",
+    nombre: EMPRENOR_TELEFONO_SECUNDARIO.nombre,
+    rol: EMPRENOR_TELEFONO_SECUNDARIO.rol,
+    telefono: EMPRENOR_TELEFONO_SECUNDARIO.telefono,
+    telHref: EMPRENOR_TELEFONO_SECUNDARIO.telHref,
   },
 ] as const
 
 export const EMPRENOR_WHATSAPP = [
   {
-    name: EMPRENOR_TITULAR.nombreCompleto,
-    role: `Titular · ${EMPRENOR_BRAND.siglas}`,
-    number: "543873522920",
-    message: "Hola, consulto por servicios de construcción EMPRENOR C&S.",
+    name: EMPRENOR_TELEFONO_PRINCIPAL.nombre,
+    role: EMPRENOR_TELEFONO_PRINCIPAL.rol,
+    number: EMPRENOR_TELEFONO_PRINCIPAL.whatsapp,
+    message: "Hola Sebastian, consulto por servicios de construcción EMPRENOR.",
   },
   {
-    name: "Sebastian Romero",
-    role: "Atención comercial",
-    number: "5491127586521",
-    message: "Hola Sebastian, consulto por servicios de construcción EMPRENOR.",
+    name: EMPRENOR_TELEFONO_SECUNDARIO.nombre,
+    role: EMPRENOR_TELEFONO_SECUNDARIO.rol,
+    number: EMPRENOR_TELEFONO_SECUNDARIO.whatsapp,
+    message: "Hola, consulto por servicios de construcción EMPRENOR C&S.",
   },
 ] as const
 
@@ -118,23 +111,24 @@ export const EMPRENOR_LEGAL = {
   domicilioFiscal: EMPRENOR_TITULAR.domicilioFiscal,
   domicilioComercial: EMPRENOR_TITULAR.domicilioComercial,
   oficinasOperativas: EMPRENOR_OFICINAS,
-  emailGeneral: "info@emprenor.com.ar",
-  emailEtica: "etica@emprenor.com.ar",
-  emailLicitaciones: "licitaciones@emprenor.com.ar",
-  emailRrhh: "rrhh@emprenor.com.ar",
-  telefonoPrincipal: EMPRENOR_TITULAR.telefono,
-  telefonoSecundario: EMPRENOR_CONTACTOS[1].telefono,
+  emailGeneral: company.legal.emailGeneral,
+  emailEtica: company.legal.emailEtica,
+  emailLicitaciones: company.legal.emailLicitaciones,
+  emailRrhh: company.legal.emailRrhh,
+  telefonoPrincipal: EMPRENOR_TELEFONO_PRINCIPAL.telefono,
+  telefonoPrincipalHref: EMPRENOR_TELEFONO_PRINCIPAL.telHref,
+  telefonoSecundario: EMPRENOR_TELEFONO_SECUNDARIO.telefono,
+  telefonoSecundarioHref: EMPRENOR_TELEFONO_SECUNDARIO.telHref,
   provincias: EMPRENOR_PROVINCIAS,
   tiposObra: EMPRENOR_TIPOS_OBRA,
   operacionDesde: EMPRENOR_TITULAR.operacionDesde,
-  notaImpositiva:
-    "Los datos fiscales publicados corresponden a la constancia vigente del titular ante ARCA (ex AFIP). Para contrataciones se entrega constancia de inscripción actualizada.",
+  notaImpositiva: company.legal.notaImpositiva,
 } as const
 
 export const EMPRENOR_SOCIAL = {
-  facebook: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK || "https://www.facebook.com/emprenor",
-  instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || "https://www.instagram.com/emprenor",
-  linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || "https://www.linkedin.com/company/emprenor",
+  facebook: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK || company.social.facebook,
+  instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || company.social.instagram,
+  linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || company.social.linkedin,
 } as const
 
 export const EMPRENOR_SECTORS = [
@@ -165,19 +159,7 @@ export const EMPRENOR_SECTORS = [
   },
 ] as const
 
-export const FOOTER_LEGAL_LINKS = [
-  { href: "/aviso-legal", label: "Aviso legal" },
-  { href: "/politica-calidad", label: "Política de calidad" },
-  { href: "/gestion-documental", label: "Gestión documental" },
-  { href: "/privacidad", label: "Política de privacidad" },
-  { href: "/cookies", label: "Política de cookies" },
-  { href: "/codigo-etica", label: "Código de ética" },
-  { href: "/seguridad-y-salud", label: "Seguridad y salud" },
-  { href: "/sostenibilidad", label: "Sostenibilidad" },
-  { href: "/linea-etica", label: "Línea de ética" },
-  { href: "/licitaciones", label: "Licitaciones" },
-  { href: "/trabaja-con-nosotros", label: "Trabajá con nosotros" },
-] as const
+export const FOOTER_LEGAL_LINKS = company.footerLegalLinks
 
 export function getMarcaLegalNotice() {
   return `${EMPRENOR_BRAND.nombreExtendido} es marca comercial de ${EMPRENOR_TITULAR.nombreCompleto} (CUIT ${EMPRENOR_LEGAL.cuit}, ${EMPRENOR_LEGAL.condicionIva}). ${EMPRENOR_LEGAL.notaImpositiva}`

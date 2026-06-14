@@ -13,6 +13,12 @@ const ROUTE_PERMISSION_MAP = buildMiddlewareRouteMap()
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // Legacy URLs con mayúsculas exactas (next.config redirects son case-insensitive en Windows → bucle en /brochure)
+  if (pathname === "/Brochure") {
+    return NextResponse.redirect(new URL("/brochure", request.url), 308)
+  }
+
   const token = request.cookies.get("emprenor_session")?.value
 
   let isAuthenticated = false

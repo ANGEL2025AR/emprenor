@@ -1,0 +1,150 @@
+{
+  "pageKey": "ServicioClimatizacion",
+  "hero": {
+    "type": "page-header",
+    "title": "Climatización",
+    "highlight": "Integral",
+    "subtitle": "Aire acondicionado, calefacción y ventilación para hogares, comercios e industrias"
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Climatización",
+          "title": "Confort térmico durante todo el año",
+          "paragraphs": [
+            "Diseñamos e instalamos sistemas de climatización eficientes y confiables. Trabajamos con las marcas líderes del mercado y garantizamos el dimensionamiento correcto de cada sistema para maximizar el confort y minimizar el consumo energético."
+          ],
+          "image": "https://images.unsplash.com/photo-1698479603408-1a66a6d9e80f?auto=format&fit=crop&w=1200&q=85",
+          "imageAlt": "Equipo de aire acondicionado en ambiente comercial — EMPRENOR C&S",
+          "tags": [
+            "Daikin",
+            "Carrier",
+            "Rheem",
+            "York",
+            "Trane",
+            "Midea",
+            "LG",
+            "Samsung",
+            "Sanyo",
+            "Hitachi"
+          ]
+        },
+        {
+          "type": "cards",
+          "icon": "Wind",
+          "iconColor": "from-sky-500 to-sky-600",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-20",
+          "items": [
+            {
+              "title": "Aire Acondicionado",
+              "color": "from-sky-500 to-sky-600",
+              "items": [
+                "Splits pared (desde 2.500 a 9.000 frigorías)",
+                "Splits de techo (cassette y ducto)",
+                "Sistemas multi-split (un exterior — varios interiores)",
+                "VRF / VRV para edificios y grandes superficies",
+                "Sistemas centrales con unidades manejadoras de aire (UMA)",
+                "Aires de ventana y portátiles",
+                "Enfriadores de agua (chillers) industriales",
+                "Torres de enfriamiento",
+                "Fancoils y sistemas hidráulicos de climatización"
+              ]
+            },
+            {
+              "title": "Calefacción",
+              "color": "from-orange-500 to-orange-600",
+              "items": [
+                "Calderas a gas de baja temperatura (condensación)",
+                "Radiadores de aluminio y hierro fundido",
+                "Losa radiante hidráulica y eléctrica",
+                "Splits frío-calor (modo calefacción)",
+                "Estufas a gas de tiro balanceado y tiraje natural",
+                "Calefacción central a gas con distribución por radiadores",
+                "Paneles infrarrojos eléctricos",
+                "Calefacción por biomasa (pellets y leña)"
+              ]
+            },
+            {
+              "title": "Ventilación Industrial y Comercial",
+              "color": "from-teal-500 to-teal-600",
+              "items": [
+                "Extractores de techo y pared industrial",
+                "Ventilación mecánica controlada (VMC)",
+                "Sistemas de recuperación de calor (HRV/ERV)",
+                "Extractores para cocinas gastronómicas (humos y grasas)",
+                "Filtración y purificación de aire",
+                "Control de humedad (deshumidificadores/humidificadores)",
+                "Inyección de aire exterior filtrado",
+                "Cortinas de aire para entradas comerciales"
+              ]
+            },
+            {
+              "title": "Climatización Industrial",
+              "color": "from-violet-500 to-violet-600",
+              "items": [
+                "Naves industriales de gran volumen",
+                "Almacenes y depósitos logísticos",
+                "Cámaras frigoríficas y salas de frío",
+                "Salas limpias y áreas controladas",
+                "Laboratorios y centros de salud",
+                "Centros de datos y servidores",
+                "Plantas farmacéuticas y alimenticias",
+                "Control de temperatura en fermentación y crianza"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "process-inline",
+          "eyebrow": "Metodología",
+          "title": "Nuestro proceso de trabajo",
+          "steps": [
+            {
+              "step": "01",
+              "title": "Estudio de Carga Térmica",
+              "desc": "Calculamos las necesidades de climatización según el volumen, orientación, aislación y uso del espacio."
+            },
+            {
+              "step": "02",
+              "title": "Selección de Equipos",
+              "desc": "Recomendamos los equipos de mayor eficiencia energética (EER/COP) para reducir costos operativos."
+            },
+            {
+              "step": "03",
+              "title": "Proyecto e Ingeniería",
+              "desc": "Diseñamos la disposición de la instalación con planos de ductos, circuitos frigorígenos y eléctricos."
+            },
+            {
+              "step": "04",
+              "title": "Instalación Profesional",
+              "desc": "Montaje por técnicos certificados con herramientas calibradas y materiales de primera calidad."
+            },
+            {
+              "step": "05",
+              "title": "Puesta en Marcha",
+              "desc": "Prueba de funcionamiento, ajuste de parámetros y capacitación al usuario."
+            },
+            {
+              "step": "06",
+              "title": "Mantenimiento",
+              "desc": "Plan de mantenimiento preventivo anual para garantizar rendimiento y vida útil máxima."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás climatización?",
+      "subtitle": "Estudio de carga térmica y cotización sin cargo.",
+      "buttonText": "Solicitar Cotización",
+      "showPhone": true
+    }
+  ]
+}

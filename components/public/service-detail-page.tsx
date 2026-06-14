@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, CheckCircle } from "lucide-react"
 import type { SiteService } from "@/lib/db/models"
 import { getServiceIcon } from "@/lib/site/service-icons"
+import { contactFormUrl } from "@/lib/site/urls"
 import { ServiceGallery } from "@/components/public/service-gallery"
 
 export function ServiceDetailPage({
@@ -146,7 +147,7 @@ export function ServiceDetailPage({
                       Contactanos para una consulta gratuita y cotización personalizada.
                     </p>
                     <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                      <Link href="/contacto">
+                      <Link href={contactFormUrl()}>
                         Solicitar Cotización
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>

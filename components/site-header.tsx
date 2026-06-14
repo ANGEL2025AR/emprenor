@@ -4,6 +4,7 @@ import type React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { LOGO_LIGHT } from "@/lib/brand/logo"
+import { contactFormUrl } from "@/lib/site/urls"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -170,7 +171,7 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
             </Link>
           </Button>
           <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/contacto">Solicitar Cotización</Link>
+            <Link href={contactFormUrl()}>Solicitar Cotización</Link>
           </Button>
         </div>
 
@@ -273,7 +274,7 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
             </div>
 
             <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link href="/contacto">Solicitar Cotización</Link>
+              <Link href={contactFormUrl()}>Solicitar Cotización</Link>
             </Button>
           </nav>
         </div>

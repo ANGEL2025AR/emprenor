@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
+import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata: Metadata = {
   title: "Seguridad y salud ocupacional | EMPRENOR",
@@ -52,7 +53,7 @@ export default function SeguridadSaludPage() {
           ),
         },
       ]}
-      cta={{ label: "Solicitar información de obra", href: "/contacto" }}
+      cta={{ label: "Solicitar información de obra", href: contactFormUrl() }}
     />
   )
 }

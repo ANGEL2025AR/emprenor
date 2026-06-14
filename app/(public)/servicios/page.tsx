@@ -7,6 +7,7 @@ import { ArrowRight, Wrench } from "lucide-react"
 import { getPublishedServices } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Servicios",
@@ -39,7 +40,7 @@ export default async function ServiciosPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Button size="lg" className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8" asChild>
-                <Link href="/contacto">
+                <Link href={contactFormUrl()}>
                   Solicitar Cotización
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>

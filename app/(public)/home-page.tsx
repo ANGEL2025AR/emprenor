@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { EMPRENOR_HOME_STATS, EMPRENOR_LEGAL, EMPRENOR_MARKETING } from "@/lib/company/constants"
 import { SERVICES_CATALOG } from "@/lib/site/services-catalog"
+import { contactFormUrl } from "@/lib/site/urls"
 import { getServiceIcon } from "@/lib/site/service-icons"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -180,7 +181,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-green-600 hover:bg-green-50 px-8 py-6 text-lg" asChild>
-                <Link href="/contacto">
+                <Link href={contactFormUrl()}>
                   Solicitar Cotización
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>

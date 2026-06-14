@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { CookieConsentBanner } from "@/components/public/cookie-consent-banner"
+import { ScrollManager } from "@/components/routing/scroll-manager"
 import { getPublishedServices, toServiceNavItem } from "@/lib/site/get-services"
 
 export default async function PublicLayout({
@@ -14,6 +15,7 @@ export default async function PublicLayout({
 
   return (
     <>
+      <ScrollManager />
       <SiteHeader services={services} />
       {children}
       <SiteFooter />

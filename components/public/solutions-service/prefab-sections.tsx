@@ -18,6 +18,7 @@ import {
   type PrefabModel,
 } from "@/lib/site/prefab-catalog"
 import { PREFAB_SYSTEMS, pricingFootnote, type PrefabSystemId } from "@/lib/site/prefab-pricing"
+import { contactFormUrl } from "@/lib/site/urls"
 
 function ModelDetailModal({ model, systemId, onClose }: { model: PrefabModel | null; systemId: PrefabSystemId; onClose: () => void }) {
   if (!model) return null
@@ -54,7 +55,7 @@ function ModelDetailModal({ model, systemId, onClose }: { model: PrefabModel | n
             </div>
           </div>
           <Button className="w-full bg-green-600 hover:bg-green-700" asChild>
-            <Link href="/contacto">Solicitar presupuesto de este modelo</Link>
+            <Link href={contactFormUrl()}>Solicitar presupuesto de este modelo</Link>
           </Button>
         </div>
       </div>
@@ -193,7 +194,7 @@ export function PrefabFinancingSection() {
                   <li key={f} className="flex gap-2 text-sm text-muted-foreground"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{f}</li>
                 ))}
               </ul>
-              <Button className="w-full bg-green-600 hover:bg-green-700" asChild><Link href="/contacto">Consultar plan</Link></Button>
+              <Button className="w-full bg-green-600 hover:bg-green-700" asChild><Link href={contactFormUrl()}>Consultar plan</Link></Button>
             </div>
           ))}
         </div>

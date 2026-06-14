@@ -8,6 +8,7 @@ import { NOA_MAP_DEFAULT } from "@/lib/site/project-geo"
 import { STATUS_CONFIG, STATUS_MARKER_COLORS, normalizeProjectStatus } from "@/lib/site/project-status"
 import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
 import { ProjectProgressBar } from "@/components/projects/project-progress-bar"
+import { projectsMapUrl } from "@/lib/site/urls"
 import "leaflet/dist/leaflet.css"
 
 type Props = {
@@ -161,7 +162,7 @@ export function WorksMap({
           {selected.location && <p className="text-xs text-muted-foreground mb-3">{selected.location}</p>}
           <ProjectStatusBadge status={selected.status} className="mb-3" />
           <ProjectProgressBar progress={selected.progress} status={selected.status} compact />
-          <Link href="/proyectos#mapa" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-green-600 hover:text-green-700">
+          <Link href={projectsMapUrl()} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-green-600 hover:text-green-700">
             Ver portafolio <ArrowRight className="w-3 h-3" />
           </Link>
         </div>

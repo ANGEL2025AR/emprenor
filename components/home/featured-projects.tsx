@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { contactFormUrl } from "@/lib/site/urls"
 import { Button } from "@/components/ui/button"
 import { MapPin, ArrowRight, ImageOff } from "lucide-react"
 import { getDb } from "@/lib/db/connection"
@@ -60,7 +61,7 @@ export default async function FeaturedProjects() {
               className="border-white/20 text-white hover:bg-white/10 bg-transparent"
               asChild
             >
-              <Link href="/contacto">
+              <Link href={contactFormUrl()}>
                 Solicitar Información
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>

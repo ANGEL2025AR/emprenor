@@ -74,7 +74,7 @@ export default function ContactoClient() {
   }
 
   return (
-    <section className="py-16 md:py-24">
+    <section id="formulario" className="py-16 md:py-24 scroll-mt-24">
       <div className="container px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2">
           <div className="space-y-6">

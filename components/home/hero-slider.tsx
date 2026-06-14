@@ -7,6 +7,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, MessageSquare, Users, Wrench } from "lucide-react"
 import type { SitePageHeroSlide } from "@/lib/db/models"
+import { normalizeContactHref } from "@/lib/site/urls"
 
 function HeroTitle({
   title,
@@ -220,7 +221,7 @@ export function HeroSlider({
                         className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6 text-lg text-white hover:from-green-700 hover:to-emerald-700"
                         asChild
                       >
-                        <Link href={slide.primaryCtaHref}>
+                        <Link href={normalizeContactHref(slide.primaryCtaHref)}>
                           {slide.primaryCtaLabel}
                           <ChevronRight className="ml-2 h-5 w-5" />
                         </Link>

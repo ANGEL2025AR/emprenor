@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { PublicProjectGallery } from "@/components/public/public-project-gallery"
 import { getPublishedProjectById } from "@/lib/public-projects/get-published-project"
+import { contactFormUrl } from "@/lib/site/urls"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -135,7 +136,7 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
                 Contactanos para cotizar tu obra con el mismo nivel de calidad y profesionalismo.
               </p>
               <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link href="/contacto">
+                <Link href={contactFormUrl()}>
                   Solicitar cotización
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

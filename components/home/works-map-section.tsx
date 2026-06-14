@@ -9,6 +9,7 @@ import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
 import { ProjectProgressBar } from "@/components/projects/project-progress-bar"
 import { STATUS_CONFIG } from "@/lib/site/project-status"
 import type { MapProject } from "@/lib/site/project-geo"
+import { projectsMapUrl } from "@/lib/site/urls"
 
 export function WorksMapSection() {
   const [projects, setProjects] = useState<MapProject[]>([])
@@ -74,7 +75,7 @@ export function WorksMapSection() {
             )}
 
             <Button className="bg-green-600 hover:bg-green-700 text-white" asChild>
-              <Link href="/proyectos#mapa">
+              <Link href={projectsMapUrl()}>
                 Ver mapa en proyectos <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>

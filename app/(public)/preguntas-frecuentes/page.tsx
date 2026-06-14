@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ArrowRight, HelpCircle } from "lucide-react"
 import { EMPRENOR_LEGAL, EMPRENOR_OFICINAS, EMPRENOR_PROVINCIAS, EMPRENOR_TIPOS_OBRA } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata = buildPageMetadata({
   title: "Preguntas Frecuentes",
@@ -173,7 +174,7 @@ export default function PreguntasFrecuentesPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/contacto">
+                    <Link href={contactFormUrl()}>
                       Contactar Ahora
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>

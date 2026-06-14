@@ -5,6 +5,7 @@ import { EMPRENOR_LEGAL } from "@/lib/company/constants"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileCheck, Shield, Users, ClipboardList } from "lucide-react"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Licitaciones y sector público",
@@ -48,7 +49,7 @@ export default function LicitacionesPage() {
                   {EMPRENOR_LEGAL.emailLicitaciones}
                 </a>{" "}
                 indicando pliego, organismo y plazos. También puede usar el{" "}
-                <Link href="/contacto" className="text-emerald-700 underline">
+                <Link href={contactFormUrl()} className="text-emerald-700 underline">
                   formulario de contacto
                 </Link>
                 .

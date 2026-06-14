@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Target, Award, Heart, CheckCircle, ArrowRight, MapPin } from "lucide-react"
 import { PublicHeroSection } from "@/components/home/public-hero-section"
+import { contactFormUrl } from "@/lib/site/urls"
 import {
   EMPRENOR_BRAND,
   EMPRENOR_LEGAL,
@@ -289,7 +290,7 @@ export default function NosotrosPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/contacto">
+                    <Link href={contactFormUrl()}>
                       Contactar ahora
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>

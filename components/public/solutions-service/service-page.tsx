@@ -27,6 +27,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { contactFormUrl } from "@/lib/site/urls"
 import type { ServicePageConfig, ServiceSectionConfig } from "@/lib/site/service-page-types"
 import { ServiceHeroSlider } from "./service-hero-slider"
 import {
@@ -74,7 +75,7 @@ function ServiceCTA({ title, subtitle, buttonText, showPhone }: { title?: string
         {subtitle && <p className="text-primary-foreground/80 max-w-2xl mx-auto">{subtitle}</p>}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" variant="secondary" asChild>
-            <Link href="/contacto">{buttonText || "Solicitar cotización"} <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Link href={contactFormUrl()}>{buttonText || "Solicitar cotización"} <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </Button>
           {showPhone && (
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 bg-transparent" asChild>
@@ -307,7 +308,7 @@ function PlansGrid(props: Record<string, unknown>) {
             <ul className="space-y-2.5 mb-8">
               {plan.features.map((f, j) => <li key={j} className="flex items-start gap-2 text-sm"><CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />{f}</li>)}
             </ul>
-            <Button className="w-full bg-green-600 hover:bg-green-700" asChild><Link href="/contacto">Contratar Plan</Link></Button>
+            <Button className="w-full bg-green-600 hover:bg-green-700" asChild><Link href={contactFormUrl()}>Contratar Plan</Link></Button>
           </div>
         ))}
       </div>
@@ -330,7 +331,7 @@ function BannerDark(props: Record<string, unknown>) {
           </div>
           {props.ctaText ? (
             <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white rounded-full px-8 h-14" asChild>
-              <Link href="/contacto">{String(props.ctaText)} <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              <Link href={contactFormUrl()}>{String(props.ctaText)} <ArrowRight className="ml-2 w-4 h-4" /></Link>
             </Button>
           ) : null}
         </div>

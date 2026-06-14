@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_BRAND, EMPRENOR_LEGAL, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Política de privacidad",
@@ -79,7 +80,7 @@ export default function PrivacidadPage() {
           ),
         },
       ]}
-      cta={{ label: "Consultar sobre mis datos", href: "/contacto" }}
+      cta={{ label: "Consultar sobre mis datos", href: contactFormUrl() }}
     />
   )
 }

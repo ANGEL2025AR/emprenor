@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Home, Search, ArrowLeft } from 'lucide-react'
+import { contactFormUrl } from "@/lib/site/urls"
 
 export default function NotFound() {
   return (
@@ -22,7 +23,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="/contacto">
+            <Link href={contactFormUrl()}>
               Contacto
             </Link>
           </Button>

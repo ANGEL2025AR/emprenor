@@ -25,6 +25,7 @@ import {
 } from "@/lib/site/brochure-full-content"
 import { BROCHURE_SERVICES_DETAIL, getServicePageChunks } from "@/lib/site/build-brochure-services"
 import { SERVICES_CATALOG } from "@/lib/site/services-catalog"
+import { contactFormUrl } from "@/lib/site/urls"
 import {
   BrochureFooterLine,
   BrochureLogo,
@@ -107,7 +108,7 @@ export function BrochureDocument() {
                 ))}
               </div>
               <Button className="bg-green-600 hover:bg-green-700 text-white w-fit print:hidden" asChild>
-                <Link href="/contacto">{BROCHURE_COVER.cta} <ArrowRight className="w-3 h-3 ml-2" /></Link>
+                <Link href={contactFormUrl()}>{BROCHURE_COVER.cta} <ArrowRight className="w-3 h-3 ml-2" /></Link>
               </Button>
             </div>
             <div className="relative z-10 mt-auto shrink-0 px-8 py-5 border-t border-white/10 flex justify-between items-center text-[10px] tracking-wider">
@@ -407,7 +408,7 @@ export function BrochureDocument() {
               <Printer className="w-4 h-4 mr-2" /> Generar PDF
             </Button>
             <Button variant="outline" className="border-slate-300" asChild>
-              <Link href="/contacto">Solicitar cotización <ArrowRight className="w-4 h-4 ml-2" /></Link>
+              <Link href={contactFormUrl()}>Solicitar cotización <ArrowRight className="w-4 h-4 ml-2" /></Link>
             </Button>
           </div>
         </div>

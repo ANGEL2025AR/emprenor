@@ -3,6 +3,7 @@ import Link from "next/link"
 import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_BRAND, EMPRENOR_LEGAL, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
+import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Gestión documental",
@@ -82,7 +83,7 @@ export default function GestionDocumentalPage() {
           ),
         },
       ]}
-      cta={{ label: "Contactar para licitaciones", href: "/contacto" }}
+      cta={{ label: "Contactar para licitaciones", href: contactFormUrl() }}
     />
   )
 }

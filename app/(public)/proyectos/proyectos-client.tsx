@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { ProjectsMapPanel } from "@/components/projects/projects-map-panel"
+import { contactFormUrl } from "@/lib/site/urls"
 
 const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental"]
 
@@ -98,7 +99,7 @@ export default function ProyectosPage() {
         </div>
       </section>
 
-      <section id="mapa" className="py-16 md:py-20 bg-muted/30 scroll-mt-24">
+      <section id="mapa-obras" className="py-16 md:py-20 bg-muted/30 scroll-mt-28">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Mapa de obras en el NOA</h2>
@@ -303,7 +304,7 @@ export default function ProyectosPage() {
                     personalizada.
                   </p>
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/contacto">
+                    <Link href={contactFormUrl()}>
                       Iniciar Mi Proyecto
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>

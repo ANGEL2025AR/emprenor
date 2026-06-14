@@ -7,6 +7,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Phone } from "lucide-react"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { normalizeContactHref } from "@/lib/site/urls"
 
 type Slide = {
   eyebrow?: string
@@ -63,7 +64,7 @@ export function ServiceHeroSlider({ slides = [], minHeight = "70vh" }: { slides?
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
                     {slide.cta_text && (
                       <Button size="lg" className="bg-green-600 hover:bg-green-700" asChild>
-                        <Link href={(slide.cta_url || "/contacto").replace(/^\/Contacto/i, "/contacto")}>{slide.cta_text}</Link>
+                        <Link href={normalizeContactHref(slide.cta_url)}>{slide.cta_text}</Link>
                       </Button>
                     )}
                     <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 bg-transparent" asChild>

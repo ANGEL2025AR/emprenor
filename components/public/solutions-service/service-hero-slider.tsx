@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Phone } from "lucide-react"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
 import { normalizeContactHref } from "@/lib/site/urls"
+import { shouldUnoptimizeImage } from "@/lib/site/image-utils"
 
 type Slide = {
   eyebrow?: string
@@ -49,7 +50,7 @@ export function ServiceHeroSlider({ slides = [], minHeight = "70vh" }: { slides?
             <div key={index} className="relative flex-[0_0_100%] shrink-0" style={{ minHeight }}>
               {slide.image_url && (
                 <>
-                  <Image src={slide.image_url} alt={slide.title || "Servicio"} fill className="object-cover opacity-50" priority={index === 0} unoptimized={slide.image_url.startsWith("http")} />
+                  <Image src={slide.image_url} alt={slide.title || "Servicio"} fill className="object-cover opacity-50" priority={index === 0} unoptimized={shouldUnoptimizeImage(slide.image_url)} sizes="100vw" />
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
                 </>
               )}

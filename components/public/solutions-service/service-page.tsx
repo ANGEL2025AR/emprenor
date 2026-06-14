@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
 import { contactFormUrl } from "@/lib/site/urls"
 import type { ServicePageConfig, ServiceSectionConfig } from "@/lib/site/service-page-types"
+import { shouldUnoptimizeImage } from "@/lib/site/image-utils"
 import { ServiceHeroSlider } from "./service-hero-slider"
 import {
   PrefabAuthoritySection,
@@ -160,7 +161,7 @@ function IntroSplit(props: Record<string, unknown>) {
       </div>
       {image && (
         <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/5] min-h-[320px]">
-          <Image src={image} alt={String(props.imageAlt || props.title || "Servicio")} fill className="object-cover" unoptimized={image.startsWith("http") || image.startsWith("/assets")} />
+          <Image src={image} alt={String(props.imageAlt || props.title || "Servicio")} fill className="object-cover" unoptimized={shouldUnoptimizeImage(image)} sizes="(max-width: 1024px) 100vw, 50vw" />
         </div>
       )}
     </div>

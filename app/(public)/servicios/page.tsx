@@ -8,6 +8,7 @@ import { getPublishedServices } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 import { contactFormUrl } from "@/lib/site/urls"
+import { shouldUnoptimizeImage } from "@/lib/site/image-utils"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Servicios",
@@ -78,7 +79,7 @@ export default async function ServiciosPage() {
                         alt={service.heroImageAlt}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        unoptimized={thumb.startsWith("http") || thumb.startsWith("/uploads")}
+                        unoptimized={shouldUnoptimizeImage(thumb)}
                       />
                     </div>
                   ) : (

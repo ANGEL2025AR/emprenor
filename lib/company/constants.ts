@@ -161,6 +161,12 @@ export const EMPRENOR_SECTORS = [
 
 export const FOOTER_LEGAL_LINKS = company.footerLegalLinks
 
+export const FOOTER_PORTAL_LINKS = company.footerPortalLinks as readonly {
+  href: string
+  label: string
+  external?: boolean
+}[]
+
 export function getMarcaLegalNotice() {
   return `${EMPRENOR_BRAND.nombreExtendido} es marca comercial de ${EMPRENOR_TITULAR.nombreCompleto} (CUIT ${EMPRENOR_LEGAL.cuit}, ${EMPRENOR_LEGAL.condicionIva}). ${EMPRENOR_LEGAL.notaImpositiva}`
 }

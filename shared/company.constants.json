@@ -84,5 +84,16 @@
     { "href": "/seguridad-y-salud", "label": "Seguridad y salud" },
     { "href": "/sostenibilidad", "label": "Sostenibilidad" },
     { "href": "/linea-etica", "label": "Línea de ética" }
+  ],
+  "portal": {
+    "product": "Gestión Emprenor",
+    "homeUrl": "https://www.myemprenor.online",
+    "loginUrl": "https://www.myemprenor.online/login",
+    "registerUrl": "https://www.myemprenor.online/registro"
+  },
+  "footerPortalLinks": [
+    { "href": "https://www.myemprenor.online", "label": "Gestión Emprenor — portal de obra online", "external": true },
+    { "href": "https://www.myemprenor.online/login", "label": "Iniciar sesión (clientes y equipo)", "external": true },
+    { "href": "https://www.myemprenor.online/registro", "label": "Crear cuenta gratis", "external": true }
   ]
 }

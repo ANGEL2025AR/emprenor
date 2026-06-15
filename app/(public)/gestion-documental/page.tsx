@@ -4,6 +4,7 @@ import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_BRAND, EMPRENOR_LEGAL, EMPRENOR_TITULAR } from "@/lib/company/constants"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 import { contactFormUrl } from "@/lib/site/urls"
+import { GESTION_EMPRENOR } from "@/lib/site/gestion-emprenor-portal"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Gestión documental",
@@ -67,6 +68,40 @@ export default function GestionDocumentalPage() {
               </Link>
               .
             </p>
+          ),
+        },
+        {
+          title: "Portal digital en obra",
+          content: (
+            <div className="space-y-3">
+              <p>
+                <strong>{GESTION_EMPRENOR.product}</strong> es la plataforma online de las marcas EMPRENOR, operada por{" "}
+                {EMPRENOR_TITULAR.nombreCompleto} (CUIT {EMPRENOR_LEGAL.cuit}). Clientes y equipos acceden a documentos,
+                consultas, cuenta corriente y aprobaciones por obra.
+              </p>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <a
+                    href={GESTION_EMPRENOR.homeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-emerald-700 underline"
+                  >
+                    Conocer {GESTION_EMPRENOR.product}
+                  </a>
+                </li>
+                <li>
+                  <a href={GESTION_EMPRENOR.loginUrl} className="text-emerald-700 underline">
+                    Iniciar sesión
+                  </a>
+                </li>
+                <li>
+                  <a href={GESTION_EMPRENOR.registerUrl} className="text-emerald-700 underline">
+                    Crear cuenta gratis
+                  </a>
+                </li>
+              </ul>
+            </div>
           ),
         },
         {

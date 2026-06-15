@@ -39,6 +39,7 @@ import { cn } from "@/lib/utils"
 import type { ServiceNavItem } from "@/lib/site/get-services"
 import { getServiceIcon } from "@/lib/site/service-icons"
 import { FOOTER_SERVICE_LINKS } from "@/lib/site/services-catalog"
+import { GESTION_EMPRENOR } from "@/lib/site/gestion-emprenor-portal"
 
 const FALLBACK_SERVICES: ServiceNavItem[] = FOOTER_SERVICE_LINKS.map((link, i) => ({
   slug: link.href.replace("/servicios/", ""),
@@ -131,6 +132,12 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
                     <ListItem href="/licitaciones" title="Licitaciones" icon={Building2}>
                       Sector público y documentación
                     </ListItem>
+                    <ListItem href="/gestion-documental" title="Gestión documental" icon={Shield}>
+                      Trazabilidad y portal de obra
+                    </ListItem>
+                    <ListItem href={GESTION_EMPRENOR.homeUrl} title={GESTION_EMPRENOR.product} icon={LogIn}>
+                      Portal de clientes y equipo en obra
+                    </ListItem>
                     <ListItem href="/seguridad-y-salud" title="Seguridad y salud" icon={Shield}>
                       Política SST y ART
                     </ListItem>
@@ -165,10 +172,10 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
 
         <div className="hidden md:flex items-center gap-3">
           <Button asChild variant="ghost" size="sm">
-            <Link href="/login" className="flex items-center gap-2">
+            <a href={GESTION_EMPRENOR.loginUrl} className="flex items-center gap-2">
               <LogIn className="h-4 w-4" />
-              Ingresar
-            </Link>
+              Iniciar sesión
+            </a>
           </Button>
           <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
             <Link href={contactFormUrl()}>Solicitar Cotización</Link>
@@ -255,22 +262,20 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
             </Link>
 
             <div className="border-t border-border pt-4 mt-2">
-              <Link
-                href="/login"
+              <a
+                href={GESTION_EMPRENOR.loginUrl}
                 className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors py-2"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 <LogIn className="h-4 w-4" />
-                Ingresar
-              </Link>
-              <Link
-                href="/registro"
+                Iniciar sesión
+              </a>
+              <a
+                href={GESTION_EMPRENOR.registerUrl}
                 className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors py-2"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 <UserPlus className="h-4 w-4" />
-                Registrarse
-              </Link>
+                Crear cuenta gratis
+              </a>
             </div>
 
             <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">

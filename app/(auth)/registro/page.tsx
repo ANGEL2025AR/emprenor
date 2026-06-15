@@ -1,5 +1,7 @@
-import { PublicRegistrationForm } from "@/components/auth/public-registration-form"
+import { redirect } from "next/navigation"
+import { GESTION_EMPRENOR } from "@/lib/site/gestion-emprenor-portal"
 
-export default function RegisterPage() {
-  return <PublicRegistrationForm />
+/** /registro público → portal SaaS Gestión Emprenor (myemprenor.online). */
+export default function RegistroRedirectPage() {
+  redirect(GESTION_EMPRENOR.registerUrl)
 }

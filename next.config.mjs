@@ -105,11 +105,6 @@ const nextConfig = {
         destination: `/servicios/${to}`,
         permanent: true,
       })),
-      { source: "/politica-privacidad", destination: "/privacidad", permanent: true },
-      { source: "/politica-de-privacidad", destination: "/privacidad", permanent: true },
-      { source: "/legal/privacidad", destination: "/privacidad", permanent: true },
-      { source: "/legal/terminos", destination: "/aviso-legal", permanent: true },
-      { source: "/legal/cookies", destination: "/cookies", permanent: true },
     ]
   },
   

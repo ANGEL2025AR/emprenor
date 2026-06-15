@@ -8,7 +8,6 @@ import {
   EMPRENOR_LEGAL,
   EMPRENOR_SOCIAL,
   FOOTER_LEGAL_LINKS,
-  FOOTER_PORTAL_LINKS,
   getCopyrightNotice,
 } from "@/lib/company/constants"
 import { FOOTER_SERVICE_LINKS } from "@/lib/site/services-catalog"
@@ -124,18 +123,6 @@ export function SiteFooter() {
                   Trabajá con nosotros
                 </Link>
               </li>
-              {FOOTER_PORTAL_LINKS.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
             </ul>
           </div>
 

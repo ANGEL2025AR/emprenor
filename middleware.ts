@@ -5,7 +5,6 @@ import { buildMiddlewareRouteMap, isClientPathAllowed } from "@/lib/auth/client-
 import { getDefaultDashboardPath, isEmployeePathAllowed, isEmployeeRole } from "@/lib/auth/employee-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
-import { GESTION_EMPRENOR } from "@/lib/site/gestion-emprenor-portal"
 
 const protectedRoutes = ["/dashboard"]
 const authRoutes = ["/login", "/registro", "/setup"]
@@ -33,17 +32,6 @@ export async function middleware(request: NextRequest) {
     } catch {
       isAuthenticated = false
     }
-  }
-
-  // Acceso público al portal SaaS (Gestión Emprenor) — mismo sistema que myemprenor.online
-  if ((pathname === "/login" || pathname === "/registro") && !isAuthenticated) {
-    const dest = pathname === "/login" ? GESTION_EMPRENOR.loginUrl : GESTION_EMPRENOR.registerUrl
-    const url = new URL(dest)
-    const from = request.nextUrl.searchParams.get("from")
-    if (from && pathname === "/login") {
-      url.searchParams.set("callbackUrl", from)
-    }
-    return NextResponse.redirect(url, 302)
   }
 
   if (authRoutes.some((route) => pathname.startsWith(route)) && isAuthenticated) {

@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db/connection"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { projectsFilterForClient } from "@/lib/clients/project-queries"
+import { linkExistingPortalUserToClient } from "@/lib/clients/user-client-sync"
 
 export async function GET() {
   try {
@@ -67,6 +68,10 @@ export async function POST(request: Request) {
     }
 
     const result = await db.collection("clients").insertOne(client)
+
+    if (client.email) {
+      await linkExistingPortalUserToClient(result.insertedId.toString(), String(client.email))
+    }
 
     return NextResponse.json({
       client: { ...client, _id: result.insertedId.toString() },

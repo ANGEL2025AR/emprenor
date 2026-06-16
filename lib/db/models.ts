@@ -33,6 +33,8 @@ export interface User extends BaseDocument {
   lastLogin?: Date
   resetPasswordToken?: string
   resetPasswordExpires?: Date
+  /** Ficha en colección clients (usuarios rol cliente) */
+  linkedClientId?: ObjectId
 }
 
 // ============================================
@@ -124,6 +126,20 @@ export interface Project extends BaseDocument {
   createdBy: ObjectId
   /** Portal de cumplimiento para clientes de obra (FAO, municipios, empresas, consorcios, etc.) */
   institutionalCompliance?: ProjectInstitutionalCompliance
+  /** Líneas de servicio EMPRENOR asociadas a la obra */
+  serviceLines?: ProjectServiceLine[]
+  galleryImages?: string[]
+}
+
+export type ProjectServiceStatus = "pendiente" | "en_curso" | "completado"
+
+export interface ProjectServiceLine {
+  slug: string
+  title: string
+  status: ProjectServiceStatus
+  order: number
+  documentCount?: number
+  notes?: string
 }
 
 // ============================================

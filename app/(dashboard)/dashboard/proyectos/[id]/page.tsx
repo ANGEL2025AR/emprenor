@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress"
 import { ArrowLeft, Edit, MapPin, Calendar, Users, DollarSign, ListTodo, Loader2, Phone, Mail, ClipboardList } from "lucide-react"
 import type { Project } from "@/lib/db/models"
 import { ProjectDocumentsClient } from "@/components/projects/project-documents-client"
+import { ProjectServicesClient } from "@/components/projects/project-services-client"
 import { ProjectFinancesClient } from "@/components/projects/project-finances-client"
 import { ProjectTasksClient } from "@/components/projects/project-tasks-client"
 import { ComplianceSetupChecklist } from "@/components/compliance/compliance-setup-checklist"
@@ -248,6 +249,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       <Tabs defaultValue="info" className="space-y-4">
         <TabsList>
           <TabsTrigger value="info">Información</TabsTrigger>
+          <TabsTrigger value="services">Servicios</TabsTrigger>
           {!isClient && <TabsTrigger value="tasks">Tareas</TabsTrigger>}
           <TabsTrigger value="documents">Documentación</TabsTrigger>
           {!isClient && <TabsTrigger value="finances">Finanzas</TabsTrigger>}
@@ -338,6 +340,20 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="services">
+          <Card>
+            <CardHeader>
+              <CardTitle>Servicios de la obra</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ProjectServicesClient
+                services={project.serviceLines || []}
+                isClient={isClient}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {!isClient && (

@@ -73,7 +73,13 @@ export async function getClientById(id: string): Promise<ClientDetail | null> {
       .toArray(),
     db
       .collection("users")
-      .find({ role: "cliente", $or: [{ email: { $regex: new RegExp(`^${email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") } }] })
+      .find({
+        role: "cliente",
+        $or: [
+          { email: { $regex: new RegExp(`^${email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") } },
+          { linkedClientId: oid },
+        ],
+      })
       .project({ name: 1, lastName: 1, email: 1, isActive: 1 })
       .toArray(),
   ])

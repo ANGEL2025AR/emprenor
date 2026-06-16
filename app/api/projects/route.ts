@@ -8,7 +8,10 @@ import type { Project } from "@/lib/db/models"
 import { ObjectId } from "mongodb"
 import { getClientProjectsFilter, isClientRole } from "@/lib/auth/project-access"
 import { loadClientRecord } from "@/lib/clients/project-link"
-import { projectSyncFromClient } from "@/lib/clients/compliance-sync"
+import { buildProjectClientFields, projectSyncFromClient } from "@/lib/clients/compliance-sync"
+import { formatZodError } from "@/lib/validations/format-errors"
+import { buildDefaultProjectServices } from "@/lib/projects/default-services"
+import { syncPortalUserOnProject } from "@/lib/clients/user-client-sync"
 
 export async function GET(request: NextRequest) {
   try {
@@ -91,11 +94,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Sin permisos para crear proyectos" }, { status: 403 })
     }
 
-    const body = await request.json()
-    const result = projectSchema.safeParse(body)
+    const rawBody = await request.json()
+    const { images: imageUrls, ...body } = rawBody as { images?: string[]; clientId?: string; [key: string]: unknown }
+
+    let payload = body
+    if (body.clientId && ObjectId.isValid(String(body.clientId))) {
+      const client = await loadClientRecord(String(body.clientId))
+      if (client) {
+        payload = { ...body, client: buildProjectClientFields(client) }
+      }
+    } else {
+      const c = (body.client || {}) as { name?: string; email?: string; phone?: string; address?: string }
+      const loc = (body.location || {}) as { address?: string }
+      if (!c.name?.trim()) {
+        payload = {
+          ...body,
+          client: {
+            name: "Cliente a vincular",
+            email: c.email?.trim() || "pendiente@emprenor.local",
+            phone: c.phone?.trim() || "0000000000",
+            address: c.address?.trim() || loc.address || "A definir",
+          },
+        }
+      }
+    }
+
+    const result = projectSchema.safeParse(payload)
 
     if (!result.success) {
-      return NextResponse.json({ error: "Datos inválidos", details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json(
+        {
+          error: "Datos inválidos",
+          message: formatZodError(result.error),
+          details: result.error.flatten(),
+        },
+        { status: 400 },
+      )
     }
 
     const db = await getDb()
@@ -120,6 +154,7 @@ export async function POST(request: NextRequest) {
         workers: [],
       },
       tags: result.data.tags || [],
+      serviceLines: buildDefaultProjectServices(),
       createdBy: userObjectId,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -135,7 +170,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    if (Array.isArray(imageUrls) && imageUrls.length > 0) {
+      newProject.coverImage = imageUrls[0]
+      ;(newProject as Project & { galleryImages?: string[] }).galleryImages = imageUrls
+    }
+
     const insertResult = await db.collection("projects").insertOne(newProject)
+
+    if (bodyClientId && ObjectId.isValid(bodyClientId)) {
+      await syncPortalUserOnProject(insertResult.insertedId.toString(), bodyClientId)
+    }
 
     return NextResponse.json(
       {

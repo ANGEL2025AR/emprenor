@@ -5,6 +5,7 @@ import { hasPermission } from "@/lib/auth/permissions"
 import { ObjectId } from "mongodb"
 import { del } from "@vercel/blob"
 import { canAccessDocumentId, isClientRole } from "@/lib/auth/project-access"
+import type { Document } from "@/lib/db/models"
 
 type RouteParams = { params: Promise<{ id: string }> }
 
@@ -27,9 +28,13 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     }
 
     const db = await getDb()
-    const document = await db.collection("documents").findOne({ _id: new ObjectId(id) })
+    const document = await db.collection<Document>("documents").findOne({ _id: new ObjectId(id) })
     if (!document) {
       return NextResponse.json({ error: "Documento no encontrado" }, { status: 404 })
+    }
+
+    if (isClientRole(user.role) && document.access === "equipo") {
+      return NextResponse.json({ error: "Sin acceso a este documento" }, { status: 403 })
     }
 
     return NextResponse.json({ document })

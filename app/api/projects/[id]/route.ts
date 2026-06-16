@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb"
 import type { Project } from "@/lib/db/models"
 import { findProjectForUser } from "@/lib/auth/project-access"
 import { applyClientToProjectUpdate } from "@/lib/clients/project-link"
+import { syncPortalUserOnProject } from "@/lib/clients/user-client-sync"
 
 // GET - Obtener proyecto por ID
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -67,6 +68,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const allowedFields = [
       "name", "description", "type", "priority", "status", "progress",
       "client", "location", "dates", "budget", "team", "notes", "clientId",
+      "coverImage", "galleryImages",
     ]
     const sanitizedUpdate: Record<string, unknown> = {}
     for (const key of allowedFields) {
@@ -101,6 +103,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     if (typeof body.clientId === "string" && body.clientId && ObjectId.isValid(body.clientId)) {
       await applyClientToProjectUpdate(id, body.clientId, existing.institutionalCompliance)
+      await syncPortalUserOnProject(id, body.clientId)
     }
 
     const updatedProject = await db.collection("projects").findOne({

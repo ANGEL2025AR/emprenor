@@ -103,7 +103,7 @@ export const projectSchema = z.object({
     estimatedEnd: z.coerce.date(),
   }),
   budget: z.object({
-    estimated: z.number().positive("El presupuesto debe ser positivo"),
+    estimated: z.number().min(1, "El presupuesto debe ser mayor a 0"),
     currency: z.string().default("ARS"),
   }),
   priority: z.enum(["baja", "media", "alta", "urgente"]),

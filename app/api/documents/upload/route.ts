@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
     const type = (formData.get("type") as string) || "otro"
     const name = (formData.get("name") as string) || file.name
     const description = (formData.get("description") as string) || ""
+    const accessRaw = (formData.get("access") as string) || "equipo"
+    const access = accessRaw === "privado" || accessRaw === "publico" ? accessRaw : "equipo"
 
     if (!file) {
       return NextResponse.json({ error: "No se proporcionó archivo" }, { status: 400 })
@@ -64,7 +66,7 @@ export async function POST(request: NextRequest) {
       version: 1,
       tags: [],
       metadata: {},
-      access: "equipo",
+      access: access as Document["access"],
       views: 0,
       downloads: 0,
       uploadedBy: userObjectId,

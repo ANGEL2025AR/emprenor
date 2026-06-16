@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb"
 import { getDb } from "@/lib/db/connection"
 import type { SerializableUser } from "@/lib/auth/session"
-import type { Project } from "@/lib/db/models"
+import type { Project, Document } from "@/lib/db/models"
 
 function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
@@ -9,6 +9,11 @@ function escapeRegex(value: string): string {
 
 export function isClientRole(role: string): boolean {
   return role === "cliente"
+}
+
+/** Documentos visibles para el cliente: solo los marcados privado/público, nunca internos (equipo). */
+export function getClientVisibleDocumentFilter(): Record<string, unknown> {
+  return { access: { $in: ["privado", "publico"] } }
 }
 
 /** Filtro MongoDB: proyectos asignados al usuario cliente (email / registro clients / clientUserId). */
@@ -26,6 +31,10 @@ export async function getClientProjectsFilter(user: SerializableUser): Promise<R
 
   if (clientRecord?._id) {
     or.push({ clientId: clientRecord._id })
+  }
+
+  if (user.linkedClientId && ObjectId.isValid(user.linkedClientId)) {
+    or.push({ clientId: new ObjectId(user.linkedClientId) })
   }
 
   return { $or: or }
@@ -86,9 +95,11 @@ export async function canAccessCertificateId(user: SerializableUser, certificate
 export async function canAccessDocumentId(user: SerializableUser, documentId: string): Promise<boolean> {
   if (!ObjectId.isValid(documentId)) return false
   const db = await getDb()
-  const doc = await db.collection("documents").findOne({ _id: new ObjectId(documentId) })
+  const doc = await db.collection<Document>("documents").findOne({ _id: new ObjectId(documentId) })
   if (!doc?.projectId) return false
-  return canAccessProjectId(user, doc.projectId.toString())
+  if (!(await canAccessProjectId(user, doc.projectId.toString()))) return false
+  if (isClientRole(user.role) && doc.access === "equipo") return false
+  return true
 }
 
 export function isEmployeePortalRole(role: string): boolean {

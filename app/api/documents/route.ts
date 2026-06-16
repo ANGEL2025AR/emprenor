@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { ObjectId } from "mongodb"
 import type { Document } from "@/lib/db/models"
 import { hasPermission } from "@/lib/auth/permissions"
-import { canAccessProjectId, withProjectScope } from "@/lib/auth/project-access"
+import { canAccessProjectId, withProjectScope, isClientRole, getClientVisibleDocumentFilter } from "@/lib/auth/project-access"
 
 // GET - Listar documentos
 export async function GET(request: NextRequest) {
@@ -35,6 +35,9 @@ export async function GET(request: NextRequest) {
       filter.projectId = new ObjectId(projectId)
     }
     if (type) filter.type = type
+    if (isClientRole(user.role)) {
+      filter = { ...filter, ...getClientVisibleDocumentFilter() }
+    }
     filter = await withProjectScope(user, filter)
 
     const [documents, total] = await Promise.all([

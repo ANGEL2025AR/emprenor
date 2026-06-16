@@ -4,7 +4,15 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { hashPassword } from "@/lib/auth/password"
 import type { User } from "@/lib/db/models"
-import { assignClientUserToProjects } from "@/lib/clients/project-link"
+import {
+  assignClientUserToProjects,
+} from "@/lib/clients/project-link"
+import {
+  ensureClientRecordForPortalUser,
+  linkPortalUserToClient,
+  syncPortalUserOnAllClientProjects,
+} from "@/lib/clients/user-client-sync"
+import { ObjectId } from "mongodb"
 
 // GET - Listar usuarios
 export async function GET(request: NextRequest) {
@@ -77,7 +85,6 @@ export async function POST(request: NextRequest) {
 
     const db = await getDb()
 
-    // Verificar email único
     const existing = await db.collection("users").findOne({ email: body.email.toLowerCase() })
     if (existing) {
       return NextResponse.json({ error: "El email ya existe" }, { status: 409 })
@@ -100,15 +107,40 @@ export async function POST(request: NextRequest) {
     }
 
     const insertResult = await db.collection("users").insertOne(newUser)
+    const userId = insertResult.insertedId.toString()
+    let linkedClientId: string | undefined
 
-    if (body.role === "cliente" && typeof body.linkedClientId === "string" && body.linkedClientId) {
-      await assignClientUserToProjects(insertResult.insertedId.toString(), body.linkedClientId)
+    if (body.role === "cliente") {
+      if (typeof body.linkedClientId === "string" && body.linkedClientId && ObjectId.isValid(body.linkedClientId)) {
+        linkedClientId = body.linkedClientId
+        await linkPortalUserToClient(userId, linkedClientId)
+        await syncPortalUserOnAllClientProjects(linkedClientId, userId)
+      } else {
+        linkedClientId = await ensureClientRecordForPortalUser({
+          _id: insertResult.insertedId,
+          email: newUser.email,
+          name: newUser.name,
+          lastName: newUser.lastName,
+          phone: newUser.phone,
+        })
+        await assignClientUserToProjects(userId, linkedClientId)
+      }
     }
 
     return NextResponse.json(
       {
         success: true,
-        user: { ...newUser, _id: insertResult.insertedId, password: undefined },
+        user: {
+          ...newUser,
+          _id: insertResult.insertedId,
+          linkedClientId: linkedClientId ? new ObjectId(linkedClientId) : undefined,
+          password: undefined,
+        },
+        linkedClientId,
+        message:
+          body.role === "cliente"
+            ? "Usuario creado y vinculado automáticamente en la sección Clientes."
+            : undefined,
       },
       { status: 201 },
     )

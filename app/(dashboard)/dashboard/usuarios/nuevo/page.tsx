@@ -93,7 +93,10 @@ function NewUserForm() {
 
       toast({
         title: "Usuario creado",
-        description: "El usuario se ha creado correctamente",
+        description:
+          formData.role === "cliente"
+            ? "Usuario y ficha de cliente vinculados automáticamente."
+            : "El usuario se ha creado correctamente",
       })
 
       router.push("/dashboard/usuarios")
@@ -127,9 +130,15 @@ function NewUserForm() {
         <CardHeader>
           <CardTitle>Información del Usuario</CardTitle>
           <CardDescription>
-            {linkedClientId
-              ? "Usuario portal: quedará vinculado a las obras del cliente seleccionado."
-              : "Completa todos los campos para crear una nueva cuenta de usuario"}
+            {formData.role === "cliente" ? (
+              linkedClientId
+                ? "Usuario portal: quedará vinculado a las obras del cliente seleccionado."
+                : "Al crear un usuario con rol Cliente se genera automáticamente su ficha en la sección Clientes (sin duplicar datos)."
+            ) : linkedClientId ? (
+              "Usuario portal: quedará vinculado a las obras del cliente seleccionado."
+            ) : (
+              "Completa todos los campos para crear una nueva cuenta de usuario"
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>

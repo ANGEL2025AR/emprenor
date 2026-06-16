@@ -28,6 +28,7 @@ function NewProjectForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [images, setImages] = useState<Array<{ url: string; filename: string }>>([])
+  const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [clientId, setClientId] = useState("")
 
@@ -62,39 +63,63 @@ function NewProjectForm() {
     if (cid) setClientId(cid)
   }, [searchParams])
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const MAX_IMAGE_BYTES = 4 * 1024 * 1024
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files || files.length === 0) return
 
-    setIsUploadingImage(true)
-    const uploadedImages: Array<{ url: string; filename: string }> = []
-
+    const accepted: File[] = []
+    const rejected: string[] = []
     for (const file of Array.from(files)) {
-      try {
-        const formData = new FormData()
-        formData.append("file", file)
-        formData.append("projectId", "temp-" + Date.now())
-
-        const response = await fetch("/api/projects/images", {
-          method: "POST",
-          body: formData,
-        })
-
-        if (response.ok) {
-          const data = await response.json()
-          uploadedImages.push({ url: data.url, filename: data.filename })
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error)
+      if (!file.type.startsWith("image/")) {
+        rejected.push(`${file.name}: no es imagen`)
+        continue
       }
+      if (file.size > MAX_IMAGE_BYTES) {
+        rejected.push(`${file.name}: supera 4 MB`)
+        continue
+      }
+      accepted.push(file)
     }
 
-    setImages((prev) => [...prev, ...uploadedImages])
-    setIsUploadingImage(false)
+    if (rejected.length) {
+      setError(`Algunas imágenes no se agregaron: ${rejected.join("; ")}`)
+    } else {
+      setError("")
+    }
+
+    setPendingFiles((prev) => [...prev, ...accepted])
+    const previews = accepted.map((file) => ({
+      url: URL.createObjectURL(file),
+      filename: file.name,
+    }))
+    setImages((prev) => [...prev, ...previews])
+    e.target.value = ""
+  }
+
+  const uploadProjectImages = async (projectId: string, files: File[]) => {
+    const uploaded: string[] = []
+    for (const file of files) {
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("projectId", projectId)
+      const response = await fetch("/api/projects/images", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      })
+      if (response.ok) {
+        const data = await response.json()
+        uploaded.push(data.url)
+      }
+    }
+    return uploaded
   }
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index))
+    setPendingFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,37 +127,63 @@ function NewProjectForm() {
     setIsLoading(true)
     setError("")
 
+    const budgetValue = Number.parseFloat(formData.budget.estimated)
+    if (!budgetValue || budgetValue < 1) {
+      setError("El presupuesto estimado debe ser mayor a 0")
+      setIsLoading(false)
+      return
+    }
+
     try {
       const response = await fetch("/api/projects", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           clientId: clientId || undefined,
           budget: {
             ...formData.budget,
-            estimated: Number.parseFloat(formData.budget.estimated) || 0,
+            estimated: budgetValue,
           },
-          images: images.map((img) => img.url),
         }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || "Error al crear proyecto")
+        setError(data.message || data.error || "Error al crear proyecto")
         return
+      }
+
+      const projectId = data.project?._id
+      if (projectId && pendingFiles.length > 0) {
+        setIsUploadingImage(true)
+        const urls = await uploadProjectImages(projectId, pendingFiles)
+        if (urls.length > 0) {
+          await fetch(`/api/projects/${projectId}`, {
+            method: "PUT",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              coverImage: urls[0],
+              galleryImages: urls,
+            }),
+          })
+        }
+        setIsUploadingImage(false)
       }
 
       router.push(
         clientId
-          ? `/dashboard/proyectos/${data.project._id}/cumplimiento-cliente?tab=config`
-          : `/dashboard/proyectos/${data.project._id}`,
+          ? `/dashboard/proyectos/${projectId}/cumplimiento-cliente?tab=config`
+          : `/dashboard/proyectos/${projectId}`,
       )
     } catch {
       setError("Error de conexión")
     } finally {
       setIsLoading(false)
+      setIsUploadingImage(false)
     }
   }
 
@@ -250,7 +301,7 @@ function NewProjectForm() {
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={handleImageUpload}
+                  onChange={handleImageSelect}
                   disabled={isUploadingImage}
                   className="hidden"
                 />
@@ -273,7 +324,7 @@ function NewProjectForm() {
                   )}
                 </Button>
                 <span className="text-sm text-slate-500">
-                  {images.length} {images.length === 1 ? "imagen" : "imágenes"} cargadas
+                  {images.length} {images.length === 1 ? "imagen" : "imágenes"} (máx. 4 MB c/u, se suben al guardar)
                 </span>
               </div>
             </div>
@@ -314,11 +365,13 @@ function NewProjectForm() {
           </CardContent>
         </Card>
 
-        {/* Cliente */}
+        {/* Cliente — opcional al crear; puede vincularse después en Editar */}
         <Card>
           <CardHeader>
-            <CardTitle>Información del Cliente</CardTitle>
-            <CardDescription>Datos de contacto del cliente</CardDescription>
+            <CardTitle>Cliente (opcional)</CardTitle>
+            <CardDescription>
+              Podés vincular un cliente registrado ahora o después desde Editar proyecto. Los servicios se cargan automáticamente al crear la obra.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <ProjectClientPicker
@@ -333,48 +386,45 @@ function NewProjectForm() {
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="clientName">Nombre del Cliente *</Label>
+                <Label htmlFor="clientName">Nombre del Cliente {!clientId ? "" : "(desde ficha)"}</Label>
                 <Input
                   id="clientName"
                   value={formData.client.name}
                   onChange={(e) => updateFormData("client.name", e.target.value)}
                   placeholder="Nombre completo"
-                  required
+                  required={!clientId}
                   disabled={!!clientId}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="clientEmail">Email *</Label>
+                <Label htmlFor="clientEmail">Email</Label>
                 <Input
                   id="clientEmail"
                   type="email"
                   value={formData.client.email}
                   onChange={(e) => updateFormData("client.email", e.target.value)}
                   placeholder="email@ejemplo.com"
-                  required
                   disabled={!!clientId}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="clientPhone">Teléfono *</Label>
+                <Label htmlFor="clientPhone">Teléfono</Label>
                 <Input
                   id="clientPhone"
                   type="tel"
                   value={formData.client.phone}
                   onChange={(e) => updateFormData("client.phone", e.target.value)}
                   placeholder="+54 9 11 1234-5678"
-                  required
                   disabled={!!clientId}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="clientAddress">Dirección *</Label>
+                <Label htmlFor="clientAddress">Dirección</Label>
                 <Input
                   id="clientAddress"
                   value={formData.client.address}
                   onChange={(e) => updateFormData("client.address", e.target.value)}
                   placeholder="Dirección del cliente"
-                  required
                   disabled={!!clientId}
                 />
               </div>
@@ -496,11 +546,11 @@ function NewProjectForm() {
           <Button type="button" variant="outline" asChild>
             <Link href="/dashboard/proyectos">Cancelar</Link>
           </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? (
+          <Button type="submit" disabled={isLoading || isUploadingImage}>
+            {isLoading || isUploadingImage ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Creando...
+                {isUploadingImage ? "Subiendo imágenes..." : "Creando..."}
               </>
             ) : (
               <>

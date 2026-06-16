@@ -31,6 +31,7 @@ export interface SerializableUser {
   permissions: string[]
   isActive: boolean
   emailVerified: boolean
+  linkedClientId?: string
   lastLogin?: string
   createdAt: string
   updatedAt: string
@@ -103,10 +104,11 @@ export async function getCurrentUser(): Promise<SerializableUser | null> {
       lastName: user.lastName,
       phone: user.phone,
       avatar: user.avatar,
-      role: user.role || "cliente", // Default si no tiene rol
+      role: user.role || "cliente",
       permissions: user.permissions || [],
       isActive: user.isActive ?? true,
       emailVerified: user.emailVerified ?? false,
+      linkedClientId: user.linkedClientId?.toString(),
       lastLogin: user.lastLogin?.toISOString(),
       createdAt: user.createdAt?.toISOString() || new Date().toISOString(),
       updatedAt: user.updatedAt?.toISOString() || new Date().toISOString(),

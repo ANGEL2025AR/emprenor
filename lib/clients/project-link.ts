@@ -6,6 +6,7 @@ import {
   type ClientRecord,
 } from "@/lib/clients/compliance-sync"
 import type { Project, ProjectInstitutionalCompliance } from "@/lib/db/models"
+import { syncPortalUserOnProject } from "@/lib/clients/user-client-sync"
 
 export async function loadClientRecord(clientId: string): Promise<ClientRecord | null> {
   if (!ObjectId.isValid(clientId)) return null
@@ -35,6 +36,8 @@ export async function applyClientToProjectUpdate(
       },
     },
   )
+
+  await syncPortalUserOnProject(projectId, clientId)
 
   return sync
 }

@@ -48,6 +48,7 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
   // Form state
   const [file, setFile] = useState<File | null>(null)
   const [documentType, setDocumentType] = useState("otro")
+  const [documentAccess, setDocumentAccess] = useState<"equipo" | "privado">("privado")
   const [documentName, setDocumentName] = useState("")
   const [description, setDescription] = useState("")
 
@@ -104,6 +105,7 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
       formData.append("file", file)
       formData.append("projectId", projectId)
       formData.append("type", documentType)
+      formData.append("access", documentAccess)
       formData.append("name", documentName)
       formData.append("description", description)
 
@@ -122,6 +124,7 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
         setDocumentName("")
         setDescription("")
         setDocumentType("otro")
+        setDocumentAccess("privado")
         setDialogOpen(false)
         // Refresh documents
         await fetchDocuments()
@@ -242,6 +245,26 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
               </div>
 
               <div>
+                <Label htmlFor="access">Visibilidad</Label>
+                <Select
+                  value={documentAccess}
+                  onValueChange={(v) => setDocumentAccess(v as "equipo" | "privado")}
+                  disabled={uploading}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="privado">Visible para el cliente</SelectItem>
+                    <SelectItem value="equipo">Solo administración (interno)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-slate-500 mt-1">
+                  Los documentos internos no los ve el cliente en su portal.
+                </p>
+              </div>
+
+              <div>
                 <Label htmlFor="description">Descripción (opcional)</Label>
                 <Textarea
                   id="description"
@@ -296,6 +319,11 @@ export function ProjectDocumentsClient({ projectId }: ProjectDocumentsClientProp
                       <Badge variant="secondary" className="text-xs">
                         {DOCUMENT_TYPES.find((t) => t.value === doc.type)?.label || doc.type}
                       </Badge>
+                      {!isClient && (
+                        <Badge variant="outline" className="text-xs">
+                          {doc.access === "equipo" ? "Interno" : "Cliente"}
+                        </Badge>
+                      )}
                       <span className="text-xs text-slate-500">{formatFileSize(doc.file.size)}</span>
                     </div>
                     {doc.description && <p className="text-xs text-slate-600 mt-2 line-clamp-2">{doc.description}</p>}

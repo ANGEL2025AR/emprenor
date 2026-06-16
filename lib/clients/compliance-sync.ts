@@ -34,11 +34,13 @@ export function clientOrganizationName(client: ClientRecord): string {
 }
 
 export function buildProjectClientFields(client: ClientRecord) {
+  const addressParts = [client.address, client.city, client.province].filter((p) => p?.trim())
+  const phone = client.phone?.trim() || ""
   return {
     name: clientOrganizationName(client),
-    email: client.email,
-    phone: client.phone || "",
-    address: client.address || "",
+    email: client.email?.trim() || "sin-email@emprenor.local",
+    phone: phone.length >= 8 ? phone : "0000000000",
+    address: addressParts.length > 0 ? addressParts.join(", ") : "Sin dirección registrada",
   }
 }
 

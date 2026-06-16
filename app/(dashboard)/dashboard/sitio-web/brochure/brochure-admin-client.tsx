@@ -213,7 +213,7 @@ export function BrochureAdminClient() {
             <CardHeader>
               <CardTitle>Razón social y marca comercial</CardTitle>
               <CardDescription>
-                EMPRENDIMIENTO DEL NORTE (persona jurídica en constitución) · Marca comercial EMPRENOR C&S
+                Emprendimiento del Norte Construcciones y Servicios SAS (en constitución) · Marca comercial EMPRENOR C&S
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

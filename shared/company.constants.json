@@ -8,6 +8,15 @@
     "nombreCompleto": "EMPRENOR Construcciones y Servicios",
     "descripcion": "Construcción y servicios integrados en el NOA"
   },
+  "legalEntity": {
+    "legalName": "EMPRENDIMIENTO DEL NORTE SA / SAS CONSTRUCCIONES Y SERVICIOS",
+    "legalNameShort": "Emprendimiento del Norte Construcciones y Servicios",
+    "commercialBrand": "EMPRENOR C&S",
+    "commercialTagline": "Construcciones y Servicios",
+    "formaJuridica": "Sociedad en proceso de constitución (actualmente persona humana titular)",
+    "transitionNote": "Actualmente opera bajo titularidad de Silvio Carlos Fabian Guerrero (persona humana, CUIT 20-40154622-8). Esta plataforma digital será transferida a la sociedad al completar la constitución societaria.",
+    "cuit": "20-40154622-8"
+  },
   "titular": {
     "apellidoNombre": "Guerrero, Silvio Carlos Fabian",
     "nombreCompleto": "Silvio Carlos Fabian Guerrero",

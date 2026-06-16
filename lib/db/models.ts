@@ -911,6 +911,110 @@ export interface SiteContentPage extends BaseDocument {
 }
 
 // ============================================
+// BROCHURE CORPORATIVO Y DIRECTORIO (CMS)
+// ============================================
+
+export interface BrochureLegalEntity {
+  legalName: string
+  legalNameShort: string
+  commercialBrand: string
+  commercialTagline: string
+  cuit: string
+  formaJuridica: string
+  transitionNote: string
+  domicilioFiscal: string
+  operacionDesde: number
+  foundedLabel: string
+  companyImage?: string
+}
+
+export interface BrochureCoverContent {
+  since: string
+  headline: string[]
+  description: string
+  cta: string
+  image: string
+  imageAlt?: string
+  provinces: string[]
+}
+
+export interface BrochureManifestoItem {
+  id: string
+  text: string
+  order: number
+}
+
+export interface BrochureValueItem {
+  title: string
+  desc: string
+}
+
+export interface BrochureStatItem {
+  value: string
+  label: string
+}
+
+export interface BrochurePresentationContent {
+  title: string
+  salutation: string
+  paragraphs: string[]
+  closing: string
+  signatory: string
+  signatoryRole: string
+}
+
+export interface BrochureHistoryContent {
+  title: string
+  paragraphs: string[]
+}
+
+export interface BrochureMissionContent {
+  mission: string
+  vision: string
+}
+
+export interface BrochureClosingContent {
+  headline: string
+  subline: string
+}
+
+/** Documento singleton del brochure editable desde dashboard. */
+export interface BrochureContentDocument extends BaseDocument {
+  key: "main"
+  legalEntity: BrochureLegalEntity
+  cover: BrochureCoverContent
+  manifesto: {
+    title: string
+    subtitle: string
+    items: BrochureManifestoItem[]
+  }
+  presentation: BrochurePresentationContent
+  history: BrochureHistoryContent
+  mission: BrochureMissionContent
+  values: BrochureValueItem[]
+  stats: BrochureStatItem[]
+  certifications: string[]
+  closing: BrochureClosingContent
+  published: boolean
+  updatedBy?: ObjectId
+}
+
+/** Miembro del directorio / organigrama publicado en brochure. */
+export interface BrochureDirectoryMember extends BaseDocument {
+  name: string
+  role: string
+  department: string
+  bio?: string
+  photo?: string
+  email?: string
+  phone?: string
+  order: number
+  published: boolean
+  featured: boolean
+  updatedBy?: ObjectId
+}
+
+// ============================================
 // RECURSOS HUMANOS POR PROYECTO
 // ============================================
 

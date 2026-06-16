@@ -232,13 +232,17 @@ export const userSchema = z.object({
 export const contactFormSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(2, "El nombre debe tener al menos 2 caracteres")
     .max(100, "El nombre no puede exceder 100 caracteres")
-    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, "El nombre solo puede contener letras"),
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'.-]+$/, "El nombre contiene caracteres no permitidos"),
 
   email: z.string().email("Email inválido").max(255, "El email es demasiado largo").toLowerCase().trim(),
 
-  phone: z.string().regex(/^\+?[0-9\s\-()]{8,20}$/, "Teléfono inválido"),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[0-9\s\-().]{8,22}$/, "Teléfono inválido. Use números con código de área, por ejemplo: +54 9 387 123-4567"),
 
   service: z.enum(
     [

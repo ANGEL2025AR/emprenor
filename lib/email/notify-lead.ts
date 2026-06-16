@@ -40,7 +40,12 @@ export async function notifyLeadReceived(data: LeadPayload): Promise<void> {
           text,
           reply_to: data.email,
         }),
-      }).then(() => undefined),
+      }).then(async (res) => {
+        if (!res.ok) {
+          const body = await res.text().catch(() => "")
+          console.error("[notifyLeadReceived] Resend error:", res.status, body)
+        }
+      }),
     )
   }
 

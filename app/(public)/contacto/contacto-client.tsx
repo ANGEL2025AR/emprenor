@@ -23,11 +23,35 @@ export default function ContactoClient() {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const formatValidationError = (data: {
+    error?: string
+    details?: Array<{ field: string; message: string }>
+  }) => {
+    if (data.details?.length) {
+      return data.details.map((d) => d.message).join(" ")
+    }
+    return (
+      data.error ||
+      "Hubo un problema al enviar su mensaje. Por favor, intente nuevamente o contáctenos por teléfono."
+    )
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus("idle")
     setErrorMessage("")
+
+    const form = e.currentTarget
+    const payload = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value.trim(),
+      email: (form.elements.namedItem("email") as HTMLInputElement).value.trim(),
+      phone: (form.elements.namedItem("phone") as HTMLInputElement).value.trim(),
+      service: (form.elements.namedItem("service") as HTMLSelectElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value.trim(),
+    }
+
+    setFormData(payload)
 
     try {
       const response = await fetch("/api/contact", {
@@ -35,7 +59,7 @@ export default function ContactoClient() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       })
 
       const data = await response.json()
@@ -49,12 +73,10 @@ export default function ContactoClient() {
           service: "",
           message: "",
         })
+        form.reset()
       } else {
         setSubmitStatus("error")
-        setErrorMessage(
-          data.error ||
-            "Hubo un problema al enviar su mensaje. Por favor, intente nuevamente o contáctenos por teléfono.",
-        )
+        setErrorMessage(formatValidationError(data))
       }
     } catch {
       setSubmitStatus("error")
@@ -115,6 +137,7 @@ export default function ContactoClient() {
                 <Input
                   id="name"
                   name="name"
+                  autoComplete="name"
                   placeholder="Juan Pérez"
                   value={formData.name}
                   onChange={handleChange}
@@ -132,6 +155,7 @@ export default function ContactoClient() {
                     id="email"
                     name="email"
                     type="email"
+                    autoComplete="email"
                     placeholder="juan@ejemplo.com"
                     value={formData.email}
                     onChange={handleChange}
@@ -148,6 +172,8 @@ export default function ContactoClient() {
                     id="phone"
                     name="phone"
                     type="tel"
+                    autoComplete="tel"
+                    inputMode="tel"
                     placeholder="+54 9 387 123-4567"
                     value={formData.phone}
                     onChange={handleChange}

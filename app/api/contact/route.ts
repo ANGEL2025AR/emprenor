@@ -92,8 +92,8 @@ export async function POST(request: NextRequest) {
         },
       },
     )
-  } catch {
-    // Error silencioso en producción - los errores se registran en Vercel logs
+  } catch (error) {
+    console.error("[POST /api/contact]", error)
     return NextResponse.json(
       {
         error:

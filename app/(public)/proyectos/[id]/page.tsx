@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { PublicProjectGallery } from "@/components/public/public-project-gallery"
 import { getPublishedProjectById } from "@/lib/public-projects/get-published-project"
 import { contactFormUrl } from "@/lib/site/urls"
+import { formatPublicCopy, formatPublicLabel } from "@/lib/site/format-label"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -20,9 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Proyecto no encontrado | Emprenor" }
   }
 
-  const title = project.seo?.metaTitle || `${project.title} | Emprenor`
+  const titleLabel = formatPublicLabel(project.title)
+  const locationLabel = formatPublicLabel(project.location)
+  const title = project.seo?.metaTitle || `${titleLabel} | Emprenor`
   const description =
-    project.seo?.metaDescription || project.description?.slice(0, 160) || `Proyecto ${project.title} en ${project.location}`
+    project.seo?.metaDescription || project.description?.slice(0, 160) || `Proyecto ${titleLabel} en ${locationLabel}`
 
   return {
     title,
@@ -39,7 +42,10 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  const bodyText = project.detailedDescription?.trim() || project.description
+  const bodyText = formatPublicCopy(project.detailedDescription?.trim() || project.description)
+  const titleLabel = formatPublicLabel(project.title)
+  const locationLabel = formatPublicLabel(project.location)
+  const categoryLabel = formatPublicLabel(project.category)
 
   return (
     <main className="flex flex-col">
@@ -58,9 +64,9 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
           </Button>
           <div className="mx-auto max-w-3xl space-y-4">
             <span className="inline-block rounded-full bg-primary-foreground/15 px-3 py-1 text-sm font-medium">
-              {project.category}
+              {categoryLabel}
             </span>
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-balance">{project.title}</h1>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-balance">{titleLabel}</h1>
             <div className="flex flex-wrap gap-6 text-primary-foreground/90 text-sm md:text-base">
               {project.duration && (
                 <span className="flex items-center gap-2">
@@ -71,7 +77,7 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
               {project.location && (
                 <span className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 shrink-0" />
-                  {project.location}
+                  {locationLabel}
                 </span>
               )}
             </div>

@@ -10,6 +10,33 @@ import { Textarea } from "@/components/ui/textarea"
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle2, AlertCircle } from "lucide-react"
 import { EMPRENOR_CONTACTOS, EMPRENOR_LEGAL, EMPRENOR_OFICINAS, EMPRENOR_PROVINCIAS } from "@/lib/company/constants"
 
+const PROJECT_PROVINCES = [
+  "Salta",
+  "Jujuy",
+  "Tucumán",
+  "Formosa",
+  "Buenos Aires",
+  "CABA",
+  "Catamarca",
+  "Chaco",
+  "Chubut",
+  "Córdoba",
+  "Corrientes",
+  "Entre Ríos",
+  "La Pampa",
+  "La Rioja",
+  "Mendoza",
+  "Misiones",
+  "Neuquén",
+  "Río Negro",
+  "San Juan",
+  "San Luis",
+  "Santa Cruz",
+  "Santa Fe",
+  "Santiago del Estero",
+  "Tierra del Fuego",
+]
+
 export default function ContactoClient() {
   const [formData, setFormData] = useState({
     name: "",
@@ -17,6 +44,13 @@ export default function ContactoClient() {
     phone: "",
     service: "",
     message: "",
+    legalName: "",
+    cuit: "",
+    province: "",
+    locality: "",
+    estimatedBudget: "",
+    requiredDate: "",
+    privacyConsent: false,
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -43,23 +77,15 @@ export default function ContactoClient() {
     setErrorMessage("")
 
     const form = e.currentTarget
-    const payload = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value.trim(),
-      email: (form.elements.namedItem("email") as HTMLInputElement).value.trim(),
-      phone: (form.elements.namedItem("phone") as HTMLInputElement).value.trim(),
-      service: (form.elements.namedItem("service") as HTMLSelectElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value.trim(),
-    }
+    const body = new FormData(form)
+    body.set("privacyConsent", (form.elements.namedItem("privacyConsent") as HTMLInputElement).checked ? "true" : "false")
 
-    setFormData(payload)
+    setFormData((prev) => ({ ...prev, privacyConsent: body.get("privacyConsent") === "true" }))
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+        body,
       })
 
       const data = await response.json()
@@ -72,6 +98,13 @@ export default function ContactoClient() {
           phone: "",
           service: "",
           message: "",
+          legalName: "",
+          cuit: "",
+          province: "",
+          locality: "",
+          estimatedBudget: "",
+          requiredDate: "",
+          privacyConsent: false,
         })
         form.reset()
       } else {
@@ -89,9 +122,10 @@ export default function ContactoClient() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const value = e.target instanceof HTMLInputElement && e.target.type === "checkbox" ? e.target.checked : e.target.value
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     })
   }
 
@@ -103,7 +137,7 @@ export default function ContactoClient() {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold text-foreground">Solicitá una cotización</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Completá el formulario y nos comunicaremos con vos en menos de 24 horas.
+                Completá el formulario y te contactamos para coordinar el relevamiento.
               </p>
             </div>
 
@@ -196,7 +230,7 @@ export default function ContactoClient() {
                   disabled={isSubmitting}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
                 >
-                  <option value="">Seleccione un servicio</option>
+                  <option value="">Elegí un servicio</option>
                   <option value="construccion">Construcción General</option>
                   <option value="remodelacion">Remodelación y Refacciones</option>
                   <option value="albanileria">Albañilería</option>
@@ -209,8 +243,48 @@ export default function ContactoClient() {
                   <option value="climatizacion">Climatización</option>
                   <option value="mantenimiento">Mantenimiento Integral</option>
                   <option value="viviendas-prefabricadas">Viviendas Llave en Mano</option>
+                  <option value="ingenieria">Ingeniería y documentación técnica</option>
+                  <option value="gestion-de-proyectos">Gestión de proyectos</option>
                   <option value="otro">Otro / Consulta general</option>
                 </select>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="legalName" className="text-sm font-medium text-foreground">Razón social</label>
+                  <Input id="legalName" name="legalName" disabled={isSubmitting} />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="cuit" className="text-sm font-medium text-foreground">CUIT</label>
+                  <Input id="cuit" name="cuit" placeholder="20-12345678-9" disabled={isSubmitting} />
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="province" className="text-sm font-medium text-foreground">Provincia del proyecto</label>
+                  <select id="province" name="province" disabled={isSubmitting} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                    <option value="">Elegí una provincia</option>
+                    {PROJECT_PROVINCES.map((province) => (
+                      <option key={province} value={province}>{province}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="locality" className="text-sm font-medium text-foreground">Localidad</label>
+                  <Input id="locality" name="locality" disabled={isSubmitting} />
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="estimatedBudget" className="text-sm font-medium text-foreground">Presupuesto estimado (opcional)</label>
+                  <Input id="estimatedBudget" name="estimatedBudget" disabled={isSubmitting} />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="requiredDate" className="text-sm font-medium text-foreground">Fecha requerida (opcional)</label>
+                  <Input id="requiredDate" name="requiredDate" type="date" disabled={isSubmitting} />
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -229,11 +303,37 @@ export default function ContactoClient() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <label htmlFor="attachment" className="text-sm font-medium text-foreground">Documentación (opcional)</label>
+                <Input id="attachment" name="attachment" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" disabled={isSubmitting} />
+                <p className="text-xs text-muted-foreground">PDF o imagen, hasta 8 MB. Queda asociado a la consulta y no se publica.</p>
+              </div>
+
+              <label className="flex items-start gap-3 text-sm text-muted-foreground">
+                <input
+                  id="privacyConsent"
+                  name="privacyConsent"
+                  type="checkbox"
+                  checked={formData.privacyConsent}
+                  onChange={handleChange}
+                  required
+                  disabled={isSubmitting}
+                  className="mt-1 h-4 w-4 rounded border-input"
+                />
+                <span>
+                  Acepto que EMPRENOR trate estos datos para responder la consulta, según la{" "}
+                  <a href="/privacidad" className="text-foreground underline underline-offset-2">
+                    política de privacidad
+                  </a>
+                  .
+                </span>
+              </label>
+
               <Button
                 type="submit"
                 size="lg"
                 className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !formData.privacyConsent}
               >
                 {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
                 <Send className="ml-2 h-4 w-4" />
@@ -245,7 +345,7 @@ export default function ContactoClient() {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold text-foreground">Información de Contacto</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Puede comunicarse con nosotros a través de cualquiera de los siguientes medios.
+                Podés comunicarte por cualquiera de estos medios.
               </p>
             </div>
 

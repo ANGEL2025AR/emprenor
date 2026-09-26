@@ -42,7 +42,7 @@ function LoginForm() {
       const tipoLabel = tipo ? getPublicClientTypeLabel(tipo) : "cliente"
       const motivoLabel = motivo ? getRegistrationIntentLabel(motivo) : "registro"
       setSuccessMessage(
-        `Solicitud enviada como ${tipoLabel} (${motivoLabel}). EMPRENOR revisará su cuenta y le avisará por email cuando pueda ingresar.`,
+        `Solicitud enviada como ${tipoLabel} (${motivoLabel}). EMPRENOR va a revisar tu cuenta y te avisa por email cuando puedas ingresar.`,
       )
     }
   }, [searchParams])
@@ -98,7 +98,7 @@ function LoginForm() {
             />
             <h1 className="text-4xl font-bold text-slate-900 leading-tight">Portal EMPRENOR</h1>
             <p className="text-lg text-slate-600 leading-relaxed">
-              Acceso según su rol: gestión de obra, portal del cliente, empleados en campo o administración corporativa.
+              Acceso según tu rol: gestión de obra, portal del cliente, empleados en campo o administración.
             </p>
           </div>
 
@@ -201,12 +201,15 @@ function LoginForm() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end pt-1">
+              <div className="flex items-center justify-between pt-1">
+                <Link href="/recuperar" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                  ¿Olvidaste tu contraseña?
+                </Link>
                 <Link
                   href="/contacto"
                   className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
                 >
-                  ¿Problemas de acceso? Contáctanos
+                  ¿Problemas de acceso? Contactanos
                 </Link>
               </div>
             </CardContent>
@@ -240,7 +243,7 @@ function LoginForm() {
               </div>
 
               <p className="text-center text-sm text-slate-600">
-                ¿No tienes cuenta?{" "}
+                ¿No tenés cuenta?{" "}
                 <Link
                   href="/registro"
                   className="text-emerald-600 hover:text-emerald-700 font-semibold transition-colors"

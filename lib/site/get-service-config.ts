@@ -13,6 +13,8 @@ import instalacionesSanitarias from "../../shared/service-configs/instalaciones-
 import mantenimiento from "../../shared/service-configs/mantenimiento.json"
 import obrasIndustriales from "../../shared/service-configs/obras-industriales.json"
 import viviendasPrefabricadas from "../../shared/service-configs/viviendas-prefabricadas.json"
+import ingenieria from "../../shared/service-configs/ingenieria.json"
+import gestionDeProyectos from "../../shared/service-configs/gestion-de-proyectos.json"
 
 const CONFIG_BY_SLUG: Record<string, ServicePageConfig> = {
   construccion: construccion as ServicePageConfig,
@@ -27,6 +29,8 @@ const CONFIG_BY_SLUG: Record<string, ServicePageConfig> = {
   climatizacion: climatizacion as ServicePageConfig,
   mantenimiento: mantenimiento as ServicePageConfig,
   "viviendas-prefabricadas": viviendasPrefabricadas as ServicePageConfig,
+  ingenieria: ingenieria as ServicePageConfig,
+  "gestion-de-proyectos": gestionDeProyectos as ServicePageConfig,
 }
 
 export function getServicePageConfig(slug: string): ServicePageConfig | null {

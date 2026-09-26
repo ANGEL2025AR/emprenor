@@ -48,6 +48,7 @@ import {
   Trash2,
 } from "lucide-react"
 import { ROLE_LABELS, ROLE_COLORS } from "@/lib/auth/permissions"
+import { getUserDisplayName, getUserInitials } from "@/lib/auth/display-name"
 import { usePermissions } from "@/lib/auth/access-control"
 import { useToast } from "@/hooks/use-toast"
 import type { UserRole } from "@/lib/db/models"
@@ -64,18 +65,16 @@ type UserRow = {
   emailVerified: boolean
 }
 
-function getUserInitials(name?: string | null, lastName?: string | null): string {
-  const firstInitial = (name || "U").charAt(0).toUpperCase()
-  const lastInitial = (lastName || "").charAt(0).toUpperCase()
-  return firstInitial + lastInitial
-}
-
 const ROLE_OPTIONS: { value: UserRole; label: string; superAdminOnly?: boolean }[] = [
   { value: "admin", label: "Administrador" },
   { value: "gerente", label: "Gerente de Proyecto" },
+  { value: "comercial", label: "Comercial" },
+  { value: "proyectos", label: "Proyectos" },
+  { value: "documentacion", label: "Documentación" },
   { value: "supervisor", label: "Supervisor de Obra" },
   { value: "trabajador", label: "Trabajador" },
   { value: "cliente", label: "Cliente" },
+  { value: "proveedor", label: "Proveedor" },
   { value: "super_admin", label: "Super Administrador", superAdminOnly: true },
 ]
 
@@ -307,12 +306,12 @@ export default function UsersClient() {
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-lg font-semibold shrink-0">
-                      {getUserInitials(user.name, user.lastName)}
+                      {getUserInitials(user)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="font-semibold text-slate-900 truncate">
-                          {user.name} {user.lastName}
+                          {getUserDisplayName(user)}
                         </h3>
                         {showActions && !self && (
                           <DropdownMenu>

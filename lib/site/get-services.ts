@@ -1,6 +1,6 @@
 import type { SiteService } from "@/lib/db/models"
 import { getDb } from "@/lib/db/connection"
-import { getDefaultServicesFromCatalog, resolveServiceSlug } from "./services-catalog"
+import { getDefaultServicesFromCatalog, LEGACY_SERVICE_SLUG_REDIRECTS, resolveServiceSlug } from "./services-catalog"
 
 function isMissingMongoUriError(error: unknown): boolean {
   return error instanceof Error && error.message.includes("MONGODB_URI")
@@ -10,12 +10,26 @@ export function getDefaultServices(): SiteService[] {
   return getDefaultServicesFromCatalog()
 }
 
-function mergePublishedWithCatalog(docs: SiteService[], defaults: SiteService[]): SiteService[] {
+function preferCanonicalDoc(docs: SiteService[]): Map<string, SiteService> {
   const bySlug = new Map<string, SiteService>()
   for (const doc of docs) {
     const resolved = resolveServiceSlug(doc.slug)
-    bySlug.set(resolved, { ...doc, slug: resolved })
+    const current = bySlug.get(resolved)
+    if (!current || doc.slug === resolved) {
+      bySlug.set(resolved, { ...doc, slug: resolved })
+    }
   }
+  return bySlug
+}
+
+function legacySlugsFor(resolved: string): string[] {
+  return Object.entries(LEGACY_SERVICE_SLUG_REDIRECTS)
+    .filter(([, target]) => target === resolved)
+    .map(([from]) => from)
+}
+
+function mergePublishedWithCatalog(docs: SiteService[], defaults: SiteService[]): SiteService[] {
+  const bySlug = preferCanonicalDoc(docs)
 
   return defaults
     .filter((entry) => entry.published)
@@ -72,7 +86,13 @@ export async function getAllServicesAdmin(): Promise<SiteService[]> {
     const db = await getDb()
     const docs = await db.collection<SiteService>("site_services").find({}).sort({ order: 1 }).toArray()
     if (!docs.length) return defaults.sort((a, b) => a.order - b.order)
-    return docs
+    const bySlug = preferCanonicalDoc(docs)
+    return defaults
+      .map((entry) => {
+        const fromDb = bySlug.get(entry.slug)
+        return fromDb ? { ...entry, ...fromDb, slug: entry.slug } : entry
+      })
+      .sort((a, b) => a.order - b.order)
   } catch (error) {
     if (!isMissingMongoUriError(error)) {
       console.error("[site_services] Error admin:", error)
@@ -103,7 +123,8 @@ export async function getServiceBySlug(slug: string): Promise<SiteService | null
 }
 
 export async function getServiceBySlugAdmin(slug: string): Promise<SiteService | null> {
-  const fallback = getDefaultServices().find((s) => s.slug === slug) ?? null
+  const resolved = resolveServiceSlug(slug)
+  const fallback = getDefaultServices().find((s) => s.slug === resolved) ?? null
 
   if (!process.env.MONGODB_URI?.trim()) {
     return fallback
@@ -111,8 +132,14 @@ export async function getServiceBySlugAdmin(slug: string): Promise<SiteService |
 
   try {
     const db = await getDb()
-    const doc = await db.collection<SiteService>("site_services").findOne({ slug })
-    return doc ?? fallback
+    const candidates = [resolved, ...legacySlugsFor(resolved)]
+    const docs = await db
+      .collection<SiteService>("site_services")
+      .find({ slug: { $in: candidates } })
+      .toArray()
+    const doc = preferCanonicalDoc(docs).get(resolved)
+    if (!doc) return fallback
+    return { ...(fallback ?? {}), ...doc, slug: resolved }
   } catch (error) {
     if (!isMissingMongoUriError(error)) {
       console.error("[site_services] Error admin slug:", slug, error)

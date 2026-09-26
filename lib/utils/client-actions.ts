@@ -53,12 +53,7 @@ export async function handleDeleteWithConfirmation(id: string, options: DeleteOp
   }
 }
 
-export function formatCurrency(amount: number, currency = "ARS"): string {
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency,
-  }).format(amount)
-}
+export { formatCurrency } from "@/lib/utils"
 
 export function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat("es-AR", {

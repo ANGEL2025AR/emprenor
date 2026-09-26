@@ -1,6 +1,7 @@
 import { CardContent, CardHeader } from "@/components/ui/card"
 import { DashboardPanel, DashboardSectionTitle } from "@/components/dashboard/dashboard-ui"
 import { DollarSign } from "lucide-react"
+import { formatCompactCurrency } from "@/lib/utils"
 import { getDb } from "@/lib/db/connection"
 
 async function getRevenueData() {
@@ -14,36 +15,37 @@ async function getRevenueData() {
     const transactions = await db
       .collection("transactions")
       .find({
-        date: { $gte: sixMonthsAgo },
         status: "pagado",
+        type: "ingreso",
       })
-      .sort({ date: 1 })
       .toArray()
 
-    // Agrupar por mes
+    const recent = transactions.filter((t) => {
+      const raw = t.date || t.createdAt
+      const date = raw ? new Date(raw) : null
+      return date && !Number.isNaN(date.getTime()) && date >= sixMonthsAgo
+    })
+
     const monthlyData = new Map<string, number>()
     const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
-    transactions.forEach((t) => {
-      if (t.type === "ingreso") {
-        const date = new Date(t.date)
-        const monthKey = `${monthNames[date.getMonth()]}`
-        monthlyData.set(monthKey, (monthlyData.get(monthKey) || 0) + (t.amount || 0))
-      }
+    recent.forEach((t) => {
+      const date = new Date(t.date || t.createdAt)
+      const monthKey = `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+      monthlyData.set(monthKey, (monthlyData.get(monthKey) || 0) + (t.amount || 0))
     })
 
-    // Convertir a array para renderizar
     const months = Array.from(monthlyData.keys()).slice(-6)
     const revenue = months.map((m) => monthlyData.get(m) || 0)
 
-    return { months, revenue }
+    return { months, revenue, hasHistoricalIncome: transactions.length > 0 }
   } catch {
-    return { months: [], revenue: [] }
+    return { months: [], revenue: [], hasHistoricalIncome: false }
   }
 }
 
 export async function RevenueChart() {
-  const { months, revenue } = await getRevenueData()
+  const { months, revenue, hasHistoricalIncome } = await getRevenueData()
 
   if (months.length === 0 || revenue.every((r) => r === 0)) {
     return (
@@ -54,9 +56,13 @@ export async function RevenueChart() {
         <CardContent>
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <DollarSign className="w-16 h-16 text-slate-300 mb-4" />
-            <p className="text-slate-500 font-medium">No hay datos de ingresos registrados</p>
+            <p className="text-slate-500 font-medium">
+              {hasHistoricalIncome ? "Sin ingresos en los últimos 6 meses" : "No hay ingresos registrados"}
+            </p>
             <p className="text-sm text-slate-400 mt-1">
-              Los ingresos aparecerán aquí una vez que registres transacciones
+              {hasHistoricalIncome
+                ? "El balance del panel incluye movimientos anteriores a este período."
+                : "Los ingresos aparecerán aquí cuando registres transacciones pagadas."}
             </p>
           </div>
         </CardContent>
@@ -77,7 +83,7 @@ export async function RevenueChart() {
             <div key={month} className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="font-medium text-slate-700">{month}</span>
-                <span className="font-bold text-slate-900">${(revenue[i] / 1000).toFixed(0)}K</span>
+                <span className="font-bold text-slate-900">{formatCompactCurrency(revenue[i])}</span>
               </div>
               <div className="h-8 bg-slate-100 rounded-lg overflow-hidden">
                 <div

@@ -61,6 +61,13 @@ interface Contacto {
   company?: string
   service?: string
   message: string
+  legalName?: string
+  cuit?: string
+  province?: string
+  locality?: string
+  estimatedBudget?: string
+  requiredDate?: string
+  attachment?: { originalName?: string; storedName?: string }
   status: string
   notes?: string
   priority?: string
@@ -444,10 +451,24 @@ export function ContactosAdminClient({ currentUser }: { currentUser: Serializabl
                 {/* Mensaje */}
                 <Card className="bg-slate-50">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm">Mensaje</CardTitle>
+                    <CardTitle className="text-sm">Consulta</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-slate-700 whitespace-pre-wrap">{selectedContacto.message}</p>
+                  <CardContent className="space-y-2 text-sm text-slate-700">
+                    {selectedContacto.legalName ? <p>Razón social: {selectedContacto.legalName}</p> : null}
+                    {selectedContacto.cuit ? <p>CUIT: {selectedContacto.cuit}</p> : null}
+                    {selectedContacto.province || selectedContacto.locality ? (
+                      <p>
+                        Lugar: {[selectedContacto.locality, selectedContacto.province].filter(Boolean).join(", ")}
+                      </p>
+                    ) : null}
+                    {selectedContacto.estimatedBudget ? <p>Presupuesto estimado: {selectedContacto.estimatedBudget}</p> : null}
+                    {selectedContacto.requiredDate ? <p>Fecha requerida: {selectedContacto.requiredDate}</p> : null}
+                    {selectedContacto.attachment?.storedName ? (
+                      <a className="underline" href={`/api/contact/${selectedContacto._id}/attachment`}>
+                        Descargar {selectedContacto.attachment.originalName || "documentación"}
+                      </a>
+                    ) : null}
+                    <p className="whitespace-pre-wrap">{selectedContacto.message}</p>
                   </CardContent>
                 </Card>
 

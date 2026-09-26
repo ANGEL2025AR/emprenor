@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Política de cookies | EMPRENOR",
-  description: "Uso de cookies y tecnologías similares en emprenor.com.ar",
-}
+export const metadata: Metadata = buildPageMetadata({
+  title: "Política de cookies",
+  description: "Cookies esenciales, de sesión y de medición en www.emprenor.com, y cómo gestionarlas en el navegador.",
+  path: "/cookies",
+})
 
 export default function CookiesPage() {
   return (

@@ -221,7 +221,18 @@ export const userSchema = z.object({
   name: z.string().min(2, "El nombre es requerido"),
   lastName: z.string().min(2, "El apellido es requerido"),
   phone: z.string().optional(),
-  role: z.enum(["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"]),
+  role: z.enum([
+    "super_admin",
+    "admin",
+    "gerente",
+    "comercial",
+    "proyectos",
+    "documentacion",
+    "supervisor",
+    "trabajador",
+    "cliente",
+    "proveedor",
+  ]),
   isActive: z.boolean().default(true),
 })
 
@@ -258,6 +269,8 @@ export const contactFormSchema = z.object({
       "climatizacion",
       "mantenimiento",
       "viviendas-prefabricadas",
+      "ingenieria",
+      "gestion-de-proyectos",
       "otro",
     ],
     { errorMap: () => ({ message: "Servicio inválido" }) },
@@ -268,6 +281,23 @@ export const contactFormSchema = z.object({
     .min(10, "El mensaje debe tener al menos 10 caracteres")
     .max(2000, "El mensaje no puede exceder 2000 caracteres")
     .trim(),
+
+  legalName: z.string().trim().max(160).optional().or(z.literal("")),
+  cuit: z
+    .string()
+    .trim()
+    .max(13)
+    .optional()
+    .or(z.literal(""))
+    .refine((value) => !value || /^\d{2}-?\d{8}-?\d$/.test(value), "CUIT inválido. Usá el formato 20-12345678-9."),
+  province: z.string().trim().max(80).optional().or(z.literal("")),
+  locality: z.string().trim().max(80).optional().or(z.literal("")),
+  estimatedBudget: z.string().trim().max(40).optional().or(z.literal("")),
+  requiredDate: z.string().trim().max(10).optional().or(z.literal("")),
+
+  privacyConsent: z.literal(true, {
+    errorMap: () => ({ message: "Tenés que aceptar la política de privacidad para enviar la consulta." }),
+  }),
 })
 
 export function sanitizeHtml(input: string): string {

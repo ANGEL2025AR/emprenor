@@ -15,9 +15,10 @@ import { useToast } from "@/hooks/use-toast"
 import type { SiteService, SiteServiceIconKey } from "@/lib/db/models"
 import { ImageUploadField } from "@/components/site/image-upload-field"
 import { GalleryUploadField } from "@/components/site/gallery-upload-field"
+import { ServicePageCopyEditor } from "@/components/site/service-page-copy-editor"
 import { ArrowLeft, Loader2, Plus, Save, Trash2 } from "lucide-react"
 
-const ICONS: SiteServiceIconKey[] = ["Building2", "Hammer", "Home", "Factory", "Flame", "Lightbulb", "Droplets", "Paintbrush"]
+const ICONS: SiteServiceIconKey[] = ["Building2", "Hammer", "Home", "Factory", "Flame", "Lightbulb", "Droplets", "Paintbrush", "Zap", "Wind", "Wrench", "Tractor"]
 
 export default function EditarServicioPage() {
   const params = useParams()
@@ -97,6 +98,7 @@ export default function EditarServicioPage() {
           <TabsTrigger value="proceso">Proceso</TabsTrigger>
           <TabsTrigger value="trabajos">Tipos de trabajo</TabsTrigger>
           <TabsTrigger value="imagenes">Imágenes</TabsTrigger>
+          <TabsTrigger value="pagina">Página pública</TabsTrigger>
           <TabsTrigger value="seo">SEO</TabsTrigger>
         </TabsList>
 
@@ -211,6 +213,15 @@ export default function EditarServicioPage() {
                 <Input value={form.heroImageAlt} onChange={(e) => set("heroImageAlt", e.target.value)} />
               </div>
               <GalleryUploadField label="Galería de trabajos realizados" folder="services" value={form.gallery} onChange={(g) => set("gallery", g)} onUploadingChange={setUploading} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="pagina" className="mt-4">
+          <Card>
+            <CardHeader><CardTitle>Textos de la página pública</CardTitle></CardHeader>
+            <CardContent>
+              <ServicePageCopyEditor slug={slug} />
             </CardContent>
           </Card>
         </TabsContent>

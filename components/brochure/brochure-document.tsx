@@ -327,7 +327,13 @@ export function BrochureDocument() {
               Referencias publicadas en <strong className="text-slate-700">{BROCHURE_META.website}/proyectos</strong>.
             </p>
             <div className="space-y-1 mb-6">
-              {featuredProjects.map((p) => (
+              {featuredProjects.length === 0 ? (
+                <p className="text-sm text-slate-600">
+                  Las obras publicadas se consultan en el sitio. Este folleto no incluye referencias que no estén cargadas
+                  en el portfolio.
+                </p>
+              ) : (
+                featuredProjects.map((p) => (
                 <div
                   key={p.num}
                   className={`grid grid-cols-[40px_1fr_auto] gap-3 items-center p-3.5 ${
@@ -344,7 +350,8 @@ export function BrochureDocument() {
                     {p.plazo && <span className="text-[8px] text-slate-400 mt-1 block">Plazo: {p.plazo}</span>}
                   </div>
                 </div>
-              ))}
+                ))
+              )}
             </div>
             <p className="text-[10px] tracking-widest uppercase text-green-600 font-semibold mb-3 flex items-center gap-2">
               <FileCheck className="w-3.5 h-3.5" />
@@ -376,7 +383,7 @@ export function BrochureDocument() {
             <div className="grid md:grid-cols-2 gap-8 bg-slate-900 text-white p-8 flex-1 min-h-0">
               <div>
                 <h3 className="text-xl font-black mb-3">Cobertura en <span className="text-green-500">4 provincias</span></h3>
-                <p className="text-sm text-white/55 mb-5">Sede estratégica en el NOA para brindarle el mejor servicio de construcción del norte argentino.</p>
+                <p className="text-sm text-white/55 mb-5">Sede en el NOA para darte el mejor servicio de construcción del norte argentino.</p>
                 {BROCHURE_OFFICES.map((o) => (
                   <div key={o.name} className="flex gap-2 mb-3 text-sm">
                     <MapPin className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />

@@ -5,8 +5,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { hashPassword } from "@/lib/auth/password"
 import type { User, UserRole } from "@/lib/db/models"
-
-const USER_ROLES: UserRole[] = ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"]
+import { USER_ROLES } from "@/lib/db/models"
 
 type RouteParams = { params: Promise<{ id: string }> }
 

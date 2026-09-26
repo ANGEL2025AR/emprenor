@@ -48,7 +48,7 @@ export function WorksMapSection() {
               Presencia verificable en el <span className="text-green-500">NOA</span>
             </h2>
             <p className="text-white/55 leading-relaxed mb-6 max-w-lg">
-              Cada obra publicada con ubicación geográfica se sincroniza automáticamente en el mapa. Consulte el estado y el avance de proyectos en Salta y Jujuy.
+              Cada obra publicada con ubicación se sincroniza en el mapa. Consultá el estado y el avance de los proyectos en Salta y Jujuy.
             </p>
 
             {!loading && projects.length > 0 && (

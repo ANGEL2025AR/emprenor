@@ -129,7 +129,7 @@
         {
           "step": "06",
           "title": "Entrega y Garantía",
-          "desc": "Inspección final, documentación conforme a obra ejecutada y garantía de hasta 5 años en estructura y terminaciones."
+          "desc": "Inspección final, documentación conforme a obra ejecutada y garantía según el contrato."
         }
       ]
     },
@@ -150,7 +150,7 @@
     {
       "type": "cta",
       "title": "¿Tenés un proyecto de construcción?",
-      "subtitle": "Solicitá tu cotización gratuita hoy. Respuesta en menos de 24 horas.",
+      "subtitle": "Solicitá tu cotización. El plazo de respuesta se coordina después del relevamiento.",
       "buttonText": "Solicitar Cotización",
       "showPhone": true
     }

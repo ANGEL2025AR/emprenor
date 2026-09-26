@@ -152,6 +152,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [navPath, setNavPath] = useState("")
 
   const [portalSettings, setPortalSettings] = useState<PortalSettings | null>(initialPortalSettings)
 
@@ -162,9 +163,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
     [userRole, portalSettings],
   )
 
-  const [openGroups, setOpenGroups] = useState<Set<string>>(() =>
-    getOpenGroupsForPath(pathname, filterNavGroups(userRole, initialPortalSettings)),
-  )
+  const [openGroups, setOpenGroups] = useState<Set<string>>(() => new Set())
 
   const showHome = useMemo(() => isHomeVisible(userRole), [userRole])
   const homeItem = useMemo(() => getDashboardHome(userRole), [userRole])
@@ -190,10 +189,8 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
   }, [user?.role, initialPortalSettings])
 
   useEffect(() => {
-    setOpenGroups((prev) => {
-      const active = getOpenGroupsForPath(pathname, navGroups)
-      return new Set([...prev, ...active])
-    })
+    setNavPath(pathname)
+    setOpenGroups(getOpenGroupsForPath(pathname, navGroups))
   }, [pathname, navGroups])
 
   const toggleGroup = (groupId: string) => {
@@ -280,7 +277,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
               <li className="mb-2">
                 <NavLink
                   item={homeItem}
-                  isActive={isNavPathActive(pathname, homeItem.href)}
+                  isActive={isNavPathActive(navPath, homeItem.href)}
                   isCollapsed={isCollapsed}
                 />
               </li>
@@ -293,7 +290,7 @@ export function DashboardSidebar({ user, initialPortalSettings = null }: Dashboa
                 isCollapsed={isCollapsed}
                 isOpen={openGroups.has(group.id)}
                 onToggle={() => toggleGroup(group.id)}
-                pathname={pathname}
+                pathname={navPath}
               />
             ))}
           </ul>

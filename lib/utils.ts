@@ -32,6 +32,16 @@ export function formatCurrency(value: unknown, currency = "ARS"): string {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency }).format(num)
 }
 
+/** Montos ejecutivos: pesos completos bajo el millón y compacto a partir de ahí. */
+export function formatCompactCurrency(value: unknown, currency = "ARS"): string {
+  const num = Number(value)
+  if (!Number.isFinite(num)) return "$0"
+  const abs = Math.abs(num)
+  if (abs < 1_000_000) return formatCurrency(num, currency)
+  const compact = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 }).format(abs / 1_000_000)
+  return `${num < 0 ? "-" : ""}$${compact} M`
+}
+
 /**
  * Safe percentage calculation avoiding division by zero.
  */

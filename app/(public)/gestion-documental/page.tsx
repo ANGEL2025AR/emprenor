@@ -7,7 +7,7 @@ import { contactFormUrl } from "@/lib/site/urls"
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Gestión documental",
-  description: `Documentación de obra y trazabilidad — ${EMPRENOR_BRAND.siglas}.`,
+  description: `Documentación de obra, legajo de personal y entregables al cliente, según el contrato. ${EMPRENOR_BRAND.siglas}.`,
   path: "/gestion-documental",
 })
 
@@ -57,7 +57,7 @@ export default function GestionDocumentalPage() {
           content: (
             <p>
               Para organismos estatales, la documentación se ajusta al pliego y al manual de procedimientos del
-              contratante. Consulte también{" "}
+              contratante. Consultá también{" "}
               <Link href="/licitaciones" className="text-emerald-700 underline">
                 Licitaciones
               </Link>{" "}

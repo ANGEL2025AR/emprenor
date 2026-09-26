@@ -15,7 +15,18 @@ export interface BaseDocument {
 // USUARIOS Y AUTENTICACIÓN
 // ============================================
 
-export const USER_ROLES = ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"] as const
+export const USER_ROLES = [
+  "super_admin",
+  "admin",
+  "gerente",
+  "comercial",
+  "proyectos",
+  "documentacion",
+  "supervisor",
+  "trabajador",
+  "cliente",
+  "proveedor",
+] as const
 export type UserRole = (typeof USER_ROLES)[number]
 
 export interface User extends BaseDocument {

@@ -9,6 +9,7 @@ import { STATUS_CONFIG, STATUS_MARKER_COLORS, normalizeProjectStatus } from "@/l
 import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
 import { ProjectProgressBar } from "@/components/projects/project-progress-bar"
 import { projectsMapUrl } from "@/lib/site/urls"
+import { escapeHtml, formatPublicLabel } from "@/lib/site/format-label"
 import "leaflet/dist/leaflet.css"
 
 type Props = {
@@ -90,10 +91,12 @@ export function WorksMap({
           icon: createStatusIcon(L, project.status || "Finalizado", project.id === selectedId),
         })
         marker.on("click", () => onSelectRef.current?.(project))
+        const title = escapeHtml(formatPublicLabel(project.title))
+        const location = project.location ? escapeHtml(formatPublicLabel(project.location)) : ""
         marker.bindPopup(`
           <div style="min-width:200px">
-            <p style="font-weight:700;font-size:14px;margin:0 0 4px">${project.title}</p>
-            ${project.location ? `<p style="font-size:12px;color:#64748b;margin:0">${project.location}</p>` : ""}
+            <p style="font-weight:700;font-size:14px;margin:0 0 4px">${title}</p>
+            ${location ? `<p style="font-size:12px;color:#64748b;margin:0">${location}</p>` : ""}
           </div>
         `)
         marker.addTo(map)
@@ -158,8 +161,8 @@ export function WorksMap({
 
       {selected && onSelect && (
         <div className="absolute top-4 right-4 z-[1000] max-w-xs bg-background/95 backdrop-blur-sm rounded-xl border border-border p-4 shadow-xl hidden md:block">
-          <p className="font-bold text-sm leading-snug mb-1">{selected.title}</p>
-          {selected.location && <p className="text-xs text-muted-foreground mb-3">{selected.location}</p>}
+          <p className="font-bold text-sm leading-snug mb-1">{formatPublicLabel(selected.title)}</p>
+          {selected.location && <p className="text-xs text-muted-foreground mb-3">{formatPublicLabel(selected.location)}</p>}
           <ProjectStatusBadge status={selected.status} className="mb-3" />
           <ProjectProgressBar progress={selected.progress} status={selected.status} compact />
           <Link href={projectsMapUrl()} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-green-600 hover:text-green-700">

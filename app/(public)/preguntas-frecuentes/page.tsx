@@ -44,7 +44,7 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Cuánto tiempo toma recibir una cotización?",
           respuesta:
-            "Generalmente entregamos cotizaciones en menos de 24-48 horas después de la visita al sitio. Para proyectos más complejos, puede tomar entre 3-5 días hábiles.",
+            "El plazo se define después del relevamiento, según la complejidad del proyecto.",
         },
         {
           pregunta: "¿Los precios incluyen materiales?",
@@ -79,7 +79,7 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Ofrecen garantía en sus trabajos?",
           respuesta:
-            "Sí, todos nuestros trabajos cuentan con garantía. La duración varía según el tipo de trabajo: desde 6 meses para pintura hasta 5 años para estructuras.",
+            "La garantía se pacta en el contrato y el acta de entrega, según el tipo de trabajo. No publicamos un plazo único para todas las obras.",
         },
         {
           pregunta: "¿Se encargan de los permisos y trámites?",
@@ -109,7 +109,7 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Ofrecen financiación?",
           respuesta:
-            "Para proyectos grandes, podemos ofrecer planes de pago en cuotas. Consúltenos sobre las opciones disponibles según su proyecto.",
+            "Para obras grandes armamos planes en cuotas. Consultanos y lo definimos según el alcance de tu proyecto.",
         },
       ],
     },
@@ -167,7 +167,7 @@ export default function PreguntasFrecuentesPage() {
             <CardContent className="p-8 md:p-12">
               <div className="mx-auto max-w-2xl text-center space-y-6">
                 <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-balance">
-                  ¿No encontró la respuesta que buscaba?
+                  ¿No encontraste la respuesta?
                 </h2>
                 <p className="text-muted-foreground text-lg leading-relaxed">
                   Contactanos directamente y con gusto responderemos todas tus consultas

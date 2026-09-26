@@ -2,11 +2,13 @@ import type { Metadata } from "next"
 import { PublicHeroSection } from "@/components/home/public-hero-section"
 import { EthicsReportForm } from "@/components/public/ethics-report-form"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Línea de ética | EMPRENOR",
-  description: "Canal confidencial para reportar conductas contrarias a nuestro código de ética.",
-}
+export const metadata: Metadata = buildPageMetadata({
+  title: "Línea de ética",
+  description: "Canal confidencial para reportar conductas contrarias al código de ética de EMPRENOR.",
+  path: "/linea-etica",
+})
 
 export default function LineaEticaPage() {
   return (

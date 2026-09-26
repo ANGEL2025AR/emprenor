@@ -132,6 +132,28 @@
       "icon": "Home",
       "colorGradient": "from-teal-500 to-teal-600",
       "order": 12
+    },
+    {
+      "pageKey": "ServicioIngenieria",
+      "slug": "ingenieria",
+      "legacySlugs": [],
+      "title": "Ingeniería",
+      "footerName": "Ingeniería",
+      "shortDescription": "Relevamiento, documentación técnica y criterios de obra según el contrato",
+      "icon": "Building2",
+      "colorGradient": "from-slate-600 to-slate-800",
+      "order": 13
+    },
+    {
+      "pageKey": "ServicioGestionProyectos",
+      "slug": "gestion-de-proyectos",
+      "legacySlugs": [],
+      "title": "Gestión de proyectos",
+      "footerName": "Gestión de proyectos",
+      "shortDescription": "Planificación, presupuesto, ejecución y entrega documentada",
+      "icon": "Wrench",
+      "colorGradient": "from-emerald-600 to-emerald-800",
+      "order": 14
     }
   ],
   "legacySlugRedirects": {

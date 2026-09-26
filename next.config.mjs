@@ -94,6 +94,9 @@ const nextConfig = {
       { source: "/MapaObras", destination: "/proyectos#mapa", permanent: true },
       { source: "/mapa-obras", destination: "/proyectos#mapa", permanent: true },
       { source: "/Cotizar", destination: "/contacto", permanent: true },
+      { source: "/solicitar-presupuesto", destination: "/contacto", permanent: true },
+      { source: "/politicas", destination: "/aviso-legal", permanent: true },
+      { source: "/terminos", destination: "/aviso-legal", permanent: true },
       ...Object.entries({
         refacciones: "remodelacion",
         refaccion: "remodelacion",

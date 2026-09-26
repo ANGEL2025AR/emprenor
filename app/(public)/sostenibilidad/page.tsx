@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Sostenibilidad | EMPRENOR",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Sostenibilidad",
   description: "Compromiso ambiental y social en obras del NOA — compras locales, comunidades y buenas prácticas.",
-}
+  path: "/sostenibilidad",
+})
 
 export default function SostenibilidadPage() {
   return (

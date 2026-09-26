@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/db/connection"
+import { formatCompactCurrency, formatCurrency } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, TrendingDown, DollarSign } from "lucide-react"
 
@@ -10,19 +11,20 @@ export const metadata = {
 export default async function ReporteFinancieroPage() {
   const db = await getDb()
 
-  // Use payments collection (transactions may not exist)
-  const payments = await db.collection("payments").find().toArray()
-  const projects = await db.collection("projects").find().toArray()
+  const [payments, transactions, projects] = await Promise.all([
+    db.collection("payments").find().toArray(),
+    db.collection("transactions").find().toArray(),
+    db.collection("projects").find().toArray(),
+  ])
+  const movements = [...payments, ...transactions]
 
-  const ingresos = payments
+  const ingresos = movements
     .filter((t) => t.type === "ingreso" && (t.status === "pagado" || t.status === "completed"))
     .reduce((sum, t) => sum + (t.amount || 0), 0)
 
-  const egresos = payments
+  const egresos = movements
     .filter((t) => t.type === "egreso" && (t.status === "pagado" || t.status === "completed"))
     .reduce((sum, t) => sum + (t.amount || 0), 0)
-
-  const pendiente = payments.filter((t) => t.status === "pendiente").reduce((sum, t) => sum + (t.amount || 0), 0)
 
   return (
     <div className="space-y-6">
@@ -37,7 +39,7 @@ export default async function ReporteFinancieroPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Ingresos Totales</p>
-                <p className="text-3xl font-bold text-green-600">${(ingresos / 1000000).toFixed(2)}M</p>
+                <p className="text-3xl font-bold text-green-600">{formatCompactCurrency(ingresos)}</p>
               </div>
               <TrendingUp className="w-12 h-12 text-green-600 opacity-20" />
             </div>
@@ -49,7 +51,7 @@ export default async function ReporteFinancieroPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Egresos Totales</p>
-                <p className="text-3xl font-bold text-red-600">${(egresos / 1000000).toFixed(2)}M</p>
+                <p className="text-3xl font-bold text-red-600">{formatCompactCurrency(egresos)}</p>
               </div>
               <TrendingDown className="w-12 h-12 text-red-600 opacity-20" />
             </div>
@@ -62,7 +64,7 @@ export default async function ReporteFinancieroPage() {
               <div>
                 <p className="text-sm font-medium text-slate-600">Balance Neto</p>
                 <p className={`text-3xl font-bold ${ingresos - egresos >= 0 ? "text-green-600" : "text-red-600"}`}>
-                  ${((ingresos - egresos) / 1000000).toFixed(2)}M
+                  {formatCompactCurrency(ingresos - egresos)}
                 </p>
               </div>
               <DollarSign className="w-12 h-12 text-blue-600 opacity-20" />
@@ -77,8 +79,13 @@ export default async function ReporteFinancieroPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            {projects.length === 0 ? (
+              <p className="text-sm text-slate-500">
+                No hay proyectos de gestión para desglosar. El balance de arriba incluye los movimientos generales cargados.
+              </p>
+            ) : null}
             {projects.map((project) => {
-              const projectIngresos = payments
+              const projectIngresos = movements
                 .filter(
                   (t) =>
                     t.projectId?.toString() === project._id?.toString() &&
@@ -87,7 +94,7 @@ export default async function ReporteFinancieroPage() {
                 )
                 .reduce((sum, t) => sum + (t.amount || 0), 0)
 
-              const projectEgresos = payments
+              const projectEgresos = movements
                 .filter(
                   (t) =>
                     t.projectId?.toString() === project._id?.toString() &&
@@ -103,12 +110,12 @@ export default async function ReporteFinancieroPage() {
                     <p className="text-sm text-slate-500">{project.code}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-slate-600">Ingresos: ${projectIngresos.toLocaleString()}</p>
-                    <p className="text-sm text-slate-600">Egresos: ${projectEgresos.toLocaleString()}</p>
+                    <p className="text-sm text-slate-600">Ingresos: {formatCurrency(projectIngresos)}</p>
+                    <p className="text-sm text-slate-600">Egresos: {formatCurrency(projectEgresos)}</p>
                     <p
                       className={`font-bold ${projectIngresos - projectEgresos >= 0 ? "text-green-600" : "text-red-600"}`}
                     >
-                      Balance: ${(projectIngresos - projectEgresos).toLocaleString()}
+                      Balance: {formatCurrency(projectIngresos - projectEgresos)}
                     </p>
                   </div>
                 </div>

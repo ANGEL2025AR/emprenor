@@ -16,6 +16,10 @@ const ICON_KEYS: SiteServiceIconKey[] = [
   "Lightbulb",
   "Droplets",
   "Paintbrush",
+  "Zap",
+  "Wind",
+  "Wrench",
+  "Tractor",
 ]
 
 function revalidateServicePaths(slug: string) {

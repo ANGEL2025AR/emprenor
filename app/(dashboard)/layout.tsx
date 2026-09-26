@@ -1,5 +1,10 @@
 import type React from "react"
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 import { getCurrentUser } from "@/lib/auth/session"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"

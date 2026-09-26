@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import { InstitutionalPage } from "@/components/public/institutional-page"
 import { contactFormUrl } from "@/lib/site/urls"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Seguridad y salud ocupacional | EMPRENOR",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Seguridad y salud ocupacional",
   description: "Política SST, ART y cultura de prevención en obra — EMPRENOR NOA.",
-}
+  path: "/seguridad-y-salud",
+})
 
 export default function SeguridadSaludPage() {
   return (

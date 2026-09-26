@@ -46,7 +46,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
     ["Viviendas unifamiliares", "Edificios comerciales", "Obras públicas", "Estructuras metálicas"],
     "Construcción Profesional",
     [
-      "En EMPRENOR ofrecemos servicios integrales de construcción desde la planificación inicial hasta la entrega final. Nuestro equipo se encarga de cada detalle para garantizar que su proyecto se complete a tiempo, dentro del presupuesto y con la máxima calidad.",
+      "En EMPRENOR nos ocupamos de la obra completa, desde la planificación hasta la entrega. El equipo cuida cada detalle para que tu proyecto llegue a tiempo, dentro del presupuesto y con la calidad acordada.",
       "Operamos en Salta, Jujuy, Tucumán y Formosa con equipos especializados en construcción, remodelación e instalaciones.",
     ],
     [

@@ -261,7 +261,7 @@ function SplitContentEmergency(props: Record<string, unknown>) {
               ))}
             </ul>
             <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white h-12" asChild>
-              <a href={`tel:${EMPRENOR_LEGAL.telefonoPrincipalHref}`}><Phone className="w-4 h-4 mr-2" />Llamar Ahora — 24/7</a>
+              <a href={`tel:${EMPRENOR_LEGAL.telefonoPrincipalHref}`}><Phone className="w-4 h-4 mr-2" />Llamar ahora</a>
             </Button>
           </div>
         </div>

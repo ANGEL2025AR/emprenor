@@ -5,14 +5,39 @@ import { buildMiddlewareRouteMap, isClientPathAllowed } from "@/lib/auth/client-
 import { getDefaultDashboardPath, isEmployeePathAllowed, isEmployeeRole } from "@/lib/auth/employee-routes"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
+import { getAllServiceSlugs, LEGACY_SERVICE_SLUG_REDIRECTS } from "@/lib/site/services-catalog"
 
 const protectedRoutes = ["/dashboard"]
-const authRoutes = ["/login", "/registro", "/setup"]
+const authRoutes = ["/login", "/registro", "/setup", "/recuperar", "/restablecer"]
+const knownServiceSlugs = new Set(getAllServiceSlugs())
 
 const ROUTE_PERMISSION_MAP = buildMiddlewareRouteMap()
 
+function isUnknownServicePath(pathname: string) {
+  const match = pathname.match(/^\/servicios\/([^/]+)\/?$/)
+  if (!match) return false
+  const slug = decodeURIComponent(match[1])
+  return !knownServiceSlugs.has(slug) && !LEGACY_SERVICE_SLUG_REDIRECTS[slug]
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const host = request.headers.get("host")?.split(":")[0]?.toLowerCase()
+  const secondaryHosts = new Set(["emprenor.com", "emprenor.com.ar", "www.emprenor.com.ar"])
+
+  if (host && secondaryHosts.has(host)) {
+    const canonical = request.nextUrl.clone()
+    canonical.protocol = "https"
+    canonical.hostname = "www.emprenor.com"
+    canonical.port = ""
+    return NextResponse.redirect(canonical, 301)
+  }
+
+  if (isUnknownServicePath(pathname)) {
+    const missing = request.nextUrl.clone()
+    missing.pathname = "/__ruta_inexistente"
+    return NextResponse.rewrite(missing)
+  }
 
   // Legacy URLs con mayúsculas exactas (next.config redirects son case-insensitive en Windows → bucle en /brochure)
   if (pathname === "/Brochure") {

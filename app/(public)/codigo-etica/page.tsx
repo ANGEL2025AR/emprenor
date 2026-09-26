@@ -2,11 +2,13 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { InstitutionalPage } from "@/components/public/institutional-page"
 import { EMPRENOR_LEGAL } from "@/lib/company/constants"
+import { buildPageMetadata } from "@/lib/site/page-metadata"
 
-export const metadata: Metadata = {
-  title: "Código de ética | EMPRENOR",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Código de ética",
   description: "Compromisos de integridad, anticorrupción y conducta profesional de EMPRENOR.",
-}
+  path: "/codigo-etica",
+})
 
 export default function CodigoEticaPage() {
   return (

@@ -3,7 +3,7 @@
   "hero": {
     "type": "page-header",
     "title": "Mantenimiento",
-    "highlight": "Integral 24/7",
+    "highlight": "Preventivo y correctivo",
     "subtitle": "Servicios preventivos y correctivos para mantener tus instalaciones en perfecto estado"
   },
   "sections": [
@@ -22,16 +22,16 @@
           "imageAlt": "Mantenimiento",
           "stats": [
             {
-              "v": "2 hs",
-              "l": "Tiempo de respuesta"
+              "v": "Preventivo",
+              "l": "Visitas programadas"
             },
             {
-              "v": "100%",
-              "l": "Personal propio"
+              "v": "Correctivo",
+              "l": "Según el plan contratado"
             },
             {
-              "v": "24/7",
-              "l": "Disponibilidad"
+              "v": "Horario comercial",
+              "l": "Lunes a sábado"
             }
           ]
         },
@@ -134,19 +134,17 @@
                 "Prioridad máxima"
               ],
               "color": "border-amber-400",
-              "badge": "Más elegido"
+              "badge": ""
             },
             {
-              "name": "Plan Premium 24/7",
+              "name": "Plan Premium",
               "price": "Consultar",
               "period": "Contrato anual",
               "features": [
-                "Visitas ilimitadas",
-                "Emergencias sin cargo 24/7",
-                "Reemplazos incluidos",
-                "Técnico dedicado al cliente",
-                "Monitoreo remoto continuo",
-                "Informe de gestión ejecutivo"
+                "Visitas según alcance contratado",
+                "Atención de emergencias según contrato",
+                "Reemplazos incluidos según alcance",
+                "Informe de gestión"
               ],
               "color": "border-slate-700",
               "badge": "Para industrias"
@@ -157,8 +155,8 @@
     },
     {
       "type": "emergency-bar",
-      "title": "Emergencias 24/7 — Respuesta en 2 horas",
-      "subtitle": "Somos el primer número que tenés que llamar ante una emergencia en instalaciones"
+      "title": "Consultas de mantenimiento",
+      "subtitle": "Escribinos en horario comercial y coordinamos la visita técnica"
     },
     {
       "type": "cta",

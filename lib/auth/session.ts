@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb"
 import type { UserRole } from "@/lib/db/models"
 
 import { getJwtSecretKey } from "@/lib/auth/jwt-secret"
+import { getUserDisplayName } from "@/lib/auth/display-name"
 
 const getSecretKey = () => getJwtSecretKey()
 
@@ -48,7 +49,7 @@ export async function createSession(user: {
     userId: user._id.toString(),
     email: user.email,
     role: user.role,
-    name: `${user.name} ${user.lastName}`,
+    name: getUserDisplayName(user),
   }
 
   const token = await new SignJWT(payload)

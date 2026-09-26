@@ -20,7 +20,7 @@
       "imageHeight": "h-[480px]",
       "stats": [
         { "v": "1", "l": "Interlocutor técnico" },
-        { "v": "24 h", "l": "Respuesta comercial" },
+        { "v": "A convenir", "l": "Respuesta comercial" },
         { "v": "NOA", "l": "Cobertura regional" }
       ]
     },
@@ -134,7 +134,7 @@
     {
       "type": "cta",
       "title": "¿Querés refaccionar o remodelar?",
-      "subtitle": "Solicitá una visita técnica sin cargo. Cotización en 24–48 horas.",
+      "subtitle": "Solicitá una visita técnica. El plazo de la cotización se define después del relevamiento.",
       "buttonText": "Solicitar Cotización",
       "showPhone": true
     }

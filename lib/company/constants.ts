@@ -115,6 +115,8 @@ export const EMPRENOR_LEGAL = {
   emailEtica: company.legal.emailEtica,
   emailLicitaciones: company.legal.emailLicitaciones,
   emailRrhh: company.legal.emailRrhh,
+  horarioSemana: company.legal.hoursWeekday,
+  horarioSabado: company.legal.hoursSaturday,
   telefonoPrincipal: EMPRENOR_TELEFONO_PRINCIPAL.telefono,
   telefonoPrincipalHref: EMPRENOR_TELEFONO_PRINCIPAL.telHref,
   telefonoSecundario: EMPRENOR_TELEFONO_SECUNDARIO.telefono,
@@ -130,6 +132,9 @@ export const EMPRENOR_SOCIAL = {
   instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || company.social.instagram,
   linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || company.social.linkedin,
 } as const
+
+/** Los perfiles no se publican en Schema.org hasta confirmar que son oficiales. */
+export const EMPRENOR_SOCIAL_VERIFIED = company.site.socialProfilesVerified === true
 
 export const EMPRENOR_SECTORS = [
   {

@@ -26,7 +26,6 @@ import { EmergencyBanner } from "@/components/home/emergency-banner"
 import { WorkProcessSection } from "@/components/home/work-process-section"
 import { QualitySection } from "@/components/home/quality-section"
 import { CoverageSection } from "@/components/home/coverage-section"
-import { TrustSection } from "@/components/home/trust-section"
 
 const services = SERVICES_CATALOG.map((service) => ({
   title: service.title,
@@ -169,7 +168,6 @@ export default function HomePage() {
       <EmergencyBanner />
       <WorkProcessSection />
       <QualitySection />
-      <TrustSection />
       <CoverageSection />
 
       <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-600">
@@ -177,7 +175,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">¿Listo para comenzar tu proyecto?</h2>
             <p className="text-xl text-green-100 mb-8">
-              Contáctanos hoy mismo y obtén una cotización gratuita. Nuestro equipo está listo para ayudarte a hacer realidad tu proyecto.
+              Contactanos hoy y obtené una cotización sin cargo. El equipo está listo para ayudarte a concretar la obra.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-green-600 hover:bg-green-50 px-8 py-6 text-lg" asChild>
@@ -205,7 +203,7 @@ export default function HomePage() {
                 <Phone className="w-7 h-7 text-green-500" />
               </div>
               <div>
-                <div className="text-sm text-slate-400 mb-1">Llámanos</div>
+                <div className="text-sm text-slate-400 mb-1">Llamanos</div>
                 <a href={`tel:${EMPRENOR_LEGAL.telefonoPrincipalHref}`} className="text-lg font-semibold text-white hover:text-green-400 transition-colors">
                   {EMPRENOR_LEGAL.telefonoPrincipal}
                 </a>
@@ -216,7 +214,7 @@ export default function HomePage() {
                 <Mail className="w-7 h-7 text-green-500" />
               </div>
               <div>
-                <div className="text-sm text-slate-400 mb-1">Escríbenos</div>
+                <div className="text-sm text-slate-400 mb-1">Escribinos</div>
                 <a href={`mailto:${EMPRENOR_LEGAL.emailGeneral}`} className="text-lg font-semibold text-white hover:text-green-400 transition-colors">
                   {EMPRENOR_LEGAL.emailGeneral}
                 </a>

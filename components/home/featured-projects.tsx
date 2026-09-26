@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { MapPin, ArrowRight, ImageOff } from "lucide-react"
 import { getDb } from "@/lib/db/connection"
 import type { PublicProject } from "@/lib/db/models"
+import { formatPublicLabel } from "@/lib/site/format-label"
 
 function isMissingMongoUriError(error: unknown): boolean {
   return error instanceof Error && error.message.includes("MONGODB_URI")
@@ -96,7 +97,7 @@ export default async function FeaturedProjects() {
                   {mainImage ? (
                     <Image
                       src={mainImage || "/placeholder.svg"}
-                      alt={project.title}
+                      alt={formatPublicLabel(project.title)}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       unoptimized={
@@ -114,15 +115,15 @@ export default async function FeaturedProjects() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <span className="inline-block px-3 py-1 bg-green-500/20 text-green-400 text-sm rounded-full mb-3">
-                    {project.category}
+                    {formatPublicLabel(project.category)}
                   </span>
                   <h3 className="text-xl font-semibold text-white mb-1 group-hover:text-green-400 transition-colors">
-                    {project.title}
+                    {formatPublicLabel(project.title)}
                   </h3>
                   {project.location && (
                     <p className="text-slate-400 flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
-                      {project.location}
+                      {formatPublicLabel(project.location)}
                     </p>
                   )}
                 </div>

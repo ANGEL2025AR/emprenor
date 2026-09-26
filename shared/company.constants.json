@@ -81,7 +81,8 @@
   "site": {
     "canonicalUrl": "https://www.emprenor.com",
     "descriptionShort": "EMPRENOR C&S, marca comercial de Silvio Carlos Fabian Guerrero. Construcción, remodelación e instalaciones en Salta, Jujuy, Tucumán y Formosa.",
-    "tagline": "Construcción y servicios en el NOA"
+    "tagline": "Construcción y servicios en el NOA",
+    "socialProfilesVerified": false
   },
   "footerLegalLinks": [
     { "href": "/aviso-legal", "label": "Aviso legal" },

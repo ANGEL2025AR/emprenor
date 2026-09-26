@@ -32,15 +32,17 @@ export async function ensureClientRecordForPortalUser(user: PortalUserInput): Pr
   })
 
   if (existingByEmail?._id) {
+    const existingId = existingByEmail._id
+    const existingOid = existingId instanceof ObjectId ? existingId : new ObjectId(existingId)
     await db.collection("clients").updateOne(
-      { _id: existingByEmail._id },
+      { _id: existingOid },
       { $set: { userId: user._id, updatedAt: new Date() } },
     )
     await db.collection("users").updateOne(
       { _id: user._id },
-      { $set: { linkedClientId: existingByEmail._id, updatedAt: new Date() } },
+      { $set: { linkedClientId: existingOid, updatedAt: new Date() } },
     )
-    return existingByEmail._id.toString()
+    return existingOid.toString()
   }
 
   const clientDoc = {

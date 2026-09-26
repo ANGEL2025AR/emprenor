@@ -1,0 +1,34 @@
+{
+  "pageKey": "ServicioGestionProyectos",
+  "hero": {
+    "type": "page-header",
+    "title": "Gestión",
+    "highlight": "de proyectos",
+    "subtitle": "De la consulta a la entrega: alcance, presupuesto, ejecución y documentación según contrato."
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Gestión de proyectos",
+          "title": "Un interlocutor para el seguimiento de la obra",
+          "paragraphs": [
+            "El trabajo se ordena en consulta, relevamiento, ingeniería, presupuesto, ejecución, control y entrega. Cada etapa queda registrada en la medida que el contrato lo pide."
+          ],
+          "image": "/industrial-plant-construction.jpg",
+          "imageAlt": "Seguimiento de obra"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Querés ordenar un proyecto?",
+      "subtitle": "Escribinos y coordinamos la primera consulta.",
+      "buttonText": "Solicitar presupuesto",
+      "showPhone": true
+    }
+  ]
+}

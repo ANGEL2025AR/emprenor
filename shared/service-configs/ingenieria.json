@@ -1,0 +1,34 @@
+{
+  "pageKey": "ServicioIngenieria",
+  "hero": {
+    "type": "page-header",
+    "title": "Ingeniería",
+    "highlight": "y documentación",
+    "subtitle": "Relevamiento, criterios técnicos y documentación de obra, según el alcance que se acuerda por escrito."
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Ingeniería",
+          "title": "La obra se define antes de ejecutarse",
+          "paragraphs": [
+            "EMPRENOR releva el lugar, ordena el alcance y prepara la documentación técnica que el proyecto necesita para cotizar, ejecutar y entregar. El contenido de cada entrega se fija en la propuesta."
+          ],
+          "image": "/construction-site-workers-blueprint.jpg",
+          "imageAlt": "Relevamiento técnico de obra"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás definir el alcance técnico?",
+      "subtitle": "Contanos el proyecto y coordinamos el relevamiento.",
+      "buttonText": "Solicitar presupuesto",
+      "showPhone": true
+    }
+  ]
+}

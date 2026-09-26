@@ -21,7 +21,7 @@ export function CookieConsentBanner() {
       <div className="container max-w-4xl mx-auto pointer-events-auto">
         <div className="rounded-xl border bg-background/95 backdrop-blur shadow-lg p-4 md:p-5 flex flex-col md:flex-row md:items-center gap-4">
           <p className="text-sm text-muted-foreground flex-1">
-            Usamos cookies esenciales para el portal y métricas para mejorar el sitio. Consulte nuestra{" "}
+            Usamos cookies esenciales para el portal y métricas para mejorar el sitio. Consultá nuestra{" "}
             <Link href="/cookies" className="text-emerald-700 underline font-medium">
               política de cookies
             </Link>{" "}

@@ -91,13 +91,16 @@ export const BROCHURE_CONTACT = {
     { label: "Salta / NOA", value: EMPRENOR_LEGAL.telefonoSecundario },
   ],
   email: EMPRENOR_LEGAL.emailGeneral,
-  emailNote: "Respuesta en menos de 24 horas",
+  emailNote: "Horario comercial de lunes a sábado",
   website: "www.emprenor.com",
   websiteNote: "Solicite una cotización gratuita en línea",
 }
 
-export const BROCHURE_FEATURED_PROJECTS_FALLBACK = [
-  { num: "01", title: "Obra educativa — NOA", location: "Salta", badge: "Sector público", plazo: "Documentado", highlight: true },
-  { num: "02", title: "Infraestructura sanitaria", location: "Jujuy", badge: "Salud", plazo: "Entregado", highlight: false },
-  { num: "03", title: "Nave industrial", location: "Tucumán", badge: "Industrial", plazo: "En garantía", highlight: false },
-]
+export const BROCHURE_FEATURED_PROJECTS_FALLBACK: Array<{
+  num: string
+  title: string
+  location: string
+  badge: string
+  plazo?: string
+  highlight?: boolean
+}> = []

@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { hashPassword } from "@/lib/auth/password"
 import type { User } from "@/lib/db/models"
+import { USER_ROLES } from "@/lib/db/models"
 import {
   assignClientUserToProjects,
 } from "@/lib/clients/project-link"
@@ -79,6 +80,10 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
 
+    if (!USER_ROLES.includes(body.role)) {
+      return NextResponse.json({ error: "Rol inválido" }, { status: 400 })
+    }
+
     if (!body.password || body.password.length < 8) {
       return NextResponse.json({ error: "La contraseña debe tener al menos 8 caracteres" }, { status: 400 })
     }
@@ -111,10 +116,11 @@ export async function POST(request: NextRequest) {
     let linkedClientId: string | undefined
 
     if (body.role === "cliente") {
-      if (typeof body.linkedClientId === "string" && body.linkedClientId && ObjectId.isValid(body.linkedClientId)) {
-        linkedClientId = body.linkedClientId
-        await linkPortalUserToClient(userId, linkedClientId)
-        await syncPortalUserOnAllClientProjects(linkedClientId, userId)
+      if (typeof body.linkedClientId === "string" && ObjectId.isValid(body.linkedClientId)) {
+        const clientId = body.linkedClientId
+        linkedClientId = clientId
+        await linkPortalUserToClient(userId, clientId)
+        await syncPortalUserOnAllClientProjects(clientId, userId)
       } else {
         linkedClientId = await ensureClientRecordForPortalUser({
           _id: insertResult.insertedId,

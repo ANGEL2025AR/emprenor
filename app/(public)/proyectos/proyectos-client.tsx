@@ -19,8 +19,7 @@ import {
 import Link from "next/link"
 import { ProjectsMapPanel } from "@/components/projects/projects-map-panel"
 import { contactFormUrl } from "@/lib/site/urls"
-
-const categories = ["Todos", "Residencial", "Comercial", "Industrial", "Remodelación", "Oficina Gubernamental"]
+import { formatPublicCopy, formatPublicLabel } from "@/lib/site/format-label"
 
 interface Project {
   _id: string
@@ -60,6 +59,8 @@ export default function ProyectosPage() {
   const filteredProjects =
     selectedCategory === "Todos" ? projects : projects.filter((project) => project.category === selectedCategory)
 
+  const categories = ["Todos", ...Array.from(new Set(projects.map((project) => project.category).filter(Boolean)))]
+
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case "Residencial":
@@ -92,8 +93,7 @@ export default function ProyectosPage() {
             </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-balance">Nuestros Proyectos</h1>
             <p className="text-lg text-primary-foreground/90 leading-relaxed text-pretty">
-              Descubra la calidad y el profesionalismo de nuestro trabajo a través de proyectos completados con éxito
-              para clientes satisfechos.
+              Descubrí obras terminadas en escuelas, hospitales, municipios y plantas del NOA, con alcance y ubicación verificables.
             </p>
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function ProyectosPage() {
                 onClick={() => setSelectedCategory(category)}
                 className={selectedCategory === category ? "bg-accent text-accent-foreground hover:bg-accent/90" : ""}
               >
-                {category}
+                {category === "Todos" ? "Todos" : formatPublicLabel(category)}
               </Button>
             ))}
           </div>
@@ -149,13 +149,13 @@ export default function ProyectosPage() {
                   >
                     <img
                       src={project.image || "/placeholder.svg"}
-                      alt={project.title}
+                      alt={formatPublicLabel(project.title)}
                       className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-3 right-3">
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-foreground">
                         {getCategoryIcon(project.category)}
-                        {project.category}
+                        {formatPublicLabel(project.category)}
                       </span>
                     </div>
                     {project.gallery && project.gallery.length > 0 && (
@@ -169,8 +169,8 @@ export default function ProyectosPage() {
                   </div>
 
                   <CardContent className="p-6 space-y-3">
-                    <h3 className="text-xl font-semibold text-foreground line-clamp-1">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{project.description}</p>
+                    <h3 className="text-xl font-semibold text-foreground line-clamp-1">{formatPublicLabel(project.title)}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{formatPublicCopy(project.description)}</p>
 
                     <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border">
                       <span className="flex items-center gap-1">
@@ -179,7 +179,7 @@ export default function ProyectosPage() {
                       </span>
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
-                        {project.location}
+                        {formatPublicLabel(project.location)}
                       </span>
                     </div>
 
@@ -197,9 +197,9 @@ export default function ProyectosPage() {
               {selectedProject && (
                 <>
                   <DialogHeader>
-                    <DialogTitle className="text-2xl">{selectedProject.title}</DialogTitle>
+                    <DialogTitle className="text-2xl">{formatPublicLabel(selectedProject.title)}</DialogTitle>
                     <DialogDescription className="sr-only">
-                      Detalles completos del proyecto {selectedProject.title}
+                      Detalles completos del proyecto {formatPublicLabel(selectedProject.title)}
                     </DialogDescription>
                   </DialogHeader>
 
@@ -257,14 +257,14 @@ export default function ProyectosPage() {
                       <div className="flex items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent-foreground">
                           {getCategoryIcon(selectedProject.category)}
-                          {selectedProject.category}
+                          {formatPublicLabel(selectedProject.category)}
                         </span>
                       </div>
 
                       <div className="space-y-2">
                         <h4 className="text-sm font-semibold text-foreground">Descripción del proyecto</h4>
                         <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                          {selectedProject.description}
+                          {formatPublicCopy(selectedProject.description)}
                         </p>
                       </div>
 
@@ -281,7 +281,7 @@ export default function ProyectosPage() {
                             <MapPin className="h-3 w-3" />
                             Ubicación
                           </p>
-                          <p className="text-sm font-medium">{selectedProject.location}</p>
+                          <p className="text-sm font-medium">{formatPublicLabel(selectedProject.location)}</p>
                         </div>
                       </div>
                     </div>
@@ -297,11 +297,10 @@ export default function ProyectosPage() {
               <CardContent className="p-8 md:p-12">
                 <div className="mx-auto max-w-2xl text-center space-y-6">
                   <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-balance">
-                    ¿Te gustaría que tu proyecto sea el siguiente?
+                    ¿Querés que tu obra sea la siguiente?
                   </h2>
                   <p className="text-muted-foreground leading-relaxed text-pretty">
-                    Transformamos ideas en realidad. Contactanos hoy para conversar sobre tu proyecto y recibir una cotización
-                    personalizada.
+                    Contanos el alcance y te armamos una cotización clara, sin costos ocultos.
                   </p>
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
                     <Link href={contactFormUrl()}>

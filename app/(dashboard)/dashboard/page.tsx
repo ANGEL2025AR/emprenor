@@ -33,6 +33,7 @@ import { RevenueChart } from "@/components/dashboard/revenue-chart"
 import { ClientDashboard } from "@/components/dashboard/client-dashboard"
 import { isClientRole, isEmployeePortalRole } from "@/lib/auth/project-access"
 import { getUserDisplayName } from "@/lib/auth/display-name"
+import { formatCompactCurrency } from "@/lib/utils"
 
 async function getDashboardStats() {
   try {
@@ -43,6 +44,7 @@ async function getDashboardStats() {
       totalProjects,
       activeProjects,
       completedProjects,
+      publishedProjects,
       totalTasks,
       pendingTasks,
       completedTasks,
@@ -52,6 +54,7 @@ async function getDashboardStats() {
       db.collection("projects").countDocuments(),
       db.collection("projects").countDocuments({ status: "en_progreso" }),
       db.collection("projects").countDocuments({ status: "completado" }),
+      db.collection("public_projects").countDocuments({ published: true }),
       db.collection("tasks").countDocuments(),
       db.collection("tasks").countDocuments({ status: "pendiente" }),
       db.collection("tasks").countDocuments({ status: "completada" }),
@@ -84,6 +87,7 @@ async function getDashboardStats() {
       totalProjects,
       activeProjects,
       completedProjects,
+      publishedProjects,
       totalTasks,
       pendingTasks,
       completedTasks,
@@ -102,6 +106,7 @@ async function getDashboardStats() {
       totalProjects: 0,
       activeProjects: 0,
       completedProjects: 0,
+      publishedProjects: 0,
       totalTasks: 0,
       pendingTasks: 0,
       completedTasks: 0,
@@ -133,61 +138,77 @@ export default async function DashboardPage() {
 
   const userName = getUserDisplayName(user)
 
+  const hasManagedProjects = stats.totalProjects > 0
+  const hasTasks = stats.totalTasks > 0
+  const hasInspections = stats.totalInspections > 0
+
   const executiveKPIs = [
     {
       title: "Balance Financiero",
-      value: `$${(stats.balance / 1000000).toFixed(2)}M`,
+      value: formatCompactCurrency(stats.balance),
       subtitle: stats.ingresos > 0 ? `${stats.balance >= 0 ? "+" : ""}${((stats.balance / stats.ingresos) * 100).toFixed(1)}% margen` : "Sin movimientos registrados",
       icon: DollarSign,
-      accent: stats.balance >= 0 ? ("emerald" as const) : ("rose" as const),
-      trend: stats.balance >= 0 ? "up" : "down",
+      accent: stats.ingresos > 0 ? (stats.balance >= 0 ? ("emerald" as const) : ("rose" as const)) : ("blue" as const),
+      trend: stats.ingresos > 0 ? (stats.balance >= 0 ? "up" : "down") : ("stable" as const),
       href: "/dashboard/finanzas",
     },
     {
       title: "Proyectos Activos",
       value: stats.activeProjects,
-      subtitle: `${stats.totalProjects} totales · ${stats.completedProjects} completados`,
+      subtitle: hasManagedProjects
+        ? `${stats.totalProjects} en gestión · ${stats.completedProjects} completados`
+        : `${stats.publishedProjects} publicados en el sitio · ninguno en gestión`,
       icon: FolderKanban,
       accent: "blue" as const,
       trend: stats.activeProjects > stats.completedProjects ? "up" : "stable",
-      href: "/dashboard/proyectos",
+      href: hasManagedProjects ? "/dashboard/proyectos" : "/dashboard/sitio-web/proyectos",
     },
     {
       title: "Eficiencia Operativa",
-      value: `${stats.completionRate.toFixed(1)}%`,
-      subtitle: `${stats.completedTasks} de ${stats.totalTasks} tareas completadas`,
+      value: hasTasks ? `${stats.completionRate.toFixed(1)}%` : "—",
+      subtitle: hasTasks ? `${stats.completedTasks} de ${stats.totalTasks} tareas completadas` : "Sin tareas registradas",
       icon: Activity,
-      accent: stats.completionRate >= 80 ? ("violet" as const) : stats.completionRate >= 60 ? ("amber" as const) : ("rose" as const),
-      trend: stats.completionRate >= 80 ? "up" : "down",
+      accent: !hasTasks ? ("blue" as const) : stats.completionRate >= 80 ? ("violet" as const) : stats.completionRate >= 60 ? ("amber" as const) : ("rose" as const),
+      trend: !hasTasks ? ("stable" as const) : stats.completionRate >= 80 ? "up" : "down",
       href: "/dashboard/tareas",
     },
     {
       title: "Cumplimiento de Plazos",
-      value: `${stats.onTimeRate.toFixed(1)}%`,
-      subtitle: `${stats.onTimeProjects} proyectos entregados a tiempo`,
+      value: hasManagedProjects ? `${stats.onTimeRate.toFixed(1)}%` : "—",
+      subtitle: hasManagedProjects ? `${stats.onTimeProjects} proyectos entregados a tiempo` : "Sin proyectos en gestión",
       icon: Clock,
-      accent: stats.onTimeRate >= 80 ? ("cyan" as const) : stats.onTimeRate >= 60 ? ("amber" as const) : ("rose" as const),
-      trend: stats.onTimeRate >= 80 ? "up" : "down",
+      accent: !hasManagedProjects ? ("blue" as const) : stats.onTimeRate >= 80 ? ("cyan" as const) : stats.onTimeRate >= 60 ? ("amber" as const) : ("rose" as const),
+      trend: !hasManagedProjects ? ("stable" as const) : stats.onTimeRate >= 80 ? "up" : "down",
       href: "/dashboard/proyectos",
     },
     {
       title: "Utilización Presupuesto",
-      value: `${stats.budgetUtilization.toFixed(1)}%`,
-      subtitle: "Promedio de ejecución presupuestaria",
+      value: hasManagedProjects ? `${stats.budgetUtilization.toFixed(1)}%` : "—",
+      subtitle: hasManagedProjects ? "Promedio de ejecución presupuestaria" : "Sin presupuesto de obra cargado",
       icon: TrendingUp,
-      accent:
-        stats.budgetUtilization <= 100 ? ("emerald" as const) : stats.budgetUtilization <= 110 ? ("amber" as const) : ("rose" as const),
-      trend: stats.budgetUtilization <= 100 ? "up" : "down",
+      accent: !hasManagedProjects
+        ? ("blue" as const)
+        : stats.budgetUtilization <= 100
+          ? ("emerald" as const)
+          : stats.budgetUtilization <= 110
+            ? ("amber" as const)
+            : ("rose" as const),
+      trend: !hasManagedProjects ? ("stable" as const) : stats.budgetUtilization <= 100 ? "up" : "down",
       href: "/dashboard/finanzas",
     },
     {
       title: "Inspecciones Pendientes",
       value: stats.pendingInspections,
-      subtitle: `${stats.totalInspections} totales realizadas`,
+      subtitle: hasInspections ? `${stats.totalInspections} totales realizadas` : "Sin inspecciones registradas",
       icon: ClipboardCheck,
-      accent:
-        stats.pendingInspections <= 5 ? ("emerald" as const) : stats.pendingInspections <= 10 ? ("amber" as const) : ("rose" as const),
-      trend: stats.pendingInspections <= 5 ? "up" : "down",
+      accent: !hasInspections
+        ? ("blue" as const)
+        : stats.pendingInspections <= 5
+          ? ("emerald" as const)
+          : stats.pendingInspections <= 10
+            ? ("amber" as const)
+            : ("rose" as const),
+      trend: !hasInspections ? ("stable" as const) : stats.pendingInspections <= 5 ? "up" : "down",
       href: "/dashboard/inspecciones",
     },
   ]

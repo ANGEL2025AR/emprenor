@@ -8,6 +8,13 @@ export type LeadPayload = {
   service?: string
   message: string
   source?: string
+  legalName?: string
+  cuit?: string
+  province?: string
+  locality?: string
+  estimatedBudget?: string
+  requiredDate?: string
+  attachmentName?: string
 }
 
 /** Notifica por email (Resend) y/o webhook si están configurados. */
@@ -22,6 +29,12 @@ export async function notifyLeadReceived(data: LeadPayload): Promise<void> {
       `Nombre: ${data.name}`,
       `Email: ${data.email}`,
       data.phone ? `Tel: ${data.phone}` : "",
+      data.legalName ? `Razón social: ${data.legalName}` : "",
+      data.cuit ? `CUIT: ${data.cuit}` : "",
+      data.province || data.locality ? `Lugar: ${[data.locality, data.province].filter(Boolean).join(", ")}` : "",
+      data.estimatedBudget ? `Presupuesto estimado: ${data.estimatedBudget}` : "",
+      data.requiredDate ? `Fecha requerida: ${data.requiredDate}` : "",
+      data.attachmentName ? `Archivo: ${data.attachmentName}` : "",
       data.service ? `Servicio: ${data.service}` : "",
       "",
       data.message,

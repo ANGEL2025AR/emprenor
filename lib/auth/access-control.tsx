@@ -151,7 +151,7 @@ export function AccessDenied({ message }: { message?: string }) {
       </div>
       <h2 className="text-xl font-semibold text-slate-900 mb-2">Acceso Denegado</h2>
       <p className="text-slate-500 max-w-md">
-        {message || "No tienes permisos para acceder a esta sección. Contacta al administrador si crees que esto es un error."}
+        {message || "No tenés permisos para ver esta sección. Avisale al administrador si creés que es un error."}
       </p>
     </div>
   )

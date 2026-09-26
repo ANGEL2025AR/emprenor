@@ -3,6 +3,8 @@ import {
   EMPRENOR_BRAND,
   EMPRENOR_LEGAL,
   EMPRENOR_PROVINCIAS,
+  EMPRENOR_SOCIAL,
+  EMPRENOR_SOCIAL_VERIFIED,
   EMPRENOR_TITULAR,
 } from "@/lib/company/constants"
 
@@ -35,10 +37,9 @@ export function generateOrganizationSchema() {
       email: EMPRENOR_LEGAL.emailGeneral,
     },
     areaServed: EMPRENOR_PROVINCIAS.map((p) => ({ "@type": "State", name: p })),
-    sameAs: [
-      "https://www.facebook.com/emprenor",
-      "https://www.instagram.com/emprenor",
-    ],
+    ...(EMPRENOR_SOCIAL_VERIFIED
+      ? { sameAs: [EMPRENOR_SOCIAL.facebook, EMPRENOR_SOCIAL.instagram, EMPRENOR_SOCIAL.linkedin] }
+      : {}),
   }
 }
 
@@ -73,10 +74,9 @@ export function generateLocalBusinessSchema() {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: "Saturday",
         opens: "09:00",
-        closes: "14:00",
+        closes: "13:00",
       },
     ],
-    priceRange: "$$",
   }
 }
 
@@ -96,10 +96,7 @@ export function generateServiceSchema(service: {
       legalName: EMPRENOR_TITULAR.apellidoNombre,
       url: SITE_URL,
     },
-    areaServed: {
-      "@type": "State",
-      name: [...EMPRENOR_PROVINCIAS],
-    },
+    areaServed: EMPRENOR_PROVINCIAS.map((name) => ({ "@type": "State", name })),
     url: service.url,
   }
 }

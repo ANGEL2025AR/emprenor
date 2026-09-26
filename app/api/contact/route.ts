@@ -4,6 +4,9 @@ import { getCurrentUser } from "@/lib/auth/session"
 import { contactFormSchema, sanitizeHtml, type ContactFormData } from "@/lib/validations/schemas"
 import { rateLimit } from "@/lib/rate-limiter"
 import { notifyLeadReceived } from "@/lib/email/notify-lead"
+import { storeLeadAttachment, validateLeadAttachment } from "@/lib/uploads/lead-attachment"
+import { hasPermission } from "@/lib/auth/permissions"
+import type { UserRole } from "@/lib/db/models"
 
 const limiter = rateLimit({ windowMs: 60000, maxRequests: 5 })
 
@@ -29,9 +32,37 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json()
+    const contentType = request.headers.get("content-type") || ""
+    let raw: Record<string, unknown>
+    let attachment: Awaited<ReturnType<typeof storeLeadAttachment>> | null = null
 
-    const validation = contactFormSchema.safeParse(body)
+    if (contentType.includes("multipart/form-data")) {
+      const form = await request.formData()
+      const file = form.get("attachment")
+      if (file instanceof File && file.size > 0) {
+        const invalid = validateLeadAttachment(file)
+        if (invalid) return NextResponse.json({ error: invalid }, { status: 400 })
+        attachment = await storeLeadAttachment(file)
+      }
+      raw = {
+        name: String(form.get("name") || ""),
+        email: String(form.get("email") || ""),
+        phone: String(form.get("phone") || ""),
+        service: String(form.get("service") || ""),
+        message: String(form.get("message") || ""),
+        legalName: String(form.get("legalName") || ""),
+        cuit: String(form.get("cuit") || ""),
+        province: String(form.get("province") || ""),
+        locality: String(form.get("locality") || ""),
+        estimatedBudget: String(form.get("estimatedBudget") || ""),
+        requiredDate: String(form.get("requiredDate") || ""),
+        privacyConsent: form.get("privacyConsent") === "true",
+      }
+    } else {
+      raw = await request.json()
+    }
+
+    const validation = contactFormSchema.safeParse(raw)
 
     if (!validation.success) {
       return NextResponse.json(
@@ -52,6 +83,8 @@ export async function POST(request: NextRequest) {
       ...data,
       name: sanitizeHtml(data.name),
       message: sanitizeHtml(data.message),
+      legalName: data.legalName ? sanitizeHtml(data.legalName) : "",
+      locality: data.locality ? sanitizeHtml(data.locality) : "",
     }
 
     const db = await getDb()
@@ -59,9 +92,11 @@ export async function POST(request: NextRequest) {
 
     const contacto = {
       ...sanitizedData,
+      attachment,
       createdAt: new Date(),
       status: "nuevo",
       source: "formulario_web",
+      crm: { provider: null, externalId: null, syncStatus: "pending" },
       ip: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown",
       userAgent: request.headers.get("user-agent") || "unknown",
       referrer: request.headers.get("referer") || "direct",
@@ -76,6 +111,13 @@ export async function POST(request: NextRequest) {
       service: sanitizedData.service,
       message: sanitizedData.message,
       source: "formulario_web",
+      legalName: sanitizedData.legalName,
+      cuit: sanitizedData.cuit,
+      province: sanitizedData.province,
+      locality: sanitizedData.locality,
+      estimatedBudget: sanitizedData.estimatedBudget,
+      requiredDate: sanitizedData.requiredDate,
+      attachmentName: attachment?.originalName,
     })
 
     return NextResponse.json(
@@ -109,8 +151,8 @@ export async function GET() {
     const user = await getCurrentUser()
     if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
 
-    const adminRoles = ["super_admin", "admin"]
-    if (!adminRoles.includes(user.role)) {
+    const adminRoles = ["super_admin", "admin", "comercial"]
+    if (!adminRoles.includes(user.role) && !hasPermission(user.role as UserRole, "contacts.view")) {
       return NextResponse.json({ error: "Sin permisos" }, { status: 403 })
     }
 

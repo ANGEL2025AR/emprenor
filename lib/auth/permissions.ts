@@ -7,16 +7,16 @@ import type { UserRole } from "@/lib/db/models"
 
 export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   // Proyectos
-  "projects.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
-  "projects.create": ["super_admin", "admin", "gerente"],
-  "projects.edit": ["super_admin", "admin", "gerente"],
+  "projects.view": ["super_admin", "admin", "gerente", "comercial", "proyectos", "supervisor", "trabajador", "cliente"],
+  "projects.create": ["super_admin", "admin", "gerente", "proyectos"],
+  "projects.edit": ["super_admin", "admin", "gerente", "proyectos"],
   "projects.delete": ["super_admin", "admin"],
   "projects.export": ["super_admin", "admin", "gerente"],
 
   // Tareas
-  "tasks.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "tasks.create": ["super_admin", "admin", "gerente", "supervisor"],
-  "tasks.edit": ["super_admin", "admin", "gerente", "supervisor"],
+  "tasks.view": ["super_admin", "admin", "gerente", "proyectos", "supervisor", "trabajador"],
+  "tasks.create": ["super_admin", "admin", "gerente", "proyectos", "supervisor"],
+  "tasks.edit": ["super_admin", "admin", "gerente", "proyectos", "supervisor"],
   "tasks.delete": ["super_admin", "admin", "gerente"],
   "tasks.assign": ["super_admin", "admin", "gerente", "supervisor"],
 
@@ -35,10 +35,10 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "finance.export": ["super_admin", "admin", "gerente"],
 
   // Documentos
-  "documents.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
-  "documents.upload": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "documents.delete": ["super_admin", "admin", "gerente"],
-  "documents.download": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
+  "documents.view": ["super_admin", "admin", "gerente", "proyectos", "documentacion", "supervisor", "trabajador", "cliente"],
+  "documents.upload": ["super_admin", "admin", "gerente", "proyectos", "documentacion", "supervisor", "trabajador"],
+  "documents.delete": ["super_admin", "admin", "gerente", "documentacion"],
+  "documents.download": ["super_admin", "admin", "gerente", "proyectos", "documentacion", "supervisor", "trabajador", "cliente"],
 
   // Usuarios
   "users.view": ["super_admin", "admin", "gerente"],
@@ -57,8 +57,8 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "employees.documents.upload_own": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
 
   // Clientes
-  "clients.view": ["super_admin", "admin", "gerente", "supervisor"],
-  "clients.create": ["super_admin", "admin", "gerente"],
+  "clients.view": ["super_admin", "admin", "gerente", "comercial", "supervisor"],
+  "clients.create": ["super_admin", "admin", "gerente", "comercial"],
   "clients.edit": ["super_admin", "admin", "gerente"],
   "clients.delete": ["super_admin", "admin"],
 
@@ -76,7 +76,7 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "inventory.delete": ["super_admin", "admin"],
 
   // Proveedores
-  "suppliers.view": ["super_admin", "admin", "gerente"],
+  "suppliers.view": ["super_admin", "admin", "gerente", "proveedor"],
   "suppliers.create": ["super_admin", "admin", "gerente"],
   "suppliers.edit": ["super_admin", "admin", "gerente"],
   "suppliers.delete": ["super_admin", "admin"],
@@ -100,7 +100,7 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   // Chat y Notificaciones
   "chat.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
   "chat.create": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
-  "notifications.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador", "cliente"],
+  "notifications.view": ["super_admin", "admin", "gerente", "comercial", "proyectos", "documentacion", "supervisor", "trabajador", "cliente", "proveedor"],
 
   // Vista cliente: finanzas y avances solo en sus obras
   "client.project_finance.view": ["cliente"],
@@ -108,7 +108,7 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "client.compliance.view": ["cliente"],
 
   // Cumplimiento de obra (portal del cliente) — gestión interna
-  "compliance.manage": ["super_admin", "admin", "gerente", "supervisor"],
+  "compliance.manage": ["super_admin", "admin", "gerente", "documentacion", "supervisor"],
 
   // Calendario
   "calendar.view": ["super_admin", "admin", "gerente", "supervisor", "trabajador"],
@@ -116,8 +116,8 @@ export const DEFAULT_PERMISSIONS: Record<string, string[]> = {
   "calendar.edit": ["super_admin", "admin", "gerente", "supervisor"],
 
   // Contactos (formulario web)
-  "contacts.view": ["super_admin", "admin"],
-  "contacts.manage": ["super_admin", "admin"],
+  "contacts.view": ["super_admin", "admin", "comercial"],
+  "contacts.manage": ["super_admin", "admin", "comercial"],
   "contacts.delete": ["super_admin", "admin"],
 
   // Bitácora diaria
@@ -306,35 +306,51 @@ export const ROLE_LABELS: Record<UserRole, string> = {
   super_admin: "Super Administrador",
   admin: "Administrador",
   gerente: "Gerente de Proyecto",
+  comercial: "Comercial",
+  proyectos: "Proyectos",
+  documentacion: "Documentación",
   supervisor: "Supervisor de Obra",
   trabajador: "Trabajador",
   cliente: "Cliente",
+  proveedor: "Proveedor",
 }
 
 export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
   super_admin: "Control total del sistema. Puede gestionar roles, permisos y toda la configuración.",
   admin: "Administración general. Acceso a todas las secciones operativas y de gestión.",
   gerente: "Gestión de proyectos, finanzas, reportes y coordinación de equipos.",
+  comercial: "Consultas, clientes y seguimiento comercial. No administra el sitio ni las finanzas.",
+  proyectos: "Obras, tareas, inspecciones y documentación de proyecto.",
+  documentacion: "Legajo documental, carga y cumplimiento de obra.",
   supervisor: "Supervisión de obra, tareas, inspecciones e incidencias en campo.",
   trabajador: "Acceso a tareas asignadas, bitácora diaria, chat e incidencias.",
   cliente: "Portal de obra: solo proyectos asignados, documentación, avances y pagos de su obra.",
+  proveedor: "Consulta del padrón de proveedores asignado. Sin acceso a obras de terceros.",
 }
 
 export const ROLE_COLORS: Record<UserRole, string> = {
   super_admin: "bg-purple-100 text-purple-800",
   admin: "bg-blue-100 text-blue-800",
   gerente: "bg-green-100 text-green-800",
+  comercial: "bg-teal-100 text-teal-800",
+  proyectos: "bg-cyan-100 text-cyan-800",
+  documentacion: "bg-indigo-100 text-indigo-800",
   supervisor: "bg-yellow-100 text-yellow-800",
   trabajador: "bg-gray-100 text-gray-800",
   cliente: "bg-orange-100 text-orange-800",
+  proveedor: "bg-stone-100 text-stone-800",
 }
 
 export const ROLE_HIERARCHY: Record<UserRole, number> = {
   super_admin: 100,
   admin: 80,
   gerente: 60,
+  comercial: 55,
+  proyectos: 50,
+  documentacion: 45,
   supervisor: 40,
   trabajador: 20,
+  proveedor: 15,
   cliente: 10,
 }
 

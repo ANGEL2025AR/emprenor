@@ -15,6 +15,7 @@ export type ClientRecord = {
   complianceType?: ClientComplianceType
   /** Valores legacy: particular | empresa | gobierno */
   type?: string
+  userId?: ObjectId | string
 }
 
 const LEGACY_CLIENT_TYPE_MAP: Record<string, ClientComplianceType> = {

@@ -16,6 +16,7 @@ import Link from "next/link"
 import { ImageUploadField } from "@/components/site/image-upload-field"
 import { GalleryUploadField } from "@/components/site/gallery-upload-field"
 import { PublicProjectMapFields } from "@/components/site/public-project-map-fields"
+import { normalizeProjectStatus } from "@/lib/site/project-status"
 
 const categorias = [
   "Edificio Municipal",
@@ -92,7 +93,14 @@ export default function EditarProyectoPage() {
       const res = await fetch(`/api/public-projects/${id}`)
       if (res.ok) {
         const data = await res.json()
-        setFormData(data.project)
+        const project = data.project
+        setFormData({
+          ...project,
+          status: normalizeProjectStatus(project.status),
+          progress: typeof project.progress === "number" ? project.progress : 100,
+          coordinates: project.coordinates ?? null,
+          showOnMap: project.showOnMap !== false,
+        })
       } else {
         alert("Error al cargar el proyecto")
         router.push("/dashboard/sitio-web/proyectos")

@@ -14,7 +14,7 @@ export function ProjectsMapPanel() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch("/api/public-projects/map")
+    fetch("/api/public-projects/map", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => setProjects(data.projects || []))
       .catch(() => setProjects([]))

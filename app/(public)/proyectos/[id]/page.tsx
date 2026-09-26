@@ -8,6 +8,8 @@ import { PublicProjectGallery } from "@/components/public/public-project-gallery
 import { getPublishedProjectById } from "@/lib/public-projects/get-published-project"
 import { contactFormUrl } from "@/lib/site/urls"
 import { formatPublicCopy, formatPublicLabel } from "@/lib/site/format-label"
+import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
+import { ProjectProgressBar } from "@/components/projects/project-progress-bar"
 
 type PageProps = {
   params: Promise<{ id: string }>
@@ -67,6 +69,12 @@ export default async function PublicProjectDetailPage({ params }: PageProps) {
               {categoryLabel}
             </span>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-balance">{titleLabel}</h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <ProjectStatusBadge status={project.status} className="bg-white/95" />
+              <div className="w-40">
+                <ProjectProgressBar progress={project.progress} status={project.status} compact className="text-primary-foreground" />
+              </div>
+            </div>
             <div className="flex flex-wrap gap-6 text-primary-foreground/90 text-sm md:text-base">
               {project.duration && (
                 <span className="flex items-center gap-2">

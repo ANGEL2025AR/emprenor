@@ -3,6 +3,8 @@ import { getDb } from "@/lib/db/connection"
 import type { PublicProject } from "@/lib/db/models"
 import { toMapProject } from "@/lib/site/project-geo"
 
+export const dynamic = "force-dynamic"
+
 export async function GET(_request: NextRequest) {
   try {
     const db = await getDb()
@@ -13,7 +15,10 @@ export async function GET(_request: NextRequest) {
       .toArray()
 
     const projects = docs.map((doc) => toMapProject(doc)).filter(Boolean)
-    return NextResponse.json({ projects })
+    return NextResponse.json(
+      { projects },
+      { headers: { "Cache-Control": "no-store" } },
+    )
   } catch (error) {
     console.error("Error al obtener proyectos del mapa:", error)
     return NextResponse.json({ error: "Error al obtener proyectos del mapa" }, { status: 500 })

@@ -1,3 +1,5 @@
+import { normalizeProjectStatus } from "@/lib/site/project-status"
+
 export const NOA_MAP_DEFAULT = {
   center: { lat: -24.35, lng: -64.55 },
   zoom: 7,
@@ -46,4 +48,21 @@ export function toMapProject(doc: {
     progress: doc.progress,
     coordinates,
   }
+}
+
+/** Campos de estado y mapa que el formulario público envía y el mapa consume. */
+export function readPublicProjectMapUpdate(body: Record<string, unknown>): Record<string, unknown> {
+  const update: Record<string, unknown> = {}
+  if (body.status !== undefined && body.status !== null && String(body.status).trim() !== "") {
+    update.status = normalizeProjectStatus(String(body.status))
+  }
+  if (body.progress !== undefined && body.progress !== null && body.progress !== "") {
+    const progress = Number(body.progress)
+    if (Number.isFinite(progress)) update.progress = Math.min(100, Math.max(0, Math.round(progress)))
+  }
+  if (body.coordinates !== undefined) {
+    update.coordinates = body.coordinates == null ? null : normalizeCoordinates(body.coordinates)
+  }
+  if (body.showOnMap !== undefined) update.showOnMap = body.showOnMap !== false
+  return update
 }

@@ -20,6 +20,8 @@ import Link from "next/link"
 import { ProjectsMapPanel } from "@/components/projects/projects-map-panel"
 import { contactFormUrl } from "@/lib/site/urls"
 import { formatPublicCopy, formatPublicLabel } from "@/lib/site/format-label"
+import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
+import { ProjectProgressBar } from "@/components/projects/project-progress-bar"
 
 interface Project {
   _id: string
@@ -30,6 +32,8 @@ interface Project {
   location: string
   image: string
   gallery?: string[]
+  status?: string
+  progress?: number
 }
 
 export default function ProyectosPage() {
@@ -46,7 +50,7 @@ export default function ProyectosPage() {
 
   const loadProjects = async () => {
     try {
-      const res = await fetch("/api/public-projects?published=true")
+      const res = await fetch("/api/public-projects?published=true", { cache: "no-store" })
       const data = await res.json()
       setProjects(data.projects || [])
     } catch (error) {
@@ -169,6 +173,7 @@ export default function ProyectosPage() {
                   </div>
 
                   <CardContent className="p-6 space-y-3">
+                    <ProjectStatusBadge status={project.status} />
                     <h3 className="text-xl font-semibold text-foreground line-clamp-1">{formatPublicLabel(project.title)}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{formatPublicCopy(project.description)}</p>
 
@@ -254,12 +259,14 @@ export default function ProyectosPage() {
 
                     {/* Información del proyecto */}
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent-foreground">
                           {getCategoryIcon(selectedProject.category)}
                           {formatPublicLabel(selectedProject.category)}
                         </span>
+                        <ProjectStatusBadge status={selectedProject.status} />
                       </div>
+                      <ProjectProgressBar progress={selectedProject.progress} status={selectedProject.status} />
 
                       <div className="space-y-2">
                         <h4 className="text-sm font-semibold text-foreground">Descripción del proyecto</h4>

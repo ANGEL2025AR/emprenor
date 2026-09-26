@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import type { PublicProject } from "@/lib/db/models"
+import { readPublicProjectMapUpdate } from "@/lib/site/project-geo"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -74,6 +75,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     for (const key of allowedFields) {
       if (body[key] !== undefined) updateData[key] = body[key]
     }
+    Object.assign(updateData, readPublicProjectMapUpdate(body))
     updateData.updatedAt = new Date()
 
     const result = await db
@@ -88,7 +90,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     revalidatePath("/proyectos")
     revalidatePath(`/proyectos/${id}`)
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, status: updateData.status, progress: updateData.progress })
   } catch (error) {
     console.error("Error al actualizar proyecto:", error)
     return NextResponse.json({ error: "Error al actualizar proyecto" }, { status: 500 })

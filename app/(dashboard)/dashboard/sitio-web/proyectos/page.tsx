@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Plus, Eye, EyeOff, Edit, Trash2, Globe } from "lucide-react"
+import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -19,6 +20,8 @@ interface PublicProject {
   published: boolean
   featured: boolean
   order: number
+  status?: string
+  progress?: number
   createdAt: string
 }
 
@@ -144,7 +147,10 @@ export default function SitioWebProyectosPage() {
               </div>
               <CardHeader>
                 <CardTitle className="line-clamp-1">{project.title}</CardTitle>
-                <p className="text-sm text-muted-foreground">{project.category}</p>
+                <div className="flex items-center gap-2 pt-1">
+                  <ProjectStatusBadge status={project.status} />
+                  <p className="text-sm text-muted-foreground">{project.category}</p>
+                </div>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{project.description}</p>

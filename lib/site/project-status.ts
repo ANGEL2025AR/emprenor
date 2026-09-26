@@ -30,6 +30,9 @@ export function normalizeProjectStatus(status?: string): ProjectStatusKey {
     pausado: "Pausado",
     finalizado: "Finalizado",
     garantia: "Garantia",
+    "garantía": "Garantia",
+    "en garantia": "Garantia",
+    "en garantía": "Garantia",
   }
   if (!status) return "Finalizado"
   const key = map[status.toLowerCase()] || (status as ProjectStatusKey)

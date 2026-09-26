@@ -11,6 +11,8 @@ import { formatPublicCopy, formatPublicLabel } from "@/lib/site/format-label"
 import { ProjectStatusBadge } from "@/components/projects/project-status-badge"
 import { ProjectProgressBar } from "@/components/projects/project-progress-bar"
 
+export const dynamic = "force-dynamic"
+
 type PageProps = {
   params: Promise<{ id: string }>
 }

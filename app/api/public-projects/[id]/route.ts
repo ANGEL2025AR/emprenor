@@ -1,10 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { ObjectId } from "mongodb"
-import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import type { PublicProject } from "@/lib/db/models"
 import { readPublicProjectMapUpdate } from "@/lib/site/project-geo"
+import { revalidatePublicProjects } from "@/lib/public-projects/revalidate"
+
+export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -86,9 +88,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
     }
 
-    revalidatePath("/")
-    revalidatePath("/proyectos")
-    revalidatePath(`/proyectos/${id}`)
+    revalidatePublicProjects(id)
 
     return NextResponse.json({ success: true, status: updateData.status, progress: updateData.progress })
   } catch (error) {
@@ -117,9 +117,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 })
     }
 
-    revalidatePath("/")
-    revalidatePath("/proyectos")
-    revalidatePath(`/proyectos/${id}`)
+    revalidatePublicProjects(id)
 
     return NextResponse.json({ success: true })
   } catch (error) {

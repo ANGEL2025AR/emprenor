@@ -1,9 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import type { PublicProject } from "@/lib/db/models"
 import { readPublicProjectMapUpdate } from "@/lib/site/project-geo"
+import { revalidatePublicProjects } from "@/lib/public-projects/revalidate"
+
+export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,12 +22,11 @@ export async function GET(request: NextRequest) {
       filter.category = category
     }
 
-    // Visitantes y SEO: solo publicados. Admin autenticado puede pedir borradores con ?published=false
     const isStaff = user && ["super_admin", "admin"].includes(user.role)
-    if (published === "false" && isStaff) {
-      filter.published = false
-    } else {
+    if (!isStaff || published === "true") {
       filter.published = true
+    } else if (published === "false") {
+      filter.published = false
     }
 
     const projects = await db
@@ -34,7 +35,10 @@ export async function GET(request: NextRequest) {
       .sort({ order: 1, createdAt: -1 })
       .toArray()
 
-    return NextResponse.json({ projects })
+    return NextResponse.json(
+      { projects },
+      { headers: { "Cache-Control": "no-store" } },
+    )
   } catch (error) {
     console.error("Error al obtener proyectos públicos:", error)
     return NextResponse.json({ error: "Error al obtener proyectos" }, { status: 500 })
@@ -64,8 +68,7 @@ export async function POST(request: NextRequest) {
 
     const result = await db.collection<PublicProject>("public_projects").insertOne(newProject as PublicProject)
 
-    revalidatePath("/")
-    revalidatePath("/proyectos")
+    revalidatePublicProjects(result.insertedId.toString())
 
     return NextResponse.json({
       success: true,

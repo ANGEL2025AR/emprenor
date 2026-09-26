@@ -37,7 +37,7 @@ export default function SitioWebProyectosPage() {
 
   const loadProjects = async () => {
     try {
-      const res = await fetch("/api/public-projects")
+      const res = await fetch("/api/public-projects", { cache: "no-store" })
       const data = await res.json()
       setProjects(data.projects || [])
     } catch (error) {

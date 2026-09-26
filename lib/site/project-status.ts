@@ -38,3 +38,17 @@ export function normalizeProjectStatus(status?: string): ProjectStatusKey {
   const key = map[status.toLowerCase()] || (status as ProjectStatusKey)
   return STATUS_CONFIG[key] ? key : "Finalizado"
 }
+
+/** Finalizado y en garantía significan obra terminada: el avance es 100 %. */
+export function isWorkCompleteStatus(status?: string): boolean {
+  if (!status?.trim()) return false
+  const key = normalizeProjectStatus(status)
+  return key === "Finalizado" || key === "Garantia"
+}
+
+export function progressForStatus(status?: string, progress?: number): number {
+  if (isWorkCompleteStatus(status)) return 100
+  const value = Number(progress)
+  if (!Number.isFinite(value)) return 0
+  return Math.min(100, Math.max(0, Math.round(value)))
+}

@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { STATUS_CONFIG, type ProjectStatusKey } from "@/lib/site/project-status"
+import { STATUS_CONFIG, isWorkCompleteStatus, type ProjectStatusKey } from "@/lib/site/project-status"
 
 export type PublicProjectMapFields = {
   status?: string
@@ -39,7 +39,13 @@ export function PublicProjectMapFields({ value, onChange }: Props) {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="project-status">Estado de obra</Label>
-          <Select value={value.status || "Finalizado"} onValueChange={(v) => onChange({ status: v as ProjectStatusKey })}>
+          <Select
+            value={value.status || "Finalizado"}
+            onValueChange={(v) => {
+              const status = v as ProjectStatusKey
+              onChange(isWorkCompleteStatus(status) ? { status, progress: 100 } : { status })
+            }}
+          >
             <SelectTrigger id="project-status">
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
@@ -57,10 +63,14 @@ export function PublicProjectMapFields({ value, onChange }: Props) {
             type="number"
             min={0}
             max={100}
-            value={value.progress ?? ""}
+            value={isWorkCompleteStatus(value.status) ? 100 : (value.progress ?? "")}
+            disabled={isWorkCompleteStatus(value.status)}
             onChange={(e) => onChange({ progress: e.target.value === "" ? undefined : Number(e.target.value) })}
             placeholder="0–100"
           />
+          {isWorkCompleteStatus(value.status) ? (
+            <p className="text-xs text-muted-foreground">Finalizado y en garantía quedan al 100 %.</p>
+          ) : null}
         </div>
         <div className="space-y-2">
           <Label htmlFor="project-lat">Latitud</Label>

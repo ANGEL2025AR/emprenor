@@ -1,4 +1,4 @@
-import { STATUS_CONFIG, normalizeProjectStatus } from "@/lib/site/project-status"
+import { STATUS_CONFIG, isWorkCompleteStatus, normalizeProjectStatus } from "@/lib/site/project-status"
 import { cn } from "@/lib/utils"
 
 export function ProjectProgressBar({
@@ -14,7 +14,9 @@ export function ProjectProgressBar({
 }) {
   const key = normalizeProjectStatus(status)
   const cfg = STATUS_CONFIG[key]
-  const pct = Math.min(100, Math.max(0, progress ?? (key === "Finalizado" ? 100 : key === "Planificacion" ? 15 : 55)))
+  const pct = isWorkCompleteStatus(status)
+    ? 100
+    : Math.min(100, Math.max(0, progress ?? (key === "Planificacion" ? 15 : 55)))
 
   return (
     <div className={cn("space-y-1", className)}>

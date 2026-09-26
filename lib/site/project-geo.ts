@@ -1,4 +1,4 @@
-import { normalizeProjectStatus } from "@/lib/site/project-status"
+import { isWorkCompleteStatus, normalizeProjectStatus, progressForStatus } from "@/lib/site/project-status"
 
 export const NOA_MAP_DEFAULT = {
   center: { lat: -24.35, lng: -64.55 },
@@ -45,7 +45,7 @@ export function toMapProject(doc: {
     title: doc.title,
     location: doc.location,
     status: doc.status,
-    progress: doc.progress,
+    progress: progressForStatus(doc.status, doc.progress),
     coordinates,
   }
 }
@@ -59,6 +59,9 @@ export function readPublicProjectMapUpdate(body: Record<string, unknown>): Recor
   if (body.progress !== undefined && body.progress !== null && body.progress !== "") {
     const progress = Number(body.progress)
     if (Number.isFinite(progress)) update.progress = Math.min(100, Math.max(0, Math.round(progress)))
+  }
+  if (isWorkCompleteStatus(typeof update.status === "string" ? update.status : undefined)) {
+    update.progress = 100
   }
   if (body.coordinates !== undefined) {
     update.coordinates = body.coordinates == null ? null : normalizeCoordinates(body.coordinates)

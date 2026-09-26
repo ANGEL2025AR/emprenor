@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import type { PublicProject } from "@/lib/db/models"
+import { readPublicProjectMapUpdate } from "@/lib/site/project-geo"
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,6 +53,7 @@ export async function POST(request: NextRequest) {
 
     const newProject: Partial<PublicProject> = {
       ...body,
+      ...readPublicProjectMapUpdate(body),
       published: body.published ?? false,
       featured: body.featured ?? false,
       order: body.order ?? 999,

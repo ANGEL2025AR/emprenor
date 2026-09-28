@@ -54,7 +54,7 @@ export function ServiceHeroSlider({ slides = [], minHeight = "70vh" }: { slides?
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
                 </>
               )}
-              <div className="container relative z-10 px-4 md:px-6 flex items-center py-16 md:py-24" style={{ minHeight }}>
+              <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center px-6 py-20 pb-32 sm:px-10 lg:px-14" style={{ minHeight }}>
                 <div className="max-w-3xl space-y-5">
                   {slide.eyebrow && <span className="text-green-400 font-semibold text-sm tracking-wider uppercase">{slide.eyebrow}</span>}
                   <h1 className="text-4xl md:text-5xl font-bold leading-tight">
@@ -82,19 +82,21 @@ export function ServiceHeroSlider({ slides = [], minHeight = "70vh" }: { slides?
         </div>
       </div>
       {loop && (
-        <>
-          <button type="button" aria-label="Anterior" className="absolute left-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/10 p-2 hover:bg-white/20" onClick={() => emblaApi?.scrollPrev()}>
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <button type="button" aria-label="Siguiente" className="absolute right-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/10 p-2 hover:bg-white/20" onClick={() => emblaApi?.scrollNext()}>
-            <ChevronRight className="h-6 w-6" />
-          </button>
-          <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-2">
-            {items.map((_, i) => (
-              <button key={i} type="button" aria-label={`Diapositiva ${i + 1}`} className={`h-2 rounded-full transition-all ${selected === i ? "w-8 bg-green-400" : "w-2 bg-white/40"}`} onClick={() => emblaApi?.scrollTo(i)} />
-            ))}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950/70 to-transparent pt-16">
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 pb-6 sm:px-10 sm:pb-8 lg:px-14">
+            <button type="button" aria-label="Anterior" className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-slate-950/55 text-white shadow-lg backdrop-blur hover:bg-slate-950/80" onClick={() => emblaApi?.scrollPrev()}>
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <div className="pointer-events-auto flex items-center justify-center gap-2">
+              {items.map((_, i) => (
+                <button key={i} type="button" aria-label={`Diapositiva ${i + 1}`} className={`h-2 rounded-full transition-all ${selected === i ? "w-8 bg-green-400" : "w-2 bg-white/55"}`} onClick={() => emblaApi?.scrollTo(i)} />
+              ))}
+            </div>
+            <button type="button" aria-label="Siguiente" className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-slate-950/55 text-white shadow-lg backdrop-blur hover:bg-slate-950/80" onClick={() => emblaApi?.scrollNext()}>
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
-        </>
+        </div>
       )}
     </section>
   )

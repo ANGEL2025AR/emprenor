@@ -84,12 +84,12 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Se encargan de los permisos y trámites?",
           respuesta:
-            "Sí, gestionamos todos los permisos municipales y documentación necesaria. Incluimos esto en nuestro servicio integral para su comodidad.",
+            "Cuando el contrato lo incluye, gestionamos permisos y documentación de la obra. El detalle figura en la propuesta.",
         },
         {
           pregunta: "¿Tienen seguro de responsabilidad civil?",
           respuesta:
-            "Sí, contamos con seguro de responsabilidad civil y todos nuestros trabajadores están asegurados. Su propiedad y nuestro equipo están protegidos.",
+            "Los seguros de obra, ART y responsabilidad civil que correspondan se informan en la propuesta. No publicamos una póliza única para todos los trabajos.",
         },
       ],
     },
@@ -99,17 +99,17 @@ export default function PreguntasFrecuentesPage() {
         {
           pregunta: "¿Qué formas de pago aceptan?",
           respuesta:
-            "Aceptamos efectivo, transferencias bancarias, cheques y tarjetas de crédito/débito. Ofrecemos planes de pago flexibles según el proyecto.",
+            "Las formas de pago se acuerdan en el contrato. No hay un medio único publicado para todas las obras.",
         },
         {
           pregunta: "¿Debo pagar todo por adelantado?",
           respuesta:
-            "No. Generalmente trabajamos con un esquema: 30% anticipo, 40% a mitad de obra y 30% al finalizar. El plan de pagos se ajusta a cada proyecto.",
+            "No. El anticipo y los certificados de avance se pactan obra por obra. No hay un esquema único de 30/40/30.",
         },
         {
           pregunta: "¿Ofrecen financiación?",
           respuesta:
-            "Para obras grandes armamos planes en cuotas. Consultanos y lo definimos según el alcance de tu proyecto.",
+            "Si el proyecto lo permite, el plan de pagos se arma en la propuesta. No hay una financiación publicada aparte del contrato.",
         },
       ],
     },

@@ -237,6 +237,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
       { name: "Portadas (slider)", href: "/dashboard/sitio-web/paginas", icon: LayoutTemplate, permission: "admin.access" },
       { name: "Servicios", href: "/dashboard/sitio-web/servicios", icon: Wrench, permission: "admin.access" },
       { name: "Brochure y Directorio", href: "/dashboard/sitio-web/brochure", icon: BookOpen, permission: "admin.access" },
+      { name: "Páginas de Empresa", href: "/dashboard/sitio-web/institucional", icon: Building2, permission: "admin.access" },
     ],
   },
 ]

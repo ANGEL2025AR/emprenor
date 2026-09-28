@@ -223,7 +223,7 @@ async function calculateTechnicalDetails(data: LegalReportData) {
     date: inspection.date,
     type: inspection.type,
     result: inspection.result,
-    inspector: "Inspector certificado",
+    inspector: "Registro de obra",
   }))
 
   return {

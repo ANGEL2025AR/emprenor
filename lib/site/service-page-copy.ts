@@ -4,10 +4,6 @@ import type { ServicePageConfig } from "@/lib/site/service-page-types"
 
 const SKIP_KEYS = new Set([
   "className",
-  "image",
-  "imageAlt",
-  "planImg",
-  "img",
   "icon",
   "iconColor",
   "color",
@@ -21,14 +17,18 @@ const SKIP_KEYS = new Set([
   "badge",
 ])
 
+const IMAGE_KEYS = new Set(["image", "imageAlt", "planImg", "img", "heroImage", "heroImageAlt"])
+
 export type EditableServiceText = { path: string; value: string }
 
 export function collectEditableTexts(value: unknown, path = "", out: EditableServiceText[] = []): EditableServiceText[] {
   if (typeof value === "string") {
     const text = value.trim()
-    if (text.length >= 12 && !text.startsWith("http") && !text.startsWith("from-") && !text.startsWith("/")) {
-      out.push({ path, value })
-    }
+    const key = path.split(".").pop() || ""
+    const isImage = IMAGE_KEYS.has(key) || /\.(avif|gif|jpe?g|png|webp)(\?|$)/i.test(text)
+    if (text.startsWith("from-") || text.startsWith("h-[")) return out
+    if (!isImage && (text.startsWith("http") || text.startsWith("/") || text.length < 2)) return out
+    out.push({ path, value })
     return out
   }
   if (Array.isArray(value)) {
@@ -63,7 +63,7 @@ export function applyTextOverrides<T>(value: T, overrides: Record<string, string
     const last = parts[parts.length - 1]
     const key = /^\d+$/.test(last) ? Number(last) : last
     const target = cursor as Record<string | number, unknown>
-    if (typeof target[key] === "string") target[key] = text.slice(0, 2000)
+    if (typeof target[key] === "string") target[key] = text.slice(0, 4000)
   }
   return clone as T
 }

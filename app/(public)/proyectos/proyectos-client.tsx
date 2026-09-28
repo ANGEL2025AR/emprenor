@@ -307,7 +307,7 @@ export default function ProyectosPage() {
                     ¿Querés que tu obra sea la siguiente?
                   </h2>
                   <p className="text-muted-foreground leading-relaxed text-pretty">
-                    Contanos el alcance y te armamos una cotización clara, sin costos ocultos.
+                    Contanos el alcance y armamos un presupuesto por escrito.
                   </p>
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
                     <Link href={contactFormUrl()}>

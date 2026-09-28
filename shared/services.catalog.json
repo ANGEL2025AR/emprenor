@@ -1,5 +1,5 @@
 {
-  "$comment": "Catálogo único de 12 servicios — páginas independientes en emprenor.com/servicios/[slug].",
+  "$comment": "Catálogo de servicios — páginas independientes en emprenor.com/servicios/[slug].",
   "services": [
     {
       "pageKey": "ServicioConstuccion",
@@ -29,7 +29,7 @@
       "legacySlugs": [],
       "title": "Albañilería",
       "footerName": "Albañilería",
-      "shortDescription": "Mampostería, hormigón, revoques y estructuras con maestros certificados",
+      "shortDescription": "Mampostería, hormigón, revoques, cordones y estructuras",
       "icon": "Hammer",
       "colorGradient": "from-orange-500 to-orange-600",
       "order": 3
@@ -46,6 +46,28 @@
       "order": 4
     },
     {
+      "pageKey": "ServicioTerminacionesSecas",
+      "slug": "terminaciones-secas",
+      "legacySlugs": ["durlock"],
+      "title": "Durlock y Terminaciones en Seco",
+      "footerName": "Durlock y Terminaciones en Seco",
+      "shortDescription": "Placas de yeso, cielorrasos, tabiques y aislaciones",
+      "icon": "Hammer",
+      "colorGradient": "from-stone-500 to-stone-600",
+      "order": 5
+    },
+    {
+      "pageKey": "ServicioHerreria",
+      "slug": "herreria",
+      "legacySlugs": ["herreria-metalicas"],
+      "title": "Herrería y Estructuras Metálicas",
+      "footerName": "Herrería y Estructuras Metálicas",
+      "shortDescription": "Herrería de obra, estructuras, escaleras, barandas y cerramientos",
+      "icon": "Factory",
+      "colorGradient": "from-zinc-600 to-zinc-800",
+      "order": 6
+    },
+    {
       "pageKey": "ServicioElectrico",
       "slug": "instalaciones-electricas",
       "legacySlugs": ["electricidad"],
@@ -54,7 +76,7 @@
       "shortDescription": "Media y baja tensión, subestaciones y automatización",
       "icon": "Zap",
       "colorGradient": "from-amber-500 to-amber-600",
-      "order": 5
+      "order": 7
     },
     {
       "pageKey": "ServicioSanitario",
@@ -65,7 +87,7 @@
       "shortDescription": "Agua potable, cloacales, pluviales y tratamiento de efluentes",
       "icon": "Droplets",
       "colorGradient": "from-cyan-500 to-cyan-600",
-      "order": 6
+      "order": 8
     },
     {
       "pageKey": "ServicioGas",
@@ -73,10 +95,10 @@
       "legacySlugs": [],
       "title": "Instalaciones de Gas",
       "footerName": "Instalaciones de Gas",
-      "shortDescription": "Gas natural y envasado con matrícula habilitada",
+      "shortDescription": "Gas natural y envasado, con habilitación cuando la instalación lo exige",
       "icon": "Flame",
       "colorGradient": "from-orange-500 to-orange-600",
-      "order": 7
+      "order": 9
     },
     {
       "pageKey": "ServicioIndustrial",
@@ -87,7 +109,7 @@
       "shortDescription": "Naves industriales, plantas productivas y sistemas contra incendio",
       "icon": "Factory",
       "colorGradient": "from-slate-600 to-slate-700",
-      "order": 8
+      "order": 10
     },
     {
       "pageKey": "ServicioAgropecuario",
@@ -98,7 +120,7 @@
       "shortDescription": "Infraestructura rural, riego tecnificado y electrificación",
       "icon": "Tractor",
       "colorGradient": "from-emerald-500 to-emerald-600",
-      "order": 9
+      "order": 11
     },
     {
       "pageKey": "ServicioClimatizacion",
@@ -109,7 +131,29 @@
       "shortDescription": "Aire acondicionado, calefacción y ventilación industrial",
       "icon": "Wind",
       "colorGradient": "from-violet-500 to-violet-600",
-      "order": 10
+      "order": 12
+    },
+    {
+      "pageKey": "ServicioVial",
+      "slug": "infraestructura-vial",
+      "legacySlugs": [],
+      "title": "Infraestructura Vial y Urbana",
+      "footerName": "Infraestructura Vial y Urbana",
+      "shortDescription": "Cordón cuneta, veredas, drenajes, pavimentos y alumbrado urbano",
+      "icon": "Building2",
+      "colorGradient": "from-amber-600 to-amber-800",
+      "order": 13
+    },
+    {
+      "pageKey": "ServicioInstitucional",
+      "slug": "obras-institucionales",
+      "legacySlugs": ["institucional"],
+      "title": "Obras Institucionales",
+      "footerName": "Obras Institucionales",
+      "shortDescription": "Escuelas, salud, organismos y edificios públicos",
+      "icon": "Building2",
+      "colorGradient": "from-blue-600 to-blue-800",
+      "order": 14
     },
     {
       "pageKey": "ServicioMantenimiento",
@@ -120,7 +164,7 @@
       "shortDescription": "Servicios preventivos y correctivos",
       "icon": "Wrench",
       "colorGradient": "from-rose-500 to-rose-600",
-      "order": 11
+      "order": 15
     },
     {
       "pageKey": "ServicioPrefabricadas",
@@ -131,7 +175,7 @@
       "shortDescription": "Steel Frame, madera, hormigón o tradicional — obra completa en el NOA",
       "icon": "Home",
       "colorGradient": "from-teal-500 to-teal-600",
-      "order": 12
+      "order": 16
     },
     {
       "pageKey": "ServicioIngenieria",
@@ -142,7 +186,7 @@
       "shortDescription": "Relevamiento, documentación técnica y criterios de obra según el contrato",
       "icon": "Building2",
       "colorGradient": "from-slate-600 to-slate-800",
-      "order": 13
+      "order": 17
     },
     {
       "pageKey": "ServicioGestionProyectos",
@@ -153,7 +197,7 @@
       "shortDescription": "Planificación, presupuesto, ejecución y entrega documentada",
       "icon": "Wrench",
       "colorGradient": "from-emerald-600 to-emerald-800",
-      "order": 14
+      "order": 18
     }
   ],
   "legacySlugRedirects": {
@@ -161,6 +205,9 @@
     "refaccion": "remodelacion",
     "electricidad": "instalaciones-electricas",
     "plomeria": "instalaciones-sanitarias",
-    "prefabricadas": "viviendas-prefabricadas"
+    "prefabricadas": "viviendas-prefabricadas",
+    "durlock": "terminaciones-secas",
+    "herreria-metalicas": "herreria",
+    "institucional": "obras-institucionales"
   }
 }

@@ -37,12 +37,36 @@ const PROJECT_PROVINCES = [
   "Tierra del Fuego",
 ]
 
-export default function ContactoClient() {
+const CONTACT_SERVICES = new Set([
+  "construccion",
+  "remodelacion",
+  "albanileria",
+  "pintura",
+  "instalaciones-electricas",
+  "instalaciones-sanitarias",
+  "gas",
+  "obras-industriales",
+  "agropecuario",
+  "climatizacion",
+  "mantenimiento",
+  "viviendas-prefabricadas",
+  "ingenieria",
+  "gestion-de-proyectos",
+  "terminaciones-secas",
+  "herreria",
+  "infraestructura-vial",
+  "obras-institucionales",
+  "licitaciones",
+  "otro",
+])
+
+export default function ContactoClient({ initialService = "" }: { initialService?: string }) {
+  const service = CONTACT_SERVICES.has(initialService) ? initialService : ""
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    service: "",
+    service,
     message: "",
     legalName: "",
     cuit: "",
@@ -235,12 +259,17 @@ export default function ContactoClient() {
                   <option value="remodelacion">Remodelación y Refacciones</option>
                   <option value="albanileria">Albañilería</option>
                   <option value="pintura">Pintura y Revestimientos</option>
+                  <option value="terminaciones-secas">Durlock y Terminaciones en Seco</option>
+                  <option value="herreria">Herrería y Estructuras Metálicas</option>
                   <option value="instalaciones-electricas">Instalaciones Eléctricas</option>
                   <option value="instalaciones-sanitarias">Instalaciones Sanitarias</option>
                   <option value="gas">Instalaciones de Gas</option>
                   <option value="obras-industriales">Obras Industriales</option>
                   <option value="agropecuario">Proyectos Agropecuarios</option>
                   <option value="climatizacion">Climatización</option>
+                  <option value="infraestructura-vial">Infraestructura Vial y Urbana</option>
+                  <option value="obras-institucionales">Obras Institucionales</option>
+                  <option value="licitaciones">Licitaciones y obra pública</option>
                   <option value="mantenimiento">Mantenimiento Integral</option>
                   <option value="viviendas-prefabricadas">Viviendas Llave en Mano</option>
                   <option value="ingenieria">Ingeniería y documentación técnica</option>

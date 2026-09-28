@@ -44,23 +44,23 @@ const stats = EMPRENOR_HOME_STATS.map((stat) => ({
 
 const features = [
   {
-    title: "Calidad Garantizada",
-    description: "Utilizamos los mejores materiales y técnicas de construcción para garantizar resultados duraderos.",
+    title: "Alcance por escrito",
+    description: "Materiales, controles y entregables se definen en el presupuesto y en el contrato de cada obra.",
     icon: Award,
   },
   {
-    title: "Equipo Profesional",
-    description: "Contamos con un equipo de profesionales altamente capacitados y con amplia experiencia.",
+    title: "Un interlocutor",
+    description: "Consulta, presupuesto y seguimiento de la obra se coordinan con un mismo equipo comercial y técnico.",
     icon: Users,
   },
   {
     title: "Cumplimiento de Plazos",
-    description: "Nos comprometemos con los tiempos de entrega establecidos en cada proyecto.",
+    description: "El cronograma se acuerda por escrito y se informa el avance durante la obra.",
     icon: Clock,
   },
   {
     title: "Presupuestos Claros",
-    description: "Ofrecemos presupuestos detallados y transparentes, sin costos ocultos.",
+    description: "El presupuesto detalla alcance y precio antes de empezar la obra.",
     icon: Target,
   },
 ]
@@ -175,7 +175,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">¿Listo para comenzar tu proyecto?</h2>
             <p className="text-xl text-green-100 mb-8">
-              Contactanos hoy y obtené una cotización sin cargo. El equipo está listo para ayudarte a concretar la obra.
+              Pedí una cotización. Coordinamos el relevamiento y el presupuesto según la obra.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-green-600 hover:bg-green-50 px-8 py-6 text-lg" asChild>

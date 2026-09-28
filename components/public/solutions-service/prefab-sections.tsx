@@ -44,14 +44,14 @@ function ModelDetailModal({ model, systemId, onClose }: { model: PrefabModel | n
           <p className="text-muted-foreground">{enriched.desc}</p>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-muted border border-border">
-              <p className="text-xs text-muted-foreground uppercase">Precio de lista</p>
+              <p className="text-xs text-muted-foreground uppercase">Precio</p>
               <p className="text-2xl font-bold mt-1">{enriched.priceList}</p>
               <p className="text-xs text-muted-foreground mt-1">{pricingFootnote(systemId)}</p>
             </div>
             <div className="p-4 rounded-xl bg-green-50 border border-green-100">
-              <p className="text-xs text-green-700 uppercase">Anticipo estimado</p>
+              <p className="text-xs text-green-700 uppercase">Plan de pagos</p>
               <p className="text-xl font-bold text-green-800 mt-1">{enriched.anticipo}</p>
-              <p className="text-sm text-green-700 mt-1">Cuotas desde {enriched.cuotaDesde}</p>
+              <p className="text-sm text-green-700 mt-1">{enriched.cuotas}</p>
             </div>
           </div>
           <Button className="w-full bg-green-600 hover:bg-green-700" asChild>
@@ -185,7 +185,6 @@ export function PrefabFinancingSection() {
         <div className="grid md:grid-cols-3 gap-5">
           {plans.map((plan) => (
             <div key={plan.name} className={`relative p-8 rounded-2xl bg-background border-2 ${plan.color}`}>
-              {"badge" in plan && plan.badge && <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-600 text-white text-xs font-bold px-4 py-1.5 rounded-full">{plan.badge}</span>}
               <h3 className="text-xl font-bold">{plan.name}</h3>
               <p className="text-2xl font-bold text-green-600 mt-3">{plan.price}</p>
               <p className="text-xs text-muted-foreground mb-5">{plan.period}</p>

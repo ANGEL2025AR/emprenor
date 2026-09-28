@@ -1,0 +1,55 @@
+{
+  "pageKey": "ServicioHerreria",
+  "hero": {
+    "type": "page-header",
+    "title": "Herrería",
+    "highlight": "y estructuras metálicas",
+    "subtitle": "Herrería de obra, estructuras, escaleras, barandas y cerramientos, según plano y presupuesto."
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Estructuras metálicas",
+          "title": "Fabricación y montaje según el encargo",
+          "paragraphs": [
+            "EMPRENOR toma trabajos de herrería de obra y de estructura metálica: naves y tinglados, escaleras, barandas y cerramientos. Medidas, materiales y plazo se fijan en la propuesta."
+          ],
+          "image": "/industrial-plant-construction.jpg",
+          "imageAlt": "Estructura metálica de obra"
+        },
+        {
+          "type": "cards",
+          "icon": "Factory",
+          "iconColor": "from-zinc-600 to-zinc-800",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-20",
+          "items": [
+            {
+              "title": "Alcance habitual",
+              "color": "from-zinc-600 to-zinc-800",
+              "items": [
+                "Herrería de obra",
+                "Estructuras metálicas",
+                "Naves y tinglados",
+                "Barandas y escaleras",
+                "Cerramientos metálicos"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Tenés un trabajo de herrería o estructura?",
+      "subtitle": "Enviá el plano o las medidas y preparamos el presupuesto.",
+      "buttonText": "Solicitar presupuesto",
+      "showPhone": true
+    }
+  ]
+}

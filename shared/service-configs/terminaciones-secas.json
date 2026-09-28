@@ -1,0 +1,55 @@
+{
+  "pageKey": "ServicioTerminacionesSecas",
+  "hero": {
+    "type": "page-header",
+    "title": "Durlock",
+    "highlight": "y terminaciones en seco",
+    "subtitle": "Placas de yeso, cielorrasos, tabiques y aislaciones, con alcance y materiales definidos en el presupuesto."
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Terminaciones en seco",
+          "title": "Tabiques, cielorrasos y cerramientos livianos",
+          "paragraphs": [
+            "EMPRENOR toma obras de terminación en seco para obra nueva y remodelación. El trabajo puede incluir placas de yeso, cielorrasos, tabiques divisorios, trasdosados y aislaciones. El detalle queda escrito en la propuesta."
+          ],
+          "image": "/construction-site-workers-blueprint.jpg",
+          "imageAlt": "Terminaciones de obra"
+        },
+        {
+          "type": "cards",
+          "icon": "Hammer",
+          "iconColor": "from-stone-500 to-stone-600",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-20",
+          "items": [
+            {
+              "title": "Alcance habitual",
+              "color": "from-stone-500 to-stone-600",
+              "items": [
+                "Colocación de placas de yeso",
+                "Cielorrasos suspendidos y aplicados",
+                "Tabiques divisorios",
+                "Trasdosados",
+                "Aislaciones térmicas y acústicas"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Necesitás terminaciones en seco?",
+      "subtitle": "Contanos el ambiente y coordinamos el relevamiento.",
+      "buttonText": "Solicitar presupuesto",
+      "showPhone": true
+    }
+  ]
+}

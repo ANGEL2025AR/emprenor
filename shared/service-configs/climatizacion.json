@@ -16,7 +16,7 @@
           "eyebrow": "Climatización",
           "title": "Confort térmico durante todo el año",
           "paragraphs": [
-            "Diseñamos e instalamos sistemas de climatización eficientes y confiables. Trabajamos con las marcas líderes del mercado y garantizamos el dimensionamiento correcto de cada sistema para maximizar el confort y minimizar el consumo energético."
+            "EMPRENOR toma instalaciones de aire acondicionado, calefacción y ventilación. El equipo y el dimensionamiento se definen en el presupuesto, según el uso del local."
           ],
           "image": "https://images.unsplash.com/photo-1698479603408-1a66a6d9e80f?auto=format&fit=crop&w=1200&q=85",
           "imageAlt": "Equipo de aire acondicionado en ambiente comercial — EMPRENOR C&S",
@@ -123,7 +123,7 @@
             {
               "step": "04",
               "title": "Instalación Profesional",
-              "desc": "Montaje por técnicos certificados con herramientas calibradas y materiales de primera calidad."
+              "desc": "Montaje según el presupuesto, con prueba de funcionamiento al cierre."
             },
             {
               "step": "05",
@@ -133,7 +133,7 @@
             {
               "step": "06",
               "title": "Mantenimiento",
-              "desc": "Plan de mantenimiento preventivo anual para garantizar rendimiento y vida útil máxima."
+              "desc": "Si se contrata, el mantenimiento preventivo se agenda según el plan escrito."
             }
           ]
         }
@@ -142,7 +142,7 @@
     {
       "type": "cta",
       "title": "¿Necesitás climatización?",
-      "subtitle": "Estudio de carga térmica y cotización sin cargo.",
+      "subtitle": "El estudio y el precio se definen en la propuesta.",
       "buttonText": "Solicitar Cotización",
       "showPhone": true
     }

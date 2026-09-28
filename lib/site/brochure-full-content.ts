@@ -9,12 +9,9 @@ import {
 } from "@/lib/company/constants"
 
 export const BROCHURE_CERTIFICATIONS = [
-  "AEA 90364 — Instalaciones eléctricas",
-  "NAG / ENARGAS — Instalaciones de gas",
-  "CIRSOC — Estructuras y obra civil",
-  "IRAM / IEC — Materiales eléctricos",
+  "Norma aplicable al contrato, cuando la instalación o la estructura la exigen",
   "IVA Responsable Inscripto",
-  "Matrículas profesionales vigentes",
+  "Documentación de obra según lo pactado",
 ]
 
 export const BROCHURE_META = {
@@ -43,8 +40,8 @@ export const BROCHURE_PRESENTATION = {
   paragraphs: [
     `Por medio de la presente, ${EMPRENOR_BRAND.siglas} — marca comercial de ${EMPRENOR_TITULAR.nombreCompleto} — tiene el agrado de presentarle nuestra propuesta integral de construcción e instalaciones para el Noroeste Argentino.`,
     `Desde ${EMPRENOR_TITULAR.operacionDesde} acompañamos a empresas, instituciones y familias en ${EMPRENOR_PROVINCIAS.join(", ")} con un modelo de gestión único: un solo interlocutor para obra civil, instalaciones eléctricas, sanitarias, de gas, climatización, mantenimiento y viviendas llave en mano.`,
-    "Nuestro diferencial es la ejecución con documentación técnica completa, personal matriculado y control de calidad conforme a normativa AEA 90364, NAG/ENARGAS y CIRSOC. Cada proyecto se desarrolla con presupuesto transparente, cronograma acordado y garantía de obra.",
-    "Este folleto corporativo detalla, especialidad por especialidad, el alcance técnico de nuestros servicios. Invitamos a contactarnos para una visita técnica sin cargo y una cotización adaptada a su necesidad.",
+    "El diferencial es un solo interlocutor y un alcance escrito: presupuesto, cronograma y documentación de entrega se definen en cada contrato.",
+    "Este folleto corporativo detalla el alcance de cada especialidad. El presupuesto se arma después de definir la obra.",
   ],
   closing: "Atentamente,",
   signatory: "Equipo Comercial · EMPRENOR C&S",
@@ -64,13 +61,13 @@ export const BROCHURE_MISSION = {
   mission:
     "Proporcionar servicios de construcción e instalaciones de la más alta calidad, cumpliendo plazos y presupuestos acordados, superando las expectativas mediante un trabajo profesional, ético y comprometido.",
   vision:
-    "Ser la empresa constructora líder del norte argentino, reconocida por innovación, calidad y cumplimiento, expandiendo servicios integrados y manteniéndonos a la vanguardia de la industria.",
+    "Acompañar obras del norte argentino con un interlocutor, alcance escrito y la documentación que pida cada contrato.",
 }
 
 export const BROCHURE_VALUES = [
   { title: "Calidad", desc: "Materiales y técnicas constructivas de excelencia en cada proyecto, con control documentado en obra." },
   { title: "Compromiso", desc: "Dedicación total a cada obra, tratándola como propia y asegurando satisfacción en cada etapa." },
-  { title: "Profesionalismo", desc: "Equipo capacitado y matriculado que actúa con ética, respeto y transparencia." },
+  { title: "Profesionalismo", desc: "Un interlocutor comercial y técnico, con el alcance escrito antes de la obra." },
   { title: "Puntualidad", desc: "Respeto de plazos acordados, comunicación constante y gestión eficiente de recursos." },
   { title: "Innovación", desc: "Tecnologías y métodos constructivos modernos para soluciones eficientes y sostenibles." },
   { title: "Seguridad", desc: "Prioridad en SST y cumplimiento riguroso de normativas vigentes en obra." },

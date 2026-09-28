@@ -128,7 +128,7 @@
         { "icon": "ShieldCheck", "title": "Obra ordenada", "desc": "Protección de mobiliario y áreas en uso durante la intervención." },
         { "icon": "Clock", "title": "Plazos acordados", "desc": "Cronograma por etapas con hitos verificables." },
         { "icon": "Users", "title": "Gremios coordinados", "desc": "Un solo responsable técnico para todas las especialidades." },
-        { "icon": "FileCheck", "title": "Presupuesto claro", "desc": "Partidas detalladas sin costos ocultos." }
+        { "icon": "FileCheck", "title": "Presupuesto claro", "desc": "Las partidas y el precio se detallan por escrito." }
       ]
     },
     {

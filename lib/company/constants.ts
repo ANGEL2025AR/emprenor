@@ -4,6 +4,7 @@
  */
 
 import company from "../../shared/company.constants.json"
+import { SERVICES_CATALOG } from "@/lib/site/services-catalog"
 
 export const EMPRENOR_BRAND = company.brand
 
@@ -43,7 +44,11 @@ export const EMPRENOR_MARKETING = {
 } as const
 
 /** Indicadores publicados verificables (no métricas inventadas). */
-export const EMPRENOR_HOME_STATS = company.homeStats as readonly {
+export const EMPRENOR_HOME_STATS = company.homeStats.map((stat) =>
+  stat.label === "Especialidades integradas"
+    ? { ...stat, number: String(SERVICES_CATALOG.length) }
+    : stat,
+) as readonly {
   number: string
   label: string
   icon: "CheckCircle" | "Users" | "Clock" | "Award"

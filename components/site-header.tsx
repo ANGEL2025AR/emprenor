@@ -176,7 +176,13 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
         </div>
 
         {/* Mobile Menu Button */}
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </Button>
       </div>
@@ -235,6 +241,25 @@ export function SiteHeader({ services = FALLBACK_SERVICES }: { services?: Servic
               <Users className="h-4 w-4" />
               Nosotros
             </Link>
+
+            <div className="flex flex-col gap-2 pl-6">
+              <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <Shield className="h-4 w-4" />
+                Empresa
+              </p>
+              <Link href="/licitaciones" className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1" onClick={() => setMobileMenuOpen(false)}>
+                Licitaciones
+              </Link>
+              <Link href="/seguridad-y-salud" className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1" onClick={() => setMobileMenuOpen(false)}>
+                Seguridad y salud
+              </Link>
+              <Link href="/sostenibilidad" className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1" onClick={() => setMobileMenuOpen(false)}>
+                Sostenibilidad
+              </Link>
+              <Link href="/linea-etica" className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1" onClick={() => setMobileMenuOpen(false)}>
+                Línea de ética
+              </Link>
+            </div>
 
             <Link
               href="/preguntas-frecuentes"

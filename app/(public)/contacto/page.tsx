@@ -6,15 +6,20 @@ import { buildPageMetadata } from "@/lib/site/page-metadata"
 export const metadata: Metadata = buildPageMetadata({
   title: "Contacto",
   description:
-    "Solicite una cotización gratuita. Oficinas en Salta Capital, Tartagal y Campamento Vespucio. Atención en Salta, Jujuy, Tucumán y Formosa.",
+    "Pedí un presupuesto. Sede en Campamento Vespucio, Salta. Atención en Salta, Jujuy, Tucumán y Formosa.",
   path: "/contacto",
 })
 
-export default function ContactoPage() {
+export default async function ContactoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ servicio?: string }>
+}) {
+  const { servicio } = await searchParams
   return (
     <main className="flex flex-col">
       <PublicHeroSection slug="contacto" variant="simple" />
-      <ContactoClient />
+      <ContactoClient initialService={servicio} />
     </main>
   )
 }

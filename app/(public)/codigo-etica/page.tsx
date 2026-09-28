@@ -15,7 +15,7 @@ export default function CodigoEticaPage() {
     <InstitutionalPage
       slug="codigo-etica"
       title="Código de ética e integridad"
-      subtitle="Nuestro compromiso con la transparencia, la seguridad y el respeto — alineado a estándares internacionales de contratistas."
+      subtitle="Compromisos de integridad en contratos, obra pública y relaciones con clientes, personal y proveedores."
       sections={[
         {
           title: "Principios",
@@ -32,8 +32,8 @@ export default function CodigoEticaPage() {
           title: "Proveedores y subcontratos",
           content: (
             <p>
-              Exigimos a proveedores y subcontratistas el cumplimiento de este código, ART vigente y normativa laboral
-              argentina. Las compras locales se registran con transparencia en obras con cumplimiento institucional.
+              Quienes participan en una obra se rigen por este código, por la normativa laboral argentina y por lo que
+              pida el contrato. La ART se revisa cuando esa normativa o el contrato lo exigen.
             </p>
           ),
         },
@@ -58,8 +58,8 @@ export default function CodigoEticaPage() {
           title: "Cumplimiento en obra",
           content: (
             <p>
-              En proyectos con organismos internacionales, Estado o grandes empresas, aplicamos checklists de
-              cumplimiento (nómina, capacitaciones, libro de quejas, incidentes) auditables desde el portal del cliente.
+              Si el contrato prevé un control de nómina, capacitaciones o incidentes, esos registros se llevan para esa
+              obra y se comparten con quien el contrato indique.
             </p>
           ),
         },

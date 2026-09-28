@@ -21,19 +21,16 @@ const LEGAL_ENTITY = companyConstants.legalEntity as {
 }
 
 export const DEFAULT_BROCHURE_CERTIFICATIONS = [
-  "AEA 90364 — Instalaciones eléctricas",
-  "NAG / ENARGAS — Instalaciones de gas",
-  "CIRSOC — Estructuras y obra civil",
-  "IRAM / IEC — Materiales eléctricos",
+  "Norma aplicable al contrato, cuando la instalación o la estructura la exigen",
   "IVA Responsable Inscripto",
-  "Matrículas profesionales vigentes",
+  "Documentación de obra según lo pactado",
 ]
 
 export const DEFAULT_BROCHURE_MANIFESTO_ITEMS = [
-  { id: "m1", order: 1, text: "PORQUE integramos 12 especialidades bajo un solo interlocutor comercial y técnico en el NOA." },
-  { id: "m2", order: 2, text: "PORQUE cada obra se ejecuta con documentación completa, personal matriculado y trazabilidad en obra." },
-  { id: "m3", order: 3, text: "PORQUE cumplimos normativa AEA 90364, NAG/ENARGAS y CIRSOC en instalaciones y estructuras." },
-  { id: "m4", order: 4, text: "PORQUE ofrecemos presupuesto transparente, cronograma acordado y garantía de entrega." },
+  { id: "m1", order: 1, text: `PORQUE integramos ${servicesCatalog.services.length} especialidades bajo un solo interlocutor comercial y técnico en el NOA.` },
+  { id: "m2", order: 2, text: "PORQUE cada obra se ejecuta con el alcance, la documentación y la garantía que figuran en el contrato." },
+  { id: "m3", order: 3, text: "PORQUE la norma de la instalación o de la estructura se indica en el contrato, cuando el trámite la exige." },
+  { id: "m4", order: 4, text: "PORQUE el presupuesto y el cronograma se acuerdan por escrito antes de empezar." },
   { id: "m5", order: 5, text: "PORQUE acompañamos al cliente antes, durante y después de la obra con atención comercial dedicada." },
   { id: "m6", order: 6, text: "PORQUE operamos en Salta, Jujuy, Tucumán y Formosa con sede estratégica en Campamento Vespucio." },
   { id: "m7", order: 7, text: "PORQUE construimos para el sector público, privado, industrial, comercial y agropecuario." },
@@ -81,8 +78,8 @@ export function buildDefaultBrochureContent(): Omit<BrochureContentDocument, "_i
       paragraphs: [
         `Por medio de la presente, ${LEGAL_ENTITY.commercialBrand} — marca comercial de ${LEGAL_ENTITY.legalNameShort} — tiene el agrado de presentarle nuestra propuesta integral de construcción e instalaciones para el Noroeste Argentino.`,
         `Desde ${EMPRENOR_TITULAR.operacionDesde} acompañamos a empresas, instituciones y familias en ${EMPRENOR_PROVINCIAS.join(", ")} con un modelo de gestión único: un solo interlocutor para obra civil, instalaciones eléctricas, sanitarias, de gas, climatización, mantenimiento y viviendas llave en mano.`,
-        "Nuestro diferencial es la ejecución con documentación técnica completa, personal matriculado y control de calidad conforme a normativa vigente. Cada proyecto se desarrolla con presupuesto transparente, cronograma acordado y garantía de obra.",
-        `Este folleto corporativo detalla nuestra estructura, equipo directivo y alcance técnico de nuestras ${servicesCatalog.services.length} especialidades. Invitamos a contactarnos para una visita técnica sin cargo.`,
+        "El diferencial es un solo interlocutor y un alcance escrito: presupuesto, cronograma y documentación de entrega se definen en cada contrato.",
+        `Este folleto corporativo detalla el alcance de nuestras ${servicesCatalog.services.length} especialidades. El presupuesto se arma después de definir la obra.`,
       ],
       closing: "Atentamente,",
       signatory: `Dirección Comercial · ${LEGAL_ENTITY.commercialBrand}`,
@@ -94,19 +91,19 @@ export function buildDefaultBrochureContent(): Omit<BrochureContentDocument, "_i
         `${LEGAL_ENTITY.commercialBrand} inició operaciones en ${companyConstants.titular.operacionDesdeLabel} bajo la conducción de ${EMPRENOR_TITULAR.nombreCompleto}, con foco en construcción e instalaciones para el sector público, privado e industrial del NOA.`,
         `La empresa evoluciona hacia ${LEGAL_ENTITY.legalName}, manteniendo ${LEGAL_ENTITY.commercialBrand} como marca comercial ante el mercado.`,
         `Operamos en ${EMPRENOR_PROVINCIAS.length} provincias con ${servicesCatalog.services.length} especialidades integradas y un equipo directivo en expansión.`,
-        "Nuestro propósito es ser el referente de construcción e instalaciones integradas del norte argentino.",
+        "El propósito es acompañar obras de construcción e instalaciones en el norte argentino, con el alcance escrito en cada contrato.",
       ],
     },
     mission: {
       mission:
         "Proporcionar servicios de construcción e instalaciones de la más alta calidad, cumpliendo plazos y presupuestos acordados, con trabajo profesional, ético y comprometido.",
       vision:
-        "Ser la empresa constructora líder del NOA, reconocida por integración de servicios, cumplimiento normativo y excelencia en la experiencia del cliente.",
+        "Acompañar obras del NOA con un interlocutor, alcance escrito y la documentación que pida cada contrato.",
     },
     values: [
       { title: "Calidad", desc: "Materiales y técnicas de excelencia con control documentado en obra." },
       { title: "Compromiso", desc: "Dedicación total a cada proyecto como si fuera propio." },
-      { title: "Profesionalismo", desc: "Equipo capacitado y matriculado con ética y transparencia." },
+      { title: "Profesionalismo", desc: "Un interlocutor comercial y técnico, con el alcance escrito antes de la obra." },
       { title: "Puntualidad", desc: "Respeto de plazos acordados y comunicación constante." },
       { title: "Integración", desc: "Un solo interlocutor para civil, instalaciones y mantenimiento." },
       { title: "Seguridad", desc: "Prioridad en SST y cumplimiento riguroso en obra." },

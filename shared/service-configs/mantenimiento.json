@@ -84,7 +84,7 @@
                 "Verificación de temperaturas y presiones",
                 "Lubricación de partes móviles",
                 "Mantenimiento de sistemas VRF/VRV",
-                "Desinfección y certificación de sistemas de climatización (Legionella)"
+                "Limpieza de equipos de climatización si el plan la incluye"
               ]
             },
             {
@@ -111,12 +111,12 @@
             {
               "name": "Plan Básico",
               "price": "Consultar",
-              "period": "Contrato 12 meses",
+              "period": "Según contrato",
               "features": [
-                "1 visita preventiva mensual",
-                "Atención de emergencias (cobro adicional)",
-                "Informe de estado mensual",
-                "Prioridad en turnos"
+                "Visitas preventivas según el plan",
+                "Emergencias con el alcance pactado",
+                "Informe si el contrato lo pide",
+                "Turnos según disponibilidad"
               ],
               "color": "border-slate-200",
               "badge": ""
@@ -124,14 +124,13 @@
             {
               "name": "Plan Integral",
               "price": "Consultar",
-              "period": "Contrato 12 meses",
+              "period": "Según contrato",
               "features": [
-                "2 visitas preventivas mensuales",
-                "Emergencias sin cargo (2 al mes)",
-                "Informe técnico mensual",
-                "Reemplazos de insumos menores incluidos",
-                "Panel digital de estado",
-                "Prioridad máxima"
+                "Frecuencia de visitas en el contrato",
+                "Emergencias según el alcance pactado",
+                "Informe técnico si se incluye",
+                "Insumos según el presupuesto",
+                "Seguimiento acordado por escrito"
               ],
               "color": "border-amber-400",
               "badge": ""

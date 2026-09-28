@@ -3,9 +3,15 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { ImageUploadField } from "@/components/site/image-upload-field"
 import { useToast } from "@/hooks/use-toast"
 
 type Field = { path: string; value: string }
+
+function isImageField(field: Field) {
+  const key = field.path.split(".").pop() || ""
+  return ["image", "planImg", "img", "heroImage"].includes(key) || /\.(avif|gif|jpe?g|png|webp)(\?|$)/i.test(field.value)
+}
 
 export function ServicePageCopyEditor({ slug }: { slug: string }) {
   const { toast } = useToast()
@@ -60,15 +66,29 @@ export function ServicePageCopyEditor({ slug }: { slug: string }) {
       {fields.map((field, index) => (
         <div key={field.path} className="space-y-1">
           <label className="text-xs text-muted-foreground">{field.path}</label>
-          <Textarea
-            value={field.value}
-            rows={field.value.length > 120 ? 4 : 2}
-            onChange={(e) => {
-              const next = [...fields]
-              next[index] = { ...field, value: e.target.value }
-              setFields(next)
-            }}
-          />
+          {isImageField(field) ? (
+            <ImageUploadField
+              label="Imagen de la página"
+              folder="services"
+              allowEmpty
+              value={field.value}
+              onChange={(url) => {
+                const next = [...fields]
+                next[index] = { ...field, value: url }
+                setFields(next)
+              }}
+            />
+          ) : (
+            <Textarea
+              value={field.value}
+              rows={field.value.length > 120 ? 4 : 2}
+              onChange={(e) => {
+                const next = [...fields]
+                next[index] = { ...field, value: e.target.value }
+                setFields(next)
+              }}
+            />
+          )}
         </div>
       ))}
       <Button type="button" onClick={save} disabled={saving || fields.length === 0}>

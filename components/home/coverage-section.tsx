@@ -12,7 +12,7 @@ export function CoverageSection() {
               Cobertura en <span className="text-green-500">4 provincias</span>
             </h2>
             <p className="text-white/55 leading-relaxed mb-8">
-              Con sede en el NOA, EMPRENOR C&S está cerca tuyo para darte el mejor servicio de construcción e instalaciones del norte argentino.
+              La sede está en Campamento Vespucio, Salta. Atendemos obras en Salta, Jujuy, Tucumán y Formosa.
             </p>
             <div className="space-y-4">
               {BROCHURE_OFFICES.map((o) => (

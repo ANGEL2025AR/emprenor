@@ -12,6 +12,7 @@ import { Loader2, Shield } from "lucide-react"
 export function EthicsReportForm() {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const [ticket, setTicket] = useState("")
   const [error, setError] = useState("")
   const [anonymous, setAnonymous] = useState(false)
   const [category, setCategory] = useState("conducta")
@@ -42,6 +43,7 @@ export function EthicsReportForm() {
         setError(data.error || "No se pudo enviar el reporte")
         return
       }
+      setTicket(typeof data.ticket === "string" ? data.ticket : "")
       setDone(true)
       setMessage("")
     } catch {
@@ -57,7 +59,8 @@ export function EthicsReportForm() {
         <Shield className="h-10 w-10 text-emerald-600 mx-auto" />
         <p className="font-semibold text-emerald-900">Reporte recibido</p>
         <p className="text-sm text-emerald-800">
-          Referencia: se analizará con confidencialidad. Si dejó contacto, responderemos dentro del plazo corporativo.
+          {ticket ? <>Referencia <strong>{ticket}</strong>. </> : null}
+          El reporte queda registrado y se trata con confidencialidad. Si dejó un contacto, la respuesta se hace por ese medio.
         </p>
       </div>
     )

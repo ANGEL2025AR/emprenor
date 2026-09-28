@@ -11,7 +11,7 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
       title: "Construimos con planificación, calidad y cumplimiento",
       titleAccent: "calidad",
       subtitle:
-        "EMPRENOR C&S — construcción e instalaciones integradas en el NOA. Doce especialidades, un solo interlocutor. Cobertura en Salta, Jujuy, Tucumán y Formosa.",
+        "EMPRENOR C&S — construcción e instalaciones integradas en el NOA. Especialidades integradas, un solo interlocutor. Cobertura en Salta, Jujuy, Tucumán y Formosa.",
       primaryCtaLabel: "Solicitar Cotización",
       primaryCtaHref: "/contacto#formulario",
       secondaryCtaLabel: "Ver Proyectos",

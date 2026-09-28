@@ -58,7 +58,7 @@
     "Obras públicas"
   ],
   "homeStats": [
-    { "number": "12", "label": "Especialidades integradas", "icon": "CheckCircle" },
+    { "number": "18", "label": "Especialidades integradas", "icon": "CheckCircle" },
     { "number": "4", "label": "Provincias del NOA", "icon": "Users" },
     { "number": "2018", "label": "Operación documentada", "icon": "Clock" },
     { "number": "5", "label": "Tipos de obra", "icon": "Award" }

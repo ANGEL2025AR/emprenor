@@ -63,7 +63,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Construcción Industrial", items: ["Naves industriales", "Bodegas y almacenes", "Plantas de producción"] },
       { title: "Proyectos Especiales", items: ["Instalaciones deportivas", "Instituciones educativas", "Centros de salud"] },
     ],
-    ["Personal certificado y ART al día", "Control de calidad en cada etapa", "Cumplimiento normativo IRAM/INTI", "Garantía escrita post-entrega"],
+    ["Alcance por escrito", "Controles en los hitos del contrato", "Norma aplicable cuando el trámite la exige", "Garantía según el contrato"],
     1,
   ),
   svc(
@@ -100,7 +100,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
     "Albañilería",
     "Hammer",
     "from-orange-500 to-orange-600",
-    "Trabajos de albañilería profesional con maestros certificados para proyectos residenciales, comerciales e industriales.",
+    "Mampostería, revoques, contrapisos y estructuras para obra residencial, comercial e industrial.",
     ["Mampostería", "Revoques", "Contrapisos", "Estructuras"],
     "Albañilería de Precisión",
     [
@@ -121,7 +121,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Revoques especiales", items: ["Exterior SIR", "Texturas", "Ladrillo visto"] },
       { title: "Industrial", items: ["Bases de maquinaria", "Canaletas", "Pisos industriales"] },
     ],
-    ["Maestros con experiencia comprobada", "Materiales certificados", "Cumplimiento de plomos y niveles", "Integración con resto de gremios"],
+    ["Control de plomos y niveles", "Materiales indicados en el presupuesto", "Alcance por escrito", "Coordinación con el resto de la obra"],
     3,
   ),
   svc(
@@ -129,11 +129,11 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
     "Electricidad",
     "Lightbulb",
     "from-yellow-500 to-yellow-600",
-    "Instalaciones eléctricas seguras, eficientes y certificadas para hogares y empresas con cumplimiento normativo AEA.",
+    "Instalaciones eléctricas de vivienda, comercio e industria. La documentación se entrega si el contrato la incluye.",
     ["Instalaciones nuevas", "Tableros eléctricos", "Iluminación", "Sistemas trifásicos"],
-    "Instalaciones Eléctricas Certificadas",
+    "Instalaciones Eléctricas",
     [
-      "Diseñamos e instalamos sistemas eléctricos residenciales, comerciales e industriales con materiales homologados y personal matriculado.",
+      "EMPRENOR toma instalaciones eléctricas residenciales, comerciales e industriales. Los materiales y la documentación figuran en el presupuesto.",
       "Realizamos mediciones, puesta a tierra, tableros, iluminación LED y sistemas de respaldo según normativa vigente.",
     ],
     [
@@ -142,7 +142,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Tableros y Protecciones", description: "Montaje de tableros, disyuntores, térmicas y diferenciales." },
       { title: "Iluminación", description: "Instalación de luminarias, sensores, automatismos y eficiencia energética." },
       { title: "Pruebas y Mediciones", description: "Continuidad, aislamiento, puesta a tierra y protocolo de ensayos." },
-      { title: "Certificación", description: "Entrega de plano conforme a obra, certificado de instalación y habilitación." },
+      { title: "Documentación", description: "Planos y habilitación si el contrato los incluye." },
     ],
     [
       { title: "Residencial", items: ["Instalación completa", "Ampliaciones", "Reparaciones"] },
@@ -150,7 +150,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Industrial", items: ["Trifásica", "Motores", "Subestaciones menores"] },
       { title: "Eficiencia", items: ["LED", "Sensores", "Automatización básica"] },
     ],
-    ["Electricistas matriculados", "Materiales AEA homologados", "Mediciones con instrumentación calibrada", "Certificado de instalación"],
+    ["Alcance por escrito", "Materiales del presupuesto", "Mediciones si el trámite las pide", "Documentación según contrato"],
     4,
   ),
   svc(
@@ -179,7 +179,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Baños y cocinas", items: ["Artefactos", "Mesadas", "Mamparas"] },
       { title: "Industrial", items: ["Líneas de proceso", "Tanques", "Incendio"] },
     ],
-    ["Materiales certificados", "Pruebas de presión documentadas", "Atención de urgencias", "Garantía en mano de obra"],
+    ["Materiales del presupuesto", "Pruebas si el contrato las pide", "Atención según disponibilidad", "Garantía según el contrato"],
     5,
   ),
   svc(
@@ -229,7 +229,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Fundaciones", description: "Platea, pilotes o bases según estudio de suelo." },
       { title: "Montaje", description: "Armado estructural, cubierta y cerramientos en tiempo récord." },
       { title: "Instalaciones", description: "Electricidad, plomería, gas y aislación completa." },
-      { title: "Entrega Llave en Mano", description: "Terminaciones, habilitaciones y garantía estructural." },
+      { title: "Entrega", description: "Terminaciones y documentación según el contrato." },
     ],
     [
       { title: "Vivienda permanente", items: ["1 a 4 dormitorios", "Cocheras", "Quincho"] },
@@ -237,7 +237,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Ampliaciones", items: ["Dormitorios", "Depósitos", "Galerías"] },
       { title: "Eficiencia", items: ["Aislación térmica", "Paneles SIP", "LED"] },
     ],
-    ["Obra 40% más rápida", "Menor desperdicio de material", "Estructura antisísmica", "Personalización total"],
+    ["Plazo según relevamiento", "Sistema definido en la propuesta", "Precio a cotizar", "Terminaciones por escrito"],
     7,
   ),
   svc(
@@ -256,7 +256,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Ingeniería de Detalle", description: "Estructuras metálicas, fundaciones y instalaciones según proceso industrial." },
       { title: "Gestión de Compras", description: "Acero, equipos, logística y control de proveedores críticos." },
       { title: "Obra Civil", description: "Fundaciones, pisos industriales, muros y vías internas." },
-      { title: "Montaje Estructural", description: "Armado de nave, grúas, anclajes y soldaduras certificadas." },
+      { title: "Montaje Estructural", description: "Armado de nave, anclajes y soldadura según el proyecto." },
       { title: "Instalaciones", description: "Eléctrica, incendio, aire comprimido, agua y desagües industriales." },
       { title: "Puesta en servicio", description: "Pruebas, protocolos de entrega y capacitación operativa." },
     ],
@@ -266,7 +266,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "Plantas", items: ["Procesamiento", "Envasado", "Frío industrial"] },
       { title: "Infraestructura", items: ["Camiones de acceso", "Tanques", "Estaciones"] },
     ],
-    ["Gestión PMI", "Seguridad industrial reforzada", "Estructuras certificadas", "Cumplimiento normativo sectorial"],
+    ["Alcance por escrito", "Seguridad según el contrato", "Estructura según el proyecto", "Norma aplicable al trámite"],
     8,
   ),
   svc(
@@ -274,19 +274,19 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
     "Instalaciones de Gas",
     "Flame",
     "from-red-500 to-red-600",
-    "Instalaciones de gas natural, envasado y GLP certificadas por profesionales matriculados con habilitación municipal.",
-    ["Gas natural", "Gas envasado", "Calderas", "Certificaciones"],
-    "Gas Matriculado y Certificado",
+    "Gas natural y envasado. La habilitación se tramita cuando la instalación lo exige.",
+    ["Gas natural", "Gas envasado", "Calderas", "Documentación"],
+    "Instalaciones de Gas",
     [
-      "Proyectamos e instalamos redes de gas natural, envasado y GLP para viviendas, comercios e industrias con matrícula habilitante.",
-      "Realizamos pruebas de estanqueidad, habilitaciones municipales y entrega de certificados exigidos por distribuidoras.",
+      "EMPRENOR toma redes de gas natural, envasado y GLP para viviendas, comercios e industrias.",
+      "Las pruebas y la habilitación se hacen cuando el trámite o el contrato las piden.",
     ],
     [
       { title: "Relevamiento", description: "Cálculo de consumos, recorrido de cañerías y selección de artefactos." },
       { title: "Proyecto y Trámite", description: "Plano para distribuidora y municipio, gestión de aprobaciones." },
       { title: "Instalación", description: "Cañerías, válvulas, reguladores, artefactos y ventilaciones." },
       { title: "Prueba de Estanqueidad", description: "Ensayo con manómetro, registro fotográfico y acta." },
-      { title: "Habilitación", description: "Inspección de distribuidora y entrega de certificado." },
+      { title: "Habilitación", description: "Trámite ante la distribuidora si la instalación lo exige." },
       { title: "Mantenimiento", description: "Revisiones periódicas, conversión de artefactos y reparaciones." },
     ],
     [
@@ -295,7 +295,7 @@ export const SITE_SERVICE_DEFAULTS: ServiceSeed[] = [
       { title: "GLP", items: ["Instalaciones industriales", "Restaurantes", "Hoteles"] },
       { title: "Certificaciones", items: ["Habilitación municipal", "Renovaciones", "Inspecciones"] },
     ],
-    ["Gasistas matriculados", "Estanqueidad certificada", "Trámites con distribuidora", "Garantía en instalaciones"],
+    ["Alcance por escrito", "Prueba de hermeticidad si el trámite la pide", "Trámite cuando corresponde", "Garantía según el contrato"],
     9,
   ),
 ]

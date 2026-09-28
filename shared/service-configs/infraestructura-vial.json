@@ -1,0 +1,55 @@
+{
+  "pageKey": "ServicioVial",
+  "hero": {
+    "type": "page-header",
+    "title": "Infraestructura",
+    "highlight": "vial y urbana",
+    "subtitle": "Cordón cuneta, veredas, drenajes, pavimentos y alumbrado para obra urbana e institucional."
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Obra urbana",
+          "title": "Calles, veredas y drenajes con alcance por escrito",
+          "paragraphs": [
+            "EMPRENOR toma infraestructura vial y urbana en el NOA: cordón cuneta, veredas, drenajes, pavimentos y alumbrado público. El tramo, los materiales y el plazo se definen en el presupuesto."
+          ],
+          "image": "/industrial-plant-construction.jpg",
+          "imageAlt": "Obra de infraestructura"
+        },
+        {
+          "type": "cards",
+          "icon": "Building2",
+          "iconColor": "from-amber-600 to-amber-800",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-20",
+          "items": [
+            {
+              "title": "Alcance habitual",
+              "color": "from-amber-600 to-amber-800",
+              "items": [
+                "Cordón cuneta",
+                "Veredas y accesos",
+                "Drenajes y obras de desagüe",
+                "Pavimentos",
+                "Alumbrado público"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Tenés una obra urbana para cotizar?",
+      "subtitle": "Contanos el lugar y el alcance para preparar la propuesta.",
+      "buttonText": "Solicitar presupuesto",
+      "showPhone": true
+    }
+  ]
+}

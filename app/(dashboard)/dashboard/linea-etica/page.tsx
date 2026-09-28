@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
+import { ObjectId } from "mongodb"
 import { getCurrentUser } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
 import { getDb } from "@/lib/db/connection"
@@ -8,6 +10,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Shield, ExternalLink } from "lucide-react"
+
+async function setEthicsStatus(formData: FormData) {
+  "use server"
+  const user = await getCurrentUser()
+  if (!user || !hasPermission(user.role as UserRole, "admin.access")) return
+  const id = String(formData.get("id") || "")
+  const status = String(formData.get("status") || "")
+  if (!ObjectId.isValid(id) || (status !== "abierto" && status !== "cerrado")) return
+  const db = await getDb()
+  await db.collection("ethics_reports").updateOne(
+    { _id: new ObjectId(id) },
+    { $set: { status, updatedAt: new Date() } },
+  )
+  revalidatePath("/dashboard/linea-etica")
+}
 
 const CATEGORY_LABELS: Record<string, string> = {
   conducta: "Conducta ética",
@@ -78,6 +95,13 @@ export default async function LineaEticaAdminPage() {
                     Contacto: {r.reporter.name || "—"} · {r.reporter.email || "—"}
                   </p>
                 ) : null}
+                <form action={setEthicsStatus}>
+                  <input type="hidden" name="id" value={String(r._id)} />
+                  <input type="hidden" name="status" value={r.status === "abierto" ? "cerrado" : "abierto"} />
+                  <Button type="submit" size="sm" variant="outline">
+                    {r.status === "abierto" ? "Marcar cerrado" : "Reabrir"}
+                  </Button>
+                </form>
               </div>
             ))
           )}

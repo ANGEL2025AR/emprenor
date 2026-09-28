@@ -16,15 +16,13 @@
           "eyebrow": "Instalaciones Sanitarias",
           "title": "Todo lo relacionado con el agua en tu obra",
           "paragraphs": [
-            "Diseñamos y ejecutamos instalaciones sanitarias completas para obras residenciales, comerciales e industriales. Todos los trabajos son realizados por plomeros matriculados y aprobados por los entes reguladores locales."
+            "EMPRENOR toma instalaciones de agua, cloacas, pluviales y efluentes en obra residencial, comercial e industrial. Las pruebas y la documentación se definen en la propuesta."
           ],
           "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=85",
           "imageAlt": "Instalaciones Sanitarias",
           "badges": [
-            "Normas APA",
-            "Código de Edificación",
-            "IRAM",
-            "Obras Sanitarias"
+            "Código de edificación local",
+            "Pruebas según contrato"
           ]
         },
         {
@@ -100,7 +98,7 @@
     {
       "type": "cta",
       "title": "¿Necesitás instalaciones sanitarias?",
-      "subtitle": "Contáctanos para una cotización sin cargo.",
+      "subtitle": "Pedí el presupuesto de la instalación.",
       "buttonText": "Solicitar Cotización",
       "showPhone": true
     }

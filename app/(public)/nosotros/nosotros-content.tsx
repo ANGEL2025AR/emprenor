@@ -106,8 +106,7 @@ export default function NosotrosPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">Profesionalismo</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Equipo altamente capacitado y certificado que actúa con ética, respeto y transparencia en todo
-                    momento.
+                    El trabajo se hace con el alcance escrito de cada obra, con ética y con la documentación que pida el contrato.
                   </p>
                 </CardContent>
               </Card>
@@ -145,8 +144,7 @@ export default function NosotrosPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-foreground">Seguridad</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Priorizamos la seguridad de nuestro equipo y clientes, cumpliendo rigurosamente con todas las
-                    normativas.
+                    La seguridad en obra se planifica según la normativa que aplique a cada contrato.
                   </p>
                 </CardContent>
               </Card>
@@ -173,7 +171,7 @@ export default function NosotrosPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground">Ingenieros</h3>
-                    <p className="text-sm text-muted-foreground">Civiles y arquitectos certificados</p>
+                    <p className="text-sm text-muted-foreground">Dirección técnica según el contrato</p>
                   </div>
                 </CardContent>
               </Card>

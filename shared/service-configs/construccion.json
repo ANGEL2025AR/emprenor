@@ -12,28 +12,28 @@
       "eyebrow": "Construcción General",
       "title": "Obra llave en mano para todos los sectores",
       "paragraphs": [
-        "En EMPRENOR C&S ejecutamos obras de construcción general con enfoque integral: proyecto, obra, instalaciones y entrega documentada conforme a normativa CIRSOC, municipal y estándares AEA 90364.",
-        "Equipo de ingeniería civil, arquitectura y dirección de obra con trayectoria en el NOA desde 2018 — sector público, educativo, sanitario, industrial y agropecuario."
+        "EMPRENOR toma obras de construcción general: proyecto, ejecución, instalaciones y entrega. La documentación y las normas aplicables se fijan en el contrato.",
+        "Desde 2018 trabajamos en el NOA en obra privada, comercial, industrial y pública. El alcance de cada encargo queda por escrito."
       ],
       "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85",
       "imageAlt": "Construcción",
       "imageHeight": "h-[480px]",
       "stats": [
         {
-          "v": "7+",
-          "l": "Referencias NOA"
-        },
-        {
-          "v": "CIRSOC",
-          "l": "Normativa estructural"
-        },
-        {
-          "v": "AEA 90364",
-          "l": "Instalaciones eléctricas"
-        },
-        {
           "v": "2018",
           "l": "Operación documentada"
+        },
+        {
+          "v": "NOA",
+          "l": "Salta, Jujuy, Tucumán y Formosa"
+        },
+        {
+          "v": "Contrato",
+          "l": "Alcance y normas por escrito"
+        },
+        {
+          "v": "1 sede",
+          "l": "Campamento Vespucio, Salta"
         }
       ]
     },
@@ -109,7 +109,7 @@
         {
           "step": "02",
           "title": "Anteproyecto y Cotización",
-          "desc": "Elaboración de planos preliminares, memoria descriptiva y presupuesto detallado sin cargo."
+          "desc": "Planos preliminares, memoria y presupuesto se arman cuando se define el alcance."
         },
         {
           "step": "03",
@@ -135,16 +135,14 @@
     },
     {
       "type": "extras-dark",
-      "title": "Incluido en todos nuestros proyectos",
+      "title": "Lo que se define en cada propuesta",
       "items": [
-        "Planos aprobados por colegios profesionales",
-        "Dirección de obra permanente por ingenieros matriculados",
-        "Materiales de primera calidad con certificación",
-        "Personal propio y subcontratistas seleccionados",
-        "Cobertura de seguros de obra y ART",
-        "Informes de avance quincenales",
-        "Libro de obra actualizado",
-        "Certificaciones de calidad de materiales"
+        "Alcance, plazo y precio por escrito",
+        "Dirección y seguimiento según el contrato",
+        "Materiales indicados en el presupuesto",
+        "Seguros y ART que el trabajo exija",
+        "Informes de avance si se pactan",
+        "Documentación de entrega acordada"
       ]
     },
     {

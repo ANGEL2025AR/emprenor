@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Wrench } from "lucide-react"
 import { getPublishedServices } from "@/lib/site/get-services"
+import { SERVICES_CATALOG } from "@/lib/site/services-catalog"
 import { getServiceIcon } from "@/lib/site/service-icons"
 import { buildPageMetadata } from "@/lib/site/page-metadata"
 import { contactFormUrl } from "@/lib/site/urls"
@@ -13,7 +14,7 @@ import { shouldUnoptimizeImage } from "@/lib/site/image-utils"
 export const metadata: Metadata = buildPageMetadata({
   title: "Servicios",
   description:
-    "Doce especialidades integradas en el NOA: construcción, remodelación, albañilería, pintura, instalaciones eléctricas, sanitarias, de gas, obras industriales, agropecuarias, climatización, mantenimiento y viviendas llave en mano.",
+    "Especialidades integradas en el NOA: construcción, remodelación, terminaciones en seco, herrería, instalaciones, obra vial y urbana, obras institucionales, industria, agro, climatización, mantenimiento y viviendas.",
   path: "/servicios",
 })
 
@@ -60,8 +61,8 @@ export default async function ServiciosPage() {
             <CardContent className="p-0 space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Nuestros Servicios Especializados</h2>
               <p className="text-lg text-slate-600">
-                Equipos profesionales certificados en cada especialidad. Calidad, seguridad y cumplimiento normativo
-                garantizados en todo el NOA.
+                {SERVICES_CATALOG.length} especialidades coordinadas por un solo equipo. El alcance, los plazos y la documentación
+                se acuerdan por escrito para cada obra en el NOA.
               </p>
             </CardContent>
           </Card>

@@ -1,0 +1,55 @@
+{
+  "pageKey": "ServicioInstitucional",
+  "hero": {
+    "type": "page-header",
+    "title": "Obras",
+    "highlight": "institucionales",
+    "subtitle": "Escuelas, salud, organismos y edificios públicos, con alcance y entregables según el contrato."
+  },
+  "sections": [
+    {
+      "type": "group",
+      "className": "py-24",
+      "children": [
+        {
+          "type": "intro",
+          "eyebrow": "Obra institucional",
+          "title": "Edificios públicos e instituciones en el NOA",
+          "paragraphs": [
+            "EMPRENOR toma obras e instalaciones para establecimientos educativos, organismos, salud y edificios públicos. El alcance, el cronograma y la documentación de entrega se acuerdan por escrito."
+          ],
+          "image": "/construction-site-workers-blueprint.jpg",
+          "imageAlt": "Obra institucional"
+        },
+        {
+          "type": "cards",
+          "icon": "Building2",
+          "iconColor": "from-blue-600 to-blue-800",
+          "columns": 2,
+          "showDesc": false,
+          "className": "mb-20",
+          "items": [
+            {
+              "title": "Alcance habitual",
+              "color": "from-blue-600 to-blue-800",
+              "items": [
+                "Establecimientos educativos",
+                "Organismos de gobierno",
+                "Salud y edificios asistenciales",
+                "Edificios públicos",
+                "Adecuaciones de edificios existentes"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "¿Tenés una obra institucional?",
+      "subtitle": "Escribinos y coordinamos el relevamiento del edificio o del predio.",
+      "buttonText": "Solicitar presupuesto",
+      "showPhone": true
+    }
+  ]
+}

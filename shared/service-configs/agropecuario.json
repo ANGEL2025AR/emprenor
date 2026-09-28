@@ -20,7 +20,7 @@
           ],
           "image": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=85",
           "imageAlt": "Agropecuario",
-          "note": "Trabajamos en estrecha colaboración con ingenieros agrónomos, veterinarios y técnicos del INTA para asegurar el mejor resultado en cada proyecto rural."
+          "note": "El alcance rural — galpones, instalaciones y trámites — se escribe en la propuesta. No publicamos convenios con organismos."
         },
         {
           "type": "cards",
@@ -92,14 +92,11 @@
           "type": "advantages-dark",
           "title": "Ventajas de trabajar con EMPRENOR en el campo",
           "items": [
-            "Experiencia en zonas rurales remotas con difícil acceso",
-            "Equipos propios de topografía y movimiento de suelos",
-            "Materiales adaptados a condiciones climáticas extremas",
-            "Coordinación con autoridades hídricas, eléctricas y municipales",
-            "Proyectos financiados con instrumentos del agro (SGR, FONDAGRO)",
-            "Asistencia para habilitaciones SENASA y INTA",
-            "Técnicos con experiencia en campo y obras rurales",
-            "Atención en Salta, Jujuy, Tucumán y Formosa"
+            "Obras en zonas rurales de Salta, Jujuy, Tucumán y Formosa",
+            "Topografía y movimiento de suelos si el presupuesto los incluye",
+            "Materiales indicados para el clima del lugar",
+            "Trámites hídricos, eléctricos o municipales si el contrato los incluye",
+            "Habilitaciones cuando el proyecto las exige"
           ]
         }
       ]
@@ -107,7 +104,7 @@
     {
       "type": "cta",
       "title": "¿Tenés un proyecto agropecuario?",
-      "subtitle": "Visitamos el campo sin costo y elaboramos la propuesta técnica.",
+      "subtitle": "Pedí la propuesta. El relevamiento y el precio se definen por escrito.",
       "buttonText": "Solicitar Visita Técnica",
       "showPhone": true
     }

@@ -4,7 +4,7 @@
     "type": "page-header",
     "title": "Instalaciones",
     "highlight": "de Gas",
-    "subtitle": "Gas natural y envasado (GLP) para uso doméstico, comercial e industrial — instaladores matriculados"
+    "subtitle": "Gas natural y envasado para uso doméstico, comercial e industrial. La habilitación se tramita cuando la instalación la exige."
   },
   "sections": [
     {
@@ -14,9 +14,9 @@
         {
           "type": "intro",
           "eyebrow": "Instalaciones de Gas",
-          "title": "Instaladores matriculados y habilitados por ENARGAS",
+          "title": "Gas natural y envasado, con trámite cuando corresponde",
           "paragraphs": [
-            "Todas nuestras instalaciones de gas son realizadas por técnicos matriculados ante ENARGAS y las distribuidoras locales. Cumplimos estrictamente con las Normas Argentinas de Gas (NAG) y los reglamentos de cada distribuidora."
+            "Las instalaciones de gas se ejecutan conforme a las Normas Argentinas de Gas y al reglamento de la distribuidora de la zona. La matrícula y la habilitación se presentan en el trámite, cuando la obra las exige."
           ],
           "image": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1200&q=85",
           "imageAlt": "Instalaciones de Gas",
@@ -70,29 +70,23 @@
             {
               "title": "Proyectos y Documentación",
               "items": [
-                "Memorias técnicas y planos de instalaciones de gas",
-                "Inspecciones y aprobaciones ante ENARGAS y distribuidoras locales",
-                "Habilitaciones ante distribuidoras locales",
-                "Pruebas de hermeticidad certificadas",
-                "Declaraciones juradas de instalaciones",
-                "Certificados de instalación de gas (CIG)",
-                "Habilitaciones municipales de locales"
+                "Memorias técnicas y planos si el contrato los incluye",
+                "Trámite ante la distribuidora cuando la instalación lo exige",
+                "Pruebas de hermeticidad cuando el trámite las pide",
+                "Documentación de la instalación si el contrato la incluye"
               ]
             }
           ]
         },
         {
           "type": "advantages-dark",
-          "title": "Nuestras garantías de seguridad",
+          "title": "Condiciones de la instalación",
           "items": [
-            "Técnicos matriculados ante ENARGAS",
-            "Materiales certificados IRAM-IAPG",
-            "Pruebas de presión y hermeticidad obligatorias",
-            "Certificación del instalador ante el organismo regulador",
-            "Uso exclusivo de caños y accesorios aprobados",
-            "Sellado con materiales ignífugos aprobados",
-            "Señalética de seguridad incluida",
-            "Manual de usuario y recomendaciones de seguridad"
+            "Habilitación cuando el trámite la exige",
+            "Materiales indicados en el presupuesto",
+            "Pruebas de hermeticidad cuando el trámite las pide",
+            "Documentación del instalador cuando el trámite la pide",
+            "Señalética y manual si el presupuesto los incluye"
           ]
         }
       ]
@@ -100,7 +94,7 @@
     {
       "type": "cta",
       "title": "¿Necesitás una instalación de gas?",
-      "subtitle": "Técnicos matriculados — Habilitación ENARGAS — Trabajo garantizado.",
+      "subtitle": "Contanos el tipo de gas y la localidad. La habilitación se incluye si el trámite la exige.",
       "buttonText": "Solicitar Cotización",
       "showPhone": true
     }

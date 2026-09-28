@@ -12,8 +12,7 @@ export function QualitySection() {
           </span>
           <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mt-3">Trazabilidad documental en cada obra</h2>
           <p className="text-slate-500 mt-3 max-w-2xl mx-auto text-sm">
-            Sistema integrado de gestión documental alineado con estándares AEA 90364, normativa ENARGAS y CIRSOC.
-            Cada proyecto cuenta con registro verificable de materiales, controles y entregables técnicos.
+            La documentación de cada obra se define en el contrato. No publicamos una certificación de sistema de gestión.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">

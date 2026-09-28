@@ -10,6 +10,10 @@ import agropecuario from "../../shared/service-configs/agropecuario.json"
 import climatizacion from "../../shared/service-configs/climatizacion.json"
 import mantenimiento from "../../shared/service-configs/mantenimiento.json"
 import viviendasPrefabricadas from "../../shared/service-configs/viviendas-prefabricadas.json"
+import terminacionesSecas from "../../shared/service-configs/terminaciones-secas.json"
+import herreria from "../../shared/service-configs/herreria.json"
+import infraestructuraVial from "../../shared/service-configs/infraestructura-vial.json"
+import obrasInstitucionales from "../../shared/service-configs/obras-institucionales.json"
 import { SERVICES_CATALOG } from "./services-catalog"
 
 export type BrochureServiceCategory = { title: string; items: string[] }
@@ -40,9 +44,13 @@ const CONFIG_BY_SLUG: Record<string, { sections?: Section[]; hero?: Record<strin
   climatizacion,
   mantenimiento,
   "viviendas-prefabricadas": viviendasPrefabricadas,
+  "terminaciones-secas": terminacionesSecas,
+  herreria,
+  "infraestructura-vial": infraestructuraVial,
+  "obras-institucionales": obrasInstitucionales,
 }
 
-const DEFAULT_NORMS = ["AEA 90364", "NAG / ENARGAS", "CIRSOC", "Normativa municipal NOA"]
+const DEFAULT_NORMS = ["Normativa aplicable al contrato", "Normativa municipal"]
 
 function flattenSections(sections: Section[] = []): Section[] {
   const out: Section[] = []

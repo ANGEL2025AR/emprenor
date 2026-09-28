@@ -15,6 +15,10 @@ import obrasIndustriales from "../../shared/service-configs/obras-industriales.j
 import viviendasPrefabricadas from "../../shared/service-configs/viviendas-prefabricadas.json"
 import ingenieria from "../../shared/service-configs/ingenieria.json"
 import gestionDeProyectos from "../../shared/service-configs/gestion-de-proyectos.json"
+import terminacionesSecas from "../../shared/service-configs/terminaciones-secas.json"
+import herreria from "../../shared/service-configs/herreria.json"
+import infraestructuraVial from "../../shared/service-configs/infraestructura-vial.json"
+import obrasInstitucionales from "../../shared/service-configs/obras-institucionales.json"
 
 const CONFIG_BY_SLUG: Record<string, ServicePageConfig> = {
   construccion: construccion as ServicePageConfig,
@@ -31,6 +35,10 @@ const CONFIG_BY_SLUG: Record<string, ServicePageConfig> = {
   "viviendas-prefabricadas": viviendasPrefabricadas as ServicePageConfig,
   ingenieria: ingenieria as ServicePageConfig,
   "gestion-de-proyectos": gestionDeProyectos as ServicePageConfig,
+  "terminaciones-secas": terminacionesSecas as ServicePageConfig,
+  herreria: herreria as ServicePageConfig,
+  "infraestructura-vial": infraestructuraVial as ServicePageConfig,
+  "obras-institucionales": obrasInstitucionales as ServicePageConfig,
 }
 
 export function getServicePageConfig(slug: string): ServicePageConfig | null {

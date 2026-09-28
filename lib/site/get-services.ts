@@ -32,18 +32,21 @@ function mergePublishedWithCatalog(docs: SiteService[], defaults: SiteService[])
   const bySlug = preferCanonicalDoc(docs)
 
   return defaults
-    .filter((entry) => entry.published)
     .map((entry) => {
       const fromDb = bySlug.get(entry.slug)
       if (!fromDb) return entry
       return {
         ...entry,
+        title: fromDb.title?.trim() || entry.title,
+        shortDescription: fromDb.shortDescription?.trim() || entry.shortDescription,
         heroImage: fromDb.heroImage || entry.heroImage,
         heroImageAlt: fromDb.heroImageAlt || entry.heroImageAlt,
         gallery: fromDb.gallery?.length ? fromDb.gallery : entry.gallery,
         features: fromDb.features?.length ? fromDb.features : entry.features,
+        published: fromDb.published !== false,
       }
     })
+    .filter((entry) => entry.published !== false)
     .sort((a, b) => a.order - b.order)
 }
 
@@ -58,7 +61,7 @@ export async function getPublishedServices(): Promise<SiteService[]> {
     const db = await getDb()
     const docs = await db
       .collection<SiteService>("site_services")
-      .find({ published: true })
+      .find({})
       .sort({ order: 1 })
       .toArray()
 

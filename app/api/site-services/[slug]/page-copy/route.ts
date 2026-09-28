@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { revalidatePath } from "next/cache"
 import { getDb } from "@/lib/db/connection"
 import { verifyAuth } from "@/lib/auth/session"
 import { hasPermission } from "@/lib/auth/permissions"
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { slug } = await params
   const config = await getServicePageConfigResolved(slug)
   if (!config) return NextResponse.json({ error: "Servicio no encontrado" }, { status: 404 })
-  return NextResponse.json({ fields: collectEditableTexts(config).slice(0, 40) })
+  return NextResponse.json({ fields: collectEditableTexts(config) })
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -34,7 +35,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   for (const field of fields) {
     if (!field || typeof field.path !== "string" || typeof field.value !== "string") continue
     if (!/^[\w.]+$/.test(field.path)) continue
-    overrides[field.path] = field.value.slice(0, 2000)
+    overrides[field.path] = field.value.slice(0, 4000)
   }
 
   const db = await getDb()
@@ -43,5 +44,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     { $set: { slug: resolved, overrides, updatedAt: new Date() } },
     { upsert: true },
   )
+  revalidatePath("/servicios")
+  revalidatePath("/")
+  revalidatePath(`/servicios/${resolved}`)
   return NextResponse.json({ success: true })
 }

@@ -193,7 +193,7 @@ export function BrochureDocument() {
               <p className="text-xs text-slate-500 mt-0.5">{content.presentation.signatoryRole}</p>
             </div>
             <div className="mt-6">
-              <p className="text-[9px] uppercase tracking-widest text-green-600 font-semibold mb-2">Certificaciones y habilitaciones</p>
+              <p className="text-[9px] uppercase tracking-widest text-green-600 font-semibold mb-2">Normas de referencia en obra</p>
               <CertBadges items={content.certifications} />
             </div>
             <BrochureFooterLine brand={brand} founded={content.legalEntity.operacionDesde} />
@@ -383,7 +383,7 @@ export function BrochureDocument() {
             <div className="grid md:grid-cols-2 gap-8 bg-slate-900 text-white p-8 flex-1 min-h-0">
               <div>
                 <h3 className="text-xl font-black mb-3">Cobertura en <span className="text-green-500">4 provincias</span></h3>
-                <p className="text-sm text-white/55 mb-5">Sede en el NOA para darte el mejor servicio de construcción del norte argentino.</p>
+                <p className="text-sm text-white/55 mb-5">Sede en Campamento Vespucio, Salta. Atendemos obras en Salta, Jujuy, Tucumán y Formosa.</p>
                 {BROCHURE_OFFICES.map((o) => (
                   <div key={o.name} className="flex gap-2 mb-3 text-sm">
                     <MapPin className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />

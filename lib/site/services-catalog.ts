@@ -18,6 +18,27 @@ export function getAllServiceSlugs(): string[] {
   return SERVICES_CATALOG.map((s) => s.slug)
 }
 
+const SERVICE_HERO_IMAGES: Record<string, string> = {
+  construccion: "/servicios/construccion.jpg",
+  remodelacion: "/servicios/remodelacion.jpg",
+  albanileria: "/servicios/albanileria.jpg",
+  pintura: "/servicios/pintura.jpg",
+  "terminaciones-secas": "/servicios/durlock.jpg",
+  herreria: "/servicios/herreria.jpg",
+  "instalaciones-electricas": "/servicios/electricidad.jpg",
+  "instalaciones-sanitarias": "/servicios/sanitaria.jpg",
+  gas: "/servicios/gas.jpg",
+  "obras-industriales": "/industrial-warehouse-construction.png",
+  agropecuario: "/servicios/agro.jpg",
+  climatizacion: "/servicios/clima.jpg",
+  "infraestructura-vial": "/servicios/vial.jpg",
+  "obras-institucionales": "/servicios/institucional.jpg",
+  mantenimiento: "/servicios/mantenimiento.jpg",
+  "viviendas-prefabricadas": "/modern-residential-house-construction.jpg",
+  ingenieria: "/servicios/ingenieria.jpg",
+  "gestion-de-proyectos": "/professional-construction-team-working.jpg",
+}
+
 export function catalogEntryToSiteService(entry: ServiceCatalogEntry): Omit<
   SiteService,
   "_id" | "createdAt" | "updatedAt"
@@ -26,7 +47,7 @@ export function catalogEntryToSiteService(entry: ServiceCatalogEntry): Omit<
     slug: entry.slug,
     title: entry.title,
     shortDescription: entry.shortDescription,
-    heroImage: "",
+    heroImage: SERVICE_HERO_IMAGES[entry.slug] ?? "",
     heroImageAlt: `${entry.title} — EMPRENOR C&S`,
     gallery: [],
     icon: entry.icon as SiteServiceIconKey,

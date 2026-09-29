@@ -98,7 +98,7 @@ function introFromConfig(config: { sections?: Section[]; hero?: Record<string, u
 function imageFromConfig(config: { sections?: Section[] }): string {
   const intro = flattenSections(config.sections).find((s) => s.type === "intro")
   if (intro?.image) return String(intro.image)
-  return "/assets/prefab/living.jpg"
+  return "/modern-residential-house-construction.jpg"
 }
 
 function normsFromConfig(config: { sections?: Section[] }): string[] {

@@ -2,10 +2,10 @@ import Image from "next/image"
 import { Home, Building2, Factory, Tractor } from "lucide-react"
 
 const sectors = [
-  { icon: Home, title: "Residencial", desc: "Viviendas unifamiliares, edificios y condominios", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80" },
-  { icon: Building2, title: "Comercial", desc: "Locales, oficinas, centros comerciales", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80" },
-  { icon: Factory, title: "Industrial", desc: "Fábricas, plantas productivas, depósitos", image: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=600&q=80" },
-  { icon: Tractor, title: "Agropecuario", desc: "Establecimientos rurales, agroindustrias", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80" },
+  { icon: Home, title: "Residencial", desc: "Viviendas unifamiliares, edificios y condominios", image: "/modern-residential-house-construction.jpg" },
+  { icon: Building2, title: "Comercial", desc: "Locales, oficinas, centros comerciales", image: "/commercial-building-construction.png" },
+  { icon: Factory, title: "Industrial", desc: "Fábricas, plantas productivas, depósitos", image: "/industrial-warehouse-construction.png" },
+  { icon: Tractor, title: "Agropecuario", desc: "Establecimientos rurales, agroindustrias", image: "/servicios/agro.jpg" },
 ]
 
 export function SectorsSection() {

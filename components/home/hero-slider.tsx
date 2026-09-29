@@ -170,8 +170,8 @@ export function HeroSlider({
               >
                 {slide.image?.trim() ? (
                   <>
-                    <Image src={slide.image} alt={slide.alt || slide.title} fill className="object-cover opacity-40" unoptimized={Boolean(slide.image?.trim() && (slide.image.startsWith("http") || slide.image.startsWith("/assets")))} />
-                    <div className="absolute inset-0 bg-primary/85" />
+                    <Image src={slide.image} alt={slide.alt || slide.title} fill className="object-cover" unoptimized={Boolean(slide.image?.trim() && (slide.image.startsWith("http") || slide.image.startsWith("/assets")))} />
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/82 via-primary/50 to-primary/20" />
                   </>
                 ) : (
                   <div className="absolute inset-0 bg-primary" />
@@ -224,7 +224,7 @@ export function HeroSlider({
               ) : (
                 <div className="absolute inset-0 bg-slate-900" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/82 via-slate-950/42 to-slate-950/12" />
               <div className={`relative z-10 flex min-h-[calc(100svh-4rem)] items-center ${heroFrame} py-24 pb-32`}>
                 <div className="max-w-3xl">
                   {slide.badgeText ? (

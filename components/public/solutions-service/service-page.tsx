@@ -160,7 +160,7 @@ function IntroSplit(props: Record<string, unknown>) {
         ) : null}
       </div>
       {image && (
-        <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/5] min-h-[320px]">
+        <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] min-h-[280px]">
           <Image src={image} alt={String(props.imageAlt || props.title || "Servicio")} fill className="object-cover" unoptimized={shouldUnoptimizeImage(image)} sizes="(max-width: 1024px) 100vw, 50vw" />
         </div>
       )}

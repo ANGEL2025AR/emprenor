@@ -24,7 +24,7 @@ function newSlide(slug: SitePageSlug): SitePageHeroSlide {
   if (slug === "home") {
     return {
       id,
-      image: "/construction-site-workers-blueprint.jpg",
+      image: "/servicios/construccion.jpg",
       alt: "Imagen del hero",
       badgeText: "",
       title: "Nueva diapositiva",

@@ -18,8 +18,8 @@
           "paragraphs": [
             "Las instalaciones de gas se ejecutan conforme a las Normas Argentinas de Gas y al reglamento de la distribuidora de la zona. La matrícula y la habilitación se presentan en el trámite, cuando la obra las exige."
           ],
-          "image": "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1200&q=85",
-          "imageAlt": "Instalaciones de Gas",
+          "image": "/servicios/gas.jpg",
+          "imageAlt": "Regulación y cañería de gas sobre muro",
           "alert": "Las instalaciones de gas son trabajos de alto riesgo. Solo deben ser realizados por instaladores habilitados. Ante cualquier olor a gas, evacuar y llamar a la empresa distribuidora."
         },
         {

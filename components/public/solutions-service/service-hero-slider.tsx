@@ -50,8 +50,8 @@ export function ServiceHeroSlider({ slides = [], minHeight = "70vh" }: { slides?
             <div key={index} className="relative flex-[0_0_100%] shrink-0" style={{ minHeight }}>
               {slide.image_url && (
                 <>
-                  <Image src={slide.image_url} alt={slide.title || "Servicio"} fill className="object-cover opacity-50" priority={index === 0} unoptimized={shouldUnoptimizeImage(slide.image_url)} sizes="100vw" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60" />
+                  <Image src={slide.image_url} alt={slide.title || "Servicio"} fill className="object-cover" priority={index === 0} unoptimized={shouldUnoptimizeImage(slide.image_url)} sizes="100vw" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950/82 via-slate-950/48 to-slate-950/15" />
                 </>
               )}
               <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center px-6 py-20 pb-32 sm:px-10 lg:px-14" style={{ minHeight }}>

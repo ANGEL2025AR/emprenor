@@ -15,8 +15,8 @@
         "Preparamos superficies y aplicamos sistemas de pintura látex, esmaltes, revestimientos plásticos, impermeabilizantes y texturas decorativas para interiores y exteriores en el NOA.",
         "Utilizamos productos de marcas reconocidas con fichas técnicas, colores según carta NCS o RAL, y técnicas airless, rodillo o soplete según especificación del proyecto."
       ],
-      "image": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1200&q=85",
-      "imageAlt": "Pintura profesional en obra — EMPRENOR C&S",
+      "image": "/servicios/pintura.jpg",
+      "imageAlt": "Aplicación de pintura sobre muro interior",
       "imageHeight": "h-[480px]",
       "stats": [
         { "v": "NCS/RAL", "l": "Carta de colores" },

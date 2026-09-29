@@ -30,7 +30,7 @@ export const BROCHURE_COVER = {
   headline: ["Ingeniería,", "construcción", "e", "instalaciones."],
   description: `${EMPRENOR_BRAND.nombreExtendido}. Marca comercial de ${EMPRENOR_TITULAR.nombreCompleto}. Presencia en ${EMPRENOR_PROVINCIAS.join(", ")}.`,
   cta: "Solicitar cotización",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=85",
+  image: "/servicios/construccion.jpg",
   provinces: EMPRENOR_PROVINCIAS,
 }
 

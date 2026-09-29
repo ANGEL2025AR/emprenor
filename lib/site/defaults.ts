@@ -5,8 +5,8 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
   home: [
     {
       id: "home-default-1",
-      image: "/construction-site-workers-blueprint.jpg",
-      alt: "Equipo de construcción EMPRENOR trabajando",
+      image: "/servicios/construccion.jpg",
+      alt: "Obra de hormigón y mampostería con grúa torre",
       badgeText: "Desde 2018 en el NOA",
       title: "Construimos con planificación, calidad y cumplimiento",
       titleAccent: "calidad",
@@ -19,8 +19,8 @@ export const SITE_DEFAULT_HERO: Record<SitePageSlug, SitePageHeroSlide[]> = {
     },
     {
       id: "home-default-2",
-      image: "/industrial-plant-construction.jpg",
-      alt: "Obra industrial EMPRENOR",
+      image: "/industrial-warehouse-construction.png",
+      alt: "Montaje de estructura de nave industrial",
       badgeText: "Obras de gran envergadura",
       title: "Infraestructura industrial con gestión documentada",
       titleAccent: "documentada",
